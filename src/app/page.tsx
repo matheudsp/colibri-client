@@ -12,7 +12,7 @@ export default function Home() {
     const checkAuth = async () => {
       try {
         await AuthService.getMe();
-        router.push("/projects");
+        router.push("/properties");
       } catch (error) {
         console.error("Usuário não autenticado:", error);
         router.push("/login");

@@ -1,5 +1,10 @@
+export const Roles = {
+  ADMIN: "ADMIN",
+  LOCADOR: "LOCADOR",
+  LOCATARIO: "LOCATARIO",
+};
 export const userRole = [
-  { value: "ADMIN", label: "Admin" },
-  { value: "LOCADOR", label: "Locador" },
-  { value: "LOCATÁRIO", label: "Locatário" },
+  { value: Roles.ADMIN, label: "Admin" },
+  { value: Roles.LOCADOR, label: "Locador" },
+  { value: Roles.LOCATARIO, label: "Locatário" },
 ];
