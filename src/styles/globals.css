@@ -1,0 +1,30 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+   --background: #f0f8fc;          /* azul bem claro para fundo suave */
+  --foreground: #1c1c1e;          /* cinza quase preto para texto */
+  --primary: #1DA1F2;             /* azul Twitter - cor principal */
+  --primary-hover: #1a91da;       /* azul escurecido para hover */
+  --secondary: #123e52;           /* azul petróleo escuro (contraste) */
+  --secondary-hover: #16506a;     /* azul petróleo um pouco mais claro */
+  --accent: #73d3ff;              /* azul-claro vibrante para detalhes e realces */
+  --error: #c62828;  
+}
+
+*::-webkit-scrollbar-thumb {
+    background-color: var(--accent);
+    border-radius: 10px;
+}
+
+*::-webkit-scrollbar {
+    width: 0.5em;
+}
+
+body {
+    box-sizing: content-box;
+    background: var(--background);
+    color: var(--foreground);
+    overflow-x: hidden;
+}
