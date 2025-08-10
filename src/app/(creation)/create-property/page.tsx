@@ -18,30 +18,75 @@ import {
   Car,
   PlusIcon,
   ArrowRight,
+  ChevronLeft,
+  CheckIcon,
 } from "lucide-react";
-
-import { CustomButton } from "../../../components/forms/CustomButton";
-import { CustomDropdownInput } from "../../../components/forms/CustomDropdownInput";
-import { CustomFormInput } from "../../../components/forms/CustomFormInput";
-
+import { CustomButton } from "@/components/forms/CustomButton";
+import { CustomDropdownInput } from "@/components/forms/CustomDropdownInput";
+import { CustomFormInput } from "@/components/forms/CustomFormInput";
 import { PhotoCard } from "@/components/cards/PhotoCard";
 import { AddPhotoModal } from "@/components/modals/photoModals/AddPhotoModal";
-
-import {
-  createPropertySchema,
-  CreatePropertyFormValues,
-} from "../../../validations";
-import { PropertyService } from "../../../services/domains/propertyService";
-import { PhotoService } from "../../../services/domains/photoService";
-
+import { createPropertySchema, CreatePropertyFormValues } from "@/validations";
+import { PropertyService } from "@/services/domains/propertyService";
+import { PhotoService } from "@/services/domains/photoService";
 import { brazilianStates } from "@/constants/states";
 import { fetchAddressByCep } from "@/utils/viacep";
 import { fetchCitiesByState } from "@/utils/ibge";
 import { Photo } from "@/interfaces/photo";
 
+const Stepper = ({
+  steps,
+  currentStep,
+}: {
+  steps: string[];
+  currentStep: number;
+}) => {
+  return (
+    <nav className="flex items-start justify-center w-full max-w-md mx-auto mb-8 sm:mb-12">
+      {steps.map((step, index) => {
+        const stepNumber = index + 1;
+        const isCompleted = currentStep > stepNumber;
+        const isCurrent = currentStep === stepNumber;
+
+        return (
+          <div key={step} className="flex items-center w-full">
+            <div className="flex flex-col items-center text-center">
+              <div
+                className={`w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300 ${
+                  isCurrent
+                    ? "bg-primary text-white scale-110"
+                    : isCompleted
+                    ? "bg-green-500 text-white"
+                    : "bg-gray-200 text-gray-500"
+                }`}
+              >
+                {isCompleted ? <CheckIcon size={24} /> : stepNumber}
+              </div>
+
+              <p
+                className={`mt-2 text-xs sm:text-sm w-20 ${
+                  isCurrent ? "font-bold text-primary" : "text-gray-500"
+                }`}
+              >
+                {step}
+              </p>
+            </div>
+            {index < steps.length - 1 && (
+              <div
+                className={`flex-1 h-1 mx-2 sm:mx-4 transition-all duration-300 ${
+                  isCompleted ? "bg-green-500" : "bg-gray-200"
+                }`}
+              />
+            )}
+          </div>
+        );
+      })}
+    </nav>
+  );
+};
+
 export default function CreatePropertyPage() {
   const router = useRouter();
-
   const [step, setStep] = useState(1);
   const [newPropertyId, setNewPropertyId] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -51,7 +96,6 @@ export default function CreatePropertyPage() {
   >([]);
   const [isCitiesLoading, setIsCitiesLoading] = useState(false);
   const [cityFromCep, setCityFromCep] = useState<string | null>(null);
-
   const [allPhotos, setAllPhotos] = useState<Photo[]>([]);
   const [isUploading, setIsUploading] = useState(false);
   const [isAddPhotoModalOpen, setIsAddPhotoModalOpen] = useState(false);
@@ -69,6 +113,10 @@ export default function CreatePropertyPage() {
   });
 
   const stateValue = watch("state");
+  const formSteps = ["Detalhes do Imóvel", "Envio de Fotos"];
+
+  const handleNextStep = () => setStep((prev) => prev + 1);
+  const handlePreviousStep = () => setStep((prev) => prev - 1);
 
   const handleCepBlur = async (e: React.FocusEvent<HTMLInputElement>) => {
     const cep = e.target.value.replace(/\D/g, "");
@@ -81,7 +129,7 @@ export default function CreatePropertyPage() {
         setValue("district", address.district, { shouldValidate: true });
         setCityFromCep(address.city);
         setValue("state", address.rawUf, { shouldValidate: true });
-        setFocus("number");
+        // setFocus("number");
       } else {
         toast.error("CEP não encontrado.");
       }
@@ -100,7 +148,6 @@ export default function CreatePropertyPage() {
     }
     const loadCities = async () => {
       setIsCitiesLoading(true);
-
       const cityOptions = await fetchCitiesByState(stateValue);
       setCities(
         cityOptions.map((c) => ({ id: c.id, value: c.value, label: c.label }))
@@ -120,9 +167,9 @@ export default function CreatePropertyPage() {
     setIsLoading(true);
     try {
       const response = await PropertyService.create(data);
-      toast.success("Detalhes do imóvel salvos! Agora, adicione as fotos.");
+      toast.success("Detalhes salvos! Agora, envie as fotos.");
       setNewPropertyId(response.data.id);
-      setStep(2);
+      handleNextStep();
     } catch (error: unknown) {
       const errorMessage =
         error instanceof axios.AxiosError
@@ -157,11 +204,11 @@ export default function CreatePropertyPage() {
 
   const handleFinish = async () => {
     if (!newPropertyId) {
-      toast.error("ID do imóvel não encontrado. Tente novamente.");
+      toast.error("ID do imóvel não encontrado.");
       return;
     }
     if (allPhotos.length === 0) {
-      toast.warning("Por favor, adicione pelo menos uma foto.");
+      toast.warning("Adicione pelo menos uma foto.");
       return;
     }
     setIsUploading(true);
@@ -170,7 +217,7 @@ export default function CreatePropertyPage() {
       .filter((f): f is File => !!f);
     try {
       await PhotoService.upload(newPropertyId, filesToUpload);
-      toast.success("Imóvel e fotos cadastrados com sucesso!");
+      toast.success("Imóvel cadastrado com sucesso!");
       router.push("/properties");
     } catch (error) {
       toast.error("Falha no upload das fotos.");
@@ -182,157 +229,161 @@ export default function CreatePropertyPage() {
   useEffect(() => {
     return () => {
       allPhotos.forEach((photo) => {
-        if (photo.tempUrl) {
-          URL.revokeObjectURL(photo.tempUrl);
-        }
+        if (photo.tempUrl) URL.revokeObjectURL(photo.tempUrl);
       });
     };
   }, [allPhotos]);
 
   return (
     <>
-      <div className="min-h-svh w-full flex items-center justify-center pt-12 pb-8 px-4 bg-muted/20">
-        <div className="bg-white grid place-items-center shadow-lg p-8 rounded-xl w-full max-w-2xl md:max-w-4xl">
+      <div className="min-h-svh mt-14 w-full flex flex-col items-center justify-center">
+        <div className="bg-white shadow-lg p-4 sm:p-6 md:p-8  w-full max-w-4xl">
+          <Stepper steps={formSteps} currentStep={step} />
+
           {step === 1 && (
             <form
               onSubmit={handleSubmit(onSubmitDetails)}
-              className="w-full space-y-6"
+              className="w-full space-y-6 md:space-y-8"
             >
-              <h1 className="text-3xl text-foreground font-sans font-bold text-center">
-                Passo 1: Detalhes do Imóvel
-              </h1>
-              <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4">
-                <CustomFormInput
-                  id="title"
-                  icon={<Building2 />}
-                  label="Título do Imóvel*"
-                  placeholder="Ex: Apartamento 2 quartos no Centro"
-                  {...register("title")}
-                  error={errors.title?.message}
-                  className="md:col-span-2"
-                />
-                <CustomFormInput
-                  id="description"
-                  icon={<HomeIcon />}
-                  label="Descrição*"
-                  placeholder="Descreva o imóvel detalhadamente"
-                  {...register("description")}
-                  error={errors.description?.message}
-                  className="md:col-span-2"
-                />
-                <CustomFormInput
-                  id="cep"
-                  icon={<MapPinIcon />}
-                  label="CEP*"
-                  registration={register("cep")}
-                  mask="cep"
-                  placeholder="Ex: 12345-678"
-                  onBlur={handleCepBlur}
-                  error={errors.cep?.message}
-                  disabled={isCepLoading}
-                />
-                <CustomDropdownInput
-                  placeholder="Selecione o estado*"
-                  options={brazilianStates}
-                  selectedOptionValue={watch("state")}
-                  onOptionSelected={(val) =>
-                    val && setValue("state", val, { shouldValidate: true })
-                  }
-                  error={errors.state?.message}
-                />
-                <CustomDropdownInput
-                  placeholder={
-                    isCitiesLoading ? "Carregando..." : "Selecione uma cidade*"
-                  }
-                  options={cities}
-                  selectedOptionValue={watch("city")}
-                  onOptionSelected={(val) =>
-                    val && setValue("city", val, { shouldValidate: true })
-                  }
-                  error={errors.city?.message}
-                  disabled={!stateValue || isCitiesLoading}
-                />
-                <CustomFormInput
-                  id="district"
-                  placeholder="Ex: Centro"
-                  icon={<MapIcon />}
-                  label="Bairro*"
-                  value={watch("district") || ""}
-                  {...register("district")}
-                  error={errors.district?.message}
-                />
-                <CustomFormInput
-                  id="street"
-                  icon={<HomeIcon />}
-                  placeholder="Ex: Rua das Flores"
-                  label="Rua/Avenida*"
-                  value={watch("street") || ""}
-                  {...register("street")}
-                  error={errors.street?.message}
-                  className="md:col-span-2"
-                />
-                <CustomFormInput
-                  id="number"
-                  icon={<HashIcon />}
-                  placeholder="Ex: 123"
-                  label="Número*"
-                  {...register("number")}
-                  required
-                  error={errors.number?.message}
-                />
-                <CustomFormInput
-                  id="complement"
-                  icon={<HashIcon />}
-                  placeholder="Ex: Apto 45"
-                  label="Complemento"
-                  {...register("complement")}
-                  error={errors.complement?.message}
-                />
-                <CustomFormInput
-                  id="areaInM2"
-                  icon={<Square />}
-                  placeholder="Ex: 75"
-                  label="Área (m²)*"
-                  type="number"
-                  {...register("areaInM2", { valueAsNumber: true })}
-                  error={errors.areaInM2?.message}
-                />
-                <CustomFormInput
-                  id="numRooms"
-                  icon={<Bed />}
-                  label="Nº de Quartos*"
-                  placeholder="Ex: 3"
-                  type="number"
-                  {...register("numRooms", { valueAsNumber: true })}
-                  error={errors.numRooms?.message}
-                />
-                <CustomFormInput
-                  id="numBathrooms"
-                  icon={<Bath />}
-                  label="Nº de Banheiros*"
-                  type="number"
-                  placeholder="Ex: 2"
-                  {...register("numBathrooms", { valueAsNumber: true })}
-                  error={errors.numBathrooms?.message}
-                />
-                <CustomFormInput
-                  id="numParking"
-                  icon={<Car />}
-                  label="Nº de Vagas*"
-                  type="number"
-                  placeholder="Ex: 1"
-                  {...register("numParking", { valueAsNumber: true })}
-                  error={errors.numParking?.message}
-                />
+              <div>
+                <h2 className="text-lg sm:text-xl font-semibold mb-4 text-gray-700 border-b pb-2">
+                  Informações Principais
+                </h2>
+                <div className="grid grid-cols-1 gap-y-4">
+                  <CustomFormInput
+                    id="title"
+                    icon={<Building2 />}
+                    label="Título do Imóvel*"
+                    {...register("title")}
+                    error={errors.title?.message}
+                  />
+                  <CustomFormInput
+                    id="description"
+                    icon={<HomeIcon />}
+                    label="Descrição*"
+                    {...register("description")}
+                    error={errors.description?.message}
+                  />
+                </div>
+              </div>
+
+              <div>
+                <h2 className="text-lg sm:text-xl font-semibold mb-4 text-gray-700 border-b pb-2">
+                  Endereço
+                </h2>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-4">
+                  <CustomFormInput
+                    id="cep"
+                    icon={<MapPinIcon />}
+                    label="CEP*"
+                    registration={register("cep")}
+                    mask="cep"
+                    onBlur={handleCepBlur}
+                    error={errors.cep?.message}
+                    disabled={isCepLoading}
+                  />
+                  <CustomDropdownInput
+                    placeholder="Estado (UF)*"
+                    options={brazilianStates}
+                    selectedOptionValue={watch("state")}
+                    onOptionSelected={(val) =>
+                      val && setValue("state", val, { shouldValidate: true })
+                    }
+                    error={errors.state?.message}
+                  />
+                  <CustomFormInput
+                    id="street"
+                    icon={<HomeIcon />}
+                    placeholder="Ex: Rua das Flores"
+                    label="Rua/Avenida*"
+                    value={watch("street") || ""}
+                    {...register("street")}
+                    error={errors.street?.message}
+                    className="md:col-span-2"
+                  />
+                  <CustomDropdownInput
+                    placeholder={isCitiesLoading ? "Carregando..." : "Cidade*"}
+                    options={cities}
+                    selectedOptionValue={watch("city")}
+                    onOptionSelected={(val) =>
+                      val && setValue("city", val, { shouldValidate: true })
+                    }
+                    error={errors.city?.message}
+                    disabled={!stateValue || isCitiesLoading}
+                  />
+                  <CustomFormInput
+                    id="district"
+                    placeholder="Ex: Centro"
+                    icon={<MapIcon />}
+                    label="Bairro*"
+                    value={watch("district") || ""}
+                    {...register("district")}
+                    error={errors.district?.message}
+                  />
+                  <CustomFormInput
+                    id="number"
+                    icon={<HashIcon />}
+                    label="Número*"
+                    {...register("number")}
+                    error={errors.number?.message}
+                  />
+                  <CustomFormInput
+                    id="complement"
+                    icon={<HashIcon />}
+                    label="Complemento"
+                    {...register("complement")}
+                    error={errors.complement?.message}
+                  />
+                </div>
+              </div>
+
+              <div>
+                <h2 className="text-lg sm:text-xl font-semibold mb-4 text-gray-700 border-b pb-2">
+                  Características do Imóvel
+                </h2>
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-x-4 gap-y-4">
+                  <CustomFormInput
+                    id="areaInM2"
+                    icon={<Square />}
+                    label="Área (m²)*"
+                    type="number"
+                    {...register("areaInM2", { valueAsNumber: true })}
+                    error={errors.areaInM2?.message}
+                  />
+                  <CustomFormInput
+                    id="numRooms"
+                    icon={<Bed />}
+                    label="Quartos*"
+                    type="number"
+                    {...register("numRooms", { valueAsNumber: true })}
+                    error={errors.numRooms?.message}
+                  />
+                  <CustomFormInput
+                    id="numBathrooms"
+                    icon={<Bath />}
+                    label="Banheiros*"
+                    type="number"
+                    {...register("numBathrooms", { valueAsNumber: true })}
+                    error={errors.numBathrooms?.message}
+                  />
+                  <CustomFormInput
+                    id="numParking"
+                    icon={<Car />}
+                    label="Vagas*"
+                    type="number"
+                    {...register("numParking", { valueAsNumber: true })}
+                    error={errors.numParking?.message}
+                  />
+                </div>
               </div>
               <div className="pt-4 flex justify-end">
                 <CustomButton
                   type="submit"
                   fontSize="text-lg"
+                  className="w-full sm:w-auto"
                   disabled={isLoading}
                 >
-                  Próximo: Fotos
-                  <ArrowRight className="w-4 h-4 ml-2" />
+                  Próximo <ArrowRight className="w-4 h-4 ml-2" />
                 </CustomButton>
               </div>
             </form>
@@ -340,10 +391,15 @@ export default function CreatePropertyPage() {
 
           {step === 2 && (
             <div className="w-full space-y-6">
-              <h1 className="text-3xl text-foreground font-sans font-bold text-center">
-                Passo 2: Fotos do Imóvel
-              </h1>
-              <div className="grid gap-4 grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
+              <div className="text-center">
+                <h2 className="text-xl sm:text-2xl font-semibold text-gray-700">
+                  Fotos do Imóvel
+                </h2>
+                <p className="text-sm text-gray-500 mt-1">
+                  A primeira foto que você adicionar será a capa do anúncio.
+                </p>
+              </div>
+              <div className="grid gap-3 sm:gap-4 grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
                 {allPhotos.map((photo, index) => (
                   <PhotoCard
                     key={photo.id}
@@ -354,20 +410,29 @@ export default function CreatePropertyPage() {
                 <button
                   type="button"
                   onClick={() => setIsAddPhotoModalOpen(true)}
-                  className="flex flex-col items-center justify-center aspect-square border-2 border-dashed rounded-lg border-muted-foreground/30 hover:bg-muted/30 transition-colors"
+                  className="flex flex-col items-center justify-center aspect-square border-2 border-dashed rounded-lg border-gray-300 text-gray-400 hover:bg-gray-100 hover:text-gray-600 transition-colors"
                   title="Adicionar nova foto"
                 >
-                  <PlusIcon className="w-10 h-10 text-muted-foreground" />
-                  <span className="text-sm text-muted-foreground mt-1">
-                    Adicionar
-                  </span>
+                  <PlusIcon className="w-8 h-8 sm:w-10 sm:h-10" />
+                  <span className="text-xs sm:text-sm mt-1">Adicionar</span>
                 </button>
               </div>
-              <div className="pt-4 flex justify-end">
+
+              <div className="pt-4 flex flex-col-reverse sm:flex-row sm:justify-between gap-3">
+                {/* <CustomButton
+                  onClick={handlePreviousStep}
+                  fontSize="text-lg"
+                  ghost
+                  textColor="text-gray-600"
+                  className="w-full sm:w-auto"
+                >
+                  <ChevronLeft className="w-4 h-4 mr-2" /> Voltar
+                </CustomButton> */}
                 <CustomButton
                   onClick={handleFinish}
                   fontSize="text-lg"
                   disabled={isUploading}
+                  className="w-full sm:w-auto"
                 >
                   {isUploading ? "Enviando..." : "Concluir Cadastro"}
                 </CustomButton>
@@ -376,7 +441,6 @@ export default function CreatePropertyPage() {
           )}
         </div>
       </div>
-
       <AddPhotoModal
         isOpen={isAddPhotoModalOpen}
         onClose={() => setIsAddPhotoModalOpen(false)}
