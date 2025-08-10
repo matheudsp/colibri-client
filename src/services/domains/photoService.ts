@@ -18,7 +18,11 @@ export const PhotoService = {
       const formData = new FormData();
 
       files.forEach((file) => {
-        formData.append("files", file, file.name || `photo-${Date.now()}.jpg`);
+        formData.append(
+          "files",
+          file,
+          file.name || `property-photo-${Date.now()}.jpg`
+        );
       });
 
       const response = await api.post(
@@ -36,7 +40,7 @@ export const PhotoService = {
     }
   },
 
-  async listByLocation(
+  async listByProperty(
     propertyId: string,
     includeSignedUrls = true
   ): Promise<ApiResponse<Photo[]>> {

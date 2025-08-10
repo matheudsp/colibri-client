@@ -228,27 +228,21 @@ const LandlordForm = () => {
       setValue("city", "");
       return;
     }
-
     const loadCities = async () => {
       setIsCitiesLoading(true);
-      if (!cityFromCep) {
-        setValue("city", "");
-      }
 
       const cityOptions = await fetchCitiesByState(stateValue);
-      setCities(cityOptions);
-
+      setCities(
+        cityOptions.map((c) => ({ id: c.id, value: c.value, label: c.label }))
+      );
       if (cityFromCep) {
-        const cityExists = cityOptions.some((c) => c.value === cityFromCep);
-        if (cityExists) {
+        if (cityOptions.some((c) => c.value === cityFromCep)) {
           setValue("city", cityFromCep, { shouldValidate: true });
         }
         setCityFromCep(null);
       }
-
       setIsCitiesLoading(false);
     };
-
     loadCities();
   }, [stateValue, setValue, cityFromCep]);
 

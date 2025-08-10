@@ -11,10 +11,10 @@ export const createPropertySchema = z.object({
   cep: z
     .string()
     .min(1, "O CEP é obrigatório")
-    .refine(
-      (val) => val.replace(/\D/g, "").length === 8,
-      "O CEP deve ter 8 dígitos"
-    ),
+    .transform((cep) => cep.replace(/\D/g, ""))
+    .refine((cep) => cep.length === 8, {
+      message: "O CEP deve conter 8 dígitos.",
+    }),
 
   street: z.string().min(1, "A rua é obrigatória"),
 
