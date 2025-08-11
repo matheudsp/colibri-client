@@ -2,13 +2,13 @@ export interface PropertyProps {
   id: string;
   title: string;
   description: string;
-  // cep: string;
-  // street: string;
-  // district: string;
-  // city: string;
-  // state: string;
-  // number: string;
-  // complement: string | null;
+  cep: string;
+  street: string;
+  district: string;
+  city: string;
+  state: string;
+  number: string;
+  complement: string | null;
   areaInM2: number;
   numRooms: number;
   numBathrooms: number;
@@ -21,12 +21,12 @@ export interface PropertyProps {
     email: string;
   };
   onDelete?: (id: string) => void;
-  // photos: Array<{
-  //   id: string;
-  //   propertyId: string;
-  //   name?: string;
-  //   filePath: string;
-  //   isCover: boolean;
-  //   signedUrl: string;
-  // }>;
+  photos: Array<{
+    id: string;
+    propertyId: string;
+    name?: string;
+    filePath: string;
+    isCover: boolean;
+    signedUrl: string;
+  }>;
 }

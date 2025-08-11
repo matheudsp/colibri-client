@@ -33,7 +33,6 @@ export default function LoginPage() {
     try {
       destroyCookie(null, "authToken", { path: "/" });
       destroyCookie(null, "accessToken", { path: "/" });
-      destroyCookie(null, "propertyId", { path: "/" });
 
       const response = await AuthService.login({
         ...data,

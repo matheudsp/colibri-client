@@ -60,7 +60,14 @@ const API_ROUTES = {
     GENERATE: "/bank-slips/generate",
   },
 
-  CONDOMINIUMS: {},
+  CONDOMINIUMS: {
+    BASE: "/condominiums",
+    SEARCH: "/condominiums/search",
+    CREATE: "/condominiums",
+    BY_ID: ({ id }: Params) => `/condominiums/${id}`,
+    UPDATE: ({ id }: Params) => `/condominiums/${id}`,
+    DELETE: ({ id }: Params) => `/condominiums/${id}`,
+  },
   CONTRACTS: {
     BASE: "/contracts",
     CREATE: "/contracts",

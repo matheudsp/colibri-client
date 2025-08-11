@@ -67,9 +67,9 @@ export function Header({
           <Image
             width={50}
             height={50}
-            src="/icons/logo-icon.svg"
+            src="/images/logo-black-letter.png"
             alt="Logo Fagon"
-            className="md:hidden w-auto h-12"
+            className="md:hidden w-auto h-4"
           />
           <CustomFormInput
             icon={<SearchIcon />}

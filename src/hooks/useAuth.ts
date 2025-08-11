@@ -23,24 +23,13 @@ export function useAuth(options?: UseAuthOptions) {
 
     async function verifyAuth() {
       try {
-        // const user = await AuthService.getMe();
-        const cookies = parseCookies();
-        // const projectId = cookies.projectId;
-
-        // if (
-        //     options?.checkVistoriador &&
-        //     user.data.role === 'vistoriador' &&
-        //     projectId
-        // ) {
-        //     router.push(`/projects/${projectId}/locations`);
-        //     return;
-        // }
+        const user = await AuthService.getMe();
 
         if (options?.redirectIfAuthenticated) {
           const redirectPath =
             typeof options.redirectIfAuthenticated === "string"
               ? options.redirectIfAuthenticated
-              : "/projects";
+              : "/properties";
           router.push(redirectPath);
         }
       } catch {
