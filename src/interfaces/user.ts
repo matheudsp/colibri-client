@@ -6,7 +6,7 @@ export interface userProps {
   id: string;
   name: string;
   email: string;
-  password: string;
-  role: UserRole;
+  password?: string;
+  role?: UserRole;
   status: boolean;
 }

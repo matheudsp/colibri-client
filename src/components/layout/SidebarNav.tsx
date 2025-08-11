@@ -1,6 +1,6 @@
 "use client";
 
-import { Building2, CalendarArrowDown, HomeIcon } from "lucide-react"; // Ícones atualizados
+import { Building2, CalendarArrowDown, HomeIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -28,7 +28,7 @@ export default function SidebarNav() {
   const pathname = usePathname();
 
   return (
-    <div className="fixed z-20 hidden md:flex w-32 min-h-svh flex-col items-center bg-primary py-6 px-2 text-background rounded-r-2xl">
+    <div className="fixed z-20 hidden md:flex w-32 min-h-svh flex-col items-center bg-primary py-6 px-2 text-background ">
       <div className="mb-10">
         <Image
           width={50}

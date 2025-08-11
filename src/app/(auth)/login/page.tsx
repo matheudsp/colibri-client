@@ -24,7 +24,6 @@ export default function LoginPage() {
     formState: { errors },
   } = useForm<LoginFormData>({
     resolver: zodResolver(loginSchema),
-    mode: "onTouched",
   });
 
   const onSubmit = async (data: LoginFormData) => {
@@ -33,6 +32,7 @@ export default function LoginPage() {
     try {
       destroyCookie(null, "authToken", { path: "/" });
       destroyCookie(null, "accessToken", { path: "/" });
+      destroyCookie(null, "propertyId", { path: "/" });
 
       const response = await AuthService.login({
         ...data,

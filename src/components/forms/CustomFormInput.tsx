@@ -3,6 +3,9 @@
 import { useEffect, useState } from "react";
 import { UseFormRegisterReturn } from "react-hook-form";
 import { formatCEP } from "@/utils/formatters/formatCEP";
+import { formatCurrency, unmaskCurrency } from "@/utils/masks/maskCurrency";
+import { dateMask } from "@/utils/masks/maskDate";
+import { phoneMask, unmaskPhone } from "@/utils/masks/maskPhone";
 
 interface BasicInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   label: string | undefined;
@@ -16,7 +19,7 @@ interface BasicInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   defaultValue?: string | number;
   value?: string;
   className?: string;
-  mask?: "cep";
+  mask?: "cep" | "currency" | "date" | "phone";
   onDebouncedChange?: (value: string) => void;
 }
 
@@ -42,72 +45,78 @@ export function CustomFormInput({
   ...props
 }: BasicInputProps) {
   const [isFocused, setIsFocused] = useState(false);
-  const [internalValue, setInternalValue] = useState("");
+  const [internalValue, setInternalValue] = useState(
+    defaultValue || value || ""
+  );
 
   useEffect(() => {
-    let initialValue = "";
     if (value !== undefined) {
-      initialValue = value;
-    } else if (defaultValue !== undefined) {
-      initialValue = String(defaultValue);
-    }
-
-    if (mask === "cep") {
-      setInternalValue(formatCEP(initialValue));
-    } else {
-      setInternalValue(initialValue);
-    }
-  }, [value, defaultValue, mask]);
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      if (onDebouncedChange) {
-        onDebouncedChange(internalValue.toString());
+      let formattedValue = String(value);
+      if (mask === "currency") {
+        formattedValue = formatCurrency(formattedValue);
+      } else if (mask === "date") {
+        formattedValue = dateMask(formattedValue);
+      } else if (mask === "cep") {
+        formattedValue = formatCEP(formattedValue);
+      } else if (mask === "phone") {
+        formattedValue = phoneMask(formattedValue);
       }
-    }, 500);
+      setInternalValue(formattedValue);
+    }
+  }, [value, mask]);
 
-    return () => clearTimeout(timer);
-  }, [internalValue, onDebouncedChange]);
-
-  const inputProps = registration
-    ? { ...registration, ...props }
-    : { ...props };
+  const hasValue = Boolean(internalValue) || Boolean(defaultValue);
 
   const containerClasses = `
-        flex items-center border-2 ${
-          borderColor || "border-gray-200"
-        } px-4 py-2 md:py-3 rounded-lg transition-all duration-200 
-        ${colorBg}
-        ${error ? "border-error" : ""}
-        ${disabled ? "bg-gray-200/90 border-gray-100 cursor-not-allowed" : ""}
-    `;
+    flex items-center w-full px-4 py-2 rounded-lg transition-all duration-300
+    ${colorBg} ${textColor}
+    ${
+      error
+        ? "border-2 border-error"
+        : borderColor
+        ? `border-2 ${borderColor}`
+        : "border-2 border-gray-300"
+    }
+    ${isFocused ? "border-primary" : "hover:border-primary-hover"}
+    ${disabled ? "bg-gray-200 cursor-not-allowed" : ""}
+  `;
 
   const inputClasses = `
-        w-full bg-transparent outline-none placeholder-transparent 
-        ${textColor}
-        ${disabled ? "cursor-not-allowed" : ""}
-    `;
+    w-full bg-transparent outline-none placeholder-transparent
+    ${disabled ? "cursor-not-allowed" : ""}
+  `;
 
   const labelClasses = `
-        absolute left-0 transition-all duration-200 pointer-events-none 
-        ${textColor} 
-        ${
-          isFocused || internalValue
-            ? "-top-1/4 opacity-0"
-            : "top-1/2 -translate-y-1/2 text-base text-gray-400"
-        }
-    `;
+    absolute left-0 transition-all duration-200 pointer-events-none 
+    ${
+      isFocused || hasValue
+        ? " -translate-y-5 text-xs text-primary font-semibold"
+        : "translate-y-0 text-base text-gray-400"
+    }
+    ${disabled ? "text-gray-500" : ""}
+  `;
+
+  const inputProps = { ...props, ...registration };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    let newValue = e.target.value;
-    let valueToRegister = newValue;
+    let value = e.target.value;
+    let valueToRegister: string | number = value;
 
-    if (mask === "cep") {
-      newValue = formatCEP(newValue);
-      valueToRegister = newValue.replace(/\D/g, "");
+    if (mask === "currency") {
+      value = formatCurrency(value);
+      valueToRegister = unmaskCurrency(value);
+    } else if (mask === "date") {
+      value = dateMask(value);
+      valueToRegister = value;
+    } else if (mask === "cep") {
+      value = formatCEP(value);
+      valueToRegister = value.replace(/\D/g, "");
+    } else if (mask === "phone") {
+      value = phoneMask(value);
+      valueToRegister = unmaskPhone(value);
     }
 
-    setInternalValue(newValue);
+    setInternalValue(value);
 
     if (registration?.onChange) {
       const fakeEvent = {
@@ -126,6 +135,8 @@ export function CustomFormInput({
     }
   };
 
+  const inputType = mask === "date" ? "text" : type;
+
   return (
     <div className={`w-full ${className}`}>
       <div className={containerClasses}>
@@ -133,7 +144,15 @@ export function CustomFormInput({
         <div className="w-full relative">
           <input
             {...inputProps}
-            type={type}
+            type={inputType}
+            inputMode={
+              mask === "currency" ||
+              mask === "date" ||
+              mask === "cep" ||
+              mask === "phone"
+                ? "numeric"
+                : "text"
+            }
             value={internalValue}
             id={id}
             onFocus={() => setIsFocused(true)}
@@ -147,7 +166,15 @@ export function CustomFormInput({
             placeholder={label}
             disabled={disabled}
             required={required}
-            maxLength={mask === "cep" ? 9 : maxLength}
+            maxLength={
+              mask === "cep"
+                ? 9
+                : mask === "date"
+                ? 10
+                : mask === "phone"
+                ? 15
+                : maxLength
+            }
             minLength={minLength}
           />
           <label htmlFor={id} className={labelClasses}>
@@ -156,7 +183,7 @@ export function CustomFormInput({
         </div>
       </div>
       {error && (
-        <span className="text-error text-sm mt-1 block transition-all duration-200">
+        <span className="text-error text-sm mt-1 block transition-all duration-300">
           {error}
         </span>
       )}

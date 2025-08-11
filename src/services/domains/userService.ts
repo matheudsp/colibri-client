@@ -7,8 +7,8 @@ interface User {
   email: string;
   role?: "ADMIN" | "LOCADOR" | "LOCATARIO";
   status: boolean;
-  createdAt: string;
-  updatedAt: string;
+  // createdAt: string;
+  // updatedAt: string;
 }
 
 interface ListUserParams {

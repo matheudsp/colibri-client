@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { Eye, EyeOff } from "lucide-react";
 import { UseFormRegisterReturn } from "react-hook-form";
 import { formatCurrency, unmaskCurrency } from "@/utils/masks/maskCurrency";
-import { formatDate } from "@/utils/formatters/formatDate";
+import { dateMask } from "@/utils/masks/maskDate";
 import { phoneMask, unmaskPhone } from "@/utils/masks/maskPhone";
 import { formatCEP } from "@/utils/formatters/formatCEP";
 
@@ -38,11 +38,12 @@ export function CustomAuthInput({
 
   const getInitialDisplayValue = () => {
     const initialValue = (props.value || props.defaultValue || "").toString();
+
     switch (mask) {
       case "currency":
         return formatCurrency(initialValue);
       case "date":
-        return formatDate(initialValue);
+        return dateMask(initialValue);
       case "phone":
         return phoneMask(initialValue);
       case "cep":
@@ -55,12 +56,22 @@ export function CustomAuthInput({
 
   useEffect(() => {
     const externalValue = (props.value || "").toString();
-    setDisplayValue(externalValue);
-  }, [props.value]);
+    if (mask === "date") {
+      setDisplayValue(dateMask(externalValue));
+    } else {
+      setDisplayValue(externalValue);
+    }
+  }, [props.value, mask]);
 
   const isPassword = type === "password";
 
-  const inputType = isPassword && !showPassword ? "password" : "text";
+  const inputType = isPassword
+    ? showPassword
+      ? "text"
+      : "password"
+    : mask === "date"
+    ? "text"
+    : type;
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
@@ -70,12 +81,12 @@ export function CustomAuthInput({
     switch (mask) {
       case "currency": {
         const numericString = unmaskCurrency(value);
-        valueToRegister = numericString ? Number(numericString).toString() : "";
+        valueToRegister = numericString || "";
         formattedDisplayValue = formatCurrency(value);
         break;
       }
       case "date": {
-        formattedDisplayValue = formatDate(value);
+        formattedDisplayValue = dateMask(value);
         valueToRegister = formattedDisplayValue;
         break;
       }
@@ -89,6 +100,12 @@ export function CustomAuthInput({
         formattedDisplayValue = formatCEP(value);
         break;
       }
+      default:
+        setDisplayValue(value);
+        if (registration?.onChange) {
+          registration.onChange(e);
+        }
+        return;
     }
 
     setDisplayValue(formattedDisplayValue);
@@ -118,12 +135,13 @@ export function CustomAuthInput({
             value={displayValue}
             type={inputType}
             id={id}
+            maxLength={mask === "date" ? 10 : undefined}
             inputMode={
               mask === "currency" ||
               mask === "date" ||
               mask === "phone" ||
               mask === "cep"
-                ? "tel"
+                ? "numeric"
                 : "text"
             }
             onFocus={() => setIsFocused(true)}

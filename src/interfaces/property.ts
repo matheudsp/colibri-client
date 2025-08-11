@@ -20,6 +20,7 @@ export interface PropertyProps {
     name: string;
     email: string;
   };
+  showPropertyInformation?: boolean;
   onDelete?: (id: string) => void;
   photos: Array<{
     id: string;

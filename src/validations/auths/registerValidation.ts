@@ -22,7 +22,7 @@ export const tenantRegisterSchema = z
       .max(14, "CPF/CNPJ inválido."),
     password: z
       .string({ required_error: "Senha é obrigatória" })
-      .min(4, "Senha deve ter pelo menos 6 caracteres")
+      .min(6, "A senha deve ter pelo menos 6 caracteres")
       .max(14, "Senha muito longa"),
     confirmPassword: z.string({
       required_error: "Confirmação de senha é obrigatória",
