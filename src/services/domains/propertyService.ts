@@ -8,6 +8,8 @@ export interface Property {
   id: string;
   title: string;
   description: string;
+  rentAmount: number;
+
   cep: string;
   street: string;
   district: string;
@@ -25,6 +27,7 @@ export interface Property {
   landlord: {
     name: string;
     email: string;
+    phone: string;
   };
   photos: Array<{
     id: string;

@@ -30,4 +30,4 @@ export const createContractSchema = z.object({
   }),
 });
 
-export type CreateContractFormData = z.infer<typeof createContractSchema>;
+export type CreateContractFormValues = z.infer<typeof createContractSchema>;

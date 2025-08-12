@@ -3,6 +3,7 @@
 import {
   Building2,
   CalendarArrowDown,
+  FileText,
   FileTextIcon,
   HomeIcon,
   LandmarkIcon,
@@ -21,6 +22,11 @@ const navItems = [
     label: "Condomínios",
     href: "/condominiums",
     icon: Building2,
+  },
+  {
+    label: "Contratos",
+    href: "/contracts",
+    icon: FileText,
   },
   {
     label: "Pagamentos",

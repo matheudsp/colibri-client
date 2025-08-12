@@ -2,6 +2,7 @@ type Params = {
   id?: string;
   userId?: string;
   contractId?: string;
+  documentId?: string;
   propertyId?: string;
 };
 
@@ -59,6 +60,16 @@ const API_ROUTES = {
     BASE: "/bank-slips",
     GENERATE: "/bank-slips/generate",
   },
+  DOCUMENTS: {
+    BASE: "/documents",
+    UPLOAD: ({ contractId }: Params) =>
+      `/documents/contracts/${contractId}/upload`,
+
+    BY_CONTRACT: ({ contractId }: Params) =>
+      `/documents/contracts/${contractId}/documents`,
+
+    UPDATE: ({ documentId }: Params) => `/documents/${documentId}`,
+  },
 
   CONDOMINIUMS: {
     BASE: "/condominiums",
@@ -79,8 +90,6 @@ const API_ROUTES = {
   PAYMENTS: {
     BASE: "/payments-orders",
     BY_ID: ({ id }: Params) => `/payments-orders/${id}`,
-    // UPDATE: ({ id }: Params) => `/payments-orders/${id}`,
-    // DELETE: ({ id }: Params) => `/payments-orders/${id}`,
     BY_CONTRACT: ({ id }: Params) => `/payments-orders/contract/${id}`,
   },
 };

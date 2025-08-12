@@ -30,36 +30,35 @@ export function CustomButton({
   title,
 }: CustomButtonProps) {
   const baseClasses = `
-        px-4 py-2 
-        ${rounded}
-        ${fontSize}
-        ${
-          disabled
-            ? "opacity-70 cursor-not-allowed"
-            : "cursor-pointer hover:shadow-md"
-        }
-        transition-all 
-        font-medium
-        gap-2
-        items-center 
-        flex justify-center
-        ${className}
-    `;
+    px-4 py-2 
+    ${rounded}
+    ${fontSize}
+    transition-all 
+    duration-200
+    font-medium
+    gap-2
+    items-center 
+    flex justify-center
+    focus:outline-none focus:ring-2 focus:ring-offset-2
+  `;
+
+  // Define a cor de texto padrão para o modo ghost, caso não seja especificada.
+  // Isso evita que o texto fique branco em um fundo branco.
+  const finalTextColor =
+    ghost && textColor === "text-white" ? "text-gray-700" : textColor;
 
   const variantClasses = ghost
-    ? `bg-transparent ${textColor} underline ${
-        disabled
-          ? "border border-gray-300"
-          : "border border-transparent hover:border-current"
-      }`
-    : `${color} ${textColor} ${disabled ? "border border-gray-300" : ""}`;
+    ? `bg-transparent ${finalTextColor} border-2 border-transparent hover:bg-gray-100 hover:border-gray-200`
+    : `${color} ${textColor} hover:brightness-95`;
+
+  const disabledClasses = disabled ? "opacity-60 cursor-not-allowed" : "";
 
   return (
     <button
       type={type}
       onClick={onClick}
       disabled={disabled}
-      className={`${baseClasses} ${variantClasses}`}
+      className={`${baseClasses} ${variantClasses} ${disabledClasses} ${className}`}
       title={title}
     >
       {icon && <span>{icon}</span>}

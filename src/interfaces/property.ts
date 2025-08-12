@@ -2,6 +2,7 @@ export interface PropertyProps {
   id: string;
   title: string;
   description: string;
+  rentAmount: number;
   cep: string;
   street: string;
   district: string;
@@ -19,6 +20,7 @@ export interface PropertyProps {
   landlord: {
     name: string;
     email: string;
+    phone: string;
   };
   showPropertyInformation?: boolean;
   onDelete?: (id: string) => void;

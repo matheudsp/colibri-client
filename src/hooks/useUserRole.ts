@@ -5,6 +5,7 @@ import { AuthService } from "../services/domains/authService";
 
 export function useUserRole() {
   const [role, setRole] = useState<string | null>(null);
+  const [sub, setSub] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -12,6 +13,7 @@ export function useUserRole() {
       try {
         const user = await AuthService.getMe();
         setRole(user.data.role);
+        setSub(user.data.id);
       } catch (error) {
         console.error("Failed to fetch user role:", error);
         setRole(null);
@@ -24,6 +26,7 @@ export function useUserRole() {
   }, []);
 
   return {
+    sub,
     role,
     loading,
   };
