@@ -6,6 +6,9 @@ import { formatCEP } from "@/utils/formatters/formatCEP";
 import { formatCurrency, unmaskCurrency } from "@/utils/masks/maskCurrency";
 import { dateMask } from "@/utils/masks/maskDate";
 import { phoneMask, unmaskPhone } from "@/utils/masks/maskPhone";
+import { decimalMask } from "@/utils/masks/maskDecimal";
+import { parseDecimalValue } from "@/utils/formatters/formatDecimal";
+import { formatNumeric, unmaskNumeric } from "@/utils/masks/maskNumeric";
 
 interface BasicInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   label: string | undefined;
@@ -19,7 +22,7 @@ interface BasicInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   defaultValue?: string | number;
   value?: string;
   className?: string;
-  mask?: "cep" | "currency" | "date" | "phone";
+  mask?: "cep" | "currency" | "date" | "phone" | "numeric";
   onDebouncedChange?: (value: string) => void;
 }
 
@@ -100,23 +103,21 @@ export function CustomFormInput({
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     let value = e.target.value;
-    let valueToRegister: string | number = value;
+    let valueToRegister: string = value;
 
     if (mask === "currency") {
-      value = formatCurrency(value);
-      valueToRegister = unmaskCurrency(value);
+      valueToRegister = formatCurrency(value);
+    } else if (mask === "numeric") {
+      valueToRegister = formatNumeric(value);
     } else if (mask === "date") {
-      value = dateMask(value);
-      valueToRegister = value;
+      valueToRegister = dateMask(value);
     } else if (mask === "cep") {
-      value = formatCEP(value);
-      valueToRegister = value.replace(/\D/g, "");
+      valueToRegister = formatCEP(value);
     } else if (mask === "phone") {
-      value = phoneMask(value);
-      valueToRegister = unmaskPhone(value);
+      valueToRegister = phoneMask(value);
     }
 
-    setInternalValue(value);
+    setInternalValue(valueToRegister);
 
     if (registration?.onChange) {
       const fakeEvent = {
@@ -149,7 +150,8 @@ export function CustomFormInput({
               mask === "currency" ||
               mask === "date" ||
               mask === "cep" ||
-              mask === "phone"
+              mask === "phone" ||
+              mask === "numeric"
                 ? "numeric"
                 : "text"
             }

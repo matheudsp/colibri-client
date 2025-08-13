@@ -1,28 +1,38 @@
+// src/utils/masks/maskCurrency.ts
+
 /**
- * Formata um valor numérico ou string de dígitos para o formato de moeda BRL.
- * Ex: 123456 -> "R$ 1.234,56"
+ * Formata um valor numérico ou uma string para o formato de moeda BRL.
+ * Lida corretamente com números de ponto flutuante e strings formatadas.
+ * Ex: 1200.4 -> "R$ 1.200,40"
  */
 export const formatCurrency = (value: string | number): string => {
-  if (value === null || value === undefined) return "";
+  if (value === null || value === undefined || value === "") return "";
 
-  // Remove tudo que não for dígito
-  const onlyDigits = String(value).replace(/\D/g, "");
+  let numericValue: number;
 
-  if (onlyDigits === "") return "";
+  if (typeof value === "string") {
+    const sanitizedValue = value.replace(/[^\d,.-]/g, "").replace(",", ".");
+    numericValue = parseFloat(sanitizedValue);
+  } else {
+    numericValue = value;
+  }
 
-  // Transforma a string de dígitos em um número (ex: '12345' se torna 123.45)
-  const numericValue = Number(onlyDigits) / 100;
+  if (isNaN(numericValue)) {
+    return "";
+  }
 
-  // Usa a API Intl.NumberFormat para formatar como moeda brasileira
   return new Intl.NumberFormat("pt-BR", {
     style: "currency",
     currency: "BRL",
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
   }).format(numericValue);
 };
 
 /**
- * Pega uma string de moeda formatada e retorna apenas os dígitos.
- * Ex: "R$ 1.234,56" -> "123456"
+ * Remove a formatação de uma string de moeda e retorna apenas os dígitos.
+ * Mantém sua função original para uso em campos de formulário.
+ * Ex: "R$ 1.200,40" -> "120040"
  */
 export const unmaskCurrency = (maskedValue: string): string => {
   if (!maskedValue) return "";

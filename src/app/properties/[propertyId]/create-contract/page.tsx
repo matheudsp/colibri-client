@@ -8,7 +8,7 @@ import { toast } from "sonner";
 
 import {
   createContractSchema,
-  CreateContractFormData,
+  CreateContractFormValues,
 } from "@/validations/contracts/contractCreateValidation";
 import { ContractService } from "@/services/domains/contractService";
 import { UserService } from "@/services/domains/userService";
@@ -38,6 +38,7 @@ import { Stepper } from "@/components/layout/Stepper";
 import { guaranteeTypes } from "@/constants";
 import { unmaskCurrency } from "@/utils/masks/maskCurrency";
 import { toISODate } from "@/utils/formatters/formatDate";
+import { unmaskNumeric } from "@/utils/masks/maskNumeric";
 
 export default function CreateContractPage() {
   const router = useRouter();
@@ -68,7 +69,7 @@ export default function CreateContractPage() {
     watch,
     trigger,
     formState: { errors },
-  } = useForm<CreateContractFormData>({
+  } = useForm<CreateContractFormValues>({
     resolver: zodResolver(createContractSchema),
     defaultValues: {
       propertyId,
@@ -121,7 +122,7 @@ export default function CreateContractPage() {
   };
 
   const nextStep = async () => {
-    const fieldsToValidate: (keyof CreateContractFormData)[] =
+    const fieldsToValidate: (keyof CreateContractFormValues)[] =
       currentStep === 1
         ? tenantAction === "create"
           ? ["tenantEmail", "tenantName", "tenantCpfCnpj", "tenantPassword"]
@@ -151,27 +152,25 @@ export default function CreateContractPage() {
     setCurrentStep((prev) => prev - 1);
   };
 
-  const onSubmit = async (data: CreateContractFormData) => {
+  const onSubmit = async (data: CreateContractFormValues) => {
     setLoading(true);
     try {
-      await ContractService.create({
+      const payload = {
         ...data,
         durationInMonths: data.durationInMonths,
         guaranteeType: data.guaranteeType,
         propertyId: data.propertyId,
-        rentAmount: Number(unmaskCurrency(data.rentAmount)),
-        iptuFee: data.iptuFee
-          ? Number(unmaskCurrency(data.iptuFee))
-          : undefined,
+        rentAmount: unmaskNumeric(data.rentAmount),
+        iptuFee: data.iptuFee ? unmaskNumeric(data.iptuFee) : undefined,
         securityDeposit: data.securityDeposit
-          ? Number(unmaskCurrency(data.securityDeposit))
+          ? unmaskNumeric(data.securityDeposit)
           : undefined,
-        condoFee: data.condoFee
-          ? Number(unmaskCurrency(data.condoFee))
-          : undefined,
+        condoFee: data.condoFee ? unmaskNumeric(data.condoFee) : undefined,
         startDate: toISODate(data.startDate),
         tenantEmail: data.tenantEmail,
-      });
+      };
+      // console.log("PAYLOAD DE CRIACAO DE CONTRATO: ", payload);
+      await ContractService.create(payload);
       setCurrentStep(3);
     } catch (error) {
       console.error("Erro ao criar contrato:", error);
@@ -370,7 +369,7 @@ export default function CreateContractPage() {
                   {...register("rentAmount")}
                   registration={register("rentAmount")}
                   error={errors.rentAmount?.message}
-                  mask="currency"
+                  mask="numeric"
                 />
 
                 <div>
@@ -380,7 +379,7 @@ export default function CreateContractPage() {
                     label="Taxa de Condomínio"
                     {...register("condoFee")}
                     error={errors.condoFee?.message}
-                    mask="currency"
+                    mask="numeric"
                   />
                   <p className="text-xs text-gray-500 mt-1 pl-1">
                     (Opcional) Taxa mensal do condomínio.
@@ -393,7 +392,7 @@ export default function CreateContractPage() {
                     icon={<Building />}
                     {...register("iptuFee")}
                     error={errors.iptuFee?.message}
-                    mask="currency"
+                    mask="numeric"
                   />
                   <p className="text-xs text-gray-500 mt-1 pl-1">
                     (Opcional) Valor mensal do IPTU.
@@ -419,7 +418,7 @@ export default function CreateContractPage() {
                       id="securityDeposit"
                       label="Depósito Caução"
                       icon={<DollarSign />}
-                      mask="currency"
+                      mask="numeric"
                       {...register("securityDeposit")}
                       error={errors.securityDeposit?.message}
                     />

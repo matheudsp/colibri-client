@@ -23,7 +23,9 @@ export const updatePropertySchema = z.object({
   complement: z.string().optional(),
 
   district: z.string().min(1, "O bairro é obrigatório"),
-
+  rentValue: z
+    .string({ required_error: "O valor do aluguel é obrigatório." })
+    .min(1, "O valor do aluguel é obrigatório."),
   city: z.string().min(1, "A cidade é obrigatória"),
 
   state: z

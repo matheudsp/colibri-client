@@ -2,7 +2,7 @@ export interface PropertyProps {
   id: string;
   title: string;
   description: string;
-  rentAmount: number;
+  rentValue: string;
   cep: string;
   street: string;
   district: string;

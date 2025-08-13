@@ -24,7 +24,7 @@ const poppins = Poppins({
 export const metadata: Metadata = {
   title: "Sistema Colibri",
   description: "Gestão de imóveis e locações",
-  icons: "/icons/logo-icon.svg",
+  icons: "/icons/logo-green.svg",
 };
 
 export default function RootLayout({
@@ -35,7 +35,7 @@ export default function RootLayout({
   return (
     <html lang="pt-br" suppressHydrationWarning>
       <body
-        className={`${openSans.className} ${montserrat.className} ${poppins.className} font-sans antialiased flex`}
+        className={`${openSans.className} ${montserrat.className} ${poppins.className} font-montserrat antialiased flex  `}
       >
         {children}
         <Toaster richColors position="top-right" />

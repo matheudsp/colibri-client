@@ -33,18 +33,20 @@ export default function SidebarNav() {
   const pathname = usePathname();
 
   return (
-    <div className="fixed z-20 hidden md:flex w-32 min-h-svh flex-col items-center bg-primary py-6 px-2 text-background ">
-      <div className="mb-10">
-        <Image
-          width={50}
-          height={50}
-          src="/images/logo-vertical.png"
-          alt="Logo Colibri"
-          className="w-20 h-auto"
-        />
+    <div className="fixed z-20 hidden md:flex w-32 min-h-screen flex-col items-center bg-secondary py-6 px-2 shadow-xl">
+      <div className="mb-12">
+        <Link href="/properties">
+          <Image
+            width={50}
+            height={50}
+            src="/icons/logo-white-green.svg"
+            alt="Logo Colibri"
+            className="w-20 h-auto"
+          />
+        </Link>
       </div>
 
-      <nav className="flex flex-col gap-6 w-full items-center">
+      <nav className="flex flex-col gap-4 w-full items-center">
         {navItems.map((item) => {
           const Icon = item.icon;
           const isActive = pathname.startsWith(item.href);
@@ -53,13 +55,19 @@ export default function SidebarNav() {
             <Link
               key={item.href}
               href={item.href}
+              title={item.label}
               className={clsx(
-                "flex flex-col items-center gap-1 px-2 py-1 w-full rounded-lg hover:bg-primary-hover transition-all duration-150",
-                isActive && "bg-black/20"
+                "flex flex-col items-center justify-center gap-1 p-2 w-full rounded-lg transition-all duration-300 ease-in-out transform",
+
+                isActive
+                  ? "bg-primary text-secondary/90 scale-105 shadow-md"
+                  : "text-white/90 hover:bg-secondary-hover hover:text-white hover:scale-105"
               )}
             >
-              <Icon className="w-8 h-8" />
-              <span className="text-sm font-medium">{item.label}</span>
+              <Icon className="w-7 h-7" />
+              <span className="text-xs font-bold tracking-wide">
+                {item.label}
+              </span>
             </Link>
           );
         })}

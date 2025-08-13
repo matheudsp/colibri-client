@@ -3,14 +3,14 @@
 @tailwind utilities;
 
 :root {
-   --background: #f0f8fc;          /* azul bem claro para fundo suave */
-  --foreground: #1c1c1e;          /* cinza quase preto para texto */
-  --primary: #1DA1F2;             /* azul Twitter - cor principal */
-  --primary-hover: #1a91da;       /* azul escurecido para hover */
-  --secondary: #123e52;           /* azul petróleo escuro (contraste) */
-  --secondary-hover: #16506a;     /* azul petróleo um pouco mais claro */
-  --accent: #73d3ff;              /* azul-claro vibrante para detalhes e realces */
-  --error: #c62828;  
+    --background: #F7F7FD;
+    --foreground: #2D2B2E;
+    --primary: #B9C72A;
+    --primary-hover: #A2B025;
+    --secondary: #4A3A6B;
+    --secondary-hover: #5F4A8B;
+    --accent: #7F2AC7;
+    --error: #c62828;
 }
 
 *::-webkit-scrollbar-thumb {

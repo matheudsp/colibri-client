@@ -34,10 +34,9 @@ export function ContractCard({ contract }: { contract: Contract }) {
       <header className="p-4 bg-gray-50 border-b border-gray-200">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
           <div className="flex items-center gap-2">
-            <Building
-              className="w-6 h-6 text-primary flex-shrink-0"
-              aria-hidden="true"
-            />
+            <div className="bg-primary p-3 rounded-xl">
+              <Building className="w-6 h-6 text-white" />
+            </div>
             <h3 className="text-lg font-bold text-gray-900 leading-tight">
               {contract.property.title}
             </h3>

@@ -4,12 +4,11 @@ import API_ROUTES from "../api/routes";
 import { PropertyProps } from "../../interfaces/property";
 import { ApiResponse } from "../../types/api";
 
-export interface Property {
+export interface PropertyResponse {
   id: string;
   title: string;
   description: string;
-  rentAmount: number;
-
+  rentValue: string;
   cep: string;
   street: string;
   district: string;
@@ -39,6 +38,25 @@ export interface Property {
   }>;
 }
 
+interface PropertyCreateData {
+  title: string;
+  description: string;
+  rentValue: number;
+  cep: string;
+  street: string;
+  district: string;
+  city: string;
+  state: string;
+  number: string;
+  complement?: string | null;
+  areaInM2: number;
+  numRooms: number;
+  numBathrooms: number;
+  numParking: number;
+  isAvailable: boolean;
+  condominiumId?: string | null;
+}
+
 interface ListPropertiesParams {
   page?: number;
   limit?: number;
@@ -51,7 +69,9 @@ interface SearchPropertiesParams {
 }
 
 export const PropertyService = {
-  async create(data: CreatePropertyFormValues): Promise<ApiResponse<Property>> {
+  async create(
+    data: PropertyCreateData
+  ): Promise<ApiResponse<PropertyResponse>> {
     try {
       const response = await api.post(API_ROUTES.PROPERTIES.CREATE, data);
       return response.data;
@@ -62,7 +82,7 @@ export const PropertyService = {
 
   async listAll(
     params?: ListPropertiesParams
-  ): Promise<ApiResponse<Property[]>> {
+  ): Promise<ApiResponse<PropertyResponse[]>> {
     try {
       const response = await api.get(API_ROUTES.PROPERTIES.BASE, {
         params: params,
@@ -75,7 +95,7 @@ export const PropertyService = {
 
   async search(
     params: SearchPropertiesParams
-  ): Promise<ApiResponse<Property[]>> {
+  ): Promise<ApiResponse<PropertyResponse[]>> {
     try {
       const cleanedParams = Object.fromEntries(
         Object.entries(params).filter(

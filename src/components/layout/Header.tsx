@@ -52,8 +52,8 @@ export function Header({
           <Image
             height={50}
             width={50}
-            src="/images/logo-black-horizontal.png"
-            alt="Logo Fagon"
+            src="/icons/logo-black-green.svg"
+            alt="Logo Colibri"
             className="items-center w-auto h-12"
             priority
           />
@@ -67,8 +67,8 @@ export function Header({
           <Image
             width={50}
             height={50}
-            src="/images/logo-black-letter.png"
-            alt="Logo Fagon"
+            src="/icons/logo-black-green.svg"
+            alt="Logo Colibri"
             className="md:hidden w-auto h-4"
           />
           <CustomFormInput

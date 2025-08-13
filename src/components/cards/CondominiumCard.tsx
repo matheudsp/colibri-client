@@ -26,8 +26,8 @@ export function CondominiumCard({ condominium }: CondominiumCardProps) {
     >
       <div className="p-5">
         <div className="flex items-center gap-3">
-          <div className="bg-primary/10 p-3 rounded-lg">
-            <Building2 className="w-6 h-6 text-primary" />
+          <div className="bg-primary p-3 rounded-xl">
+            <Building2 className="w-6 h-6 text-white" />
           </div>
           <div>
             <h3 className="text-xl font-bold text-gray-800 line-clamp-2">

@@ -1,7 +1,7 @@
 import { api, extractAxiosError } from "../api";
 import API_ROUTES from "../api/routes";
 import { ApiResponse } from "@/types/api";
-import { Contract } from "@/interfaces/contract";
+import { Contract, type ContractWithDocuments } from "@/interfaces/contract";
 
 export interface CreateContractData {
   rentAmount: number;
@@ -40,7 +40,7 @@ export const ContractService = {
     }
   },
 
-  async findOne(id: string): Promise<ApiResponse<Contract>> {
+  async findOne(id: string): Promise<ApiResponse<ContractWithDocuments>> {
     try {
       const response = await api.get(API_ROUTES.CONTRACTS.BY_ID({ id }));
       return response.data;

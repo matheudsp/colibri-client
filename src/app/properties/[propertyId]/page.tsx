@@ -9,24 +9,84 @@ import {
   Bed,
   Building,
   Car,
+  CheckCircle2,
   Home,
   Loader2,
   Mail,
   MapPin,
   Maximize,
   Phone,
-  Tag,
   User,
+  XCircle,
 } from "lucide-react";
 import { FaWhatsapp } from "react-icons/fa";
 
-import { Property, PropertyService } from "@/services/domains/propertyService";
+import { formatCurrency } from "@/utils/masks/maskCurrency";
+import {
+  PropertyResponse,
+  PropertyService,
+} from "@/services/domains/propertyService";
 import { useAuth } from "@/hooks/useAuth";
 import { CustomButton } from "@/components/forms/CustomButton";
 import { PropertyGallery } from "@/components/galleries/PropertyGallery";
 
+// --- Componentes Internos para Melhor Organização ---
+
+// Card de Preço e Contato (Reutilizável)
+const PriceAndContactCard = ({ property }: { property: PropertyResponse }) => {
+  const whatsappLink = `https://wa.me/${property.landlord.phone.replace(
+    /\D/g,
+    ""
+  )}?text=Olá, tenho interesse no imóvel "${encodeURIComponent(
+    property.title
+  )}" (Cód: ${property.id.substring(0, 8)})`;
+
+  return (
+    <div className="bg-white border border-gray-200 rounded-xl p-5 space-y-5">
+      <div>
+        <p className="text-gray-500 text-sm">Valor do Aluguel (mensal)</p>
+        <p className="text-3xl font-bold text-primary">
+          {formatCurrency(property.rentValue)}
+        </p>
+      </div>
+
+      <div className="border-t pt-5">
+        <p className="font-bold text-gray-800 mb-3">
+          Gostou? Fale com o locador!
+        </p>
+        <div className="flex items-center space-x-3">
+          <div className="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center">
+            <User className="text-primary" />
+          </div>
+          <div>
+            <p className="font-semibold text-gray-800">
+              {property.landlord.name}
+            </p>
+          </div>
+        </div>
+        <div className="mt-4 space-y-2">
+          <a href={whatsappLink} target="_blank" rel="noopener noreferrer">
+            <CustomButton className="w-full bg-green-500 hover:bg-green-600">
+              <FaWhatsapp size={18} className="mr-2" /> Conversar no WhatsApp
+            </CustomButton>
+          </a>
+          {/* <a href={`mailto:${property.landlord.email}`}>
+            <CustomButton
+              ghost
+              className="w-full border-gray-300 text-gray-700 hover:bg-gray-100"
+            >
+              <Mail size={14} className="mr-2" /> Enviar E-mail
+            </CustomButton>
+          </a> */}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// --- Componente Principal da Página ---
 export default function PropertyDetailsPage() {
-  const [property, setProperty] = useState<Property | null>(null);
+  const [property, setProperty] = useState<PropertyResponse | null>(null);
   const [loading, setLoading] = useState(true);
   const params = useParams();
   const router = useRouter();
@@ -36,7 +96,6 @@ export default function PropertyDetailsPage() {
 
   useEffect(() => {
     if (!propertyId) return;
-
     const fetchProperty = async () => {
       setLoading(true);
       try {
@@ -48,183 +107,160 @@ export default function PropertyDetailsPage() {
         setLoading(false);
       }
     };
-
     fetchProperty();
   }, [propertyId]);
 
   if (loading) {
     return (
-      <div className="flex justify-center items-center h-screen" role="status">
-        <Loader2
-          className="animate-spin text-primary"
-          size={48}
-          aria-hidden="true"
-        />
-        <span className="sr-only">Carregando...</span>
+      <div className="flex justify-center items-center h-screen bg-gray-50">
+        <Loader2 className="animate-spin text-primary" size={48} />
       </div>
     );
   }
 
   if (!property) {
     return (
-      <div className="text-center py-10">
-        <p className="text-gray-600">Imóvel não encontrado.</p>
-        <CustomButton
-          onClick={() => router.back()}
-          className="mt-4"
-          aria-label="Voltar"
-        >
-          <ArrowLeft className="mr-2" aria-hidden="true" /> Voltar
+      <div className="flex flex-col justify-center items-center h-screen bg-gray-50">
+        <p className="text-gray-600 text-lg">Imóvel não encontrado.</p>
+        <CustomButton onClick={() => router.back()} className="mt-4">
+          <ArrowLeft className="mr-2" /> Voltar
         </CustomButton>
       </div>
     );
   }
 
-  const whatsappLink = `https://wa.me/${property.landlord.phone.replace(
-    /\D/g,
-    ""
-  )}?text=Olá, tenho interesse no imóvel ${encodeURIComponent(property.title)}`;
-
-  const LandlordContactCard = () => (
-    <div className="bg-white rounded-xl shadow-lg p-5 border">
-      <h2 id="locador" className="text-xl font-bold text-gray-800 mb-4">
-        Fale com o Locador
-      </h2>
-      <div className="flex items-center space-x-4 mb-4">
-        <div className="w-12 h-12 bg-primary rounded-full flex items-center justify-center">
-          <User className="text-white" aria-hidden="true" />
-        </div>
-        <div>
-          <p className="font-bold text-gray-800">{property.landlord.name}</p>
-          <a
-            href={`mailto:${property.landlord.email}`}
-            className="text-sm text-gray-600 hover:underline flex items-center mt-1"
-          >
-            <Mail size={14} className="mr-2" /> {property.landlord.email}
-          </a>
-        </div>
-      </div>
-      <a href={whatsappLink} target="_blank" rel="noopener noreferrer">
-        <CustomButton className="w-full bg-whatsapp hover:bg-whatsapp-dark focus:ring-green-500">
-          <FaWhatsapp size={20} className="mr-2" /> Contatar via WhatsApp
-        </CustomButton>
-      </a>
-    </div>
-  );
-
   return (
     <div className="bg-gray-50 min-h-screen">
-      <div className="max-w-7xl mx-auto p-4 md:p-6">
-        <CustomButton
-          onClick={() => router.back()}
-          ghost
-          className="mb-4 text-gray-600 hover:text-gray-900"
-        >
-          <ArrowLeft className="mr-2" /> Voltar
-        </CustomButton>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-10">
+        <nav className="mt-24 pb-6">
+          <CustomButton
+            onClick={() => router.back()}
+            ghost
+            className="text-gray-600 hover:text-gray-900 px-2"
+          >
+            <ArrowLeft className="mr-2" /> Voltar
+          </CustomButton>
+        </nav>
 
-        <div className="lg:grid lg:grid-cols-3 lg:gap-8">
-          {/* Coluna Principal */}
-          <main className="lg:col-span-2 space-y-6">
-            <div className="bg-white rounded-xl shadow-lg p-5">
-              <PropertyGallery
-                photos={property.photos}
-                altText={property.title}
-              />
-              <div className="mt-4">
-                <h1 className="text-2xl md:text-4xl font-bold text-gray-900">
+        {/* --- Corpo da Página --- */}
+        <div className="lg:grid lg:grid-cols-12 lg:gap-x-12">
+          {/* Coluna Esquerda: Galeria e Detalhes */}
+          <div className="lg:col-span-8 space-y-8">
+            <PropertyGallery
+              photos={property.photos}
+              altText={property.title}
+            />
+
+            {/* Card de Contato (Mobile) */}
+            <div className="lg:hidden">
+              <PriceAndContactCard property={property} />
+            </div>
+
+            {/* Card de Detalhes do Imóvel */}
+            <div className="bg-white border border-gray-200 rounded-xl p-6 space-y-6">
+              <div className="flex justify-between items-start gap-4">
+                <h1 className="text-2xl md:text-3xl font-bold text-gray-900">
                   {property.title}
                 </h1>
-                <div className="flex items-center text-gray-600 my-2">
-                  <MapPin size={18} className="mr-2" />
-                  <p>
-                    {property.street}, {property.number} - {property.district},{" "}
-                    {property.city} - {property.state}
-                  </p>
-                </div>
+                {property.isAvailable ? (
+                  <div className="flex-shrink-0 flex items-center text-green-600 bg-green-100 font-bold text-xs px-2.5 py-1 rounded-full">
+                    <CheckCircle2 size={14} className="mr-1.5" /> Disponível
+                    para Alugar
+                  </div>
+                ) : (
+                  <div className="flex-shrink-0 flex items-center text-red-600 bg-red-100 font-bold text-xs px-2.5 py-1 rounded-full">
+                    <XCircle size={14} className="mr-1.5" /> Já Alugado
+                  </div>
+                )}
               </div>
-            </div>
 
-            <div className="bg-white rounded-xl shadow-lg p-5">
-              <section aria-labelledby="caracteristicas">
-                <h2
-                  id="caracteristicas"
-                  className="text-2xl font-bold text-gray-800 mb-4"
-                >
+              {/* Detalhes Principais */}
+              <div className="border-t pt-6">
+                <h2 className="font-bold text-lg text-gray-800 mb-4">
                   Características
                 </h2>
-                <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 text-center">
-                  {[
-                    {
-                      icon: <Maximize />,
-                      label: "Área",
-                      value: `${property.areaInM2} m²`,
-                    },
-                    {
-                      icon: <Bed />,
-                      label: "Quartos",
-                      value: property.numRooms,
-                    },
-                    {
-                      icon: <Bath />,
-                      label: "Banheiros",
-                      value: property.numBathrooms,
-                    },
-                    {
-                      icon: <Car />,
-                      label: "Vagas",
-                      value: property.numParking,
-                    },
-                  ].map((item, idx) => (
-                    <div
-                      key={idx}
-                      className="bg-gray-100 p-3 rounded-lg"
-                      role="group"
-                    >
-                      <div className="text-primary mb-1 flex justify-center">
-                        {item.icon}
-                      </div>
-                      <p className="font-bold">{item.value}</p>
-                      <p className="text-sm text-gray-600">{item.label}</p>
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-y-4 font-medium">
+                  <div className="flex items-center gap-2 ">
+                    <div className="bg-primary p-2 rounded-xl">
+                      <Maximize size={16} className="text-white rotate-45 " />{" "}
                     </div>
-                  ))}
+                    {property.areaInM2} m² de área
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <div className="bg-primary p-2 rounded-xl">
+                      <Bed size={16} className="text-white" />{" "}
+                    </div>
+                    {property.numRooms} Quarto(s)
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <div className="bg-primary p-2 rounded-xl">
+                      <Bath size={16} className="text-white" />{" "}
+                    </div>
+                    {property.numBathrooms} Banheiro(s)
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <div className="bg-primary p-2 rounded-xl">
+                      <Car size={16} className="text-white" />{" "}
+                    </div>
+                    {property.numParking} Vaga(s)
+                  </div>
+                  {property.condominiumId && (
+                    <div className="flex items-center gap-2">
+                      <div className="bg-primary p-2 rounded-xl">
+                        <Building size={16} className="text-white" />
+                      </div>{" "}
+                      Em condomínio
+                    </div>
+                  )}
                 </div>
-              </section>
-            </div>
+              </div>
 
-            {property.description && (
-              <div className="bg-white rounded-xl shadow-lg p-5">
-                <section aria-labelledby="descricao">
-                  <h2
-                    id="descricao"
-                    className="text-2xl font-bold text-gray-800 mb-2"
-                  >
-                    Descrição
-                  </h2>
-                  <p className="text-gray-700 leading-relaxed">
+              {/* Localização */}
+              <div className="border-t pt-6">
+                <h2 className="font-bold text-lg text-gray-800 mb-4">
+                  Localização
+                </h2>
+                <div className="text-gray-600 space-y-1">
+                  <p>
+                    <strong>Endereço:</strong> {property.street},{" "}
+                    {property.number}{" "}
+                    {property.complement && `, ${property.complement}`}
+                  </p>
+                  <p>
+                    <strong>Bairro:</strong> {property.district}
+                  </p>
+                  <p>
+                    <strong>Cidade/Estado:</strong> {property.city} /{" "}
+                    {property.state}
+                  </p>
+                  <p>
+                    <strong>CEP:</strong> {property.cep}
+                  </p>
+                </div>
+              </div>
+
+              {/* Descrição */}
+              {property.description && (
+                <div className="border-t pt-6">
+                  <h2 className="font-bold text-lg text-gray-800">Descrição</h2>
+                  <p className="mt-3 text-gray-600 leading-relaxed whitespace-pre-wrap">
                     {property.description}
                   </p>
-                </section>
-              </div>
-            )}
-          </main>
+                </div>
+              )}
+            </div>
+          </div>
 
-          {/* Coluna Lateral (Desktop) */}
-          <aside className="hidden lg:block lg:col-span-1">
-            <div className="sticky top-24">
-              <LandlordContactCard />
+          {/* Coluna Direita (Sticky Desktop) */}
+          <aside className="hidden lg:block lg:col-span-4">
+            <div className="sticky top-6">
+              <PriceAndContactCard property={property} />
             </div>
           </aside>
         </div>
-      </div>
-
-      {/* Rodapé Fixo de Contato (Mobile) */}
-      <div className="lg:hidden sticky bottom-0 w-full bg-white border-t p-4 shadow-top">
-        <a href={whatsappLink} target="_blank" rel="noopener noreferrer">
-          <CustomButton className="w-full bg-whatsapp hover:bg-whatsapp-dark focus:ring-green-500">
-            <FaWhatsapp size={20} className="mr-2" /> Contatar via WhatsApp
-          </CustomButton>
-        </a>
+        <p className="text-xs text-gray-400 mt-6 text-center">
+          Código de Referência do Imóvel: {property.id}
+        </p>
       </div>
     </div>
   );

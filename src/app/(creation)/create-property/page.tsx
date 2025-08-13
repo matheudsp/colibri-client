@@ -18,13 +18,17 @@ import {
   Car,
   PlusIcon,
   ArrowRight,
+  DollarSign,
 } from "lucide-react";
 import { CustomButton } from "@/components/forms/CustomButton";
 import { CustomDropdownInput } from "@/components/forms/CustomDropdownInput";
 import { CustomFormInput } from "@/components/forms/CustomFormInput";
 import { PhotoCard } from "@/components/cards/PhotoCard";
 import { AddPhotoModal } from "@/components/modals/photoModals/AddPhotoModal";
-import { createPropertySchema, CreatePropertyFormValues } from "@/validations";
+import {
+  createPropertySchema,
+  type CreatePropertyFormValues,
+} from "@/validations";
 import { PropertyService } from "@/services/domains/propertyService";
 import { PhotoService } from "@/services/domains/photoService";
 import { brazilianStates } from "@/constants/states";
@@ -32,6 +36,7 @@ import { fetchAddressByCep } from "@/utils/viacep";
 import { fetchCitiesByState } from "@/utils/ibge";
 import { Photo } from "@/interfaces/photo";
 import { Stepper } from "@/components/layout/Stepper";
+import { unmaskNumeric } from "@/utils/masks/maskNumeric";
 
 export default function CreatePropertyPage() {
   const router = useRouter();
@@ -53,7 +58,6 @@ export default function CreatePropertyPage() {
     handleSubmit,
     setValue,
     watch,
-    setFocus,
     formState: { errors },
   } = useForm<CreatePropertyFormValues>({
     resolver: zodResolver(createPropertySchema),
@@ -114,7 +118,12 @@ export default function CreatePropertyPage() {
   const onSubmitDetails = async (data: CreatePropertyFormValues) => {
     setIsLoading(true);
     try {
-      const response = await PropertyService.create(data);
+      const payload = {
+        ...data,
+        rentValue: unmaskNumeric(data.rentValue),
+      };
+      // console.log("DADOS DA CRIACAO DE PROPRIEDADE: ", payload);
+      const response = await PropertyService.create(payload);
       toast.success("Detalhes salvos! Agora, envie as fotos.");
       setNewPropertyId(response.data.id);
       handleNextStep();
@@ -212,6 +221,14 @@ export default function CreatePropertyPage() {
                     {...register("description")}
                     error={errors.description?.message}
                   />
+                  <CustomFormInput
+                    id="rentValue"
+                    icon={<DollarSign />}
+                    label="Valor do Aluguel*"
+                    registration={register("rentValue")}
+                    error={errors.rentValue?.message}
+                    mask="numeric"
+                  />
                 </div>
               </div>
 
@@ -292,7 +309,7 @@ export default function CreatePropertyPage() {
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-x-4 gap-y-4">
                   <CustomFormInput
                     id="areaInM2"
-                    icon={<Square />}
+                    icon={<Square className="rotate-45" />}
                     label="Área (m²)*"
                     type="number"
                     {...register("areaInM2", { valueAsNumber: true })}

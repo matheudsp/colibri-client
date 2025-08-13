@@ -32,9 +32,19 @@ export interface Contract {
   property: Property;
   landlord: {
     name: string;
+    email: string;
   };
   tenant: {
     name: string;
+    email: string;
   };
   paymentsOrders?: PaymentOrder[];
+}
+
+export interface ContractWithDocuments extends Contract {
+  documents: {
+    id: string;
+    status: string;
+    type: string;
+  }[];
 }
