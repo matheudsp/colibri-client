@@ -13,7 +13,7 @@ const DetailItem = ({ icon, label, value }: any) => (
   </div>
 );
 
-export function ContractDetailsCard({ contract }: { contract: Contract }) {
+export function ContractDetails({ contract }: { contract: Contract }) {
   return (
     <div className="bg-white p-5 rounded-xl shadow-sm border">
       <h2 className="font-bold text-xl mb-4 border-b pb-2">

@@ -1,7 +1,7 @@
 export const contractStatus = [
   {
     value: "PENDENTE_DOCUMENTACAO",
-    label: "Aguardando ddocumentos do inquilino",
+    label: "Aguardando documentos do inquilino",
     class: "bg-orange-100 text-orange-800",
   },
   {

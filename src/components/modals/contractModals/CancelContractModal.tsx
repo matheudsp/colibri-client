@@ -2,22 +2,22 @@
 
 import { Dialog, Transition } from "@headlessui/react";
 import { Fragment } from "react";
-import { ShieldAlert, Loader2 } from "lucide-react";
+import { Trash2Icon, Loader2 } from "lucide-react";
 import { CustomButton } from "@/components/forms/CustomButton";
 
-interface ForceActivateContractModalProps {
+interface CancelModalProps {
   isOpen: boolean;
   onClose: () => void;
   onConfirm: () => void;
   isLoading?: boolean;
 }
 
-export function ForceActivateContractModal({
+export function CancelContractModal({
   isOpen,
   onClose,
   onConfirm,
   isLoading = false,
-}: ForceActivateContractModalProps) {
+}: CancelModalProps) {
   return (
     <Transition appear show={isOpen} as={Fragment}>
       <Dialog as="div" className="relative z-50" onClose={onClose}>
@@ -30,7 +30,7 @@ export function ForceActivateContractModal({
           leaveFrom="opacity-100"
           leaveTo="opacity-0"
         >
-          <div className="fixed inset-0 bg-black bg-opacity-30" />
+          <div className="fixed inset-0 bg-black/30" />
         </Transition.Child>
 
         <div className="fixed inset-0 overflow-y-auto">
@@ -45,28 +45,20 @@ export function ForceActivateContractModal({
               leaveTo="opacity-0 scale-95"
             >
               <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
-                <div className="flex items-center gap-3">
-                  <ShieldAlert className="h-8 w-8 text-amber-500" />
-                  <Dialog.Title
-                    as="h3"
-                    className="text-lg font-medium leading-6 text-gray-900"
-                  >
-                    Confirmar Ativação Forçada
-                  </Dialog.Title>
-                </div>
-
-                <div className="mt-4 space-y-2">
-                  <p className="text-sm text-gray-600">
-                    Você tem certeza que deseja ativar este contrato?
-                  </p>
-                  <p className="text-sm text-red-700 font-semibold">
-                    Esta ação irá ignorar as etapas de envio/verificação de
-                    documentos e assinatura do contrato, gerando os pagamentos
-                    imediatamente.
+                <Dialog.Title
+                  as="h3"
+                  className="text-lg font-bold leading-6 text-gray-900 flex items-center gap-2"
+                >
+                  <Trash2Icon className="text-error" />
+                  Confirmar Cancelamento
+                </Dialog.Title>
+                <div className="mt-2">
+                  <p className="text-sm text-gray-500">
+                    Tem certeza de que deseja cancelar este contrato? Esta ação
+                    é irreversível.
                   </p>
                 </div>
-
-                <div className="flex justify-end space-x-3 mt-6">
+                <div className="mt-6 flex justify-end gap-3">
                   <CustomButton
                     type="button"
                     onClick={onClose}
@@ -81,17 +73,13 @@ export function ForceActivateContractModal({
                     type="button"
                     onClick={onConfirm}
                     disabled={isLoading}
-                    color="bg-amber-500"
+                    color="bg-error"
                     textColor="text-white"
-                    className="hover:bg-amber-600"
                   >
                     {isLoading ? (
-                      <>
-                        <Loader2 className="animate-spin mr-2" />
-                        Ativando...
-                      </>
+                      <Loader2 className="animate-spin" />
                     ) : (
-                      "Sim, ativar"
+                      "Sim, cancelar"
                     )}
                   </CustomButton>
                 </div>

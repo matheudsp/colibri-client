@@ -2,6 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
+
 :root {
     --background: #F7F7FD;
     --foreground: #2D2B2E;
@@ -28,3 +29,5 @@ body {
     color: var(--foreground);
     overflow-x: hidden;
 }
+
+

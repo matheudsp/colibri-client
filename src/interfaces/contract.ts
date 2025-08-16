@@ -31,10 +31,12 @@ export interface Contract {
   tenantId: string;
   property: Property;
   landlord: {
+    id: string;
     name: string;
     email: string;
   };
   tenant: {
+    id: string;
     name: string;
     email: string;
   };
@@ -47,4 +49,10 @@ export interface ContractWithDocuments extends Contract {
     status: string;
     type: string;
   }[];
+  GeneratedPdf: { signatureRequests: SignatureRequest[] }[];
+}
+export interface SignatureRequest {
+  id: string;
+  requestSignatureKey: string;
+  signerId: string;
 }

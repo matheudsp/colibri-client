@@ -41,6 +41,7 @@ const API_ROUTES = {
   PDFS: {
     BASE: "/pdfs",
     GENERATE: "/pdfs/generate",
+
     SIGN: ({ id }: Params) => `/pdfs/${id}/sign`,
     BY_CONTRACT: ({ contractId }: Params) => `/pdfs/contract/${contractId}`,
     BY_ID: ({ id }: Params) => `/pdfs/${id}`,
@@ -82,10 +83,15 @@ const API_ROUTES = {
   CONTRACTS: {
     BASE: "/contracts",
     CREATE: "/contracts",
+    REQUEST_SIGNATURE: ({ id }: Params) => `/contracts/${id}/request-signature`,
+    VIEW_PDF_URL: ({ id }: Params) => `/contracts/${id}/pdf-url`,
     BY_ID: ({ id }: Params) => `/contracts/${id}`,
     UPDATE: ({ id }: Params) => `/contracts/${id}`,
     DELETE: ({ id }: Params) => `/contracts/${id}`,
     ACTIVATE: ({ id }: Params) => `/contracts/${id}/activate`,
+    CANCEL: ({ id }: Params) => `/contracts/${id}/cancel`,
+    RESEND_NOTIFICATION: ({ id }: Params) =>
+      `/contracts/${id}/resend-notification`,
   },
   PAYMENTS: {
     BASE: "/payments-orders",

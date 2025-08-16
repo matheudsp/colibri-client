@@ -12,19 +12,24 @@ const PartyItem = ({
 }) => (
   <div>
     <p className="text-sm text-gray-500">{role}</p>
-    <div className="flex items-center gap-2 mt-1">
-      <div className="bg-primary p-2 rounded-xl">
+    <div className="flex items-center gap-3 mt-1">
+      <div className="bg-primary p-2 rounded-xl flex-shrink-0">
         <User className="w-6 h-6 text-white" />
       </div>
-      <div className="flex-col">
-        <p className="font-semibold text-gray-800">{name}</p>
-        <p className="font-normal text-gray-600">{email}</p>
+
+      <div className="flex-1 min-w-0">
+        <p className="font-semibold text-gray-800 truncate" title={name}>
+          {name}
+        </p>
+        <p className="font-normal text-gray-600 truncate" title={email}>
+          {email}
+        </p>
       </div>
     </div>
   </div>
 );
 
-export function PartiesInfoCard({ contract }: { contract: Contract }) {
+export function ContractPartiesDetails({ contract }: { contract: Contract }) {
   return (
     <div className="bg-white p-5 rounded-xl shadow-sm border">
       <h2 className="font-bold text-xl mb-4 border-b pb-2">

@@ -62,9 +62,11 @@ export function DeleteContractModal({
                 <div className="mt-6 flex justify-end gap-3">
                   <CustomButton
                     type="button"
-                    ghost
                     onClick={onClose}
                     disabled={isLoading}
+                    color="bg-gray-100"
+                    textColor="text-gray-800"
+                    className="hover:bg-gray-200"
                   >
                     Cancelar
                   </CustomButton>

@@ -9,15 +9,16 @@ import {
   ShieldCheck,
   Trash2,
   FileWarning,
-  FileSignature,
+  BellRing,
+  MailCheck,
+  Shredder,
 } from "lucide-react";
 import { toast } from "sonner";
 import { type ContractWithDocuments } from "@/interfaces/contract";
 import { ContractService } from "@/services/domains/contractService";
 import { useAuth } from "@/hooks/useAuth";
 import { CustomButton } from "@/components/forms/CustomButton";
-import { ContractDetailsCard } from "@/components/cards/details/ContractCardDetails";
-import { PartiesInfoCard } from "@/components/cards/details/PartiesInfoCard";
+
 import { PaymentsList } from "@/components/lists/PaymentLists";
 import { DeleteContractModal } from "@/components/modals/contractModals/DeleteContractModal";
 import { contractStatus } from "@/constants/contractStatus";
@@ -25,12 +26,20 @@ import { useUserRole } from "@/hooks/useUserRole";
 import { Roles } from "@/constants";
 import { ForceActivateContractModal } from "@/components/modals/contractModals/ForceActivateContractModal";
 import { FaRegEye } from "react-icons/fa";
+import { ContractFlowDetails } from "@/components/cards/details/ContractFlowDetails";
+import { ContractDetails } from "@/components/cards/details/ContractDetails";
+import { ContractPartiesDetails } from "@/components/cards/details/ContractPartiesDetails";
+import { ResendNotificationModal } from "@/components/modals/contractModals/ResendNotificationModal";
+import { CancelContractModal } from "@/components/modals/contractModals/CancelContractModal";
 
 export default function ContractManagementPage() {
   const [contract, setContract] = useState<ContractWithDocuments | null>(null);
   const [loading, setLoading] = useState(true);
+  const [showCancelModal, setShowCancelModal] = useState(false);
   const [isActionLoading, setIsActionLoading] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [isSigningLoading, setIsSigningLoading] = useState(false);
+  const [showResendModal, setShowResendModal] = useState(false);
   const params = useParams();
   const router = useRouter();
   const contractId = params.contractId as string;
@@ -68,6 +77,78 @@ export default function ContractManagementPage() {
       toast.error(
         `Não foi possível ativar o contrato. ${(error as Error).message}`
       );
+    } finally {
+      setIsActionLoading(false);
+    }
+  };
+  const handleViewContract = async () => {
+    if (!contract) return;
+    setIsActionLoading(true);
+    try {
+      const response = await ContractService.getViewPdfUrl(contract.id);
+
+      window.open(response.data.url, "_blank");
+    } catch (error) {
+      toast.error("Falha ao obter o link do contrato.", {
+        description: (error as Error).message,
+      });
+    } finally {
+      setIsActionLoading(false);
+    }
+  };
+  const handleRequestSignature = async () => {
+    if (!contract) return;
+    setIsSigningLoading(true);
+    try {
+      await ContractService.requestSignature(contract.id);
+      toast.success("Solicitação de assinatura enviada!", {
+        description:
+          "O locador e o locatário receberão um e-mail da Clicksign para assinar o documento.",
+      });
+      // A implementar: recarregar os dados ou atualizar o estado para esconder o botão.
+      await fetchContract();
+    } catch (error) {
+      toast.error("Falha ao iniciar o processo de assinatura.", {
+        description: (error as Error).message,
+      });
+    } finally {
+      setIsSigningLoading(false);
+    }
+  };
+  const handleResendNotification = async (
+    signerId: string,
+    method: "email" | "whatsapp"
+  ) => {
+    if (!contract) return;
+    setIsActionLoading(true);
+    try {
+      await ContractService.resendNotification(contract.id, {
+        signerId,
+        method,
+      });
+      toast.success("Notificação reenviada com sucesso!", {
+        description: `Um lembrete foi enviado por ${method} para o signatário selecionado.`,
+      });
+      setShowResendModal(false);
+    } catch (error) {
+      toast.error("Falha ao reenviar notificação.", {
+        description: (error as Error).message,
+      });
+    } finally {
+      setIsActionLoading(false);
+    }
+  };
+
+  const handleCancel = async () => {
+    if (!contract) return;
+    setIsActionLoading(true);
+    try {
+      await ContractService.cancel(contract.id);
+      toast.success("Contrato cancelado com sucesso.");
+      setShowCancelModal(false);
+      await fetchContract();
+    } catch (error) {
+      toast.error(`Erro ao cancelar o contrato. ${(error as Error).message}`);
     } finally {
       setIsActionLoading(false);
     }
@@ -173,26 +254,64 @@ export default function ContractManagementPage() {
         }
         return null;
       case "AGUARDANDO_ASSINATURAS":
+        const signatureProcessStarted = contract.GeneratedPdf?.some(
+          (pdf) => pdf.signatureRequests.length > 0
+        );
+
+        if (role === Roles.LOCADOR || role === Roles.ADMIN) {
+          if (signatureProcessStarted) {
+            return (
+              <div className="bg-green-50 border-green-200 border p-4 rounded-xl shadow-sm text-center">
+                <MailCheck className="mx-auto text-green-500" size={32} />
+                <h3 className="font-bold text-lg mt-2">
+                  Assinaturas Solicitadas
+                </h3>
+                <p className="text-sm text-gray-600 mt-1">
+                  O contrato foi enviado para ambos. Eles devem verificar os
+                  seus e-mails e WhatsApp para assinar. Você pode reenviar as
+                  notificações se necessário.
+                </p>
+              </div>
+            );
+          } else {
+            return (
+              <div className="bg-red-50 border-red-200 border p-4 rounded-xl shadow-sm text-center">
+                <FileWarning className="mx-auto text-red-500" size={32} />
+                <h3 className="font-bold text-lg mt-2">Ação Necessária</h3>
+                <p className="text-sm text-gray-600 mt-1">
+                  A documentação foi aprovada. Clique abaixo para gerar o
+                  contrato e enviá-lo para a assinatura digital de ambas as
+                  partes.
+                </p>
+                <CustomButton
+                  onClick={handleRequestSignature}
+                  disabled={isSigningLoading}
+                  color="bg-indigo-600"
+                  textColor="text-white"
+                  className="w-full mt-4"
+                >
+                  {isSigningLoading ? (
+                    <Loader2 className="animate-spin" />
+                  ) : (
+                    "Iniciar Assinatura Digital"
+                  )}
+                </CustomButton>
+              </div>
+            );
+          }
+        }
+
         return (
           <div className="bg-indigo-50 border-indigo-200 border p-4 rounded-xl shadow-sm text-center">
-            <FileSignature className="mx-auto text-indigo-500" size={32} />
-            <h3 className="font-bold text-lg mt-2">Pronto para Assinatura</h3>
+            <Loader2
+              className="mx-auto text-indigo-500 animate-spin"
+              size={32}
+            />
+            <h3 className="font-bold text-lg mt-2">Aguardando Assinaturas</h3>
             <p className="text-sm text-gray-600 mt-1">
-              A documentação foi aprovada. O próximo passo é a assinatura
-              digital do contrato.
+              O contrato foi enviado para assinatura digital. Por favor,
+              verifique o seu e-mail e WhatsApp para assinar o documento.
             </p>
-            <CustomButton
-              onClick={() =>
-                router.push(
-                  `/properties/${contract.propertyId}/contracts/${contract.id}/sign`
-                )
-              }
-              color="bg-indigo-600"
-              textColor="text-white"
-              className="w-full mt-4"
-            >
-              Assinar Contrato Digitalmente
-            </CustomButton>
           </div>
         );
 
@@ -283,8 +402,9 @@ export default function ContractManagementPage() {
           </header>
 
           <main className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            <div className="lg:col-span-2 space-y-6">
-              <ContractDetailsCard contract={contract} />
+            <div className="lg:col-span-2 space-y-6 ">
+              <ContractFlowDetails status={contract.status} />
+              <ContractDetails contract={contract} />
               {contract.paymentsOrders &&
                 contract.paymentsOrders.length > 0 && (
                   <PaymentsList payments={contract.paymentsOrders} />
@@ -292,23 +412,42 @@ export default function ContractManagementPage() {
             </div>
 
             <aside className="lg:col-span-1 space-y-6">
-              <PartiesInfoCard contract={contract} />
+              <ContractPartiesDetails contract={contract} />
 
               <ActionCard />
               <div className="bg-white p-4 rounded-xl shadow-sm border space-y-3">
                 <h3 className="font-bold text-lg">Outras Ações</h3>
-                <CustomButton
-                  onClick={() => {
-                    console.log(contractId);
-                  }}
-                  disabled={isActionLoading}
-                  color="bg-green-100"
-                  textColor="text-green-800"
-                  className="w-full"
-                >
-                  <FaRegEye className="mr-2" />
-                  Visualizar Contrato
-                </CustomButton>
+                {(contract.status === "AGUARDANDO_ASSINATURAS" ||
+                  contract.status === "ATIVO") && (
+                  <CustomButton
+                    onClick={handleViewContract}
+                    disabled={isActionLoading}
+                    color="bg-green-100"
+                    textColor="text-green-800"
+                    className="w-full"
+                  >
+                    {isActionLoading ? (
+                      <Loader2 className="animate-spin mr-2" />
+                    ) : (
+                      <>
+                        <FaRegEye className="mr-2" /> Visualizar Contrato
+                      </>
+                    )}
+                  </CustomButton>
+                )}
+                {contract.status === "AGUARDANDO_ASSINATURAS" &&
+                  (sub === contract.landlordId || role === Roles.ADMIN) && (
+                    <CustomButton
+                      onClick={() => setShowResendModal(true)}
+                      disabled={isActionLoading}
+                      color="bg-blue-100"
+                      textColor="text-blue-800"
+                      className="w-full"
+                    >
+                      <BellRing className="mr-2" size={20} />
+                      Reenviar Notificação de Assinatura
+                    </CustomButton>
+                  )}
                 {(sub === contract.landlordId || role === Roles.ADMIN) && (
                   // (contract.status === "PENDENTE_DOCUMENTACAO" ||contract.status === "EM_ANALISE") &&
                   <>
@@ -326,23 +465,39 @@ export default function ContractManagementPage() {
                           <Loader2 className="animate-spin" />
                         ) : (
                           <>
-                            <ShieldCheck className="mr-2" />
+                            <ShieldCheck className="mr-2" size={20} />
                             Forçar Ativação do Contrato
                           </>
                         )}
                       </CustomButton>
                     )}
-
-                    <CustomButton
-                      onClick={() => setShowDeleteModal(true)}
-                      disabled={isActionLoading}
-                      color="bg-red-100"
-                      textColor="text-red-800"
-                      className="w-full"
-                    >
-                      <Trash2 className="mr-2" />
-                      Remover Contrato
-                    </CustomButton>
+                    {contract.status !== "CANCELADO" &&
+                      contract.status !== "FINALIZADO" && (
+                        <CustomButton
+                          onClick={() => setShowCancelModal(true)}
+                          disabled={isActionLoading}
+                          color="bg-red-100"
+                          textColor="text-red-800"
+                          className="w-full"
+                        >
+                          <Shredder className="mr-2" size={20} />
+                          Cancelar Contrato
+                        </CustomButton>
+                      )}
+                    {(contract.status === "CANCELADO" ||
+                      contract.status === "FINALIZADO") && (
+                      <CustomButton
+                        onClick={() => setShowDeleteModal(true)}
+                        disabled={isActionLoading}
+                        color="bg-red-100"
+                        textColor="text-red-800"
+                        className="w-full"
+                      >
+                        {/* <Trash2 className="mr-2" size={20} /> */}
+                        <Shredder className="mr-2" size={20} />
+                        Remover Contrato
+                      </CustomButton>
+                    )}
                   </>
                 )}
               </div>
@@ -350,6 +505,12 @@ export default function ContractManagementPage() {
           </main>
         </div>
       </div>
+      <CancelContractModal
+        isOpen={showCancelModal}
+        onClose={() => setShowCancelModal(false)}
+        onConfirm={handleCancel}
+        isLoading={isActionLoading}
+      />
       <DeleteContractModal
         isOpen={showDeleteModal}
         onClose={() => setShowDeleteModal(false)}
@@ -363,6 +524,15 @@ export default function ContractManagementPage() {
         onConfirm={handleActivate}
         isLoading={isActionLoading}
       />
+      {contract && (
+        <ResendNotificationModal
+          isOpen={showResendModal}
+          onClose={() => setShowResendModal(false)}
+          onConfirm={handleResendNotification}
+          isLoading={isActionLoading}
+          contract={contract}
+        />
+      )}
     </>
   );
 }
