@@ -6,19 +6,22 @@ import { Loader2Icon, Building2, Search } from "lucide-react";
 
 import { PropertyCard } from "@/components/cards/PropertyCard";
 import FabButton from "@/components/layout/FabButton";
-import { Property, PropertyService } from "@/services/domains/propertyService";
+import {
+  PropertyResponse,
+  PropertyService,
+} from "@/services/domains/propertyService";
 import { useSearch } from "@/contexts/SearchContext";
 import { useAuth } from "@/hooks/useAuth";
 import { Pagination } from "@/components/layout/Pagination";
 import { ITEMS_PER_PAGE } from "@/constants/pagination";
-import { ApiResponse } from "@/types/api";
+import { ApiResponse, type PropertiesApiResponse } from "@/types/api";
 import { toast } from "sonner";
 import { useUserRole } from "@/hooks/useUserRole";
 import { Roles } from "@/constants/userRole";
 
 export default function DashboardPropertiesPage() {
   const { searchValue } = useSearch();
-  const [properties, setProperties] = useState<Property[]>([]);
+  const [properties, setProperties] = useState<PropertyResponse[]>([]);
   const [loading, setLoading] = useState(true);
   const [pagination, setPagination] = useState({
     total: 0,
@@ -30,20 +33,18 @@ export default function DashboardPropertiesPage() {
 
   useAuth();
   const { role, loading: roleLoading } = useUserRole();
-
   const fetchProperties = useCallback(async () => {
     if (roleLoading) return;
 
     setLoading(true);
     try {
-      let response: ApiResponse<Property[]>;
-
       const listParams = {
         page: currentPage,
         limit: ITEMS_PER_PAGE,
       };
 
-      response = await PropertyService.listAll(listParams);
+      const response: ApiResponse<PropertiesApiResponse> =
+        await PropertyService.listAll(listParams);
 
       const data = response.data || [];
       const meta = response.meta?.resource;
@@ -61,7 +62,7 @@ export default function DashboardPropertiesPage() {
     } finally {
       setLoading(false);
     }
-  }, [searchValue, currentPage, role, roleLoading]);
+  }, [currentPage, roleLoading]);
 
   useEffect(() => {
     fetchProperties();
@@ -73,8 +74,8 @@ export default function DashboardPropertiesPage() {
         await PropertyService.delete(id);
         toast.success("Imóvel excluído com sucesso!");
         setProperties((prev) => prev.filter((p) => p.id !== id));
-      } catch (error) {
-        toast.error("Erro ao excluir imóvel.");
+      } catch (_error) {
+        toast.error(`Erro ao excluir imóvel: ${_error}`);
       }
     }
   };
@@ -117,7 +118,7 @@ export default function DashboardPropertiesPage() {
           <p className="text-gray-500 mt-1">{pageContent.subtitle}</p>
         </div>
 
-        <div className="w-full grid gap-4">
+        <div className="w-full grid gap-4 pb-10">
           {loading ? (
             <div className="flex flex-col items-center justify-center gap-2 mt-10 text-primary">
               <Loader2Icon size={32} className="animate-spin" />

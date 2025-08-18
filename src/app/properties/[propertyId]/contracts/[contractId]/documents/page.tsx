@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useCallback } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { toast } from "sonner";
 import {
@@ -131,7 +131,8 @@ export default function DocumentPage() {
 
   useAuth();
 
-  const fetchData = async () => {
+  const fetchData = useCallback(async () => {
+    setLoading(true);
     try {
       const [docResponse, contractResponse] = await Promise.all([
         DocumentService.findByContract(contractId),
@@ -139,24 +140,23 @@ export default function DocumentPage() {
       ]);
       setDocuments(docResponse.data);
       setContractTenantId(contractResponse.data.tenantId);
-    } catch (error) {
-      toast.error("Erro ao carregar dados.");
+    } catch (_error) {
+      toast.error(`Erro ao carregar dados: ${_error}`);
     } finally {
       setLoading(false);
     }
-  };
+  }, [contractId]);
 
   useEffect(() => {
     if (contractId) {
       fetchData();
     }
-  }, [contractId]);
+  }, [contractId, fetchData]);
 
   const handleUpdateStatus = async (
     documentId: string,
     status: "APROVADO" | "REPROVADO"
   ) => {
-    // Lógica do locador para aprovar/reprovar
     setActionLoading(documentId);
     try {
       await DocumentService.updateStatus(documentId, { status });
@@ -164,8 +164,8 @@ export default function DocumentPage() {
         `Documento ${status === "APROVADO" ? "aprovado" : "reprovado"}!`
       );
       await fetchData();
-    } catch (error) {
-      toast.error("Falha ao atualizar o status do documento.");
+    } catch (_error) {
+      toast.error(`Falha ao atualizar o status do documento: ${_error}`);
     } finally {
       setActionLoading(null);
     }

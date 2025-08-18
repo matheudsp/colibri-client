@@ -2,8 +2,14 @@ import { Contract } from "@/interfaces/contract";
 import { formatDateForDisplay } from "@/utils/formatters/formatDate";
 import { formatDecimalValue } from "@/utils/formatters/formatDecimal";
 import { Building, Calendar, DollarSign, Shield, Clock } from "lucide-react";
+import type { ReactNode } from "react";
 
-const DetailItem = ({ icon, label, value }: any) => (
+interface DetailItemProps {
+  icon: ReactNode;
+  label: string;
+  value: string;
+}
+const DetailItem = ({ icon, label, value }: DetailItemProps) => (
   <div className="flex items-start gap-3">
     <div className="text-primary mt-1">{icon}</div>
     <div>

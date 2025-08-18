@@ -1,13 +1,12 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import {
   ArrowLeft,
   FileText,
   Loader2,
   ShieldCheck,
-  Trash2,
   FileWarning,
   BellRing,
   MailCheck,
@@ -31,6 +30,8 @@ import { ContractDetails } from "@/components/cards/details/ContractDetails";
 import { ContractPartiesDetails } from "@/components/cards/details/ContractPartiesDetails";
 import { ResendNotificationModal } from "@/components/modals/contractModals/ResendNotificationModal";
 import { CancelContractModal } from "@/components/modals/contractModals/CancelContractModal";
+import { PaymentService } from "@/services/domains/paymentService";
+import { RegisterPaymentModal } from "@/components/modals/paymentModals/RegisterPaymentModal";
 
 export default function ContractManagementPage() {
   const [contract, setContract] = useState<ContractWithDocuments | null>(null);
@@ -40,6 +41,11 @@ export default function ContractManagementPage() {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [isSigningLoading, setIsSigningLoading] = useState(false);
   const [showResendModal, setShowResendModal] = useState(false);
+  const [showRegisterPaymentModal, setShowRegisterPaymentModal] =
+    useState(false);
+  const [selectedPaymentId, setSelectedPaymentId] = useState<string | null>(
+    null
+  );
   const params = useParams();
   const router = useRouter();
   const contractId = params.contractId as string;
@@ -47,23 +53,23 @@ export default function ContractManagementPage() {
   const [showActivateModal, setShowActivateModal] = useState(false);
   useAuth();
 
-  const fetchContract = async () => {
+  const fetchContract = useCallback(async () => {
     if (!contractId) return;
     setLoading(true);
     try {
       const response = await ContractService.findOne(contractId);
       setContract(response.data);
     } catch (error) {
-      toast.error("Contrato não encontrado ou acesso negado.");
+      toast.error(`Contrato não encontrado ou acesso negado: ${error}`);
       router.push("/contracts");
     } finally {
       setLoading(false);
     }
-  };
+  }, [contractId, router]);
 
   useEffect(() => {
     fetchContract();
-  }, [contractId]);
+  }, [fetchContract]);
 
   const handleActivate = async () => {
     if (!contract) return;
@@ -81,6 +87,30 @@ export default function ContractManagementPage() {
       setIsActionLoading(false);
     }
   };
+  const handleOpenRegisterModal = (paymentId: string) => {
+    setSelectedPaymentId(paymentId);
+    setShowRegisterPaymentModal(true);
+  };
+
+  const handleRegisterPayment = async () => {
+    if (!selectedPaymentId) return;
+
+    setIsActionLoading(true);
+    try {
+      await PaymentService.register(selectedPaymentId, {});
+      toast.success("Pagamento registado com sucesso!");
+      setShowRegisterPaymentModal(false);
+      await fetchContract(); // Recarrega os dados do contrato para atualizar a lista
+    } catch (error) {
+      toast.error("Falha ao registar o pagamento.", {
+        description: (error as Error).message,
+      });
+    } finally {
+      setIsActionLoading(false);
+      setSelectedPaymentId(null);
+    }
+  };
+
   const handleViewContract = async () => {
     if (!contract) return;
     setIsActionLoading(true);
@@ -407,7 +437,10 @@ export default function ContractManagementPage() {
               <ContractDetails contract={contract} />
               {contract.paymentsOrders &&
                 contract.paymentsOrders.length > 0 && (
-                  <PaymentsList payments={contract.paymentsOrders} />
+                  <PaymentsList
+                    payments={contract.paymentsOrders}
+                    onRegisterPaymentClick={handleOpenRegisterModal}
+                  />
                 )}
             </div>
 
@@ -533,6 +566,13 @@ export default function ContractManagementPage() {
           contract={contract}
         />
       )}
+
+      <RegisterPaymentModal
+        isOpen={showRegisterPaymentModal}
+        onClose={() => setShowRegisterPaymentModal(false)}
+        onConfirm={handleRegisterPayment}
+        isLoading={isActionLoading}
+      />
     </>
   );
 }

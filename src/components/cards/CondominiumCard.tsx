@@ -1,6 +1,5 @@
 "use client";
 
-import { useRouter } from "next/navigation";
 import { Building2, MapPin } from "lucide-react";
 import { Condominium } from "@/services/domains/condominiumService";
 
@@ -9,7 +8,7 @@ interface CondominiumCardProps {
 }
 
 export function CondominiumCard({ condominium }: CondominiumCardProps) {
-  const router = useRouter();
+  // const router = useRouter();
 
   const handleCardClick = () => {
     // Futuramente, redirecionar para uma página de detalhes do condomínio

@@ -79,10 +79,14 @@ export function PropertyCard(props: PropertyProps) {
               <h3 className="text-xl font-bold text-gray-900 line-clamp-2">
                 {props.title}
               </h3>
-              <p className="flex items-center gap-1.5 text-sm text-gray-500 mt-1">
-                <MapPin size={14} />
-                {props.district}, {props.city} - {props.state}
-              </p>
+              <div className="flex items-center gap-1.5 mt-1">
+                <div className="bg-primary p-2 rounded-xl">
+                  <MapPin size={14} className="text-white" />
+                </div>
+                <p className="flex items-center  text-sm text-gray-500 ">
+                  {props.district}, {props.city} - {props.state}
+                </p>
+              </div>
             </div>
           </div>
           <p className="text-base text-gray-600 mt-3 line-clamp-3">

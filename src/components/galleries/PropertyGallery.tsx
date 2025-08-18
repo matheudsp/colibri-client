@@ -54,7 +54,7 @@ export function PropertyGallery({ photos, altText }: PropertyGalleryProps) {
           onClick={openModal}
         >
           <Image
-            src={currentPhoto.signedUrl}
+            src={currentPhoto.signedUrl!}
             alt={`${altText} - Foto ${currentIndex + 1}`}
             fill
             className="object-cover rounded-lg"

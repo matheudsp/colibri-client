@@ -1,7 +1,8 @@
+import type { ApiResponse } from "@/types/api";
 import { api, extractAxiosError } from "../api";
 import API_ROUTES from "../api/routes";
 
-interface User {
+export interface User {
   id: string;
   name: string;
   email: string;
@@ -42,11 +43,12 @@ export const UserService = {
     }
   },
 
-  async search(params: SearchUserParams): Promise<User[]> {
+  async search(params: SearchUserParams): Promise<ApiResponse<User[]>> {
     try {
       const response = await api.get(API_ROUTES.USERS.SEARCH, {
         params: params,
       });
+
       return response.data;
     } catch (error) {
       throw new Error(extractAxiosError(error));

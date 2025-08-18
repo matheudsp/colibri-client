@@ -13,20 +13,14 @@ import {
   HashIcon,
   MapIcon,
 } from "lucide-react";
-
-// Componentes do formulário
 import { CustomButton } from "@/components/forms/CustomButton";
 import { CustomDropdownInput } from "@/components/forms/CustomDropdownInput";
 import { CustomFormInput } from "@/components/forms/CustomFormInput";
-
-// Validação e Serviço do Condomínio
 import {
   createCondominiumSchema,
   CreateCondominiumFormValues,
 } from "@/validations/condominiums/condominiumCreateValidation";
 import { CondominiumService } from "@/services/domains/condominiumService";
-
-// Utilitários e Constantes
 import { brazilianStates } from "@/constants/states";
 import { fetchAddressByCep } from "@/utils/viacep";
 import { fetchCitiesByState } from "@/utils/ibge";
@@ -71,7 +65,7 @@ export default function CreateCondominiumPage() {
         toast.error("CEP não encontrado.");
       }
     } catch (error) {
-      toast.error("Erro ao buscar o CEP.");
+      toast.error(`Erro ao buscar o CEP: ${error}`);
     } finally {
       setIsCepLoading(false);
     }

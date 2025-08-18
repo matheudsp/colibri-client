@@ -6,6 +6,7 @@ import { Trash2 as TrashIcon, Eye as EyeIcon } from "lucide-react";
 import { Photo } from "../../interfaces/photo";
 import { DeletePhotoModal } from "../modals/photoModals/DeletePhotoModal";
 import { PhotoViewModal } from "../modals/photoModals/PhotoViewModal";
+import { toast } from "sonner";
 
 interface PhotoCardProps {
   photo: Photo;
@@ -22,7 +23,10 @@ export function PhotoCard({ photo, onDelete }: PhotoCardProps) {
     setIsLoading(true);
     try {
       await onDelete(photo.id);
-    } catch (error) {
+    } catch (_error) {
+      toast.error("Falha ao deletar foto.", {
+        description: (_error as Error).message,
+      });
     } finally {
       setIsLoading(false);
       setShowDeleteModal(false);

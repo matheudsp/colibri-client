@@ -86,7 +86,7 @@ export default function CreatePropertyPage() {
         toast.error("CEP não encontrado.");
       }
     } catch (error) {
-      toast.error("Erro ao buscar o CEP.");
+      toast.error(`Erro ao buscar o CEP: ${error}`);
     } finally {
       setIsCepLoading(false);
     }
@@ -177,7 +177,7 @@ export default function CreatePropertyPage() {
       toast.success("Imóvel cadastrado com sucesso!");
       router.push("/properties");
     } catch (error) {
-      toast.error("Falha no upload das fotos.");
+      toast.error(`Falha no upload das fotos: ${error}`);
     } finally {
       setIsUploading(false);
     }
@@ -365,7 +365,7 @@ export default function CreatePropertyPage() {
                 </p>
               </div>
               <div className="grid gap-3 sm:gap-4 grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
-                {allPhotos.map((photo, index) => (
+                {allPhotos.map((photo) => (
                   <PhotoCard
                     key={photo.id}
                     photo={photo}

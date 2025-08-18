@@ -3,12 +3,11 @@
 import { useEffect, useState } from "react";
 import { UseFormRegisterReturn } from "react-hook-form";
 import { formatCEP } from "@/utils/formatters/formatCEP";
-import { formatCurrency, unmaskCurrency } from "@/utils/masks/maskCurrency";
+import { formatCurrency } from "@/utils/masks/maskCurrency";
 import { dateMask } from "@/utils/masks/maskDate";
-import { phoneMask, unmaskPhone } from "@/utils/masks/maskPhone";
-import { decimalMask } from "@/utils/masks/maskDecimal";
-import { parseDecimalValue } from "@/utils/formatters/formatDecimal";
-import { formatNumeric, unmaskNumeric } from "@/utils/masks/maskNumeric";
+import { phoneMask } from "@/utils/masks/maskPhone";
+
+import { formatNumeric } from "@/utils/masks/maskNumeric";
 
 interface BasicInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   label: string | undefined;
@@ -23,7 +22,6 @@ interface BasicInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   value?: string;
   className?: string;
   mask?: "cep" | "currency" | "date" | "phone" | "numeric";
-  onDebouncedChange?: (value: string) => void;
 }
 
 export function CustomFormInput({
@@ -44,7 +42,7 @@ export function CustomFormInput({
   minLength,
   className,
   mask,
-  onDebouncedChange,
+
   ...props
 }: BasicInputProps) {
   const [isFocused, setIsFocused] = useState(false);
@@ -102,7 +100,7 @@ export function CustomFormInput({
   const inputProps = { ...props, ...registration };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    let value = e.target.value;
+    const value = e.target.value;
     let valueToRegister: string = value;
 
     if (mask === "currency") {

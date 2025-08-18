@@ -11,9 +11,10 @@ import { ITEMS_PER_PAGE } from "@/constants/pagination";
 
 import { toast } from "sonner";
 import { ContractCard } from "@/components/cards/ContractCard";
+import type { Contract } from "@/interfaces/contract";
 
 export default function ContractsPage() {
-  const [contracts, setContracts] = useState<any[]>([]);
+  const [contracts, setContracts] = useState<Contract[]>([]);
   const [loading, setLoading] = useState(true);
   const [pagination, setPagination] = useState({
     total: 0,

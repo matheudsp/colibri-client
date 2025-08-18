@@ -22,7 +22,6 @@ import {
   Calendar,
   Clock,
   DollarSign,
-  Shield,
   Loader2,
   Building,
   CheckCircle,
@@ -36,9 +35,10 @@ import { CustomDropdownInput } from "@/components/forms/CustomDropdownInput";
 
 import { Stepper } from "@/components/layout/Stepper";
 import { guaranteeTypes } from "@/constants";
-import { unmaskCurrency } from "@/utils/masks/maskCurrency";
+
 import { toISODate } from "@/utils/formatters/formatDate";
 import { unmaskNumeric } from "@/utils/masks/maskNumeric";
+import type { ApiResponse } from "@/types/api";
 
 export default function CreateContractPage() {
   const router = useRouter();
@@ -96,9 +96,10 @@ export default function CreateContractPage() {
     }
     setSearchingTenant(true);
     try {
-      const response: any = await UserService.search({ email: emailToSearch });
+      const response: ApiResponse<userProps[]> = await UserService.search({
+        email: emailToSearch,
+      });
       const userList = response.data || [];
-
       if (userList.length > 0) {
         setFoundTenants(userList);
         toast.success(`${userList.length} inquilino(s) encontrado(s).`);
@@ -108,8 +109,8 @@ export default function CreateContractPage() {
         );
         setFoundTenants([]);
       }
-    } catch (error) {
-      toast.error("Ocorreu um erro ao buscar o inquilino.");
+    } catch (_error) {
+      toast.error(`Ocorreu um erro ao buscar o inquilino: ${_error}`);
     } finally {
       setSearchingTenant(false);
     }
@@ -206,9 +207,9 @@ export default function CreateContractPage() {
               </legend>
 
               <p className="text-sm text-gray-600">
-                Para evitar duplicidade, primeiro busque pelo e-mail do
-                inquilino. Se ele não for encontrado, utilize a aba "Cadastrar
-                Novo".
+                {
+                  'Para evitar duplicidade, primeiro busque pelo e-mail do inquilino. Se ele não for encontrado, utilize a aba "Cadastrar Novo".'
+                }
               </p>
 
               <div className="flex w-full bg-gray-100 border border-gray-200 rounded-lg p-1">
@@ -239,10 +240,11 @@ export default function CreateContractPage() {
               {tenantAction === "search" && (
                 <div className="pt-2 space-y-4">
                   <p className="text-xs text-gray-500 italic">
-                    Digite o e-mail do inquilino e clique em "Buscar" para
-                    encontrar um usuário já cadastrado.
+                    {
+                      'Digite o e-mail do inquilino e clique em "Buscar" para encontrar um usuário já cadastrado.'
+                    }
                   </p>
-                  <div className="flex items-center gap-2">
+                  <div className="flex flex-col sm:flex-row items-center gap-2">
                     <CustomFormInput
                       id="search-email"
                       icon={<Mail />}
@@ -254,7 +256,7 @@ export default function CreateContractPage() {
                     <CustomButton
                       onClick={handleSearchTenant}
                       disabled={searchingTenant}
-                      className="h-full"
+                      className="h-full w-full sm:w-2/6"
                     >
                       {searchingTenant ? (
                         <Loader2 className="animate-spin" />

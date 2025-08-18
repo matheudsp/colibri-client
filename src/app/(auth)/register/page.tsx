@@ -8,12 +8,10 @@ import Image from "next/image";
 import { CustomButton } from "../../../components/forms/CustomButton";
 import { CustomAuthInput } from "../../../components/forms/CustomAuthInput";
 import {
-  BuildingIcon,
   CalendarIcon,
   FileTextIcon,
   HashIcon,
   HomeIcon,
-  LandmarkIcon,
   LockIcon,
   MailIcon,
   MapIcon,
@@ -217,7 +215,7 @@ const LandlordForm = () => {
         toast.error("CEP não encontrado. Preencha manualmente.");
       }
     } catch (error) {
-      toast.error("Erro ao buscar o CEP. Preencha manualmente.");
+      toast.error(`Erro ao buscar o CEP: ${error}. Preencha manualmente.`);
     } finally {
       setIsCepLoading(false);
     }

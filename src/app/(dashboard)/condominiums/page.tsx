@@ -47,7 +47,7 @@ export default function CondominiumsPage() {
           totalPages: meta?.totalPages || 1,
         });
       } catch (err) {
-        toast.error("Não foi possível carregar os condomínios.");
+        toast.error(`Não foi possível carregar os condomínios: ${err}`);
         setCondominiums([]);
       } finally {
         setLoading(false);
@@ -85,7 +85,7 @@ export default function CondominiumsPage() {
                 Nenhum condomínio encontrado.
               </p>
               <p className="text-sm text-gray-500">
-                Clique no botão '+' para adicionar seu primeiro condomínio.
+                {'Clique no botão "+" para adicionar seu primeiro condomínio.'}
               </p>
             </div>
           ) : (

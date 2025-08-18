@@ -1,3 +1,5 @@
+import type { PropertyProps } from "@/interfaces/property";
+
 interface ApiMetaPerformance {
   executionTimeMs: number;
   serverTimeMs: number;
@@ -36,4 +38,9 @@ export interface ApiResponse<T> {
   meta?: ApiMeta;
   timestamp?: string;
   success?: boolean;
+}
+
+export interface PropertiesApiResponse {
+  meta?: ApiMeta;
+  properties: PropertyProps[];
 }

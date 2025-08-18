@@ -1,11 +1,5 @@
+import type { PaymentResponse } from "./payment";
 import { PropertyProps as Property } from "./property";
-
-export interface PaymentOrder {
-  id: string;
-  amountDue: number;
-  dueDate: string;
-  status: "PENDENTE" | "PAGO" | "ATRASADO" | "CANCELADO";
-}
 
 export interface Contract {
   id: string;
@@ -40,7 +34,7 @@ export interface Contract {
     name: string;
     email: string;
   };
-  paymentsOrders?: PaymentOrder[];
+  paymentsOrders?: PaymentResponse[];
 }
 
 export interface ContractWithDocuments extends Contract {

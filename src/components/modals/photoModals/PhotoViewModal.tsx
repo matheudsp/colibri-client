@@ -39,9 +39,8 @@ export function PhotoViewModal({
         }
 
         const timestamp = Date.now();
-        let signedUrl: string;
 
-        signedUrl = await PhotoService.getSignedUrl(photoId || "");
+        const signedUrl = await PhotoService.getSignedUrl(photoId || "");
 
         const urlWithTimestamp = signedUrl.includes("?")
           ? `${signedUrl}&t=${timestamp}`

@@ -94,9 +94,11 @@ const API_ROUTES = {
       `/contracts/${id}/resend-notification`,
   },
   PAYMENTS: {
-    BASE: "/payments-orders",
+    MY_PAYMENTS: "/payments-orders/my-payments",
+    USER_PAYMENTS: "/payments-orders/user-payments",
     BY_ID: ({ id }: Params) => `/payments-orders/${id}`,
-    BY_CONTRACT: ({ id }: Params) => `/payments-orders/contract/${id}`,
+    BY_CONTRACT: ({ id }: Params) => `/payments-orders/contracts/${id}`,
+    REGISTER: ({ id }: Params) => `/payments-orders/${id}`,
   },
 };
 

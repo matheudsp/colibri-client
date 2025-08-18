@@ -54,7 +54,7 @@ export const ContractService = {
     }
   },
 
-  async requestSignature(id: string): Promise<ApiResponse<any>> {
+  async requestSignature(id: string): Promise<void> {
     try {
       const response = await api.post(
         API_ROUTES.CONTRACTS.REQUEST_SIGNATURE({ id })
@@ -83,7 +83,7 @@ export const ContractService = {
   async resendNotification(
     id: string,
     data: ResendNotificationData
-  ): Promise<ApiResponse<any>> {
+  ): Promise<void> {
     try {
       const response = await api.post(
         API_ROUTES.CONTRACTS.RESEND_NOTIFICATION({ id }),

@@ -10,12 +10,8 @@ import {
   Building,
   Car,
   CheckCircle2,
-  Home,
   Loader2,
-  Mail,
-  MapPin,
   Maximize,
-  Phone,
   User,
   XCircle,
 } from "lucide-react";
@@ -179,7 +175,7 @@ export default function PropertyDetailsPage() {
                 <h2 className="font-bold text-lg text-gray-800 mb-4">
                   Características
                 </h2>
-                <div className="grid grid-cols-2 sm:grid-cols-3 gap-y-4 font-medium">
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-y-4 font-medium">
                   <div className="flex items-center gap-2 ">
                     <div className="bg-primary p-2 rounded-xl">
                       <Maximize size={16} className="text-white rotate-45 " />{" "}

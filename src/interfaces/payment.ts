@@ -1,0 +1,19 @@
+import type { PaymentStatus } from "@/constants";
+import type { BankSlip } from "./bank-slip";
+
+export interface PaymentResponse {
+  id: string;
+  amountDue: string;
+  amountPaid: string | null;
+  dueDate: string;
+  paidAt: string | null;
+  status: PaymentStatus;
+  contractId: string;
+  bankSlip: BankSlip;
+  contract: {
+    property: {
+      id: string;
+      title: string;
+    };
+  };
+}

@@ -2,8 +2,8 @@
 
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
-import { parseCookies } from "nookies";
-import { AuthService } from "../services/domains/authService";
+// import { parseCookies } from "nookies";
+// import { AuthService } from "../services/domains/authService";
 
 type UseAuthOptions = {
   redirectIfAuthenticated?: string | boolean;
@@ -23,7 +23,7 @@ export function useAuth(options?: UseAuthOptions) {
 
     async function verifyAuth() {
       try {
-        const user = await AuthService.getMe();
+        // const user = await AuthService.getMe();
 
         if (options?.redirectIfAuthenticated) {
           const redirectPath =

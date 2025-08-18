@@ -2,7 +2,7 @@ import { CreatePropertyFormValues } from "../../validations";
 import { api, extractAxiosError } from "../api";
 import API_ROUTES from "../api/routes";
 import { PropertyProps } from "../../interfaces/property";
-import { ApiResponse } from "../../types/api";
+import { ApiResponse, type PropertiesApiResponse } from "../../types/api";
 
 export interface PropertyResponse {
   id: string;
@@ -82,7 +82,7 @@ export const PropertyService = {
 
   async listAll(
     params?: ListPropertiesParams
-  ): Promise<ApiResponse<PropertyResponse[]>> {
+  ): Promise<{ data: PropertiesApiResponse }> {
     try {
       const response = await api.get(API_ROUTES.PROPERTIES.BASE, {
         params: params,
@@ -95,7 +95,7 @@ export const PropertyService = {
 
   async search(
     params: SearchPropertiesParams
-  ): Promise<ApiResponse<PropertyResponse[]>> {
+  ): Promise<ApiResponse<PropertiesApiResponse>> {
     try {
       const cleanedParams = Object.fromEntries(
         Object.entries(params).filter(
