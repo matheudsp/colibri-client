@@ -1,6 +1,6 @@
 import React from "react";
 
-interface BrlCurrencyIconProps extends React.SVGProps<SVGSVGElement> {}
+type BrlCurrencyIconProps = React.SVGProps<SVGSVGElement>;
 
 export function BrlCurrencyIcon({
   width = 24,

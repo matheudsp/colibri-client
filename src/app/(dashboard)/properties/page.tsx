@@ -81,7 +81,7 @@ export default function DashboardPropertiesPage() {
     } finally {
       setLoading(false);
     }
-  }, [currentPage, roleLoading]);
+  }, [currentPage, roleLoading, searchValue]);
 
   useEffect(() => {
     fetchProperties();
