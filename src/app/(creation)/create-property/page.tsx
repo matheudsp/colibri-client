@@ -18,7 +18,6 @@ import {
   Car,
   PlusIcon,
   ArrowRight,
-  DollarSign,
 } from "lucide-react";
 import { CustomButton } from "@/components/forms/CustomButton";
 import { CustomDropdownInput } from "@/components/forms/CustomDropdownInput";
@@ -37,6 +36,7 @@ import { fetchCitiesByState } from "@/utils/ibge";
 import { Photo } from "@/interfaces/photo";
 import { Stepper } from "@/components/layout/Stepper";
 import { unmaskNumeric } from "@/utils/masks/maskNumeric";
+import { BrlCurrencyIcon } from "@/components/icons/BRLCurrencyIcon";
 
 export default function CreatePropertyPage() {
   const router = useRouter();
@@ -193,8 +193,8 @@ export default function CreatePropertyPage() {
 
   return (
     <>
-      <div className="min-h-svh mt-14 w-full flex flex-col items-center justify-center">
-        <div className="bg-white shadow-lg p-4 sm:p-6 md:p-8  w-full max-w-4xl">
+      <div className="min-h-svh pt-16 w-full flex flex-col items-center justify-center">
+        <div className="bg-white shadow-lg p-4 sm:p-6 md:p-8  w-full max-w-4xl ">
           <Stepper steps={formSteps} currentStep={step} />
 
           {step === 1 && (
@@ -209,21 +209,21 @@ export default function CreatePropertyPage() {
                 <div className="grid grid-cols-1 gap-y-4">
                   <CustomFormInput
                     id="title"
-                    icon={<Building2 />}
+                    icon={<Building2 className="h-5 w-5 text-gray-500" />}
                     label="Título do Imóvel*"
                     {...register("title")}
                     error={errors.title?.message}
                   />
                   <CustomFormInput
                     id="description"
-                    icon={<HomeIcon />}
+                    icon={<HomeIcon className="h-5 w-5 text-gray-500" />}
                     label="Descrição*"
                     {...register("description")}
                     error={errors.description?.message}
                   />
                   <CustomFormInput
                     id="rentValue"
-                    icon={<DollarSign />}
+                    icon={<BrlCurrencyIcon className="h-6 w-6 text-gray-500" />}
                     label="Valor do Aluguel*"
                     registration={register("rentValue")}
                     error={errors.rentValue?.message}
@@ -239,7 +239,7 @@ export default function CreatePropertyPage() {
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-4">
                   <CustomFormInput
                     id="cep"
-                    icon={<MapPinIcon />}
+                    icon={<MapPinIcon className="h-5 w-5 text-gray-500" />}
                     label="CEP*"
                     registration={register("cep")}
                     mask="cep"
@@ -249,6 +249,7 @@ export default function CreatePropertyPage() {
                   />
                   <CustomDropdownInput
                     placeholder="Estado (UF)*"
+                    label="Estado (UF)*"
                     options={brazilianStates}
                     selectedOptionValue={watch("state")}
                     onOptionSelected={(val) =>
@@ -256,18 +257,9 @@ export default function CreatePropertyPage() {
                     }
                     error={errors.state?.message}
                   />
-                  <CustomFormInput
-                    id="street"
-                    icon={<HomeIcon />}
-                    placeholder="Ex: Rua das Flores"
-                    label="Rua/Avenida*"
-                    value={watch("street") || ""}
-                    {...register("street")}
-                    error={errors.street?.message}
-                    className="md:col-span-2"
-                  />
                   <CustomDropdownInput
                     placeholder={isCitiesLoading ? "Carregando..." : "Cidade*"}
+                    label="Cidade*"
                     options={cities}
                     selectedOptionValue={watch("city")}
                     onOptionSelected={(val) =>
@@ -277,9 +269,19 @@ export default function CreatePropertyPage() {
                     disabled={!stateValue || isCitiesLoading}
                   />
                   <CustomFormInput
+                    id="street"
+                    icon={<HomeIcon className="h-5 w-5 text-gray-500" />}
+                    placeholder="Ex: Rua das Flores"
+                    label="Rua/Avenida*"
+                    value={watch("street") || ""}
+                    {...register("street")}
+                    error={errors.street?.message}
+                    className="md:col-span-2"
+                  />
+                  <CustomFormInput
                     id="district"
                     placeholder="Ex: Centro"
-                    icon={<MapIcon />}
+                    icon={<MapIcon className="h-5 w-5 text-gray-500" />}
                     label="Bairro*"
                     value={watch("district") || ""}
                     {...register("district")}
@@ -287,14 +289,14 @@ export default function CreatePropertyPage() {
                   />
                   <CustomFormInput
                     id="number"
-                    icon={<HashIcon />}
+                    icon={<HashIcon className="h-5 w-5 text-gray-500" />}
                     label="Número*"
                     {...register("number")}
                     error={errors.number?.message}
                   />
                   <CustomFormInput
                     id="complement"
-                    icon={<HashIcon />}
+                    icon={<HashIcon className="h-5 w-5 text-gray-500" />}
                     label="Complemento"
                     {...register("complement")}
                     error={errors.complement?.message}
@@ -309,7 +311,9 @@ export default function CreatePropertyPage() {
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-x-4 gap-y-4">
                   <CustomFormInput
                     id="areaInM2"
-                    icon={<Square className="rotate-45" />}
+                    icon={
+                      <Square className="rotate-45 h-5 w-5 text-gray-500" />
+                    }
                     label="Área (m²)*"
                     type="number"
                     {...register("areaInM2", { valueAsNumber: true })}
@@ -317,7 +321,7 @@ export default function CreatePropertyPage() {
                   />
                   <CustomFormInput
                     id="numRooms"
-                    icon={<Bed />}
+                    icon={<Bed className="h-5 w-5 text-gray-500" />}
                     label="Quartos*"
                     type="number"
                     {...register("numRooms", { valueAsNumber: true })}
@@ -325,7 +329,7 @@ export default function CreatePropertyPage() {
                   />
                   <CustomFormInput
                     id="numBathrooms"
-                    icon={<Bath />}
+                    icon={<Bath className="h-5 w-5 text-gray-500" />}
                     label="Banheiros*"
                     type="number"
                     {...register("numBathrooms", { valueAsNumber: true })}
@@ -333,7 +337,7 @@ export default function CreatePropertyPage() {
                   />
                   <CustomFormInput
                     id="numParking"
-                    icon={<Car />}
+                    icon={<Car className="h-5 w-5 text-gray-500" />}
                     label="Vagas*"
                     type="number"
                     {...register("numParking", { valueAsNumber: true })}

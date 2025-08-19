@@ -52,8 +52,14 @@ export default {
       animation: {
         "spin-slow": "spin 3s linear infinite",
         wiggle: "wiggle 0.5s ease-in-out infinite",
+        fadeIn: "fadeIn 0.5s ease-in-out",
       },
+
       keyframes: {
+        fadeIn: {
+          "0%": { opacity: "0" },
+          "100%": { opacity: "1" },
+        },
         wiggle: {
           "0%, 100%": { transform: "rotate(-5deg)" },
           "50%": { transform: "rotate(5deg)" },

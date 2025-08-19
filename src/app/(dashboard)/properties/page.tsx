@@ -10,7 +10,7 @@ import {
   PropertyResponse,
   PropertyService,
 } from "@/services/domains/propertyService";
-import { useSearch } from "@/contexts/SearchContext";
+import { PropertyCardSkeleton } from "@/components/skeletons/PropertyCardSkeleton";
 import { useAuth } from "@/hooks/useAuth";
 import { Pagination } from "@/components/layout/Pagination";
 import { ITEMS_PER_PAGE } from "@/constants/pagination";
@@ -18,11 +18,14 @@ import { ApiResponse, type PropertiesApiResponse } from "@/types/api";
 import { toast } from "sonner";
 import { useUserRole } from "@/hooks/useUserRole";
 import { Roles } from "@/constants/userRole";
-
+import { DeletePropertyModal } from "@/components/modals/propertyModals/DeletePropertyModal";
+import { useSearch } from "@/contexts/SearchContext";
 export default function DashboardPropertiesPage() {
   const { searchValue } = useSearch();
   const [properties, setProperties] = useState<PropertyResponse[]>([]);
   const [loading, setLoading] = useState(true);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [propertyToDelete, setPropertyToDelete] = useState<string | null>(null);
   const [pagination, setPagination] = useState({
     total: 0,
     page: 1,
@@ -38,22 +41,38 @@ export default function DashboardPropertiesPage() {
 
     setLoading(true);
     try {
-      const listParams = {
-        page: currentPage,
-        limit: ITEMS_PER_PAGE,
-      };
+      let response: ApiResponse<PropertiesApiResponse>;
+      if (searchValue.trim() === "") {
+        response = await PropertyService.listAll({
+          page: currentPage,
+          limit: ITEMS_PER_PAGE,
+        });
+      } else {
+        const searchParams = {
+          city: searchValue,
+          state:
+            searchValue.length === 2 ? searchValue.toUpperCase() : undefined,
+          title: searchValue,
+        };
 
-      const response: ApiResponse<PropertiesApiResponse> =
-        await PropertyService.listAll(listParams);
+        const cleanedParams = Object.fromEntries(
+          Object.entries(searchParams).filter(
+            ([, value]) => value !== undefined
+          )
+        );
+        response = await PropertyService.search(cleanedParams);
+      }
 
-      const data = response.data || [];
-      const meta = response.meta?.resource;
+      // const data = response.data || [];
 
-      setProperties(Array.isArray(data) ? data : []);
+      // setProperties(Array.isArray(data) ? data : []);
+      setProperties(
+        Array.isArray(response.data.properties) ? response.data.properties : []
+      );
       setPagination({
-        total: meta?.total || 0,
-        page: meta?.page || 1,
-        totalPages: meta?.totalPages || 1,
+        total: response.data.meta?.resource?.total || 0,
+        page: 1,
+        totalPages: 1,
       });
     } catch (err) {
       console.error("Erro ao carregar propriedades:", err);
@@ -68,15 +87,25 @@ export default function DashboardPropertiesPage() {
     fetchProperties();
   }, [fetchProperties]);
 
-  const handleDeleteProperty = async (id: string) => {
-    if (confirm("Tem certeza que deseja excluir este imóvel?")) {
-      try {
-        await PropertyService.delete(id);
-        toast.success("Imóvel excluído com sucesso!");
-        setProperties((prev) => prev.filter((p) => p.id !== id));
-      } catch (_error) {
-        toast.error(`Erro ao excluir imóvel: ${_error}`);
-      }
+  const handleDeleteProperty = (id: string) => {
+    setPropertyToDelete(id);
+    setIsDeleteModalOpen(true);
+  };
+  const confirmDelete = async () => {
+    if (!propertyToDelete) return;
+
+    setLoading(true);
+    try {
+      await PropertyService.delete(propertyToDelete);
+      toast.success("Imóvel excluído com sucesso!");
+
+      setProperties((prev) => prev.filter((p) => p.id !== propertyToDelete));
+    } catch (_error) {
+      toast.error(`Erro ao excluir imóvel. ${_error}`);
+    } finally {
+      setIsDeleteModalOpen(false);
+      setPropertyToDelete(null);
+      setLoading(false);
     }
   };
 
@@ -120,12 +149,11 @@ export default function DashboardPropertiesPage() {
 
         <div className="w-full grid gap-4 pb-10">
           {loading ? (
-            <div className="flex flex-col items-center justify-center gap-2 mt-10 text-primary">
-              <Loader2Icon size={32} className="animate-spin" />
-              <p>
-                {searchValue ? "Buscando imóveis..." : "Carregando imóveis..."}
-              </p>
-            </div>
+            <>
+              <PropertyCardSkeleton />
+              <PropertyCardSkeleton />
+              <PropertyCardSkeleton />
+            </>
           ) : properties.length === 0 ? (
             <div className="flex flex-col items-center justify-center gap-3 text-center mt-10 p-6 bg-white rounded-lg shadow-sm">
               {pageContent.emptyIcon}
@@ -157,6 +185,12 @@ export default function DashboardPropertiesPage() {
       </div>
 
       {(role === Roles.ADMIN || role === Roles.LOCADOR) && <FabButton />}
+      <DeletePropertyModal
+        isOpen={isDeleteModalOpen}
+        onClose={() => setIsDeleteModalOpen(false)}
+        onConfirm={confirmDelete}
+        isLoading={loading}
+      />
     </div>
   );
 }

@@ -26,9 +26,6 @@ import { useAuth } from "@/hooks/useAuth";
 import { CustomButton } from "@/components/forms/CustomButton";
 import { PropertyGallery } from "@/components/galleries/PropertyGallery";
 
-// --- Componentes Internos para Melhor Organização ---
-
-// Card de Preço e Contato (Reutilizável)
 const PriceAndContactCard = ({ property }: { property: PropertyResponse }) => {
   const whatsappLink = `https://wa.me/${property.landlord.phone.replace(
     /\D/g,
@@ -51,8 +48,8 @@ const PriceAndContactCard = ({ property }: { property: PropertyResponse }) => {
           Gostou? Fale com o locador!
         </p>
         <div className="flex items-center space-x-3">
-          <div className="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center">
-            <User className="text-primary" />
+          <div className="w-10 h-10 bg-primary rounded-2xl flex items-center justify-center">
+            <User className="text-white" />
           </div>
           <div>
             <p className="font-semibold text-gray-800">
@@ -66,21 +63,13 @@ const PriceAndContactCard = ({ property }: { property: PropertyResponse }) => {
               <FaWhatsapp size={18} className="mr-2" /> Conversar no WhatsApp
             </CustomButton>
           </a>
-          {/* <a href={`mailto:${property.landlord.email}`}>
-            <CustomButton
-              ghost
-              className="w-full border-gray-300 text-gray-700 hover:bg-gray-100"
-            >
-              <Mail size={14} className="mr-2" /> Enviar E-mail
-            </CustomButton>
-          </a> */}
+          <a href={`mailto:${property.landlord.email}`}></a>
         </div>
       </div>
     </div>
   );
 };
 
-// --- Componente Principal da Página ---
 export default function PropertyDetailsPage() {
   const [property, setProperty] = useState<PropertyResponse | null>(null);
   const [loading, setLoading] = useState(true);

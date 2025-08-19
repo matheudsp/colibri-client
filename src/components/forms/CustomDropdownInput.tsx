@@ -8,6 +8,8 @@ export interface DropdownOption {
 }
 
 interface CustomDropdownInputProps {
+  id?: string;
+  label?: string;
   options: DropdownOption[];
   selectedOptionValue?: string | null;
   onOptionSelected?: (optionId: string | null) => void;
@@ -19,6 +21,8 @@ interface CustomDropdownInputProps {
 }
 
 export function CustomDropdownInput({
+  id,
+  label,
   options = [],
   selectedOptionValue = null,
   onOptionSelected,
@@ -45,30 +49,43 @@ export function CustomDropdownInput({
 
   return (
     <div className={`w-full mx-auto ${className}`}>
+      {label && (
+        <label
+          htmlFor={id}
+          className="block text-sm font-semibold text-gray-700"
+        >
+          {label}
+        </label>
+      )}
+
       <div className="relative">
         <button
+          id={id}
           type="button"
           onClick={toggleDropdown}
-          className="w-full px-4 py-3 text-left border-2 border-gray-200 rounded-lg shadow-sm bg-white focus:outline-none flex justify-between items-center"
+          className={`w-full px-4 py-3 text-left border-2 rounded-lg shadow-sm bg-white focus:outline-none flex justify-between items-center transition-colors duration-200 hover:border-primary ${
+            isOpen ? "border-primary" : "border-gray-300"
+          }`}
           disabled={disabled}
         >
           <span className="text-gray-700 flex items-center gap-2">
             {icon && <span>{icon}</span>}
             {selectedOption ? selectedOption.label : placeholder}
           </span>
-          {isOpen ? (
-            <ChevronUpIcon className="h-5 w-5 text-gray-500" />
-          ) : (
-            <ChevronDownIcon className="h-5 w-5 text-gray-500" />
-          )}
+
+          <ChevronDownIcon
+            className={`h-5 w-5 text-gray-500 transition-transform duration-200 ${
+              isOpen ? "rotate-180" : "rotate-0"
+            }`}
+          />
         </button>
 
         {isOpen && (
-          <div className="absolute z-10 mt-1 w-full bg-white shadow-lg rounded-md py-1 border-1 border-black border-opacity-5 focus:outline-none max-h-60 overflow-y-auto">
+          <div className="absolute z-10 mt-1 w-full bg-white shadow-lg rounded-md py-1 border-1 border-black border-opacity-10 focus:outline-none max-h-60 overflow-y-auto">
             {options.map((option) => (
               <div key={option.id}>
                 <div
-                  className="px-4 py-3 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer flex justify-between items-center"
+                  className="p-4 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer flex justify-between items-center"
                   onClick={() => handleOptionSelect(option)}
                 >
                   <span>{option.label}</span>

@@ -14,15 +14,17 @@ import {
   MapPin,
   FilePlus2,
   Eye,
+  ImageIcon,
 } from "lucide-react";
 import { useUserRole } from "@/hooks/useUserRole";
 import { Roles } from "@/constants/userRole";
 import { CustomButton } from "@/components/forms/CustomButton";
+import { useState } from "react";
 
 export function PropertyCard(props: PropertyProps) {
   const router = useRouter();
   const { role, loading } = useUserRole();
-
+  const [isImageLoading, setIsImageLoading] = useState(true);
   const coverPhoto =
     props.photos?.find((p) => p.isCover) ||
     (props.photos?.length > 0 ? props.photos[0] : null);
@@ -53,18 +55,26 @@ export function PropertyCard(props: PropertyProps) {
   const showPropertyInfo = props.showPropertyInformation ?? false;
   return (
     <div
-      className={`w-full bg-white rounded-xl shadow-lg overflow-hidden transition-all duration-300 hover:shadow-2xl hover:-translate-y-1 flex flex-col md:flex-row relative`}
+      className={`w-full bg-white rounded-xl shadow-lg overflow-hidden transition-all duration-300 hover:shadow-2xl hover:-translate-y-1 flex flex-col md:flex-row relative animate-fadeIn`}
     >
-      <div className="relative w-full md:w-2/5 h-56 md:h-auto">
+      <div className="relative w-full md:w-2/5 h-56 md:h-auto transition-all delay-150">
         {coverPhoto ? (
-          <Image
-            src={coverPhoto.signedUrl}
-            alt={`Foto principal de ${props.title}`}
-            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-            fill
-            style={{ objectFit: "cover" }}
-            priority
-          />
+          <>
+            {isImageLoading && (
+              <div className="absolute inset-0 bg-gray-200 animate-pulse flex items-center justify-center">
+                <ImageIcon className="w-12 h-12 text-gray-300" />
+              </div>
+            )}
+            <Image
+              src={coverPhoto.signedUrl}
+              alt={`Foto principal de ${props.title}`}
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+              fill
+              style={{ objectFit: "cover" }}
+              priority
+              onLoad={() => setIsImageLoading(false)}
+            />
+          </>
         ) : (
           <div className="flex items-center justify-center h-full bg-gray-100 text-gray-400">
             <Home size={60} />

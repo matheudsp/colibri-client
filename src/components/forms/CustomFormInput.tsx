@@ -69,7 +69,7 @@ export function CustomFormInput({
   const hasValue = Boolean(internalValue) || Boolean(defaultValue);
 
   const containerClasses = `
-    flex items-center w-full px-4 py-2 rounded-lg transition-all duration-300
+    flex items-center w-full px-4 py-3 rounded-lg transition-all duration-300
     ${colorBg} ${textColor}
     ${
       error
@@ -91,12 +91,11 @@ export function CustomFormInput({
     absolute left-0 transition-all duration-200 pointer-events-none 
     ${
       isFocused || hasValue
-        ? " -translate-y-5 text-xs text-primary font-semibold"
+        ? `-translate-y-5 text-xs text-primary font-semibold px-1 ${colorBg}`
         : "translate-y-0 text-base text-gray-400"
     }
     ${disabled ? "text-gray-500" : ""}
   `;
-
   const inputProps = { ...props, ...registration };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -139,7 +138,7 @@ export function CustomFormInput({
   return (
     <div className={`w-full ${className}`}>
       <div className={containerClasses}>
-        <div className={`mr-3 ${textColor}`}>{icon}</div>
+        <div className={`mr-3  ${textColor}`}>{icon}</div>
         <div className="w-full relative">
           <input
             {...inputProps}
