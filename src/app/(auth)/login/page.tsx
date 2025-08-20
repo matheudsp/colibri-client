@@ -70,7 +70,7 @@ export default function LoginPage() {
       <Image
         width={200}
         height={200}
-        src="/images/logo-black-vertical.png"
+        src="/icons/logo-purple-black.svg"
         alt="Logo Colibri"
         priority
         className="w-auto h-44 md:h-52"
