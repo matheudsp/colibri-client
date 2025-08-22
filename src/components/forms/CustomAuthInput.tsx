@@ -7,6 +7,7 @@ import { formatCurrency, unmaskCurrency } from "@/utils/masks/maskCurrency";
 import { dateMask } from "@/utils/masks/maskDate";
 import { phoneMask, unmaskPhone } from "@/utils/masks/maskPhone";
 import { formatCEP } from "@/utils/formatters/formatCEP";
+import { formatNumeric } from "@/utils/masks/maskNumeric";
 
 interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   label: string;
@@ -16,7 +17,7 @@ interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   id: string;
   colorBg?: string;
   textColor?: string;
-  mask?: "currency" | "date" | "phone" | "cep";
+  mask?: "currency" | "date" | "phone" | "cep" | "numeric";
   onBlur?: (e: React.FocusEvent<HTMLInputElement>) => void;
 }
 
@@ -48,6 +49,8 @@ export function CustomAuthInput({
         return phoneMask(initialValue);
       case "cep":
         return formatCEP(initialValue);
+      case "numeric":
+        return formatNumeric(initialValue);
       default:
         return initialValue;
     }
@@ -83,6 +86,12 @@ export function CustomAuthInput({
         const numericString = unmaskCurrency(value);
         valueToRegister = numericString || "";
         formattedDisplayValue = formatCurrency(value);
+        break;
+      }
+      case "numeric": {
+        const unmasked = value.replace(/[^\d,]/g, "").replace(",", ".");
+        valueToRegister = unmasked;
+        formattedDisplayValue = formatNumeric(value);
         break;
       }
       case "date": {

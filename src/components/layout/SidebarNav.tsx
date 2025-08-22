@@ -21,11 +21,11 @@ const navItems = [
     href: "/properties",
     icon: HomeIcon,
   },
-  {
-    label: "Condomínios",
-    href: "/condominiums",
-    icon: Building2,
-  },
+  // {
+  //   label: "Condomínios",
+  //   href: "/condominiums",
+  //   icon: Building2,
+  // },
   {
     label: "Contratos",
     href: "/contracts",

@@ -34,6 +34,8 @@ import { CustomRadioGroup } from "@/components/forms/CustomRadioGroup";
 import { brazilianStates } from "@/constants/states";
 import { fetchAddressByCep } from "@/utils/viacep";
 import { fetchCitiesByState } from "@/utils/ibge";
+import { BrlCurrencyIcon } from "@/components/icons/BRLCurrencyIcon";
+import { unmaskNumeric } from "@/utils/masks/maskNumeric";
 
 type Role = "LOCATARIO" | "LOCADOR";
 
@@ -200,7 +202,7 @@ const LandlordForm = () => {
     setIsCepLoading(true);
     try {
       const address = await fetchAddressByCep(cep);
-      console.log(address);
+      // console.log(address);
       if (address) {
         setValue("street", address.street, { shouldValidate: true });
         setValue("province", address.district, { shouldValidate: true });
@@ -247,11 +249,11 @@ const LandlordForm = () => {
   const onSubmit = async (data: LandlordRegisterFormData) => {
     setLoading(true);
     try {
-      await AuthService.registerLandlord({
+      console.log("ENVIANDO CADASTRO:", {
         email: data.email,
         name: data.name,
-        cpfCnpj: data.cpfCnpj,
-        phone: data.phone,
+        cpfCnpj: data.cpfCnpj.replace(/\D/g, ""),
+        phone: data.phone.replace(/\D/g, ""),
         password: data.password,
         cep: data.cep,
         street: data.street,
@@ -262,10 +264,27 @@ const LandlordForm = () => {
         complement: data.complement,
         companyType: data.companyType,
         birthDate: data.birthDate,
-        incomeValue: Number(data.incomeValue.replace(/\D/g, "")),
+        incomeValue: unmaskNumeric(data.incomeValue),
       });
+      // await AuthService.registerLandlord({
+      //   email: data.email,
+      //   name: data.name,
+      //   cpfCnpj: data.cpfCnpj,
+      //   phone: data.phone,
+      //   password: data.password,
+      //   cep: data.cep,
+      //   street: data.street,
+      //   number: data.number,
+      //   province: data.province,
+      //   city: data.city,
+      //   state: data.state,
+      //   complement: data.complement,
+      //   companyType: data.companyType,
+      //   birthDate: data.birthDate,
+      //   incomeValue: Number(data.incomeValue.replace(/\D/g, "")),
+      // });
       toast.success("Cadastro realizado com sucesso!");
-      router.push("/login");
+      // router.push("/login");
     } catch (error) {
       if (axios.isAxiosError(error) && error.response) {
         toast.error(error.response.data.message || "Erro ao cadastrar.");
@@ -330,9 +349,9 @@ const LandlordForm = () => {
           registration={register("confirmPassword")}
           error={errors.confirmPassword?.message}
         />
-
-        {cpfCnpjValue && cpfCnpjValue.length > 11 && (
+        {cpfCnpjValue && cpfCnpjValue.length > 14 && (
           <CustomDropdownInput
+            label="Selecione o Tipo de Empresa"
             placeholder="Selecione o Tipo de Empresa*"
             options={companyType}
             selectedOptionValue={companyTypeValue}
@@ -343,7 +362,7 @@ const LandlordForm = () => {
             className="w-full"
           />
         )}
-        {cpfCnpjValue && cpfCnpjValue.length === 11 && (
+        {cpfCnpjValue && cpfCnpjValue.length <= 14 && (
           <CustomAuthInput
             label="Data de Nascimento*"
             id="birthDate"
@@ -366,6 +385,39 @@ const LandlordForm = () => {
           error={errors.cep?.message}
           disabled={isCepLoading}
         />
+        <CustomDropdownInput
+          label="Estado"
+          placeholder="Selecione o Estado (UF)*"
+          options={brazilianStates}
+          selectedOptionValue={stateValue}
+          onOptionSelected={(val) => {
+            if (val) setValue("state", val, { shouldValidate: true });
+          }}
+          error={errors.state?.message}
+          className="w-full"
+        />
+        <CustomDropdownInput
+          label="Cidade"
+          placeholder={
+            isCitiesLoading ? "Carregando..." : "Selecione a Cidade*"
+          }
+          options={cities}
+          selectedOptionValue={cityValue}
+          onOptionSelected={(val) => {
+            if (val) setValue("city", val, { shouldValidate: true });
+          }}
+          error={errors.city?.message}
+          className="w-full"
+          disabled={!stateValue || isCitiesLoading}
+        />{" "}
+        <CustomAuthInput
+          label="Bairro*"
+          id="province"
+          icon={<MapIcon />}
+          registration={register("province")}
+          value={provinceValue || ""}
+          error={errors.province?.message}
+        />
         <CustomAuthInput
           label="Rua/Avenida*"
           id="street"
@@ -382,38 +434,6 @@ const LandlordForm = () => {
           error={errors.number?.message}
         />
         <CustomAuthInput
-          label="Bairro*"
-          id="province"
-          icon={<MapIcon />}
-          registration={register("province")}
-          value={provinceValue || ""}
-          error={errors.province?.message}
-        />
-
-        <CustomDropdownInput
-          placeholder="Selecione o Estado (UF)*"
-          options={brazilianStates}
-          selectedOptionValue={stateValue}
-          onOptionSelected={(val) => {
-            if (val) setValue("state", val, { shouldValidate: true });
-          }}
-          error={errors.state?.message}
-          className="w-full"
-        />
-        <CustomDropdownInput
-          placeholder={
-            isCitiesLoading ? "Carregando..." : "Selecione a Cidade*"
-          }
-          options={cities}
-          selectedOptionValue={cityValue}
-          onOptionSelected={(val) => {
-            if (val) setValue("city", val, { shouldValidate: true });
-          }}
-          error={errors.city?.message}
-          className="w-full"
-          disabled={!stateValue || isCitiesLoading}
-        />
-        <CustomAuthInput
           label="Complemento"
           id="complement"
           icon={<HomeIcon />}
@@ -423,8 +443,8 @@ const LandlordForm = () => {
         <CustomAuthInput
           label="Renda/Faturamento Mensal*"
           id="incomeValue"
-          mask="currency"
-          icon={<UserIcon />}
+          mask="numeric"
+          icon={<BrlCurrencyIcon />}
           registration={register("incomeValue")}
           error={errors.incomeValue?.message}
         />
