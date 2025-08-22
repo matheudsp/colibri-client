@@ -46,7 +46,7 @@ export default function DashboardLayout({
         <SidebarNav />
         <main className="flex-1 md:ml-32">
           <Header
-            type="search"
+            type="default"
             hasSidebar
             searchValue={searchValue}
             onSearchChange={handleSearchChange}

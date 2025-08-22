@@ -100,6 +100,13 @@ const API_ROUTES = {
     BY_CONTRACT: ({ id }: Params) => `/payments-orders/contracts/${id}`,
     REGISTER: ({ id }: Params) => `/payments-orders/${id}`,
   },
+
+  BANK_ACCOUNTS: {
+    BASE: "/bank-accounts",
+    BALANCE: "/bank-accounts/balance",
+    MY_ACCOUNT: "/bank-accounts/my-account",
+    UPDATE: "/bank-accounts",
+  },
 };
 
 export default API_ROUTES;

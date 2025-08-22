@@ -63,7 +63,7 @@ export function CustomDropdownInput({
           id={id}
           type="button"
           onClick={toggleDropdown}
-          className={`w-full px-4 py-3 text-left border-2 rounded-lg shadow-sm bg-white focus:outline-none flex justify-between items-center transition-colors duration-200 hover:border-primary ${
+          className={`w-full px-8 py-3 text-left border-2 rounded-lg shadow-sm bg-white focus:outline-none flex justify-between items-center transition-colors duration-200 hover:border-primary ${
             isOpen ? "border-primary" : "border-gray-300"
           }`}
           disabled={disabled}

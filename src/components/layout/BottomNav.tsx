@@ -1,6 +1,12 @@
 "use client";
 
-import { Building2, CalendarArrowDown, FileText, HomeIcon } from "lucide-react";
+import {
+  Building2,
+  CalendarArrowDown,
+  FileText,
+  HomeIcon,
+  Wallet,
+} from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import clsx from "clsx";
@@ -25,6 +31,11 @@ const navItems = [
     label: "Pagamentos",
     href: "/payments",
     icon: CalendarArrowDown,
+  },
+  {
+    label: "Financeiro",
+    href: "/financial",
+    icon: Wallet,
   },
 ];
 
