@@ -8,6 +8,7 @@ export interface User {
   email: string;
   role?: "ADMIN" | "LOCADOR" | "LOCATARIO";
   status: boolean;
+  cpfCnpj?: string;
   // createdAt: string;
   // updatedAt: string;
 }
@@ -21,6 +22,7 @@ interface SearchUserParams {
   email?: string;
   role?: "ADMIN" | "LOCADOR" | "LOCATARIO";
   status?: boolean;
+  cpfCnpj?: string;
 }
 
 interface UpdateUserData {

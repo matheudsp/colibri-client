@@ -12,8 +12,8 @@ export interface CreateContractData {
   durationInMonths: number;
   guaranteeType: string;
   propertyId: string;
-  tenantEmail: string;
-  tenantCpfCnpj?: string;
+  tenantEmail?: string;
+  tenantCpfCnpj: string;
   tenantName?: string;
   tenantPassword?: string;
 }

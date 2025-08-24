@@ -1,191 +1,152 @@
 "use client";
+import clsx from "clsx";
+import { forwardRef, ChangeEvent, useState } from "react";
 
-import { useEffect, useState } from "react";
-import { UseFormRegisterReturn } from "react-hook-form";
 import { formatCEP } from "@/utils/formatters/formatCEP";
-import { formatCurrency } from "@/utils/masks/maskCurrency";
 import { dateMask } from "@/utils/masks/maskDate";
 import { phoneMask } from "@/utils/masks/maskPhone";
-
 import { formatNumeric } from "@/utils/masks/maskNumeric";
+import { cpfCnpjMask } from "@/utils/masks/cpfCnpjMask";
 
-interface BasicInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
-  label: string | undefined;
+interface BasicInputProps
+  extends Omit<React.InputHTMLAttributes<HTMLInputElement>, "onChange"> {
+  label?: string;
   icon: React.ReactElement;
-  registration?: UseFormRegisterReturn;
-  colorBg?: string;
-  textColor?: string;
-  borderColor?: string;
   error?: string;
   id: string;
-  defaultValue?: string | number;
-  value?: string;
+  mask?: "cep" | "currency" | "date" | "phone" | "numeric" | "cpfCnpj";
   className?: string;
-  mask?: "cep" | "currency" | "date" | "phone" | "numeric";
+  value?: string | number;
+  onChange?: (value: string) => void;
 }
 
-export function CustomFormInput({
-  type = "text",
-  label,
-  icon,
-  defaultValue,
-  value,
-  registration,
-  colorBg = "bg-white",
-  textColor = "text-foreground",
-  borderColor,
-  error,
-  id,
-  disabled,
-  required,
-  maxLength,
-  minLength,
-  className,
-  mask,
+export const CustomFormInput = forwardRef<HTMLInputElement, BasicInputProps>(
+  (
+    {
+      type = "text",
+      label,
+      icon,
+      error,
+      id,
+      disabled,
+      mask,
+      className,
+      value,
+      onChange,
+      ...props
+    },
+    ref
+  ) => {
+    const [isFocused, setIsFocused] = useState(false);
 
-  ...props
-}: BasicInputProps) {
-  const [isFocused, setIsFocused] = useState(false);
-  const [internalValue, setInternalValue] = useState(
-    defaultValue || value || ""
-  );
+    const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+      const rawValue = e.target.value;
+      let valueToRegister = rawValue;
 
-  useEffect(() => {
-    if (value !== undefined) {
-      let formattedValue = String(value);
-      if (mask === "currency") {
-        formattedValue = formatCurrency(formattedValue);
+      if (
+        mask === "numeric" ||
+        mask === "currency" ||
+        mask === "phone" ||
+        mask === "cep" ||
+        mask === "cpfCnpj"
+      ) {
+        valueToRegister = rawValue.replace(/\D/g, "");
       } else if (mask === "date") {
-        formattedValue = dateMask(formattedValue);
-      } else if (mask === "cep") {
-        formattedValue = formatCEP(formattedValue);
-      } else if (mask === "phone") {
-        formattedValue = phoneMask(formattedValue);
+        valueToRegister = dateMask(rawValue);
       }
-      setInternalValue(formattedValue);
-    }
-  }, [value, mask]);
 
-  const hasValue = Boolean(internalValue) || Boolean(defaultValue);
+      onChange?.(valueToRegister);
+    };
 
-  const containerClasses = `
-    flex items-center w-full px-4 py-3 rounded-lg transition-all duration-300
-    ${colorBg} ${textColor}
-    ${
-      error
-        ? "border-2 border-error"
-        : borderColor
-        ? `border-2 ${borderColor}`
-        : "border-2 border-gray-300"
-    }
-    ${isFocused ? "border-primary" : "hover:border-primary-hover"}
-    ${disabled ? "bg-gray-200 cursor-not-allowed" : ""}
-  `;
-
-  const inputClasses = `
-    w-full bg-transparent outline-none placeholder-transparent
-    ${disabled ? "cursor-not-allowed" : ""}
-  `;
-
-  const labelClasses = `
-    absolute left-0 transition-all duration-200 pointer-events-none 
-    ${
-      isFocused || hasValue
-        ? `-translate-y-5 text-xs text-primary font-semibold px-1 ${colorBg}`
-        : "translate-y-0 text-base text-gray-400"
-    }
-    ${disabled ? "text-gray-500" : ""}
-  `;
-  const inputProps = { ...props, ...registration };
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    let valueToRegister: string = value;
-
-    if (mask === "currency") {
-      valueToRegister = formatCurrency(value);
-    } else if (mask === "numeric") {
-      valueToRegister = formatNumeric(value);
-    } else if (mask === "date") {
-      valueToRegister = dateMask(value);
-    } else if (mask === "cep") {
-      valueToRegister = formatCEP(value);
-    } else if (mask === "phone") {
-      valueToRegister = phoneMask(value);
+    let displayValue = String(value || "");
+    if (mask) {
+      switch (mask) {
+        case "currency":
+        case "numeric":
+          displayValue = formatNumeric(displayValue);
+          break;
+        case "date":
+          displayValue = dateMask(displayValue);
+          break;
+        case "cep":
+          displayValue = formatCEP(displayValue);
+          break;
+        case "phone":
+          displayValue = phoneMask(displayValue);
+          break;
+        case "cpfCnpj":
+          displayValue = cpfCnpjMask(displayValue);
+          break;
+      }
     }
 
-    setInternalValue(valueToRegister);
+    const inputType = mask === "date" ? "text" : type;
 
-    if (registration?.onChange) {
-      const fakeEvent = {
-        ...e,
-        target: { ...e.target, value: valueToRegister },
-      };
-      registration.onChange(fakeEvent);
-    }
+    const containerClasses = clsx(
+      "flex items-center w-full px-3 py-2 rounded-lg border-2 transition-all duration-300 bg-white",
+      {
+        "border-primary ring-2 ring-primary/20": isFocused && !error,
+        "border-error ring-2 ring-error/20": !!error,
+        "border-gray-300": !isFocused && !error,
+        "hover:border-gray-400": !disabled && !error && !isFocused,
+        "bg-gray-100 text-gray-400 border-gray-200 cursor-not-allowed":
+          disabled,
+      }
+    );
 
-    if (props.onChange) {
-      const fakeEvent = {
-        ...e,
-        target: { ...e.target, value: valueToRegister },
-      };
-      props.onChange(fakeEvent);
-    }
-  };
+    const iconContainerClasses = clsx("mr-2 transition-colors duration-300", {
+      "text-primary": isFocused && !error,
+      "text-error": !!error,
+      "text-gray-500": !isFocused && !error,
+    });
 
-  const inputType = mask === "date" ? "text" : type;
-
-  return (
-    <div className={`w-full ${className}`}>
-      <div className={containerClasses}>
-        <div className={`mr-3  ${textColor}`}>{icon}</div>
-        <div className="w-full relative">
+    return (
+      <div className={clsx("w-full", className)}>
+        {label && (
+          <label
+            htmlFor={id}
+            className={clsx("block text-sm font-medium mb-1", {
+              "text-error": !!error,
+              "text-secondary": !error,
+            })}
+          >
+            {label}
+          </label>
+        )}
+        <div className={containerClasses}>
+          {icon && <div className={iconContainerClasses}>{icon}</div>}
           <input
-            {...inputProps}
-            type={inputType}
-            inputMode={
-              mask === "currency" ||
-              mask === "date" ||
-              mask === "cep" ||
-              mask === "phone" ||
-              mask === "numeric"
-                ? "numeric"
-                : "text"
-            }
-            value={internalValue}
+            {...props}
+            ref={ref}
             id={id}
+            type={inputType}
+            value={displayValue}
+            onChange={handleChange}
             onFocus={() => setIsFocused(true)}
             onBlur={(e) => {
               setIsFocused(false);
-              registration?.onBlur?.(e);
               props.onBlur?.(e);
             }}
-            onChange={handleChange}
-            className={inputClasses}
-            placeholder={label}
             disabled={disabled}
-            required={required}
-            maxLength={
-              mask === "cep"
-                ? 9
-                : mask === "date"
-                ? 10
-                : mask === "phone"
-                ? 15
-                : maxLength
+            className="w-full bg-transparent outline-none text-foreground placeholder:text-gray-400"
+            placeholder={props.placeholder}
+            inputMode={
+              mask === "currency" ||
+              mask === "numeric" ||
+              mask === "cep" ||
+              mask === "phone" ||
+              mask === "cpfCnpj"
+                ? "numeric"
+                : "text"
             }
-            minLength={minLength}
           />
-          <label htmlFor={id} className={labelClasses}>
-            {label}
-          </label>
         </div>
+        {error && (
+          <span className="text-error text-sm mt-1 block">{error}</span>
+        )}
       </div>
-      {error && (
-        <span className="text-error text-sm mt-1 block transition-all duration-300">
-          {error}
-        </span>
-      )}
-    </div>
-  );
-}
+    );
+  }
+);
+
+CustomFormInput.displayName = "CustomFormInput";

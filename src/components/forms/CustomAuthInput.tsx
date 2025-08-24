@@ -8,8 +8,10 @@ import { dateMask } from "@/utils/masks/maskDate";
 import { phoneMask, unmaskPhone } from "@/utils/masks/maskPhone";
 import { formatCEP } from "@/utils/formatters/formatCEP";
 import { formatNumeric } from "@/utils/masks/maskNumeric";
+import { cpfCnpjMask } from "@/utils/masks/cpfCnpjMask";
 
-interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
+interface InputProps
+  extends Omit<React.InputHTMLAttributes<HTMLInputElement>, "onChange"> {
   label: string;
   icon: React.ReactElement;
   registration?: UseFormRegisterReturn;
@@ -17,7 +19,7 @@ interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   id: string;
   colorBg?: string;
   textColor?: string;
-  mask?: "currency" | "date" | "phone" | "cep" | "numeric";
+  mask?: "currency" | "date" | "phone" | "cep" | "numeric" | "cpfCnpj";
   onBlur?: (e: React.FocusEvent<HTMLInputElement>) => void;
 }
 
@@ -51,6 +53,8 @@ export function CustomAuthInput({
         return formatCEP(initialValue);
       case "numeric":
         return formatNumeric(initialValue);
+      case "cpfCnpj":
+        return cpfCnpjMask(initialValue);
       default:
         return initialValue;
     }
@@ -109,6 +113,11 @@ export function CustomAuthInput({
         formattedDisplayValue = formatCEP(value);
         break;
       }
+      case "cpfCnpj": {
+        formattedDisplayValue = cpfCnpjMask(value);
+        valueToRegister = formattedDisplayValue.replace(/\D/g, "");
+        break;
+      }
       default:
         setDisplayValue(value);
         if (registration?.onChange) {
@@ -149,7 +158,8 @@ export function CustomAuthInput({
               mask === "currency" ||
               mask === "date" ||
               mask === "phone" ||
-              mask === "cep"
+              mask === "cep" ||
+              mask === "cpfCnpj"
                 ? "numeric"
                 : "text"
             }

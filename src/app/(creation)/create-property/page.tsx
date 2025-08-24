@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useForm } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect, useState, useCallback } from "react";
 import axios from "axios";
@@ -54,7 +54,7 @@ export default function CreatePropertyPage() {
   const [isAddPhotoModalOpen, setIsAddPhotoModalOpen] = useState(false);
 
   const {
-    register,
+    control,
     handleSubmit,
     setValue,
     watch,
@@ -65,7 +65,7 @@ export default function CreatePropertyPage() {
   });
 
   const stateValue = watch("state");
-  const formSteps = ["Detalhes do Imóvel", "Envio de Fotos"];
+  const formSteps = ["Cadastrar Imóvel", "Envio de Fotos"];
 
   const handleNextStep = () => setStep((prev) => prev + 1);
   // const handlePreviousStep = () => setStep((prev) => prev - 1);
@@ -122,7 +122,7 @@ export default function CreatePropertyPage() {
         ...data,
         rentValue: unmaskNumeric(data.rentValue),
       };
-      // console.log("DADOS DA CRIACAO DE PROPRIEDADE: ", payload);
+      console.log("DADOS DA CRIACAO DE PROPRIEDADE: ", payload);
       const response = await PropertyService.create(payload);
       toast.success("Detalhes salvos! Agora, envie as fotos.");
       setNewPropertyId(response.data.id);
@@ -137,7 +137,6 @@ export default function CreatePropertyPage() {
       setIsLoading(false);
     }
   };
-
   const handlePhotosAdded = useCallback((newFiles: File[]) => {
     const newPhotos: Photo[] = newFiles.map((file) => ({
       file,
@@ -194,8 +193,12 @@ export default function CreatePropertyPage() {
   return (
     <>
       <div className="min-h-svh pt-16 w-full flex flex-col items-center justify-center">
-        <div className="bg-white shadow-lg p-4 sm:p-6 md:p-8  w-full max-w-4xl ">
-          <Stepper steps={formSteps} currentStep={step} />
+        <div className="bg-white shadow-lg p-4 sm:p-6 md:p-8 w-full max-w-4xl">
+          <Stepper
+            steps={formSteps}
+            currentStep={step}
+            className=" mb-8 sm:mb-12"
+          />
 
           {step === 1 && (
             <form
@@ -207,27 +210,48 @@ export default function CreatePropertyPage() {
                   Informações Principais
                 </h2>
                 <div className="grid grid-cols-1 gap-y-4">
-                  <CustomFormInput
-                    id="title"
-                    icon={<Building2 className="h-5 w-5 text-gray-500" />}
-                    label="Título do Imóvel*"
-                    {...register("title")}
-                    error={errors.title?.message}
+                  <Controller
+                    name="title"
+                    control={control}
+                    render={({ field }) => (
+                      <CustomFormInput
+                        id="title"
+                        placeholder="ex: Apartamento 3 Quartos"
+                        icon={<Building2 className="h-5 w-5" />}
+                        label="Título do Imóvel*"
+                        error={errors.title?.message}
+                        {...field}
+                      />
+                    )}
                   />
-                  <CustomFormInput
-                    id="description"
-                    icon={<HomeIcon className="h-5 w-5 text-gray-500" />}
-                    label="Descrição*"
-                    {...register("description")}
-                    error={errors.description?.message}
+                  <Controller
+                    name="description"
+                    control={control}
+                    render={({ field }) => (
+                      <CustomFormInput
+                        id="description"
+                        placeholder="ex: Apartamento de alto padrão..."
+                        icon={<HomeIcon className="h-5 w-5" />}
+                        label="Descrição*"
+                        error={errors.description?.message}
+                        {...field}
+                      />
+                    )}
                   />
-                  <CustomFormInput
-                    id="rentValue"
-                    icon={<BrlCurrencyIcon className="h-6 w-6 text-gray-500" />}
-                    label="Valor do Aluguel*"
-                    registration={register("rentValue")}
-                    error={errors.rentValue?.message}
-                    mask="numeric"
+                  <Controller
+                    name="rentValue"
+                    control={control}
+                    render={({ field }) => (
+                      <CustomFormInput
+                        id="rentValue"
+                        placeholder="ex: 2.650,00"
+                        icon={<BrlCurrencyIcon className="h-6 w-6" />}
+                        label="Valor do Aluguel*"
+                        error={errors.rentValue?.message}
+                        mask="numeric"
+                        {...field}
+                      />
+                    )}
                   />
                 </div>
               </div>
@@ -237,19 +261,33 @@ export default function CreatePropertyPage() {
                   Endereço
                 </h2>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-4">
-                  <CustomFormInput
-                    id="cep"
-                    icon={<MapPinIcon className="h-5 w-5 text-gray-500" />}
-                    label="CEP*"
-                    registration={register("cep")}
-                    mask="cep"
-                    onBlur={handleCepBlur}
-                    error={errors.cep?.message}
-                    disabled={isCepLoading}
+                  <Controller
+                    name="cep"
+                    control={control}
+                    render={({ field }) => (
+                      <CustomFormInput
+                        id="cep"
+                        icon={<MapPinIcon className="h-5 w-5" />}
+                        label="CEP*"
+                        placeholder="ex: 64104-342"
+                        mask="cep"
+                        error={errors.cep?.message}
+                        disabled={isCepLoading}
+                        onBlur={(e) => {
+                          field.onBlur();
+                          handleCepBlur(e);
+                        }}
+                        onChange={field.onChange}
+                        value={field.value}
+                        ref={field.ref}
+                        name={field.name}
+                      />
+                    )}
                   />
                   <CustomDropdownInput
-                    placeholder="Estado (UF)*"
-                    label="Estado (UF)*"
+                    placeholder="Selecione o Estado"
+                    label="Estado*"
+                    icon={<MapPinIcon className="h-5 w-5" />}
                     options={brazilianStates}
                     selectedOptionValue={watch("state")}
                     onOptionSelected={(val) =>
@@ -258,7 +296,10 @@ export default function CreatePropertyPage() {
                     error={errors.state?.message}
                   />
                   <CustomDropdownInput
-                    placeholder={isCitiesLoading ? "Carregando..." : "Cidade*"}
+                    icon={<MapPinIcon className="h-5 w-5" />}
+                    placeholder={
+                      isCitiesLoading ? "Carregando..." : "Selecione a Cidade"
+                    }
                     label="Cidade*"
                     options={cities}
                     selectedOptionValue={watch("city")}
@@ -268,39 +309,64 @@ export default function CreatePropertyPage() {
                     error={errors.city?.message}
                     disabled={!stateValue || isCitiesLoading}
                   />
-                  <CustomFormInput
-                    id="street"
-                    icon={<HomeIcon className="h-5 w-5 text-gray-500" />}
-                    placeholder="Ex: Rua das Flores"
-                    label="Rua/Avenida*"
-                    value={watch("street") || ""}
-                    {...register("street")}
-                    error={errors.street?.message}
-                    className="md:col-span-2"
+                  <Controller
+                    name="street"
+                    control={control}
+                    render={({ field }) => (
+                      <CustomFormInput
+                        id="street"
+                        icon={<HomeIcon className="h-5 w-5" />}
+                        placeholder="ex: Rua das Flores"
+                        label="Rua/Avenida*"
+                        error={errors.street?.message}
+                        {...field}
+                      />
+                    )}
                   />
-                  <CustomFormInput
-                    id="district"
-                    placeholder="Ex: Centro"
-                    icon={<MapIcon className="h-5 w-5 text-gray-500" />}
-                    label="Bairro*"
-                    value={watch("district") || ""}
-                    {...register("district")}
-                    error={errors.district?.message}
+                  <Controller
+                    name="district"
+                    control={control}
+                    render={({ field }) => (
+                      <CustomFormInput
+                        id="district"
+                        placeholder="ex: Centro"
+                        icon={<MapIcon className="h-5 w-5" />}
+                        label="Bairro*"
+                        error={errors.district?.message}
+                        {...field}
+                      />
+                    )}
                   />
-                  <CustomFormInput
-                    id="number"
-                    icon={<HashIcon className="h-5 w-5 text-gray-500" />}
-                    label="Número*"
-                    {...register("number")}
-                    error={errors.number?.message}
+                  <Controller
+                    name="number"
+                    control={control}
+                    render={({ field }) => (
+                      <CustomFormInput
+                        id="number"
+                        icon={<HashIcon className="h-5 w-5" />}
+                        label="Número*"
+                        placeholder="ex: 12"
+                        error={errors.number?.message}
+                        {...field}
+                      />
+                    )}
                   />
-                  <CustomFormInput
-                    id="complement"
-                    icon={<HashIcon className="h-5 w-5 text-gray-500" />}
-                    label="Complemento"
-                    {...register("complement")}
-                    error={errors.complement?.message}
-                  />
+                  <div className="md:col-span-2">
+                    <Controller
+                      name="complement"
+                      control={control}
+                      render={({ field }) => (
+                        <CustomFormInput
+                          id="complement"
+                          placeholder="ex: Próximo ao Hospital"
+                          icon={<HashIcon className="h-5 w-5" />}
+                          label="Complemento"
+                          error={errors.complement?.message}
+                          {...field}
+                        />
+                      )}
+                    />
+                  </div>
                 </div>
               </div>
 
@@ -309,39 +375,68 @@ export default function CreatePropertyPage() {
                   Características do Imóvel
                 </h2>
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-x-4 gap-y-4">
-                  <CustomFormInput
-                    id="areaInM2"
-                    icon={
-                      <Square className="rotate-45 h-5 w-5 text-gray-500" />
-                    }
-                    label="Área (m²)*"
-                    type="number"
-                    {...register("areaInM2", { valueAsNumber: true })}
-                    error={errors.areaInM2?.message}
+                  <Controller
+                    name="areaInM2"
+                    control={control}
+                    render={({ field }) => (
+                      <CustomFormInput
+                        id="areaInM2"
+                        icon={<Square className="rotate-45 h-5 w-5" />}
+                        placeholder="ex: 50"
+                        label="Área (m²)*"
+                        type="number"
+                        error={errors.areaInM2?.message}
+                        {...field}
+                      />
+                    )}
                   />
-                  <CustomFormInput
-                    id="numRooms"
-                    icon={<Bed className="h-5 w-5 text-gray-500" />}
-                    label="Quartos*"
-                    type="number"
-                    {...register("numRooms", { valueAsNumber: true })}
-                    error={errors.numRooms?.message}
+                  <Controller
+                    name="numRooms"
+                    control={control}
+                    render={({ field }) => (
+                      <CustomFormInput
+                        id="numRooms"
+                        icon={<Bed className="h-5 w-5" />}
+                        label="Quartos*"
+                        placeholder="ex: 5"
+                        type="number"
+                        maxLength={3}
+                        error={errors.numRooms?.message}
+                        {...field}
+                      />
+                    )}
                   />
-                  <CustomFormInput
-                    id="numBathrooms"
-                    icon={<Bath className="h-5 w-5 text-gray-500" />}
-                    label="Banheiros*"
-                    type="number"
-                    {...register("numBathrooms", { valueAsNumber: true })}
-                    error={errors.numBathrooms?.message}
+                  <Controller
+                    name="numBathrooms"
+                    control={control}
+                    render={({ field }) => (
+                      <CustomFormInput
+                        id="numBathrooms"
+                        icon={<Bath className="h-5 w-5" />}
+                        label="Banheiros*"
+                        placeholder="ex: 3"
+                        type="number"
+                        maxLength={3}
+                        error={errors.numBathrooms?.message}
+                        {...field}
+                      />
+                    )}
                   />
-                  <CustomFormInput
-                    id="numParking"
-                    icon={<Car className="h-5 w-5 text-gray-500" />}
-                    label="Vagas*"
-                    type="number"
-                    {...register("numParking", { valueAsNumber: true })}
-                    error={errors.numParking?.message}
+                  <Controller
+                    name="numParking"
+                    control={control}
+                    render={({ field }) => (
+                      <CustomFormInput
+                        id="numParking"
+                        icon={<Car className="h-5 w-5" />}
+                        label="Vagas*"
+                        type="number"
+                        maxLength={3}
+                        placeholder="ex: 2"
+                        error={errors.numParking?.message}
+                        {...field}
+                      />
+                    )}
                   />
                 </div>
               </div>

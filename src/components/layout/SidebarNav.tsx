@@ -1,12 +1,6 @@
 "use client";
 
-import {
-  Building2,
-  CalendarArrowDown,
-  FileText,
-  HomeIcon,
-  LogOut,
-} from "lucide-react";
+import { CalendarArrowDown, FileText, HomeIcon, LogOut } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";

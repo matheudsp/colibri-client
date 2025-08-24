@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useForm } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect, useState } from "react";
 import axios from "axios";
@@ -12,7 +12,10 @@ import {
   HomeIcon,
   HashIcon,
   MapIcon,
+  ArrowLeft,
+  Loader2,
 } from "lucide-react";
+
 import { CustomButton } from "@/components/forms/CustomButton";
 import { CustomDropdownInput } from "@/components/forms/CustomDropdownInput";
 import { CustomFormInput } from "@/components/forms/CustomFormInput";
@@ -36,7 +39,7 @@ export default function CreateCondominiumPage() {
   const [cityFromCep, setCityFromCep] = useState<string | null>(null);
 
   const {
-    register,
+    control,
     handleSubmit,
     setValue,
     watch,
@@ -44,6 +47,7 @@ export default function CreateCondominiumPage() {
     formState: { errors },
   } = useForm<CreateCondominiumFormValues>({
     resolver: zodResolver(createCondominiumSchema),
+    mode: "onBlur",
   });
 
   const stateValue = watch("state");
@@ -51,7 +55,6 @@ export default function CreateCondominiumPage() {
   const handleCepBlur = async (e: React.FocusEvent<HTMLInputElement>) => {
     const cep = e.target.value.replace(/\D/g, "");
     if (cep.length !== 8) return;
-
     setIsCepLoading(true);
     try {
       const address = await fetchAddressByCep(cep);
@@ -99,7 +102,7 @@ export default function CreateCondominiumPage() {
     try {
       await CondominiumService.create(data);
       toast.success("Condomínio cadastrado com sucesso!");
-      router.push("/condominiums"); // Redireciona para a página de listagem
+      router.push("/condominiums");
     } catch (error: unknown) {
       const errorMessage =
         error instanceof axios.AxiosError
@@ -112,58 +115,71 @@ export default function CreateCondominiumPage() {
   };
 
   return (
-    <div className="min-h-svh w-full flex items-center justify-center bg-gray-50">
-      <div className="bg-white shadow-lg p-6 sm:p-8 rounded-xl w-full max-w-2xl">
-        <form onSubmit={handleSubmit(onSubmit)} className="w-full space-y-6">
-          <div className="text-center">
-            <h1 className="text-2xl sm:text-3xl font-bold text-gray-800">
-              Cadastrar Novo Condomínio
-            </h1>
-            <p className="text-gray-500 mt-1">
-              Preencha as informações de endereço.
-            </p>
-          </div>
+    <div className="min-h-svh mt-14 md:mt-0 w-full bg-white flex flex-col items-center max-w-xl mx-auto justify-center py-8 px-4">
+      <div className="p-6 sm:p-8 rounded-2xl w-full max-w-lg">
+        <div className="text-center mb-8">
+          <h1 className="text-3xl font-bold text-secondary">{`Cadastrar Novo Condomínio`}</h1>
+          <p className="text-foreground/70 mt-2">{`Preencha as informações de nome e endereço`}</p>
+        </div>
+      </div>
+      <form onSubmit={handleSubmit(onSubmit)} className="w-full space-y-6">
+        <div className="md:col-span-2">
+          <Controller
+            name="name"
+            control={control}
+            render={({ field }) => (
+              <CustomFormInput
+                placeholder="ex: Condomínio Rosa"
+                label="Nome do Condomínio*"
+                id="name"
+                icon={<Building2 />}
+                error={errors.name?.message}
+                {...field}
+              />
+            )}
+          />
+        </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-4">
-            <CustomFormInput
-              id="name"
-              icon={<Building2 />}
-              label="Nome do Condomínio*"
-              {...register("name")}
-              error={errors.name?.message}
-              className="sm:col-span-2"
-            />
-            <CustomFormInput
-              id="cep"
-              icon={<MapPinIcon />}
-              label="CEP*"
-              registration={register("cep")}
-              mask="cep"
-              onBlur={handleCepBlur}
-              error={errors.cep?.message}
-              disabled={isCepLoading}
-            />
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-6">
+          <Controller
+            name="cep"
+            control={control}
+            render={({ field }) => (
+              <CustomFormInput
+                id="cep"
+                icon={<MapPinIcon className="h-5 w-5" />}
+                label="CEP*"
+                placeholder="ex: 64104-342"
+                mask="cep"
+                error={errors.cep?.message}
+                disabled={isCepLoading}
+                onBlur={(e) => {
+                  field.onBlur();
+                  handleCepBlur(e);
+                }}
+                onChange={field.onChange}
+                value={field.value}
+                ref={field.ref}
+                name={field.name}
+              />
+            )}
+          />
+          <CustomDropdownInput
+            placeholder="Selecione o Estado"
+            label="Estado*"
+            options={brazilianStates}
+            selectedOptionValue={watch("state")}
+            onOptionSelected={(val) =>
+              val && setValue("state", val, { shouldValidate: true })
+            }
+            error={errors.state?.message}
+          />
+          <div className="sm:col-span-2">
             <CustomDropdownInput
-              placeholder="Estado (UF)*"
-              options={brazilianStates}
-              selectedOptionValue={watch("state")}
-              onOptionSelected={(val) =>
-                val && setValue("state", val, { shouldValidate: true })
+              placeholder={
+                isCitiesLoading ? "Carregando..." : "Selecione a Cidade"
               }
-              error={errors.state?.message}
-            />
-            <CustomFormInput
-              id="street"
-              icon={<HomeIcon />}
-              placeholder="Ex: Rua das Flores"
-              label="Rua/Avenida*"
-              value={watch("street") || ""}
-              {...register("street")}
-              error={errors.street?.message}
-              className="md:col-span-2"
-            />
-            <CustomDropdownInput
-              placeholder={isCitiesLoading ? "Carregando..." : "Cidade*"}
+              label="Cidade*"
               options={cities}
               selectedOptionValue={watch("city")}
               onOptionSelected={(val) =>
@@ -172,36 +188,75 @@ export default function CreateCondominiumPage() {
               error={errors.city?.message}
               disabled={!stateValue || isCitiesLoading}
             />
-            <CustomFormInput
-              id="district"
-              placeholder="Ex: Centro"
-              icon={<MapIcon />}
-              label="Bairro*"
-              value={watch("district") || ""}
-              {...register("district")}
-              error={errors.district?.message}
-            />
-            <CustomFormInput
-              id="number"
-              icon={<HashIcon />}
-              label="Número*"
-              {...register("number")}
-              error={errors.number?.message}
+          </div>
+          <div className="sm:col-span-2">
+            <Controller
+              name="street"
+              control={control}
+              render={({ field }) => (
+                <CustomFormInput
+                  placeholder="ex: Rua das Flores"
+                  label="Rua/Avenida*"
+                  id="street"
+                  icon={<HomeIcon />}
+                  error={errors.street?.message}
+                  {...field}
+                />
+              )}
             />
           </div>
+          <Controller
+            name="district"
+            control={control}
+            render={({ field }) => (
+              <CustomFormInput
+                placeholder="ex: Centro"
+                label="Bairro*"
+                id="district"
+                icon={<MapIcon />}
+                error={errors.district?.message}
+                {...field}
+              />
+            )}
+          />
+          <Controller
+            name="number"
+            control={control}
+            render={({ field }) => (
+              <CustomFormInput
+                label="Número*"
+                placeholder="ex: 12"
+                id="number"
+                icon={<HashIcon />}
+                error={errors.number?.message}
+                {...field}
+              />
+            )}
+          />
+        </div>
 
-          <div className="pt-4 flex justify-end">
-            <CustomButton
-              type="submit"
-              fontSize="text-lg"
-              className="w-full sm:w-auto"
-              disabled={isLoading}
-            >
-              {isLoading ? "Salvando..." : "Salvar Condomínio"}
-            </CustomButton>
-          </div>
-        </form>
-      </div>
+        <div className="pt-4 flex flex-col-reverse sm:flex-row gap-4">
+          <CustomButton
+            type="button"
+            onClick={() => router.back()}
+            ghost
+            className="w-full"
+          >
+            <ArrowLeft className="w-4 h-4 mr-2" /> Voltar
+          </CustomButton>
+          <CustomButton
+            type="submit"
+            className="w-full bg-primary hover:bg-primary-hover text-secondary font-bold"
+            disabled={isLoading}
+          >
+            {isLoading ? (
+              <Loader2 className="animate-spin" />
+            ) : (
+              "Criar Condomínio"
+            )}
+          </CustomButton>
+        </div>
+      </form>
     </div>
   );
 }

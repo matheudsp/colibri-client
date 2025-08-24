@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useParams, useRouter } from "next/navigation";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
 
@@ -27,6 +27,7 @@ import {
   CheckCircle,
   ArrowLeft,
   ArrowRight,
+  PhoneIncoming,
 } from "lucide-react";
 
 import { CustomFormInput } from "@/components/forms/CustomFormInput";
@@ -39,6 +40,7 @@ import { guaranteeTypes } from "@/constants";
 import { toISODate } from "@/utils/formatters/formatDate";
 import { unmaskNumeric } from "@/utils/masks/maskNumeric";
 import type { ApiResponse } from "@/types/api";
+import { cpfCnpjMask } from "@/utils/masks/cpfCnpjMask";
 
 export default function CreateContractPage() {
   const router = useRouter();
@@ -53,7 +55,6 @@ export default function CreateContractPage() {
   const [searchingTenant, setSearchingTenant] = useState(false);
   const [foundTenants, setFoundTenants] = useState<userProps[]>([]);
   const [selectedTenant, setSelectedTenant] = useState<userProps | null>(null);
-  const [emailToSearch, setEmailToSearch] = useState("");
 
   const steps = [
     "Encontrar Inquilino",
@@ -62,7 +63,7 @@ export default function CreateContractPage() {
   ];
 
   const {
-    register,
+    control,
     handleSubmit,
     setValue,
     resetField,
@@ -73,31 +74,38 @@ export default function CreateContractPage() {
     resolver: zodResolver(createContractSchema),
     defaultValues: {
       propertyId,
+      tenantAction: "search",
     },
+    context: { tenantAction },
   });
 
   const handleActionChange = (action: "search" | "create") => {
     setTenantAction(action);
+    setValue("tenantAction", action);
     setFoundTenants([]);
     setSelectedTenant(null);
-    setEmailToSearch("");
+
     resetField("tenantEmail");
     resetField("tenantName");
     resetField("tenantCpfCnpj");
     resetField("tenantPassword");
   };
-
+  const cpfCnpjValue = watch("tenantCpfCnpj");
   const guaranteeTypeValue = watch("guaranteeType");
 
   const handleSearchTenant = async () => {
-    if (!emailToSearch) {
-      toast.error("Por favor, insira um e-mail para buscar.");
+    if (!cpfCnpjValue || cpfCnpjValue.length < 11) {
+      toast.error("Por favor, insira um CPF/CNPJ válido para buscar.");
       return;
     }
+
     setSearchingTenant(true);
+    setFoundTenants([]);
+
     try {
       const response: ApiResponse<userProps[]> = await UserService.search({
-        email: emailToSearch,
+        cpfCnpj: cpfCnpjValue,
+        role: "LOCATARIO",
       });
       const userList = response.data || [];
       if (userList.length > 0) {
@@ -105,7 +113,7 @@ export default function CreateContractPage() {
         toast.success(`${userList.length} inquilino(s) encontrado(s).`);
       } else {
         toast.info(
-          "Nenhum inquilino encontrado. Verifique o e-mail ou cadastre um novo."
+          "Nenhum inquilino encontrado. Verifique o CPF/CNPJ ou cadastre um novo."
         );
         setFoundTenants([]);
       }
@@ -115,10 +123,10 @@ export default function CreateContractPage() {
       setSearchingTenant(false);
     }
   };
-
   const handleSelectTenant = (tenant: userProps) => {
     setSelectedTenant(tenant);
     setValue("tenantEmail", tenant.email, { shouldValidate: true });
+    setValue("tenantCpfCnpj", tenant.cpfCnpj!, { shouldValidate: true });
     setFoundTenants([]);
   };
 
@@ -127,7 +135,7 @@ export default function CreateContractPage() {
       currentStep === 1
         ? tenantAction === "create"
           ? ["tenantEmail", "tenantName", "tenantCpfCnpj", "tenantPassword"]
-          : ["tenantEmail"]
+          : ["tenantCpfCnpj"]
         : [
             "rentAmount",
             "startDate",
@@ -156,11 +164,9 @@ export default function CreateContractPage() {
   const onSubmit = async (data: CreateContractFormValues) => {
     setLoading(true);
     try {
-      const payload = {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const payload: any = {
         ...data,
-        durationInMonths: data.durationInMonths,
-        guaranteeType: data.guaranteeType,
-        propertyId: data.propertyId,
         rentAmount: unmaskNumeric(data.rentAmount),
         iptuFee: data.iptuFee ? unmaskNumeric(data.iptuFee) : undefined,
         securityDeposit: data.securityDeposit
@@ -168,16 +174,20 @@ export default function CreateContractPage() {
           : undefined,
         condoFee: data.condoFee ? unmaskNumeric(data.condoFee) : undefined,
         startDate: toISODate(data.startDate),
-        tenantEmail: data.tenantEmail,
       };
+      if (data.tenantAction === "search" && selectedTenant) {
+        delete payload.tenantEmail;
+        delete payload.tenantPhone;
+        delete payload.tenantName;
+        delete payload.tenantPassword;
+      }
+      delete payload.tenantAction;
       // console.log("PAYLOAD DE CRIACAO DE CONTRATO: ", payload);
       await ContractService.create(payload);
       setCurrentStep(3);
     } catch (error) {
       console.error("Erro ao criar contrato:", error);
-      // toast.error(
-      //   "Não foi possível criar o contrato. Verifique os dados e tente novamente."
-      // );
+
       toast.error(`${error}`);
     } finally {
       setLoading(false);
@@ -185,21 +195,20 @@ export default function CreateContractPage() {
   };
 
   return (
-    <div className="min-h-svh w-full flex flex-col items-center justify-center bg-gray-50">
-      <div className="bg-white grid place-items-center shadow-lg p-8 rounded-xl w-full max-w-2xl">
-        <h1 className="text-3xl font-bold text-gray-800 mb-2 text-center">
-          Criar Novo Contrato de Locação
-        </h1>
-        <p className="text-sm text-gray-500 mb-6 text-center">
-          Siga as etapas para gerar um novo contrato.
-        </p>
+    <div className=" w-full flex flex-col items-center justify-center">
+      <div className="bg-white min-h-svh py-20 px-4 md:px-8 grid place-items-center shadow-lg   w-full max-w-2xl">
+        <div>
+          <h1 className="text-3xl  font-bold text-gray-800  text-center">
+            Criar Novo Contrato de Locação
+          </h1>
+          <p className="text-sm text-gray-500 text-center">
+            Siga as etapas para gerar um novo contrato.
+          </p>
+        </div>
 
-        <Stepper steps={steps} currentStep={currentStep} />
+        <Stepper steps={steps} currentStep={currentStep} className=" my-8" />
 
-        <form
-          onSubmit={handleSubmit(onSubmit)}
-          className="w-full mt-8 space-y-6"
-        >
+        <form onSubmit={handleSubmit(onSubmit)} className="w-full  space-y-6">
           {currentStep === 1 && (
             <fieldset className="border p-4 rounded-lg space-y-4">
               <legend className="px-2 font-bold text-lg text-gray-700">
@@ -212,11 +221,11 @@ export default function CreateContractPage() {
                 }
               </p>
 
-              <div className="flex w-full bg-gray-100 border border-gray-200 rounded-lg p-1">
+              <div className="flex flex-col sm:flex-row w-full bg-gray-100 border border-gray-200 rounded-lg p-1 gap-1 sm:gap-0">
                 <button
                   type="button"
                   onClick={() => handleActionChange("search")}
-                  className={`w-1/2 py-2 rounded-md transition-all duration-200 text-sm font-bold ${
+                  className={`w-full sm:w-1/2 py-2 rounded-md transition-all duration-200 text-sm font-bold ${
                     tenantAction === "search"
                       ? "bg-primary text-white shadow"
                       : "bg-transparent text-gray-600"
@@ -227,7 +236,7 @@ export default function CreateContractPage() {
                 <button
                   type="button"
                   onClick={() => handleActionChange("create")}
-                  className={`w-1/2 py-2 rounded-md transition-all duration-200 text-sm font-bold ${
+                  className={`w-full sm:w-1/2 py-2 rounded-md transition-all duration-200 text-sm font-bold ${
                     tenantAction === "create"
                       ? "bg-primary text-white shadow"
                       : "bg-transparent text-gray-600"
@@ -238,63 +247,92 @@ export default function CreateContractPage() {
               </div>
 
               {tenantAction === "search" && (
-                <div className="pt-2 space-y-4">
-                  <p className="text-xs text-gray-500 italic">
-                    {
-                      'Digite o e-mail do inquilino e clique em "Buscar" para encontrar um usuário já cadastrado.'
-                    }
+                <div className="pt-2 space-y-6">
+                  <p className="text-sm text-center text-gray-600">
+                    Digite o CPF/CNPJ do inquilino para encontrá-lo na
+                    plataforma.
                   </p>
-                  <div className="flex flex-col sm:flex-row items-center gap-2">
-                    <CustomFormInput
-                      id="search-email"
-                      icon={<Mail />}
-                      label="E-mail do inquilino"
-                      value={emailToSearch}
-                      onChange={(e) => setEmailToSearch(e.target.value)}
-                      disabled={searchingTenant}
-                    />
+
+                  <div className="flex flex-col sm:flex-row items-stretch gap-2">
+                    <div className="flex-grow">
+                      <Controller
+                        name="tenantCpfCnpj"
+                        control={control}
+                        render={({ field }) => (
+                          <CustomFormInput
+                            id="search-cpf"
+                            icon={<FileText />}
+                            mask="cpfCnpj"
+                            label="CPF/CNPJ do inquilino"
+                            placeholder="ex: 064.245.353-53"
+                            disabled={searchingTenant}
+                            className="h-full "
+                            error={errors.tenantCpfCnpj?.message}
+                            {...field}
+                          />
+                        )}
+                      />
+                    </div>
                     <CustomButton
                       onClick={handleSearchTenant}
                       disabled={searchingTenant}
-                      className="h-full w-full sm:w-2/6"
+                      className="h-full w-full sm:w-1/6 sm:mt-6"
                     >
                       {searchingTenant ? (
                         <Loader2 className="animate-spin" />
                       ) : (
-                        <Search />
-                      )}{" "}
-                      Buscar
+                        <>
+                          <Search className="sm:hidden" />{" "}
+                          <span className="hidden sm:inline">Buscar</span>{" "}
+                        </>
+                      )}
                     </CustomButton>
                   </div>
+
                   {foundTenants.length > 0 && (
-                    <div className="w-full space-y-2 border-t pt-4">
+                    <div className="w-full space-y-3 border-t pt-4 animate-fadeIn">
+                      <h3 className="font-semibold text-gray-700">
+                        Resultados da Busca:
+                      </h3>
                       {foundTenants.map((user) => (
                         <div
                           key={user.id}
-                          className="w-full p-3 bg-gray-50 rounded-lg flex items-center justify-between"
+                          className="w-full p-4 bg-gray-50 rounded-lg border flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3"
                         >
-                          <div>
-                            <p className="font-semibold text-gray-800">
-                              {user.name}
-                            </p>
-                            <p className="text-sm text-gray-500">
-                              {user.email}
-                            </p>
+                          <div className="flex items-center gap-3">
+                            <div className="flex-shrink-0 bg-secondary text-white rounded-full h-10 w-10 flex items-center justify-center font-bold">
+                              {user.name.charAt(0).toUpperCase()}
+                            </div>
+                            <div>
+                              <p className="font-bold text-secondary">
+                                {user.name}
+                              </p>
+                              <p className="text-sm text-gray-600">
+                                {cpfCnpjMask(user.cpfCnpj!)}
+                              </p>
+                              <p className="text-sm text-gray-500">
+                                {user.email}
+                              </p>
+                            </div>
                           </div>
+
                           <CustomButton
                             onClick={() => handleSelectTenant(user)}
                             color="bg-green-600"
                             textColor="text-white"
+                            className="w-full sm:w-auto mt-2 sm:mt-0"
                           >
-                            <CheckCircle size={16} /> Selecionar
+                            <CheckCircle size={16} className="mr-2" />
+                            Selecionar
                           </CustomButton>
                         </div>
                       ))}
                     </div>
                   )}
+
                   {selectedTenant && (
                     <div
-                      className="w-full p-4 bg-primary/10 border-2 border-primary/20 rounded-lg"
+                      className="w-full p-4 bg-primary/10 border-2 border-primary/20 rounded-lg animate-fadeIn"
                       role="group"
                       aria-label="Inquilino Selecionado"
                     >
@@ -308,6 +346,9 @@ export default function CreateContractPage() {
                         <div className="flex-grow">
                           <p className="font-bold text-lg text-gray-800">
                             {selectedTenant.name}
+                          </p>
+                          <p className="text-sm text-gray-600">
+                            {cpfCnpjMask(selectedTenant.cpfCnpj!)}
                           </p>
                           <p className="text-sm text-gray-600">
                             {selectedTenant.email}
@@ -324,34 +365,83 @@ export default function CreateContractPage() {
                   <p className="text-xs text-gray-500 italic">
                     Preencha os dados abaixo para criar um novo cadastro para o
                     inquilino.
-                  </p>
-                  <CustomFormInput
-                    id="tenantEmail"
-                    label="E-mail*"
-                    icon={<Mail />}
-                    {...register("tenantEmail")}
-                    error={errors.tenantEmail?.message}
+                  </p>{" "}
+                  <Controller
+                    name="tenantName"
+                    control={control}
+                    render={({ field }) => (
+                      <CustomFormInput
+                        id="tenantName"
+                        label="Nome Completo*"
+                        autoComplete="name"
+                        autoCapitalize="words"
+                        placeholder="John Doe"
+                        icon={<UserIcon />}
+                        error={errors.tenantName?.message}
+                        {...field}
+                      />
+                    )}
                   />
-                  <CustomFormInput
-                    id="tenantName"
-                    label="Nome Completo*"
-                    icon={<UserIcon />}
-                    {...register("tenantName")}
-                    error={errors.tenantName?.message}
+                  <Controller
+                    name="tenantCpfCnpj"
+                    control={control}
+                    render={({ field }) => (
+                      <CustomFormInput
+                        id="tenantCpfCnpj"
+                        label="CPF/CNPJ*"
+                        placeholder="000.000.000-00"
+                        mask="cpfCnpj"
+                        icon={<FileText />}
+                        error={errors.tenantCpfCnpj?.message}
+                        {...field}
+                      />
+                    )}
                   />
-                  <CustomFormInput
-                    id="tenantCpfCnpj"
-                    label="CPF/CNPJ*"
-                    icon={<FileText />}
-                    {...register("tenantCpfCnpj")}
-                    error={errors.tenantCpfCnpj?.message}
+                  <Controller
+                    name="tenantEmail"
+                    control={control}
+                    render={({ field }) => (
+                      <CustomFormInput
+                        id="tenantEmail"
+                        label="E-mail*"
+                        autoComplete="email"
+                        placeholder="johndoe@gmail.com"
+                        icon={<Mail />}
+                        error={errors.tenantEmail?.message}
+                        {...field}
+                      />
+                    )}
+                  />{" "}
+                  <Controller
+                    name="tenantPhone"
+                    control={control}
+                    render={({ field }) => (
+                      <CustomFormInput
+                        id="tenantPhone"
+                        label="Celular*"
+                        autoComplete="tel"
+                        mask="phone"
+                        placeholder="(89) 9 9417-8403"
+                        icon={<PhoneIncoming />}
+                        error={errors.tenantEmail?.message}
+                        {...field}
+                      />
+                    )}
                   />
-                  <CustomFormInput
-                    id="tenantPassword"
-                    label="Senha"
-                    icon={<Lock />}
-                    {...register("tenantPassword")}
-                    error={errors.tenantPassword?.message}
+                  <Controller
+                    name="tenantPassword"
+                    control={control}
+                    render={({ field }) => (
+                      <CustomFormInput
+                        type="password"
+                        id="tenantPassword"
+                        label="Senha (Mínimo de 6 dígitos)"
+                        placeholder="******"
+                        icon={<Lock />}
+                        error={errors.tenantPassword?.message}
+                        {...field}
+                      />
+                    )}
                   />
                 </div>
               )}
@@ -364,46 +454,67 @@ export default function CreateContractPage() {
                 2. Detalhes do Contrato
               </legend>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-6 pt-2">
-                <CustomFormInput
-                  id="rentAmount"
-                  icon={<DollarSign />}
-                  label="Valor do Aluguel*"
-                  {...register("rentAmount")}
-                  registration={register("rentAmount")}
-                  error={errors.rentAmount?.message}
-                  mask="numeric"
-                />
-
-                <div>
-                  <CustomFormInput
-                    id="condoFee"
-                    icon={<DollarSign />}
-                    label="Taxa de Condomínio"
-                    {...register("condoFee")}
-                    error={errors.condoFee?.message}
-                    mask="numeric"
+                <div className="col-span-2">
+                  <Controller
+                    name="rentAmount"
+                    control={control}
+                    render={({ field }) => (
+                      <CustomFormInput
+                        id="rentAmount"
+                        placeholder="ex: 1.650,00"
+                        icon={<DollarSign />}
+                        label="Valor do Aluguel*"
+                        error={errors.rentAmount?.message}
+                        mask="numeric"
+                        {...field}
+                      />
+                    )}
+                  />
+                </div>
+                <div className="col-span-2 md:col-span-1">
+                  <Controller
+                    name="condoFee"
+                    control={control}
+                    render={({ field }) => (
+                      <CustomFormInput
+                        id="condoFee"
+                        icon={<DollarSign />}
+                        placeholder="ex: 125,00"
+                        label="Taxa de Condomínio"
+                        error={errors.condoFee?.message}
+                        mask="numeric"
+                        {...field}
+                      />
+                    )}
                   />
                   <p className="text-xs text-gray-500 mt-1 pl-1">
                     (Opcional) Taxa mensal do condomínio.
                   </p>
                 </div>
-                <div>
-                  <CustomFormInput
-                    id="iptuFee"
-                    label="IPTU (mensal)"
-                    icon={<Building />}
-                    {...register("iptuFee")}
-                    error={errors.iptuFee?.message}
-                    mask="numeric"
+                <div className="col-span-2 md:col-span-1">
+                  <Controller
+                    name="iptuFee"
+                    control={control}
+                    render={({ field }) => (
+                      <CustomFormInput
+                        id="iptuFee"
+                        placeholder="ex: 13,00"
+                        label="IPTU (mensal)"
+                        icon={<Building />}
+                        error={errors.iptuFee?.message}
+                        mask="numeric"
+                        {...field}
+                      />
+                    )}
                   />
                   <p className="text-xs text-gray-500 mt-1 pl-1">
                     (Opcional) Valor mensal do IPTU.
                   </p>
                 </div>
-
-                <div className="md:col-span-2">
+                <div className="col-span-2">
                   <CustomDropdownInput
-                    placeholder="Tipo de Garantia*"
+                    placeholder="Selecione a modalidade"
+                    label="Tipo de Garantia*"
                     options={guaranteeTypes}
                     selectedOptionValue={guaranteeTypeValue}
                     onOptionSelected={(val) =>
@@ -415,37 +526,61 @@ export default function CreateContractPage() {
                 </div>
 
                 {guaranteeTypeValue === "DEPOSITO_CAUCAO" && (
-                  <div>
-                    <CustomFormInput
-                      id="securityDeposit"
-                      label="Depósito Caução"
-                      icon={<DollarSign />}
-                      mask="numeric"
-                      {...register("securityDeposit")}
-                      error={errors.securityDeposit?.message}
+                  <div className="col-span-2 md:col-span-1">
+                    <Controller
+                      name="securityDeposit"
+                      control={control}
+                      render={({ field }) => (
+                        <CustomFormInput
+                          id="securityDeposit"
+                          placeholder="500,00"
+                          label="Depósito Caução"
+                          icon={<DollarSign />}
+                          mask="numeric"
+                          error={errors.securityDeposit?.message}
+                          {...field}
+                        />
+                      )}
                     />
                     <p className="text-xs text-gray-500 mt-1 pl-1">
                       Valor que fica retido como garantia.
                     </p>
                   </div>
                 )}
-
-                <CustomFormInput
-                  id="startDate"
-                  label="Data de Início*"
-                  icon={<Calendar />}
-                  mask="date"
-                  {...register("startDate")}
-                  error={errors.startDate?.message}
-                />
-                <CustomFormInput
-                  id="durationInMonths"
-                  label="Duração (meses)*"
-                  icon={<Clock />}
-                  type="number"
-                  {...register("durationInMonths")}
-                  error={errors.durationInMonths?.message}
-                />
+                <div className="col-span-2 md:col-span-1">
+                  <Controller
+                    name="startDate"
+                    control={control}
+                    render={({ field }) => (
+                      <CustomFormInput
+                        id="startDate"
+                        placeholder="08/08/2002"
+                        label="Data de Início*"
+                        icon={<Calendar />}
+                        mask="date"
+                        error={errors.startDate?.message}
+                        {...field}
+                      />
+                    )}
+                  />
+                </div>
+                <div className="col-span-2 md:col-span-1">
+                  <Controller
+                    name="durationInMonths"
+                    control={control}
+                    render={({ field }) => (
+                      <CustomFormInput
+                        id="durationInMonths"
+                        label="Duração (meses)*"
+                        placeholder="12"
+                        icon={<Clock />}
+                        type="number"
+                        error={errors.durationInMonths?.message}
+                        {...field}
+                      />
+                    )}
+                  />
+                </div>
               </div>
             </fieldset>
           )}

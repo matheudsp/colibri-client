@@ -24,9 +24,9 @@ export function Header({
   searchValue = "",
   onSearchChange,
 }: HeaderProps) {
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (value: string) => {
     if (onSearchChange) {
-      onSearchChange(e.target.value);
+      onSearchChange(value);
     }
   };
 
@@ -77,7 +77,7 @@ export function Header({
             value={searchValue}
             onChange={handleChange}
             id="SearchInput"
-            borderColor="border-foreground"
+            className="border-foreground"
           />
         </div>
       )}

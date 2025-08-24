@@ -5,9 +5,9 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
 import {
-  Landmark,
-  Building,
-  User,
+  // Landmark,
+  // Building,
+  // User,
   Loader2,
   AlertCircle,
   PiggyBank,
@@ -28,7 +28,7 @@ import {
   bankAccountSchema,
   CreateBankAccountFormValues,
 } from "@/validations/bankAccounts/bankAccountCreateValidation";
-import { CustomFormInput } from "@/components/forms/CustomFormInput";
+// import { CustomFormInput } from "@/components/forms/CustomFormInput";
 import { CustomButton } from "@/components/forms/CustomButton";
 import { CustomRadioGroup } from "@/components/forms/CustomRadioGroup";
 import { useRouter } from "next/navigation";
@@ -98,7 +98,7 @@ const BankAccountForm = ({
   const isEditing = !!initialData;
   const [loading, setLoading] = useState(false);
   const {
-    register,
+    // control,
     handleSubmit,
     watch,
     setValue,
@@ -147,7 +147,7 @@ const BankAccountForm = ({
         </p>
       </div>
       <form onSubmit={handleSubmit(onSubmit)} className="mt-6 space-y-4">
-        <CustomFormInput
+        {/* <CustomFormInput
           id="bank"
           icon={<Landmark />}
           label="Código do Banco (Ex: 001)"
@@ -167,7 +167,7 @@ const BankAccountForm = ({
           label="Conta (com dígito)"
           {...register("account")}
           error={errors.account?.message}
-        />
+        /> */}
         <CustomRadioGroup
           name="accountType"
           options={[

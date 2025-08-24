@@ -102,10 +102,10 @@ export function SearchCardList({ onSelectProperty }: SearchCardListProps) {
       <div className="relative mb-4">
         <CustomFormInput
           icon={<SearchIcon className="w-6 h-6" />}
-          label="Pesquisar agência..."
+          label="Pesquisar imóvel..."
           value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          id="SearchAgency"
+          onChange={(value) => setQuery(value)}
+          id="SearchProperty"
         />
         {isLoading && (
           <span className="absolute right-2.5 top-1/2 -translate-y-1/2 text-gray-600 text-sm">

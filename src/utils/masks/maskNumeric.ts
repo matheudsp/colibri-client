@@ -10,8 +10,6 @@ export const formatNumeric = (value: string | number): string => {
 
   const numericValue = Number(onlyDigits) / 100;
 
-  // Usa Intl.NumberFormat para obter a formatação correta (pontos e vírgula)
-  // mas sem o estilo de moeda.
   return new Intl.NumberFormat("pt-BR", {
     minimumFractionDigits: 2,
     maximumFractionDigits: 2,
@@ -19,15 +17,18 @@ export const formatNumeric = (value: string | number): string => {
 };
 
 /**
- * Converte uma string numérica formatada (ex: "1.234,56") para um número (ex: 1234.56).
+ * Converte uma string de DÍGITOS (centavos) para um NÚMERO decimal (reais).
+ * Ex: "300000" (do formulário) -> 3000.00 (para a API)
  */
-export const unmaskNumeric = (maskedValue: string): number => {
-  if (!maskedValue) return NaN;
+export const unmaskNumeric = (digits: string): number => {
+  if (!digits) return NaN;
 
-  // 1. Remove os pontos de milhar.
-  // 2. Substitui a vírgula decimal por um ponto.
-  const sanitized = maskedValue.replace(/\./g, "").replace(",", ".");
+  // 1. Garante que estamos lidando apenas com dígitos
+  const onlyDigits = digits.replace(/\D/g, "");
+  if (onlyDigits === "") return NaN;
 
-  // Retorna o valor como número ou NaN se a conversão falhar.
-  return parseFloat(sanitized);
+  // 2. Converte para número e divide por 100 para obter o valor em reais
+  const numericValue = Number(onlyDigits) / 100;
+
+  return numericValue;
 };

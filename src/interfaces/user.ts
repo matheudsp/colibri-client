@@ -9,4 +9,5 @@ export interface userProps {
   password?: string;
   role?: UserRole;
   status: boolean;
+  cpfCnpj?: string;
 }

@@ -17,6 +17,7 @@ interface CustomDropdownInputProps {
   className?: string;
   icon?: React.ReactElement;
   error?: string;
+
   disabled?: boolean;
 }
 
@@ -30,6 +31,7 @@ export function CustomDropdownInput({
   className = "",
   icon,
   error,
+
   disabled = false,
 }: CustomDropdownInputProps) {
   const [isOpen, setIsOpen] = useState(false);
@@ -52,7 +54,7 @@ export function CustomDropdownInput({
       {label && (
         <label
           htmlFor={id}
-          className="block text-sm font-semibold text-gray-700"
+          className="block text-sm font-light text-gray-700 mb-1"
         >
           {label}
         </label>
@@ -63,18 +65,22 @@ export function CustomDropdownInput({
           id={id}
           type="button"
           onClick={toggleDropdown}
-          className={`w-full px-8 py-3 text-left border-2 rounded-lg shadow-sm bg-white focus:outline-none flex justify-between items-center transition-colors duration-200 hover:border-primary ${
+          className={`w-full px-3 py-2 text-left border-2 rounded-lg shadow-sm bg-white focus:outline-none flex justify-between items-center transition-colors duration-200 hover:border-primary ${
             isOpen ? "border-primary" : "border-gray-300"
           }`}
           disabled={disabled}
         >
-          <span className="text-gray-700 flex items-center gap-2">
-            {icon && <span>{icon}</span>}
+          <span
+            className={` flex items-center gap-2 ${
+              selectedOption ? "text-gray-700" : "text-gray-400"
+            }`}
+          >
+            {icon && <span className="text-gray-500">{icon}</span>}
             {selectedOption ? selectedOption.label : placeholder}
           </span>
 
           <ChevronDownIcon
-            className={`h-5 w-5 text-gray-500 transition-transform duration-200 ${
+            className={`h-5 w-5 text-gray-500 transition-transform duration-300 ${
               isOpen ? "rotate-180" : "rotate-0"
             }`}
           />

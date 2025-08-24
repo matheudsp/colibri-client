@@ -4,11 +4,15 @@ import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
-import { Loader2, User, Phone, ArrowLeft } from "lucide-react";
+import {
+  Loader2,
+  // User, Phone,
+  ArrowLeft,
+} from "lucide-react";
 
 import { useUserRole } from "@/hooks/useUserRole";
 import { CustomButton } from "@/components/forms/CustomButton";
-import { CustomFormInput } from "@/components/forms/CustomFormInput";
+// import { CustomFormInput } from "@/components/forms/CustomFormInput";
 import { UserService } from "@/services/domains/userService";
 import {
   userUpdateSchema,
@@ -23,10 +27,13 @@ export default function ProfilePage() {
   const [loading, setLoading] = useState(false);
 
   const {
-    register,
+    // control,
     handleSubmit,
     setValue,
-    formState: { errors, isDirty },
+    formState: {
+      // errors,
+      isDirty,
+    },
   } = useForm<UserUpdateFormValues>({
     resolver: zodResolver(userUpdateSchema),
   });
@@ -86,7 +93,7 @@ export default function ProfilePage() {
           </p>
 
           <form onSubmit={handleSubmit(onSubmit)} className="mt-6 space-y-4">
-            <CustomFormInput
+            {/* <CustomFormInput
               id="name"
               label="Nome Completo"
               icon={<User />}
@@ -100,7 +107,7 @@ export default function ProfilePage() {
               mask="phone"
               {...register("phone")}
               error={errors.phone?.message}
-            />
+            /> */}
             <CustomButton
               type="submit"
               disabled={loading || !isDirty}

@@ -1,8 +1,8 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { CustomFormInput } from "./CustomFormInput";
-import { SquarePenIcon } from "lucide-react";
+// import { CustomFormInput } from "./CustomFormInput";
+// import { SquarePenIcon } from "lucide-react";
 
 interface RadioOption {
   id: string;
@@ -34,7 +34,7 @@ export function CustomRadioGroup({
   selectedValue = "",
   onChange,
   name,
-  placeholder,
+  // placeholder,
   className = "",
   gridCols = 1,
   error,
@@ -72,12 +72,12 @@ export function CustomRadioGroup({
     }
   };
 
-  const handleOtherInputChange = (value: string) => {
-    setOtherValue(value);
-    if (internalValue === otherOption?.id) {
-      onChange?.(value);
-    }
-  };
+  // const handleOtherInputChange = (value: string) => {
+  //   setOtherValue(value);
+  //   if (internalValue === otherOption?.id) {
+  //     onChange?.(value);
+  //   }
+  // };
 
   const getGridClasses = () => {
     if (gridCols === "full") {
@@ -133,7 +133,7 @@ export function CustomRadioGroup({
 
             {option.isOtherOption && internalValue === option.id && (
               <div className="space-y-1 w-full mt-2">
-                <CustomFormInput
+                {/* <CustomFormInput
                   label={placeholder}
                   value={otherValue}
                   onChange={(e) => handleOtherInputChange(e.target.value)}
@@ -141,7 +141,7 @@ export function CustomRadioGroup({
                   id={`${name}Input`}
                   borderColor="border-gray-300"
                   required
-                />
+                /> */}
               </div>
             )}
           </div>

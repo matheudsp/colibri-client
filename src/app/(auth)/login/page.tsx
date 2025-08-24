@@ -3,40 +3,38 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
 import Image from "next/image";
-import { CustomButton } from "../../../components/forms/CustomButton";
-import { CustomAuthInput } from "../../../components/forms/CustomAuthInput";
-import { LockIcon, MailIcon } from "lucide-react";
-import { LoginFormData, loginSchema } from "../../../validations";
-import { AuthService } from "../../../services/domains/authService";
+import Link from "next/link";
 import { toast } from "sonner";
 import { destroyCookie, setCookie } from "nookies";
 import axios from "axios";
+import { LockIcon, MailIcon, Loader2 } from "lucide-react";
+
+import { LoginFormData, loginSchema } from "../../../validations";
+import { AuthService } from "../../../services/domains/authService";
+import { CustomButton } from "@/components/forms/CustomButton";
+import { CustomInput } from "@/components/forms/CustomInput"; // Usando o novo CustomInput
 
 export default function LoginPage() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
 
   const {
-    register,
+    control,
     handleSubmit,
     formState: { errors },
   } = useForm<LoginFormData>({
     resolver: zodResolver(loginSchema),
+    mode: "onBlur",
   });
 
   const onSubmit = async (data: LoginFormData) => {
     setLoading(true);
-
     try {
       destroyCookie(null, "authToken", { path: "/" });
-      destroyCookie(null, "accessToken", { path: "/" });
-      destroyCookie(null, "propertyId", { path: "/" });
 
-      const response = await AuthService.login({
-        ...data,
-      });
+      const response = await AuthService.login(data);
 
       setCookie(null, "authToken", response.data.access_token, {
         sameSite: "lax",
@@ -44,99 +42,107 @@ export default function LoginPage() {
         secure: process.env.NODE_ENV === "production",
       });
 
+      toast.success("Login efetuado com sucesso!");
       router.push("/properties");
     } catch (error: unknown) {
-      if (axios.isAxiosError(error)) {
-        if (error.response?.status === 401) {
-          const errorData = error.response.data;
-
-          const errorMessage =
-            errorData.message || errorData.error || "Credenciais inválidas";
-
-          toast.error(errorMessage);
-        }
+      if (axios.isAxiosError(error) && error.response?.status === 401) {
+        toast.error("Credenciais inválidas", {
+          description: "Verifique seu e-mail e senha e tente novamente.",
+        });
+      } else {
+        toast.error("Falha no login", {
+          description:
+            "Não foi possível conectar ao servidor. Tente novamente mais tarde.",
+        });
       }
     } finally {
       setLoading(false);
     }
   };
 
-  const handleNavigation = () => {
-    router.push("/register");
-  };
-
   return (
-    <div className="min-h-svh w-full flex flex-col gap-10 items-center justify-start pt-6 pb-12 md:pt-12 xl:pt-20">
-      <Image
-        width={200}
-        height={200}
-        src="/icons/logo-purple-black.svg"
-        alt="Logo Colibri"
-        priority
-        className="w-auto h-44 md:h-52"
-      />
-      <form
-        onSubmit={handleSubmit(onSubmit, (errors) => {
-          console.error("Form validation errors:", errors);
-        })}
-        className="space-y-4 bg-primary grid place-items-center shadow-md p-6 rounded-lg w-full max-w-sm md:max-w-md"
-      >
-        <h1 className="text-2xl text-white mb-4 text-center font-sans">
-          Faça Login
-        </h1>
-
-        <div className="w-full grid place-items-center gap-8">
-          <CustomAuthInput
-            type="email"
-            icon={<MailIcon />}
-            label="Email*"
-            registration={register("email")}
-            inputMode="email"
-            error={errors.email?.message}
-            id="EmailInput"
-          />
-
-          <div className="w-full grid gap-0 place-items-end">
-            <CustomAuthInput
-              type="password"
-              icon={<LockIcon />}
-              label="Senha*"
-              registration={register("password")}
-              error={errors.password?.message}
-              id="PasswordInput"
-            />
-
-            <CustomButton
-              type="button"
-              ghost
-              fontSize="text-sm"
-              className="hover:border-transparent no-underline hover:underline font-poppins hover:shadow-none"
-            >
-              Esqueceu sua senha?
-            </CustomButton>
+    <div className="min-h-svh w-full bg-background flex flex-col items-center justify-center p-4">
+      <div className="w-full max-w-md">
+        <Image
+          width={200}
+          height={200}
+          src="/icons/logo-purple-black.svg"
+          alt="Logo Colibri"
+          priority
+          className="w-auto h-36 sm:h-44 mx-auto mb-8"
+        />
+        <div className="bg-white p-6 sm:p-8 rounded-2xl shadow-xl border">
+          <div className="text-center mb-8">
+            <h1 className="text-3xl font-bold text-secondary">
+              Acesse sua Conta
+            </h1>
+            <p className="text-foreground/70 mt-2">Bem-vindo de volta!</p>
           </div>
-        </div>
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+            <Controller
+              name="email"
+              control={control}
+              render={({ field }) => (
+                <CustomInput
+                  id="email"
+                  label="Email"
+                  placeholder="ex: johndoe@gmail.com"
+                  type="email"
+                  icon={<MailIcon size={20} />}
+                  error={errors.email?.message}
+                  autoComplete="email"
+                  {...field}
+                />
+              )}
+            />
+            <div>
+              <Controller
+                name="password"
+                control={control}
+                render={({ field }) => (
+                  <CustomInput
+                    id="password"
+                    label="Senha"
+                    type="password"
+                    placeholder="********"
+                    icon={<LockIcon size={20} />}
+                    error={errors.password?.message}
+                    autoComplete="current-password"
+                    {...field}
+                  />
+                )}
+              />
+              <div className="text-right mt-2">
+                <Link
+                  href="#"
+                  className="text-sm font-medium text-secondary hover:text-primary transition-colors"
+                >
+                  Esqueceu sua senha?
+                </Link>
+              </div>
+            </div>
 
-        <div className="grid gap-4 pt-4">
-          <CustomButton
-            type="submit"
-            fontSize="text-lg"
-            className="w-36 hover:bg-secondary-hover"
-            disabled={loading}
-          >
-            {loading ? "Entrando..." : "Entrar"}
-          </CustomButton>
-          <CustomButton
-            type="button"
-            onClick={handleNavigation}
-            ghost
-            fontSize="text-lg"
-            className="w-36"
-          >
-            Cadastre-se
-          </CustomButton>
+            <div className="pt-4 space-y-4">
+              <CustomButton
+                type="submit"
+                className="w-full bg-primary hover:bg-primary-hover text-secondary font-bold text-lg py-3"
+                disabled={loading}
+                isLoading={loading}
+              >
+                {loading ? <Loader2 className="animate-spin" /> : "Entrar"}
+              </CustomButton>
+              <CustomButton
+                type="button"
+                onClick={() => router.push("/register")}
+                ghost
+                className="w-full"
+              >
+                Não tenho uma conta
+              </CustomButton>
+            </div>
+          </form>
         </div>
-      </form>
+      </div>
     </div>
   );
 }

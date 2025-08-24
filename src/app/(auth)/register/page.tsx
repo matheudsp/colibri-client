@@ -1,516 +1,84 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
 import Image from "next/image";
-import { CustomButton } from "../../../components/forms/CustomButton";
-import { CustomAuthInput } from "../../../components/forms/CustomAuthInput";
-import {
-  CalendarIcon,
-  FileTextIcon,
-  HashIcon,
-  HomeIcon,
-  LockIcon,
-  MailIcon,
-  MapIcon,
-  MapPinIcon,
-  PhoneIcon,
-  UserIcon,
-} from "lucide-react";
-import {
-  TenantRegisterFormData,
-  LandlordRegisterFormData,
-  tenantRegisterSchema,
-  landlordRegisterSchema,
-} from "../../../validations/index";
-import { AuthService } from "../../../services/domains/authService";
-import axios from "axios";
-import { toast } from "sonner";
-import { CustomDropdownInput } from "@/components/forms/CustomDropdownInput";
-import { companyType } from "@/constants";
-import { CustomRadioGroup } from "@/components/forms/CustomRadioGroup";
-import { brazilianStates } from "@/constants/states";
-import { fetchAddressByCep } from "@/utils/viacep";
-import { fetchCitiesByState } from "@/utils/ibge";
-import { BrlCurrencyIcon } from "@/components/icons/BRLCurrencyIcon";
-import { unmaskNumeric } from "@/utils/masks/maskNumeric";
 
-type Role = "LOCATARIO" | "LOCADOR";
-
-const TenantForm = () => {
-  const router = useRouter();
-  const [loading, setLoading] = useState(false);
-
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<TenantRegisterFormData>({
-    resolver: zodResolver(tenantRegisterSchema),
-    mode: "onBlur",
-  });
-
-  const onSubmit = async (data: TenantRegisterFormData) => {
-    setLoading(true);
-    try {
-      await AuthService.registerTenant({
-        email: data.email,
-        name: data.name,
-        cpfCnpj: data.cpfCnpj,
-        phone: data.phone,
-        password: data.password,
-        birthDate: data.birthDate,
-      });
-      toast.success("Cadastro realizado com sucesso!");
-      router.push("/login");
-    } catch (error) {
-      if (axios.isAxiosError(error) && error.response) {
-        toast.error(error.response.data.message || "Erro ao cadastrar.");
-      } else {
-        toast.error("Ocorreu um erro inesperado.");
-      }
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  return (
-    <form
-      onSubmit={handleSubmit(onSubmit)}
-      className="space-y-4 grid place-items-center"
-    >
-      <div className="w-full grid place-items-center gap-8">
-        <CustomAuthInput
-          label="Nome Completo*"
-          id="name"
-          icon={<UserIcon />}
-          registration={register("name")}
-          error={errors.name?.message}
-        />
-        <CustomAuthInput
-          label="Email*"
-          type="email"
-          id="email"
-          icon={<MailIcon />}
-          registration={register("email")}
-          error={errors.email?.message}
-        />
-        <CustomAuthInput
-          label="CPF*"
-          id="cpfCnpj"
-          icon={<FileTextIcon />}
-          registration={register("cpfCnpj")}
-          error={errors.cpfCnpj?.message}
-        />
-        <CustomAuthInput
-          label="Celular*"
-          id="phone"
-          mask="phone"
-          maxLength={15}
-          icon={<PhoneIcon />}
-          registration={register("phone")}
-          error={errors.phone?.message}
-        />
-
-        <CustomAuthInput
-          label="Data de Nascimento*"
-          id="birthDate"
-          type="text"
-          mask="date"
-          maxLength={10}
-          icon={<CalendarIcon />}
-          registration={register("birthDate")}
-          error={errors.birthDate?.message}
-        />
-        <CustomAuthInput
-          type="password"
-          label="Senha*"
-          id="password"
-          icon={<LockIcon />}
-          registration={register("password")}
-          error={errors.password?.message}
-        />
-        <CustomAuthInput
-          type="password"
-          label="Confirme sua senha*"
-          id="confirmPassword"
-          icon={<LockIcon />}
-          registration={register("confirmPassword")}
-          error={errors.confirmPassword?.message}
-        />
+import { KeyRound, Building, ArrowRight } from "lucide-react";
+import Link from "next/link";
+const ProfileSelectionCard = ({
+  icon,
+  title,
+  description,
+  onClick,
+}: {
+  icon: React.ReactNode;
+  title: string;
+  description: string;
+  onClick: () => void;
+}) => (
+  <button
+    onClick={onClick}
+    className="group w-full bg-white p-6 rounded-xl shadow-lg border border-gray-200 text-left transition-all duration-300 hover:border-primary hover:shadow-2xl hover:-translate-y-1"
+  >
+    <div className="flex items-center justify-between">
+      <div className="flex items-center gap-4">
+        <div className="bg-primary/10 p-3 rounded-lg text-primary">{icon}</div>
+        <div>
+          <h3 className="font-bold text-lg text-secondary">{title}</h3>
+          <p className="text-sm text-foreground/80">{description}</p>
+        </div>
       </div>
-      <div className="grid gap-4 pt-8">
-        <CustomButton
-          type="submit"
-          fontSize="text-lg"
-          className="w-48 hover:bg-secondary-hover"
-          disabled={loading}
-        >
-          {loading ? "Cadastrando..." : "Cadastrar"}
-        </CustomButton>
-        <CustomButton
-          type="button"
-          onClick={() => router.push("/login")}
-          ghost
-          fontSize="text-lg"
-          className="w-48"
-        >
-          Voltar ao Login
-        </CustomButton>
-      </div>
-    </form>
-  );
-};
-
-const LandlordForm = () => {
-  const router = useRouter();
-  const [loading, setLoading] = useState(false);
-  const [isCepLoading, setIsCepLoading] = useState(false);
-  const [cities, setCities] = useState<
-    { id: string; value: string; label: string }[]
-  >([]);
-  const [cityFromCep, setCityFromCep] = useState<string | null>(null);
-  const [isCitiesLoading, setIsCitiesLoading] = useState(false);
-
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-    watch,
-    setValue,
-    setFocus,
-  } = useForm<LandlordRegisterFormData>({
-    resolver: zodResolver(landlordRegisterSchema),
-    mode: "onBlur",
-  });
-
-  const cpfCnpjValue = watch("cpfCnpj");
-  const companyTypeValue = watch("companyType");
-  const stateValue = watch("state");
-  const cityValue = watch("city");
-  const streetValue = watch("street");
-  const provinceValue = watch("province");
-
-  const handleCepBlur = async (e: React.FocusEvent<HTMLInputElement>) => {
-    const cep = e.target.value.replace(/\D/g, "");
-    if (cep.length !== 8) {
-      return;
-    }
-
-    setIsCepLoading(true);
-    try {
-      const address = await fetchAddressByCep(cep);
-      // console.log(address);
-      if (address) {
-        setValue("street", address.street, { shouldValidate: true });
-        setValue("province", address.district, { shouldValidate: true });
-
-        setCityFromCep(address.city);
-
-        setValue("state", address.rawUf, { shouldValidate: true });
-
-        // toast.success("Endereço preenchido!");
-        setFocus("number");
-      } else {
-        toast.error("CEP não encontrado. Preencha manualmente.");
-      }
-    } catch (error) {
-      toast.error(`Erro ao buscar o CEP: ${error}. Preencha manualmente.`);
-    } finally {
-      setIsCepLoading(false);
-    }
-  };
-  useEffect(() => {
-    if (!stateValue) {
-      setCities([]);
-      setValue("city", "");
-      return;
-    }
-    const loadCities = async () => {
-      setIsCitiesLoading(true);
-
-      const cityOptions = await fetchCitiesByState(stateValue);
-      setCities(
-        cityOptions.map((c) => ({ id: c.id, value: c.value, label: c.label }))
-      );
-      if (cityFromCep) {
-        if (cityOptions.some((c) => c.value === cityFromCep)) {
-          setValue("city", cityFromCep, { shouldValidate: true });
-        }
-        setCityFromCep(null);
-      }
-      setIsCitiesLoading(false);
-    };
-    loadCities();
-  }, [stateValue, setValue, cityFromCep]);
-
-  const onSubmit = async (data: LandlordRegisterFormData) => {
-    setLoading(true);
-    try {
-      console.log("ENVIANDO CADASTRO:", {
-        email: data.email,
-        name: data.name,
-        cpfCnpj: data.cpfCnpj.replace(/\D/g, ""),
-        phone: data.phone.replace(/\D/g, ""),
-        password: data.password,
-        cep: data.cep,
-        street: data.street,
-        number: data.number,
-        province: data.province,
-        city: data.city,
-        state: data.state,
-        complement: data.complement,
-        companyType: data.companyType,
-        birthDate: data.birthDate,
-        incomeValue: unmaskNumeric(data.incomeValue),
-      });
-      // await AuthService.registerLandlord({
-      //   email: data.email,
-      //   name: data.name,
-      //   cpfCnpj: data.cpfCnpj,
-      //   phone: data.phone,
-      //   password: data.password,
-      //   cep: data.cep,
-      //   street: data.street,
-      //   number: data.number,
-      //   province: data.province,
-      //   city: data.city,
-      //   state: data.state,
-      //   complement: data.complement,
-      //   companyType: data.companyType,
-      //   birthDate: data.birthDate,
-      //   incomeValue: Number(data.incomeValue.replace(/\D/g, "")),
-      // });
-      toast.success("Cadastro realizado com sucesso!");
-      // router.push("/login");
-    } catch (error) {
-      if (axios.isAxiosError(error) && error.response) {
-        toast.error(error.response.data.message || "Erro ao cadastrar.");
-      } else {
-        toast.error("Ocorreu um erro inesperado.");
-      }
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  return (
-    <form
-      onSubmit={handleSubmit(onSubmit)}
-      className="space-y-4 grid place-items-center"
-    >
-      <div className="w-full grid place-items-center gap-8">
-        <CustomAuthInput
-          label="Nome Completo*"
-          id="name"
-          icon={<UserIcon />}
-          registration={register("name")}
-          error={errors.name?.message}
-        />
-        <CustomAuthInput
-          label="Email*"
-          type="email"
-          id="email"
-          icon={<MailIcon />}
-          registration={register("email")}
-          error={errors.email?.message}
-        />
-        <CustomAuthInput
-          label="CPF/CNPJ*"
-          id="cpfCnpj"
-          icon={<FileTextIcon />}
-          registration={register("cpfCnpj")}
-          error={errors.cpfCnpj?.message}
-        />
-        <CustomAuthInput
-          label="Celular*"
-          id="phone"
-          mask="phone"
-          maxLength={15}
-          icon={<PhoneIcon />}
-          registration={register("phone")}
-          error={errors.phone?.message}
-        />
-        <CustomAuthInput
-          type="password"
-          label="Senha*"
-          id="password"
-          icon={<LockIcon />}
-          registration={register("password")}
-          error={errors.password?.message}
-        />
-        <CustomAuthInput
-          type="password"
-          label="Confirme sua senha*"
-          id="confirmPassword"
-          icon={<LockIcon />}
-          registration={register("confirmPassword")}
-          error={errors.confirmPassword?.message}
-        />
-        {cpfCnpjValue && cpfCnpjValue.length > 14 && (
-          <CustomDropdownInput
-            label="Selecione o Tipo de Empresa"
-            placeholder="Selecione o Tipo de Empresa*"
-            options={companyType}
-            selectedOptionValue={companyTypeValue}
-            onOptionSelected={(val) => {
-              if (val) setValue("companyType", val);
-            }}
-            error={errors.companyType?.message}
-            className="w-full"
-          />
-        )}
-        {cpfCnpjValue && cpfCnpjValue.length <= 14 && (
-          <CustomAuthInput
-            label="Data de Nascimento*"
-            id="birthDate"
-            type="text"
-            mask="date"
-            maxLength={10}
-            icon={<CalendarIcon />}
-            registration={register("birthDate")}
-            error={errors.birthDate?.message}
-          />
-        )}
-        <CustomAuthInput
-          label="CEP*"
-          id="cep"
-          mask="cep"
-          maxLength={9}
-          icon={<MapPinIcon />}
-          registration={register("cep")}
-          onBlur={handleCepBlur}
-          error={errors.cep?.message}
-          disabled={isCepLoading}
-        />
-        <CustomDropdownInput
-          label="Estado"
-          placeholder="Selecione o Estado (UF)*"
-          options={brazilianStates}
-          selectedOptionValue={stateValue}
-          onOptionSelected={(val) => {
-            if (val) setValue("state", val, { shouldValidate: true });
-          }}
-          error={errors.state?.message}
-          className="w-full"
-        />
-        <CustomDropdownInput
-          label="Cidade"
-          placeholder={
-            isCitiesLoading ? "Carregando..." : "Selecione a Cidade*"
-          }
-          options={cities}
-          selectedOptionValue={cityValue}
-          onOptionSelected={(val) => {
-            if (val) setValue("city", val, { shouldValidate: true });
-          }}
-          error={errors.city?.message}
-          className="w-full"
-          disabled={!stateValue || isCitiesLoading}
-        />{" "}
-        <CustomAuthInput
-          label="Bairro*"
-          id="province"
-          icon={<MapIcon />}
-          registration={register("province")}
-          value={provinceValue || ""}
-          error={errors.province?.message}
-        />
-        <CustomAuthInput
-          label="Rua/Avenida*"
-          id="street"
-          icon={<HomeIcon />}
-          registration={register("street")}
-          value={streetValue || ""}
-          error={errors.street?.message}
-        />
-        <CustomAuthInput
-          label="Número*"
-          id="number"
-          icon={<HashIcon />}
-          registration={register("number")}
-          error={errors.number?.message}
-        />
-        <CustomAuthInput
-          label="Complemento"
-          id="complement"
-          icon={<HomeIcon />}
-          registration={register("complement")}
-          error={errors.complement?.message}
-        />
-        <CustomAuthInput
-          label="Renda/Faturamento Mensal*"
-          id="incomeValue"
-          mask="numeric"
-          icon={<BrlCurrencyIcon />}
-          registration={register("incomeValue")}
-          error={errors.incomeValue?.message}
-        />
-      </div>
-      <div className="grid gap-4 pt-8">
-        <CustomButton
-          type="submit"
-          fontSize="text-lg"
-          className="w-48 hover:bg-secondary-hover"
-          disabled={loading}
-        >
-          {loading ? "Cadastrando..." : "Cadastrar"}
-        </CustomButton>
-        <CustomButton
-          type="button"
-          onClick={() => router.push("/login")}
-          ghost
-          fontSize="text-lg"
-          className="w-48"
-        >
-          Voltar ao Login
-        </CustomButton>
-      </div>
-    </form>
-  );
-};
+      <ArrowRight className="text-gray-300 transition-transform duration-300 group-hover:text-primary group-hover:translate-x-1" />
+    </div>
+  </button>
+);
 
 export default function RegisterPage() {
-  const [role, setRole] = useState<Role>("LOCATARIO");
-
-  const roleOptions = [
-    { id: "1", value: "LOCATARIO", label: "Quero Alugar" },
-    { id: "2", value: "LOCADOR", label: "Quero Anunciar" },
-  ];
+  const router = useRouter();
 
   return (
-    <div className="min-h-svh w-full flex flex-col gap-10 items-center justify-start pt-6 pb-12 xl:pt-12">
-      <Image
-        width={200}
-        height={200}
-        src="/images/logo-black-vertical.png"
-        alt="Logo Colibri"
-        priority
-        className="w-auto h-44 md:h-52"
-      />
+    <div className="min-h-svh w-full bg-background flex flex-col items-center justify-center p-4">
+      <div className="text-center mb-8">
+        <Image
+          width={150}
+          height={150}
+          src="/icons/logo-purple-black.svg"
+          alt="Logo Colibri"
+          priority
+          className="w-auto h-32 mx-auto"
+        />
+        <h1 className="text-3xl font-bold text-secondary mt-4">Bem-vindo!</h1>
+        <p className="text-foreground/80 mt-1">
+          Escolha seu perfil para iniciar o cadastro.
+        </p>
+      </div>
 
-      <div className="bg-primary shadow-md p-6 rounded-lg w-full max-w-sm md:max-w-md">
-        <h1 className="text-2xl text-white mb-4 text-center font-sans">
-          Faça seu Cadastro
-        </h1>
-
-        <CustomRadioGroup
-          name="role"
-          options={roleOptions}
-          selectedValue={role}
-          onChange={(value) => setRole(value as Role)}
-          className="mb-6"
-          gridCols={2}
-          textColor="text-white"
-          borderColor="border-white"
-          checkedBgColor="bg-white"
-          checkedBorderColor="border-white"
-          dotColor="bg-white"
+      <div className="w-full max-w-md space-y-4">
+        <ProfileSelectionCard
+          onClick={() => router.push("/register/tenant")}
+          icon={<KeyRound size={28} />}
+          title="Sou Inquilino"
+          description="Quero encontrar um imóvel para alugar."
         />
 
-        {role === "LOCATARIO" ? <TenantForm /> : <LandlordForm />}
+        <ProfileSelectionCard
+          onClick={() => router.push("/register/landlord")}
+          icon={<Building size={28} />}
+          title="Sou Locador"
+          description="Quero anunciar meus imóveis na plataforma."
+        />
+      </div>
+
+      <div className="mt-8 text-center">
+        <p className="text-foreground/80">
+          Já tem uma conta?{" "}
+          <Link
+            href="/login"
+            className="font-bold text-secondary hover:text-primary underline transition-colors"
+          >
+            Faça login
+          </Link>
+        </p>
       </div>
     </div>
   );
