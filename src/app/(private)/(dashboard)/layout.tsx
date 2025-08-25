@@ -4,7 +4,7 @@ import {
   //  useEffect,
   useState,
 } from "react";
-import { Header } from "../../../components/layout/Header";
+
 import BottomNav from "../../../components/layout/BottomNav";
 import SidebarNav from "../../../components/layout/SidebarNav";
 import { SearchProvider } from "../../../contexts/SearchContext";
@@ -46,15 +46,7 @@ export default function DashboardLayout({
     <SearchProvider value={{ searchValue, handleSearchChange }}>
       <div className="min-h-svh w-full flex flex-col md:flex-row overflow-x-hidden">
         <SidebarNav />
-        <main className="flex-1 md:ml-32">
-          <Header
-            type="default"
-            hasSidebar
-            searchValue={searchValue}
-            onSearchChange={handleSearchChange}
-          />
-          {children}
-        </main>
+        <main className="flex-1 md:ml-32">{children}</main>
         <BottomNav />
       </div>
     </SearchProvider>

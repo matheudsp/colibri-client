@@ -1,5 +1,7 @@
 import React from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { clsx } from "clsx";
+import { Loader2 } from "lucide-react"; // Importar o ícone
 
 interface CustomButtonProps {
   type?: "button" | "submit" | "reset";
@@ -24,7 +26,7 @@ export function CustomButton({
   fontSize = "text-base",
   color = "bg-secondary",
   textColor = "text-white",
-  rounded = "rounded-md",
+  rounded = "rounded-md", // O default continua aqui
   disabled = false,
   ghost = false,
   icon,
@@ -32,9 +34,9 @@ export function CustomButton({
   title,
   isLoading = false,
 }: CustomButtonProps) {
+  // 1. Removi a prop 'rounded' das classes base para aplicá-la dinamicamente.
   const baseClasses = `
     px-4 py-2 
-    ${rounded}
     ${fontSize}
     transition-all 
     duration-200
@@ -52,8 +54,6 @@ export function CustomButton({
     ? `bg-transparent ${finalTextColor} border-2 border-transparent hover:bg-gray-100 hover:border-gray-200`
     : `${color} ${textColor} hover:brightness-95`;
 
-  const loadingClasses = isLoading ? "w-12 h-12  !p-0" : "";
-
   const disabledClasses =
     disabled || isLoading ? "opacity-60 cursor-not-allowed" : "";
 
@@ -62,20 +62,27 @@ export function CustomButton({
       type={type}
       onClick={onClick}
       disabled={disabled || isLoading}
-      className={`${baseClasses} ${variantClasses} ${disabledClasses} ${loadingClasses} ${className}`}
+      className={clsx(
+        baseClasses,
+        variantClasses,
+        disabledClasses,
+        rounded, // 2. Adicionei a prop 'rounded' diretamente aqui.
+        className
+      )}
       title={title}
     >
       <AnimatePresence initial={false} mode="wait">
         <motion.span
-          key={isLoading ? "loading" : "ready"}
+          key={isLoading ? "loading" : "content"}
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: 10 }}
           transition={{ duration: 0.2 }}
           className="flex items-center justify-center gap-2"
         >
+          {/* 3. Lógica de loading corrigida */}
           {isLoading ? (
-            children
+            <Loader2 className="animate-spin" />
           ) : (
             <>
               {icon && <span>{icon}</span>}

@@ -1,14 +1,21 @@
 "use client";
 
-import { ArrowLeftIcon, SearchIcon } from "lucide-react";
+import {
+  ArrowLeftIcon,
+  SearchIcon,
+  Menu as MenuIcon,
+  X as XIcon,
+} from "lucide-react";
 import Image from "next/image";
-import { CustomFormInput } from "../forms/CustomFormInput";
-import { ReactNode } from "react";
+import Link from "next/link";
+import { useState, ReactNode, ChangeEvent } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 
-type HeaderType = "default" | "back" | "backMenu" | "search";
+type HeaderType = "default" | "back" | "backMenu" | "search" | "logoOnly";
 
 interface HeaderProps {
   type: HeaderType;
+  isScrolled?: boolean;
   onBack?: () => void;
   dropdownMenu?: ReactNode;
   hasSidebar?: boolean;
@@ -16,72 +23,221 @@ interface HeaderProps {
   onSearchChange?: (value: string) => void;
 }
 
+const navItems = [
+  { label: "Ajuda", href: "#" },
+  { label: "Mais", href: "#" },
+];
+
+const menuVariants = {
+  hidden: { x: "100%", opacity: 0 },
+  visible: { x: 0, opacity: 1 },
+};
+
 export function Header({
   type,
+  isScrolled = false,
   onBack,
   dropdownMenu,
-  hasSidebar = false,
+  // hasSidebar = false,
   searchValue = "",
   onSearchChange,
 }: HeaderProps) {
-  const handleChange = (value: string) => {
-    if (onSearchChange) {
-      onSearchChange(value);
-    }
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    onSearchChange?.(e.target.value);
   };
 
+  const isScrolledOrSearch = isScrolled || type === "search";
+  const showSearchBar = type === "search" || (type === "default" && isScrolled);
+
+  if (type === "default" || type === "search") {
+    return (
+      <>
+        <header
+          className={`fixed z-50 top-0 w-full px-4 sm:px-6 lg:px-8 xl:px-16 2xl:px-24 py-4 flex items-center justify-between gap-6 transition-all duration-300 ease-in-out ${
+            isScrolledOrSearch ? "bg-white shadow-sm" : "bg-secondary"
+          }`}
+        >
+          {/* Logo */}
+          <div className="flex-shrink-0">
+            <Link href="/">
+              <Image
+                height={32}
+                width={90}
+                src={
+                  isScrolledOrSearch
+                    ? "/icons/logo-purple-black.svg"
+                    : "/icons/logo-white-green.svg"
+                }
+                alt="Logo Colibri"
+                className="h-8 w-auto"
+              />
+            </Link>
+          </div>
+
+          {/* Barra de Busca */}
+          <div className="flex-1 max-w-xl hidden lg:flex justify-center">
+            <AnimatePresence>
+              {showSearchBar && (
+                <motion.div
+                  initial={{ opacity: 0, width: 0 }}
+                  animate={{ opacity: 1, width: "100%" }}
+                  exit={{ opacity: 0, width: 0 }}
+                  transition={{ duration: 0.3 }}
+                  className="w-full"
+                >
+                  <div className="relative">
+                    <input
+                      type="text"
+                      placeholder="Digite sua busca"
+                      value={searchValue}
+                      onChange={handleChange}
+                      className="w-full h-12 pl-5 pr-14 rounded-full border-2 border-gray-200"
+                    />
+                    <button
+                      type="button"
+                      aria-label="Buscar"
+                      className="absolute top-1/2 right-2 -translate-y-1/2 w-9 h-9 bg-primary rounded-full flex items-center justify-center text-white"
+                    >
+                      <SearchIcon size={20} />
+                    </button>
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
+
+          {/* Navegação (Desktop) */}
+          <nav className="hidden lg:flex items-center gap-6 flex-shrink-0">
+            <Link
+              key={"menu"}
+              href={"/properties"}
+              className={`text-sm font-semibold transition-colors whitespace-nowrap ${
+                isScrolledOrSearch
+                  ? "text-secondary hover:text-accent"
+                  : "text-white hover:text-gray-200"
+              }`}
+            >
+              {/* Se estiver logado, exibir acessar painel, se nao estiver mostre botao de login e cadastro */}
+              Entrar
+            </Link>
+            {navItems.map((item) => (
+              <Link
+                key={item.label}
+                href={item.href}
+                className={`text-sm font-semibold transition-colors whitespace-nowrap ${
+                  isScrolledOrSearch
+                    ? "text-secondary hover:text-accent"
+                    : "text-white hover:text-gray-200"
+                }`}
+              >
+                {item.label}
+              </Link>
+            ))}
+          </nav>
+
+          {/* Menu (Mobile) */}
+          <div className="flex lg:hidden">
+            <button
+              onClick={() => setIsMenuOpen(!isMenuOpen)}
+              className={`p-2 rounded-md z-50 ${
+                isScrolledOrSearch ? "text-gray-700" : "text-white"
+              }`}
+            >
+              {isMenuOpen ? <XIcon size={24} /> : <MenuIcon size={24} />}
+            </button>
+          </div>
+        </header>
+
+        <AnimatePresence>
+          {isMenuOpen && (
+            <motion.div
+              variants={menuVariants}
+              initial="hidden"
+              animate="visible"
+              exit="hidden"
+              transition={{ type: "tween", duration: 0.3 }}
+              className="fixed inset-0 top-[72px] bg-background z-40 lg:hidden"
+            >
+              <div className="p-4">
+                {showSearchBar && (
+                  <div className="relative mb-4">
+                    <input
+                      type="text"
+                      placeholder="Digite sua busca"
+                      value={searchValue}
+                      onChange={handleChange}
+                      className="w-full h-12 pl-5 pr-14 rounded-full border-2 border-gray-200"
+                    />
+                    <button
+                      type="button"
+                      aria-label="Buscar"
+                      className="absolute top-1/2 right-2 -translate-y-1/2 w-9 h-9 bg-primary rounded-full flex items-center justify-center text-white"
+                    >
+                      <SearchIcon size={20} />
+                    </button>
+                  </div>
+                )}
+                <nav className="flex flex-col space-y-2">
+                  {navItems.map((item) => (
+                    <Link
+                      key={item.label}
+                      href={item.href}
+                      onClick={() => setIsMenuOpen(false)}
+                      className="text-lg p-3 rounded-md font-semibold text-secondary hover:bg-gray-200"
+                    >
+                      {item.label}
+                    </Link>
+                  ))}
+                </nav>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </>
+    );
+  }
+
+  if (type === "logoOnly") {
+    return (
+      <header className="fixed z-40 top-0 w-full bg-white px-4 py-2 shadow-sm flex items-center justify-center">
+        <Image
+          height={50}
+          width={120}
+          src="/icons/logo-black-green.svg"
+          alt="Logo Colibri"
+          className="w-auto h-12"
+          priority
+        />
+      </header>
+    );
+  }
   return (
     <header
-      className={`fixed z-40 top-0 w-full ${
-        hasSidebar ? "md:w-[calc(100%-8rem)]" : "md:w-full"
-      } bg-white px-8 md:px-16 py-2 shadow flex items-center justify-between gap-4 `}
+      className={`fixed z-40 top-0 w-full bg-white px-8 md:px-16 py-2 shadow flex items-center justify-between gap-4`}
     >
-      {(type === "back" || type === "backMenu") && onBack && (
+      {onBack && (
         <button
-          title="Botão de voltar para a página anterior"
-          aria-label="Botão de voltar para a página anterior"
+          title="Botão de voltar"
+          aria-label="Botão de voltar"
           onClick={onBack}
-          className="hover:bg-gray-500/10 p-2 rounded-full transition-all duration-200"
+          className="hover:bg-gray-500/10 p-2 rounded-full transition-all"
         >
           <ArrowLeftIcon className="w-7 h-7" />
         </button>
       )}
-
-      {type !== "search" && (
-        <div className="flex w-full justify-center items-center self-center">
-          <Image
-            height={50}
-            width={50}
-            src="/icons/logo-black-green.svg"
-            alt="Logo Colibri"
-            className="items-center w-auto h-12"
-            priority
-          />
-        </div>
-      )}
-
-      {type === "back" && <span className="h-10 w-10"></span>}
-
-      {type === "search" && (
-        <div className="flex items-center justify-center gap-8 w-full px-4 md:px-16">
-          <Image
-            width={50}
-            height={50}
-            src="/icons/logo-black-green.svg"
-            alt="Logo Colibri"
-            className="md:hidden w-auto h-4"
-          />
-          <CustomFormInput
-            icon={<SearchIcon />}
-            label="Pesquisar..."
-            value={searchValue}
-            onChange={handleChange}
-            id="SearchInput"
-            className="border-foreground"
-          />
-        </div>
-      )}
-
+      <div className="flex-1 flex justify-center">
+        <Image
+          height={50}
+          width={120}
+          src="/icons/logo-black-green.svg"
+          alt="Logo Colibri"
+          className="w-auto h-12"
+          priority
+        />
+      </div>
+      {type === "back" && <span className="w-11 h-11"></span>}
       {type === "backMenu" && dropdownMenu}
     </header>
   );

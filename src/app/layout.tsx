@@ -35,10 +35,10 @@ export default function RootLayout({
   return (
     <html lang="pt-br" suppressHydrationWarning>
       <body
-        className={`${openSans.className} ${montserrat.className} ${poppins.className} font-montserrat antialiased flex  `}
+        className={`${openSans.className} ${montserrat.className} ${poppins.className} font-poppins antialiased flex  `}
       >
         {children}
-        <Toaster richColors position="top-right" />
+        <Toaster richColors position="bottom-center" />
       </body>
     </html>
   );

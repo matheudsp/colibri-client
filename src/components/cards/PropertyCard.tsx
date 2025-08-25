@@ -175,7 +175,7 @@ export function PropertyCard(props: PropertyProps) {
                   className="w-full py-3 text-sm font-semibold"
                   title="Contrato"
                 >
-                  Criar Contrato
+                  Criar Contrato de Aluguel
                 </CustomButton>
                 <CustomButton
                   onClick={handleEdit}
