@@ -18,7 +18,7 @@ export function ContractCard({ contract }: { contract: Contract }) {
     contractStatus.find((s) => s.value === contract.status) || defaultStatus;
 
   const handleCardClick = () => {
-    router.push(`/properties/${contract.propertyId}/contracts/${contract.id}`);
+    router.push(`/contracts/${contract.id}`);
   };
 
   return (

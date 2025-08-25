@@ -1,8 +1,8 @@
 "use client";
 
 import { Roles } from "@/constants";
-import { Header } from "../../components/layout/Header";
-import { useUserRole } from "../../hooks/useUserRole";
+import { Header } from "../../../components/layout/Header";
+import { useUserRole } from "../../../hooks/useUserRole";
 import { Loader2Icon } from "lucide-react";
 import { useRouter } from "next/navigation";
 

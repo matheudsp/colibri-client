@@ -8,13 +8,13 @@ import Image from "next/image";
 import Link from "next/link";
 import { toast } from "sonner";
 import { destroyCookie, setCookie } from "nookies";
-import axios from "axios";
+
 import { LockIcon, MailIcon, Loader2 } from "lucide-react";
 
-import { LoginFormData, loginSchema } from "../../../validations";
-import { AuthService } from "../../../services/domains/authService";
+import { LoginFormData, loginSchema } from "../../../../validations";
+import { AuthService } from "../../../../services/domains/authService";
 import { CustomButton } from "@/components/forms/CustomButton";
-import { CustomInput } from "@/components/forms/CustomInput"; // Usando o novo CustomInput
+import { CustomInput } from "@/components/forms/CustomInput";
 import { extractAxiosError } from "@/services/api";
 
 export default function LoginPage() {
