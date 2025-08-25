@@ -55,7 +55,7 @@ export function PropertyCard(props: PropertyProps) {
   const showPropertyInfo = props.showPropertyInformation ?? false;
   return (
     <div
-      className={`w-full bg-white rounded-xl shadow-lg overflow-hidden transition-all duration-300 hover:shadow-2xl hover:-translate-y-1 flex flex-col md:flex-row relative animate-fadeIn`}
+      className={`w-full bg-white rounded-xl border  shadow-lg overflow-hidden transition-all duration-300 hover:shadow-2xl hover:-translate-y-1 flex flex-col md:flex-row relative animate-fadeIn`}
     >
       <div className="relative w-full md:w-2/5 h-56 md:h-auto transition-all delay-150">
         {coverPhoto ? (

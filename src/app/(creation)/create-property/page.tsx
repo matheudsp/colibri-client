@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect, useState, useCallback } from "react";
-import axios from "axios";
+
 import { toast } from "sonner";
 import {
   Building2,
@@ -37,6 +37,7 @@ import { Photo } from "@/interfaces/photo";
 import { Stepper } from "@/components/layout/Stepper";
 import { unmaskNumeric } from "@/utils/masks/maskNumeric";
 import { BrlCurrencyIcon } from "@/components/icons/BRLCurrencyIcon";
+import { extractAxiosError } from "@/services/api";
 
 export default function CreatePropertyPage() {
   const router = useRouter();
@@ -128,10 +129,10 @@ export default function CreatePropertyPage() {
       setNewPropertyId(response.data.id);
       handleNextStep();
     } catch (error: unknown) {
-      const errorMessage =
-        error instanceof axios.AxiosError
-          ? error.response?.data?.message || "Erro ao criar o imóvel."
-          : "Ocorreu um erro inesperado.";
+      const errorMessage = extractAxiosError(error);
+      toast.error("Falha ao criar imóvel", {
+        description: errorMessage,
+      });
       toast.error(errorMessage);
     } finally {
       setIsLoading(false);

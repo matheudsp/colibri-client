@@ -32,6 +32,7 @@ import { ResendNotificationModal } from "@/components/modals/contractModals/Rese
 import { CancelContractModal } from "@/components/modals/contractModals/CancelContractModal";
 import { PaymentService } from "@/services/domains/paymentService";
 import { RegisterPaymentModal } from "@/components/modals/paymentModals/RegisterPaymentModal";
+import { extractAxiosError } from "@/services/api";
 
 export default function ContractManagementPage() {
   const [contract, setContract] = useState<ContractWithDocuments | null>(null);
@@ -59,8 +60,11 @@ export default function ContractManagementPage() {
     try {
       const response = await ContractService.findOne(contractId);
       setContract(response.data);
-    } catch (error) {
-      toast.error(`Contrato não encontrado ou acesso negado: ${error}`);
+    } catch (_error) {
+      const errorMessage = extractAxiosError(_error);
+      toast.error("Contrato não encontrado ou acesso negado", {
+        description: errorMessage,
+      });
       router.push("/contracts");
     } finally {
       setLoading(false);
@@ -79,10 +83,11 @@ export default function ContractManagementPage() {
       toast.success("Contrato ativado com sucesso! Pagamentos gerados.");
       setShowActivateModal(false);
       await fetchContract();
-    } catch (error) {
-      toast.error(
-        `Não foi possível ativar o contrato. ${(error as Error).message}`
-      );
+    } catch (_error) {
+      const errorMessage = extractAxiosError(_error);
+      toast.error("Não foi possível ativar o contrato", {
+        description: errorMessage,
+      });
     } finally {
       setIsActionLoading(false);
     }
@@ -101,9 +106,10 @@ export default function ContractManagementPage() {
       toast.success("Pagamento registado com sucesso!");
       setShowRegisterPaymentModal(false);
       await fetchContract(); // Recarrega os dados do contrato para atualizar a lista
-    } catch (error) {
-      toast.error("Falha ao registar o pagamento.", {
-        description: (error as Error).message,
+    } catch (_error) {
+      const errorMessage = extractAxiosError(_error);
+      toast.error("Não foi possivel registrar pagamento", {
+        description: errorMessage,
       });
     } finally {
       setIsActionLoading(false);
@@ -118,9 +124,10 @@ export default function ContractManagementPage() {
       const response = await ContractService.getViewPdfUrl(contract.id);
 
       window.open(response.data.url, "_blank");
-    } catch (error) {
-      toast.error("Falha ao obter o link do contrato.", {
-        description: (error as Error).message,
+    } catch (_error) {
+      const errorMessage = extractAxiosError(_error);
+      toast.error("Falha ao obter URL do contrato ", {
+        description: errorMessage,
       });
     } finally {
       setIsActionLoading(false);
@@ -137,9 +144,10 @@ export default function ContractManagementPage() {
       });
       // A implementar: recarregar os dados ou atualizar o estado para esconder o botão.
       await fetchContract();
-    } catch (error) {
-      toast.error("Falha ao iniciar o processo de assinatura.", {
-        description: (error as Error).message,
+    } catch (_error) {
+      const errorMessage = extractAxiosError(_error);
+      toast.error("Não foi possível iniciar o processo de assinatura", {
+        description: errorMessage,
       });
     } finally {
       setIsSigningLoading(false);
@@ -160,9 +168,10 @@ export default function ContractManagementPage() {
         description: `Um lembrete foi enviado por ${method} para o signatário selecionado.`,
       });
       setShowResendModal(false);
-    } catch (error) {
-      toast.error("Falha ao reenviar notificação.", {
-        description: (error as Error).message,
+    } catch (_error) {
+      const errorMessage = extractAxiosError(_error);
+      toast.error("Não foi possível enviar a notificação", {
+        description: errorMessage,
       });
     } finally {
       setIsActionLoading(false);
@@ -177,8 +186,11 @@ export default function ContractManagementPage() {
       toast.success("Contrato cancelado com sucesso.");
       setShowCancelModal(false);
       await fetchContract();
-    } catch (error) {
-      toast.error(`Erro ao cancelar o contrato. ${(error as Error).message}`);
+    } catch (_error) {
+      const errorMessage = extractAxiosError(_error);
+      toast.error("Não foi possível cancelar o contrato", {
+        description: errorMessage,
+      });
     } finally {
       setIsActionLoading(false);
     }
@@ -191,8 +203,11 @@ export default function ContractManagementPage() {
       await ContractService.remove(contract.id);
       toast.success("Contrato removido com sucesso.");
       router.push("/contracts");
-    } catch (error) {
-      toast.error(`Erro ao remover o contrato. ${(error as Error).message}`);
+    } catch (_error) {
+      const errorMessage = extractAxiosError(_error);
+      toast.error("Erro ao remover contrato", {
+        description: errorMessage,
+      });
     } finally {
       setIsActionLoading(false);
       setShowDeleteModal(false);

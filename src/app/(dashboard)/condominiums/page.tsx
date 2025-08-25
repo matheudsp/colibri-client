@@ -14,6 +14,7 @@ import { ITEMS_PER_PAGE } from "@/constants/pagination";
 import { toast } from "sonner";
 import { CondominiumCard } from "@/components/cards/CondominiumCard";
 import FabButton from "@/components/layout/FabButton";
+import { extractAxiosError } from "@/services/api";
 
 export default function CondominiumsPage() {
   const [condominiums, setCondominiums] = useState<Condominium[]>([]);
@@ -47,7 +48,10 @@ export default function CondominiumsPage() {
           totalPages: meta?.totalPages || 1,
         });
       } catch (err) {
-        toast.error(`Não foi possível carregar os condomínios: ${err}`);
+        const errorMessage = extractAxiosError(err);
+        toast.error("Não foi possível carregar os condomínios", {
+          description: errorMessage,
+        });
         setCondominiums([]);
       } finally {
         setLoading(false);

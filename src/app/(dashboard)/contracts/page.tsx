@@ -12,6 +12,7 @@ import { ITEMS_PER_PAGE } from "@/constants/pagination";
 import { toast } from "sonner";
 import { ContractCard } from "@/components/cards/ContractCard";
 import type { Contract } from "@/interfaces/contract";
+import { extractAxiosError } from "@/services/api";
 
 export default function ContractsPage() {
   const [contracts, setContracts] = useState<Contract[]>([]);
@@ -46,7 +47,10 @@ export default function ContractsPage() {
         });
       } catch (err) {
         console.error("Erro ao carregar contratos:", err);
-        toast.error("Não foi possível carregar os contratos.");
+        const errorMessage = extractAxiosError(err);
+        toast.error("Não foi possível carregar os contratos", {
+          description: errorMessage,
+        });
         setContracts([]);
       } finally {
         setLoading(false);

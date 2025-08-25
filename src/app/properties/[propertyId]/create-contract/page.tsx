@@ -41,6 +41,7 @@ import { toISODate } from "@/utils/formatters/formatDate";
 import { unmaskNumeric } from "@/utils/masks/maskNumeric";
 import type { ApiResponse } from "@/types/api";
 import { cpfCnpjMask } from "@/utils/masks/cpfCnpjMask";
+import { extractAxiosError } from "@/services/api";
 
 export default function CreateContractPage() {
   const router = useRouter();
@@ -118,7 +119,10 @@ export default function CreateContractPage() {
         setFoundTenants([]);
       }
     } catch (_error) {
-      toast.error(`Ocorreu um erro ao buscar o inquilino: ${_error}`);
+      const errorMessage = extractAxiosError(_error);
+      toast.error("Ocorreu um erro ao buscar inquilino", {
+        description: errorMessage,
+      });
     } finally {
       setSearchingTenant(false);
     }
@@ -185,10 +189,11 @@ export default function CreateContractPage() {
       // console.log("PAYLOAD DE CRIACAO DE CONTRATO: ", payload);
       await ContractService.create(payload);
       setCurrentStep(3);
-    } catch (error) {
-      console.error("Erro ao criar contrato:", error);
-
-      toast.error(`${error}`);
+    } catch (_error) {
+      const errorMessage = extractAxiosError(_error);
+      toast.error("Erro ao criar contrato", {
+        description: errorMessage,
+      });
     } finally {
       setLoading(false);
     }

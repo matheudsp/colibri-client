@@ -32,6 +32,7 @@ import {
 import { CustomButton } from "@/components/forms/CustomButton";
 import { CustomRadioGroup } from "@/components/forms/CustomRadioGroup";
 import { useRouter } from "next/navigation";
+import { extractAxiosError } from "@/services/api";
 
 const ViewBankAccount = ({
   account,
@@ -127,7 +128,10 @@ const BankAccountForm = ({
       }
       onSuccess();
     } catch (error) {
-      toast.error(`Operação falhou: ${(error as Error).message}`);
+      const errorMessage = extractAxiosError(error);
+      toast.error("Operação falhou", {
+        description: errorMessage,
+      });
     } finally {
       setLoading(false);
     }

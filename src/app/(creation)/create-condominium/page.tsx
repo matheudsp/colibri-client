@@ -27,6 +27,7 @@ import { CondominiumService } from "@/services/domains/condominiumService";
 import { brazilianStates } from "@/constants/states";
 import { fetchAddressByCep } from "@/utils/viacep";
 import { fetchCitiesByState } from "@/utils/ibge";
+import { extractAxiosError } from "@/services/api";
 
 export default function CreateCondominiumPage() {
   const router = useRouter();
@@ -104,11 +105,10 @@ export default function CreateCondominiumPage() {
       toast.success("Condomínio cadastrado com sucesso!");
       router.push("/condominiums");
     } catch (error: unknown) {
-      const errorMessage =
-        error instanceof axios.AxiosError
-          ? error.response?.data?.message || "Erro ao criar o condomínio."
-          : "Ocorreu um erro inesperado.";
-      toast.error(errorMessage);
+      const errorMessage = extractAxiosError(error);
+      toast.error("Falha ao cadastrar condomínio", {
+        description: errorMessage,
+      });
     } finally {
       setIsLoading(false);
     }

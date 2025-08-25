@@ -25,6 +25,7 @@ import {
 import { useAuth } from "@/hooks/useAuth";
 import { CustomButton } from "@/components/forms/CustomButton";
 import { PropertyGallery } from "@/components/galleries/PropertyGallery";
+import { extractAxiosError } from "@/services/api";
 
 const PriceAndContactCard = ({ property }: { property: PropertyResponse }) => {
   const whatsappLink = `https://wa.me/${property.landlord.phone.replace(
@@ -86,8 +87,11 @@ export default function PropertyDetailsPage() {
       try {
         const response = await PropertyService.getById(propertyId);
         setProperty(response.data);
-      } catch {
-        toast.error("Falha ao carregar os detalhes do imóvel.");
+      } catch (_error) {
+        const errorMessage = extractAxiosError(_error);
+        toast.error("Ocorreu um erro ao carregar detalhes do imóvel", {
+          description: errorMessage,
+        });
       } finally {
         setLoading(false);
       }

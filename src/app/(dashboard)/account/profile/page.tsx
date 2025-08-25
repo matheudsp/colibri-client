@@ -20,6 +20,7 @@ import {
 } from "@/validations/users/userUpdateValidation";
 import { AuthService } from "@/services/domains/authService";
 import { useRouter } from "next/navigation";
+import { extractAxiosError } from "@/services/api";
 
 export default function ProfilePage() {
   const { sub, loading: userLoading } = useUserRole();
@@ -46,7 +47,10 @@ export default function ProfilePage() {
         const { name } = response.data;
         setValue("name", name);
       } catch (error) {
-        toast.error(`Não foi possível carregar seus dados: ${error}`);
+        const errorMessage = extractAxiosError(error);
+        toast.error("Não foi possível carregar seus dados", {
+          description: errorMessage,
+        });
       }
     };
     fetchUserData();
@@ -59,7 +63,10 @@ export default function ProfilePage() {
       await UserService.update(sub, data);
       toast.success("Dados atualizados com sucesso!");
     } catch (error) {
-      toast.error(`Falha ao atualizar dados: ${(error as Error).message}`);
+      const errorMessage = extractAxiosError(error);
+      toast.error("Falha ao atualizar dados", {
+        description: errorMessage,
+      });
     } finally {
       setLoading(false);
     }

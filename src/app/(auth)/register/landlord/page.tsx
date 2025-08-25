@@ -36,6 +36,7 @@ import { fetchCitiesByState } from "@/utils/ibge";
 import { unmaskNumeric } from "@/utils/masks/maskNumeric";
 import { BrlCurrencyIcon } from "@/components/icons/BRLCurrencyIcon";
 import { FormWrapper } from "@/components/forms/FormWrapper";
+import { extractAxiosError } from "@/services/api";
 
 const FormSection = ({
   title,
@@ -166,11 +167,10 @@ export default function LandlordRegisterPage() {
       toast.success("Cadastro de locador realizado com sucesso!");
       router.push("/login");
     } catch (error) {
-      if (axios.isAxiosError(error) && error.response) {
-        toast.error(error.response.data.message || "Erro ao cadastrar.");
-      } else {
-        toast.error("Ocorreu um erro inesperado.");
-      }
+      const errorMessage = extractAxiosError(error);
+      toast.error("Falha ao criar conta", {
+        description: errorMessage,
+      });
     } finally {
       setLoading(false);
     }

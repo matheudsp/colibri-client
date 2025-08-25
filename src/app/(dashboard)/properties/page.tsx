@@ -20,6 +20,7 @@ import { useUserRole } from "@/hooks/useUserRole";
 import { Roles } from "@/constants/userRole";
 import { DeletePropertyModal } from "@/components/modals/propertyModals/DeletePropertyModal";
 import { useSearch } from "@/contexts/SearchContext";
+import { extractAxiosError } from "@/services/api";
 export default function DashboardPropertiesPage() {
   const { searchValue } = useSearch();
   const [properties, setProperties] = useState<PropertyResponse[]>([]);
@@ -101,7 +102,10 @@ export default function DashboardPropertiesPage() {
 
       setProperties((prev) => prev.filter((p) => p.id !== propertyToDelete));
     } catch (_error) {
-      toast.error(`Erro ao excluir imóvel. ${_error}`);
+      const errorMessage = extractAxiosError(_error);
+      toast.error("Não foi possível carregar os contratos", {
+        description: errorMessage,
+      });
     } finally {
       setIsDeleteModalOpen(false);
       setPropertyToDelete(null);

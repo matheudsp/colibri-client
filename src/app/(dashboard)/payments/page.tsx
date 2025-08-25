@@ -23,6 +23,7 @@ import {
 import { CustomButton } from "@/components/forms/CustomButton";
 import { formatDateForDisplay } from "@/utils/formatters/formatDate";
 import { formatDecimalValue } from "@/utils/formatters/formatDecimal";
+import { extractAxiosError } from "@/services/api";
 
 const statusMap: Record<
   PaymentStatus,
@@ -77,9 +78,10 @@ export default function MyPaymentsPage() {
       setLoading(true);
       const response = await PaymentService.findUserPayments(currentFilters);
       setPayments(response.data);
-    } catch (error) {
-      toast.error("Erro ao buscar seus pagamentos.", {
-        description: (error as Error).message,
+    } catch (error: unknown) {
+      const errorMessage = extractAxiosError(error);
+      toast.error("Falha ao buscar pagamentos", {
+        description: errorMessage,
       });
     } finally {
       setLoading(false);
@@ -98,9 +100,10 @@ export default function MyPaymentsPage() {
         description: "A sua lista de pagamentos foi atualizada.",
       });
       await fetchPayments(filters);
-    } catch (error) {
-      toast.error("Falha ao gerar o boleto.", {
-        description: (error as Error).message,
+    } catch (error: unknown) {
+      const errorMessage = extractAxiosError(error);
+      toast.error("Falha ao gerar boleto", {
+        description: errorMessage,
       });
     } finally {
       setGeneratingSlipId(null);

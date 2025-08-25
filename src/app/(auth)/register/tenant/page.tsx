@@ -25,6 +25,7 @@ import {
 import { AuthService } from "@/services/domains/authService";
 import { CustomButton } from "@/components/forms/CustomButton";
 import { CustomInput } from "@/components/forms/CustomInput";
+import { extractAxiosError } from "@/services/api";
 
 export default function TenantRegisterPage() {
   const router = useRouter();
@@ -48,15 +49,10 @@ export default function TenantRegisterPage() {
       });
       setTimeout(() => router.push("/login"), 2000);
     } catch (error) {
-      if (axios.isAxiosError(error) && error.response) {
-        toast.error("Falha no cadastro", {
-          description:
-            error.response.data.message ||
-            "Verifique os dados e tente novamente.",
-        });
-      } else {
-        toast.error("Ocorreu um erro inesperado.");
-      }
+      const errorMessage = extractAxiosError(error);
+      toast.error("Falha ao criar conta", {
+        description: errorMessage,
+      });
     } finally {
       setLoading(false);
     }

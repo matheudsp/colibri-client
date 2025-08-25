@@ -15,6 +15,7 @@ import { LoginFormData, loginSchema } from "../../../validations";
 import { AuthService } from "../../../services/domains/authService";
 import { CustomButton } from "@/components/forms/CustomButton";
 import { CustomInput } from "@/components/forms/CustomInput"; // Usando o novo CustomInput
+import { extractAxiosError } from "@/services/api";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -45,16 +46,10 @@ export default function LoginPage() {
       toast.success("Login efetuado com sucesso!");
       router.push("/properties");
     } catch (error: unknown) {
-      if (axios.isAxiosError(error) && error.response?.status === 401) {
-        toast.error("Credenciais inválidas", {
-          description: "Verifique seu e-mail e senha e tente novamente.",
-        });
-      } else {
-        toast.error("Falha no login", {
-          description:
-            "Não foi possível conectar ao servidor. Tente novamente mais tarde.",
-        });
-      }
+      const errorMessage = extractAxiosError(error);
+      toast.error("Falha no login", {
+        description: errorMessage,
+      });
     } finally {
       setLoading(false);
     }

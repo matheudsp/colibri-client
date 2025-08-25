@@ -4,6 +4,8 @@ import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { AuthService } from "../services/domains/authService";
 import { Loader2Icon } from "lucide-react";
+import { extractAxiosError } from "@/services/api";
+import { toast } from "sonner";
 
 export default function Home() {
   const router = useRouter();
@@ -13,8 +15,11 @@ export default function Home() {
       try {
         await AuthService.getMe();
         router.push("/properties");
-      } catch (error) {
-        console.error("Usuário não autenticado:", error);
+      } catch (_error) {
+        const errorMessage = extractAxiosError(_error);
+        toast.error("Usuário não autenticado", {
+          description: errorMessage,
+        });
         router.push("/login");
       }
     };

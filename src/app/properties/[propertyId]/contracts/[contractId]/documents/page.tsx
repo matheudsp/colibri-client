@@ -22,6 +22,7 @@ import { CustomButton } from "@/components/forms/CustomButton";
 import { useAuth } from "@/hooks/useAuth";
 import { ContractService } from "@/services/domains/contractService";
 import { useUserRole } from "@/hooks/useUserRole";
+import { extractAxiosError } from "@/services/api";
 
 const documentTypeLabels: Record<DocumentType, string> = {
   IDENTIDADE_FRENTE: "Identidade (Frente)",
@@ -141,7 +142,10 @@ export default function DocumentPage() {
       setDocuments(docResponse.data);
       setContractTenantId(contractResponse.data.tenantId);
     } catch (_error) {
-      toast.error(`Erro ao carregar dados: ${_error}`);
+      const errorMessage = extractAxiosError(_error);
+      toast.error("Erro ao carregar documentos", {
+        description: errorMessage,
+      });
     } finally {
       setLoading(false);
     }
@@ -165,7 +169,10 @@ export default function DocumentPage() {
       );
       await fetchData();
     } catch (_error) {
-      toast.error(`Falha ao atualizar o status do documento: ${_error}`);
+      const errorMessage = extractAxiosError(_error);
+      toast.error("Falha ao atualizar o status do documento", {
+        description: errorMessage,
+      });
     } finally {
       setActionLoading(null);
     }
