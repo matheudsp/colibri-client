@@ -240,9 +240,7 @@ export default function ContractManagementPage() {
               </p>
               <CustomButton
                 onClick={() =>
-                  router.push(
-                    `/properties/${contract.propertyId}/contracts/${contract.id}/documents`
-                  )
+                  router.push(`/contracts/${contract.id}/documents`)
                 }
                 className="mt-4 w-full"
               >
@@ -270,9 +268,7 @@ export default function ContractManagementPage() {
                 </p>
                 <CustomButton
                   onClick={() =>
-                    router.push(
-                      `/properties/${contract.propertyId}/contracts/${contract.id}/documents`
-                    )
+                    router.push(`/contracts/${contract.id}/documents`)
                   }
                   color="bg-red-600"
                   textColor="text-white"
@@ -372,9 +368,7 @@ export default function ContractManagementPage() {
               </p>
               <CustomButton
                 onClick={() =>
-                  router.push(
-                    `/properties/${contract.propertyId}/contracts/${contract.id}/documents`
-                  )
+                  router.push(`/contracts/${contract.id}/documents`)
                 }
                 color="bg-blue-600"
                 textColor="text-white"
@@ -395,11 +389,7 @@ export default function ContractManagementPage() {
               enquanto isso, você pode verificar quais foram enviados.
             </p>
             <CustomButton
-              onClick={() =>
-                router.push(
-                  `/properties/${contract.propertyId}/contracts/${contract.id}/documents`
-                )
-              }
+              onClick={() => router.push(`/contracts/${contract.id}/documents`)}
               color="bg-orange-600"
               textColor="text-white"
               className="w-full mt-4"
