@@ -116,11 +116,11 @@ export function Header({
               className={`text-sm font-semibold transition-colors whitespace-nowrap ${
                 isScrolledOrSearch
                   ? "text-secondary hover:text-accent"
-                  : "text-white hover:text-gray-200"
+                  : "text-white hover:text-gray-200 "
               }`}
             >
               {/* Se estiver logado, exibir acessar painel, se nao estiver mostre botao de login e cadastro */}
-              Entrar
+              Acessar plataforma
             </Link>
             {navItems.map((item) => (
               <Link
@@ -161,7 +161,7 @@ export function Header({
               className="fixed inset-0 top-[72px] bg-background z-40 lg:hidden"
             >
               <div className="p-4">
-                {showSearchBar && (
+                {/* {showSearchBar && (
                   <div className="relative mb-4">
                     <input
                       type="text"
@@ -178,8 +178,17 @@ export function Header({
                       <SearchIcon size={20} />
                     </button>
                   </div>
-                )}
+                )} */}
                 <nav className="flex flex-col space-y-2">
+                  <Link
+                    key={"access"}
+                    href={"/properties"}
+                    onClick={() => setIsMenuOpen(false)}
+                    className="text-lg p-3 rounded-md font-semibold text-secondary hover:bg-gray-200"
+                  >
+                    {/* Se estiver logado, exibir acessar painel, se nao estiver mostre botao de login e cadastro */}
+                    Acessar plataforma
+                  </Link>
                   {navItems.map((item) => (
                     <Link
                       key={item.label}

@@ -32,4 +32,5 @@ export interface PropertyProps {
     isCover: boolean;
     signedUrl: string;
   }>;
+  variant?: "dashboard" | "public";
 }

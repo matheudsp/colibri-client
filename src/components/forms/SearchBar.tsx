@@ -6,7 +6,7 @@ import { CustomButton } from "./CustomButton";
 
 const transactionOptions = [
   { id: "locacao", label: "Locação" },
-  { id: "venda", label: "Venda" },
+  // { id: "venda", label: "Venda" },
 ];
 
 const propertyTypeOptions = [
@@ -43,8 +43,8 @@ export function SearchBar() {
     "flex items-center justify-between w-full h-full px-4 text-gray-700 focus:outline-none bg-white shadow-md md:shadow-none";
 
   return (
-    <div className="w-full max-w-4xl relative flex flex-col md:flex-row  md:rounded-full md:shadow-lg md:h-10 space-y-3 md:space-y-0 ">
-      <div className="relative w-full md:w-36 h-10 md:h-full ">
+    <div className="w-full max-w-4xl relative flex flex-col md:flex-row  md:rounded-full md:shadow-lg md:h-14 space-y-3 md:space-y-0 ">
+      <div className="relative w-full md:w-36 h-14 md:h-full ">
         <button
           onClick={() => setIsTransactionOpen(!isTransactionOpen)}
           className={`${baseButtonClass} rounded-full md:rounded-l-full md:rounded-r-none`}
@@ -78,7 +78,7 @@ export function SearchBar() {
 
       <div className="h-full border-x border-gray-200 self-center hidden md:block "></div>
 
-      <div className="relative w-full md:w-40 h-10 md:h-full">
+      <div className="relative w-full md:w-40 h-14 md:h-full">
         <button
           onClick={() => setIsPropertyTypeOpen(!isPropertyTypeOpen)}
           className={`${baseButtonClass} rounded-full md:rounded-none`}
@@ -116,7 +116,7 @@ export function SearchBar() {
 
       <div className="h-full border-x border-gray-200 self-center hidden md:block "></div>
 
-      <div className="flex-grow flex items-center h-10 md:h-full bg-white rounded-full md:rounded-none shadow-md md:shadow-none">
+      <div className="flex-grow flex items-center h-14 md:h-full bg-white rounded-full md:rounded-none shadow-md md:shadow-none">
         <input
           type="text"
           value={location}
@@ -129,11 +129,11 @@ export function SearchBar() {
       <div className="w-full md:w-auto h-full md:h-full">
         <CustomButton
           onClick={handleSearch}
-          fontSize="text-sm font-bold "
+          fontSize="text-sm xs:font-bold "
           rounded="rounded-full md:rounded-none md:rounded-r-full"
           className="w-full md:w-auto md:py-0 py-4 h-full px-8 md:border-white md:border"
-          color="bg-primary hover:bg-primary-hover md:bg-secondary-hover"
-          textColor="text-secondary md:text-white"
+          color="bg-primary hover:bg-secondary-hover md:bg-accent"
+          textColor="text-secondary md:text-white "
         >
           Buscar
         </CustomButton>

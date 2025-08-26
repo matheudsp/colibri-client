@@ -2,12 +2,16 @@
 
 import { SearchBar } from "@/components/forms/SearchBar";
 
+import { RecentPropertiesList } from "@/components/lists/RecentPropertiesList";
+import { BenefitsSection } from "@/components/sections/home/BenefitsSectiont";
+import { HelpSection } from "@/components/sections/home/HelpSection";
+
 export default function Home() {
   return (
-    <div>
-      <section className="min-h-screen bg-secondary flex flex-col items-center justify-center p-4 text-center text-white">
+    <div className="bg-white flex-col justify-center items-center ">
+      <section className="min-h-[64svh] w-full bg-secondary flex flex-col items-center justify-center text-center text-white">
         <div className="w-full flex flex-col items-center justify-center">
-          <div className="max-w-5xl">
+          <div className=" px-4">
             <h1 className="text-4xl md:text-6xl font-bold">
               Para{" "}
               <span className="bg-primary text-secondary px-2 rounded">
@@ -26,11 +30,14 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="h-screen bg-white p-8">
-        <h2 className="text-3xl font-bold text-center">Sobre Nós</h2>
-        <p className="mt-4 text-center max-w-2xl mx-auto">
-          Conteúdo sobre a sua imobiliária, serviços e diferenciais.
-        </p>
+      <section className="max-w-7xl mx-auto">
+        <RecentPropertiesList />
+      </section>
+      <section className="bg-white py-16 sm:py-24">
+        <BenefitsSection />
+      </section>
+      <section>
+        <HelpSection />
       </section>
     </div>
   );

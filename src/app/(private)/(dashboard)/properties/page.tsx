@@ -142,9 +142,9 @@ export default function DashboardPropertiesPage() {
   }
 
   return (
-    <div className="min-h-svh flex flex-col items-center pt-24 px-4 pb-24 md:pt-28 md:px-8 md:pb-8 bg-gray-50">
-      <div className="w-full max-w-5xl mx-auto">
-        <div className="text-center mb-8">
+    <div className="min-h-svh flex flex-col items-center pt-8 md:pt-14 px-4 pb-24  bg-gray-50">
+      <div className="w-full max-w-7xl mx-auto">
+        <div className="text-start mb-8">
           <h1 className="text-3xl sm:text-4xl font-bold text-gray-800">
             {pageContent.title}
           </h1>
@@ -153,11 +153,12 @@ export default function DashboardPropertiesPage() {
 
         <div className="w-full grid gap-4 pb-10">
           {loading ? (
-            <>
-              <PropertyCardSkeleton />
-              <PropertyCardSkeleton />
-              <PropertyCardSkeleton />
-            </>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 pb-10">
+              <PropertyCardSkeleton variant="dashboard" />
+              <PropertyCardSkeleton variant="dashboard" />
+              <PropertyCardSkeleton variant="dashboard" />
+              <PropertyCardSkeleton variant="dashboard" />
+            </div>
           ) : properties.length === 0 ? (
             <div className="flex flex-col items-center justify-center gap-3 text-center mt-10 p-6 bg-white rounded-lg shadow-sm">
               {pageContent.emptyIcon}
@@ -171,23 +172,28 @@ export default function DashboardPropertiesPage() {
               )}
             </div>
           ) : (
-            <>
-              {properties.map((property) => (
-                <PropertyCard
-                  key={property.id}
-                  {...property}
-                  onDelete={handleDeleteProperty}
+            <div>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 pb-10">
+                {properties.map((property) => (
+                  <PropertyCard
+                    key={property.id}
+                    property={property}
+                    variant="dashboard"
+                    onDelete={handleDeleteProperty}
+                  />
+                ))}
+              </div>
+
+              {pagination.totalPages > 1 && (
+                <Pagination
+                  currentPage={pagination.page}
+                  totalPages={pagination.totalPages}
                 />
-              ))}
-              <Pagination
-                currentPage={pagination.page}
-                totalPages={pagination.totalPages}
-              />
-            </>
+              )}
+            </div>
           )}
         </div>
       </div>
-
       {(role === Roles.ADMIN || role === Roles.LOCADOR) && <FabButton />}
       <DeletePropertyModal
         isOpen={isDeleteModalOpen}

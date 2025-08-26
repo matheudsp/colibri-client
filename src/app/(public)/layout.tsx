@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { usePathname } from "next/navigation";
 import { Header } from "../../components/layout/Header";
 import { SearchProvider } from "../../contexts/SearchContext";
+import { Footer } from "@/components/layout/Footer";
 
 export default function PublicLayout({
   children,
@@ -44,7 +45,8 @@ export default function PublicLayout({
         searchValue={searchValue}
         onSearchChange={handleSearchChange}
       />
-      <main className="w-full">{children}</main>
+      <main className="w-full ">{children}</main>
+      <Footer />
     </SearchProvider>
   );
 }

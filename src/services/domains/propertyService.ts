@@ -92,7 +92,26 @@ export const PropertyService = {
       throw new Error(extractAxiosError(error));
     }
   },
+  async listAvailable(
+    params?: ListPropertiesParams
+  ): Promise<PropertiesApiResponse> {
+    try {
+      const response = await api.get<ApiResponse<PropertiesApiResponse>>(
+        "/properties/public",
+        {
+          params: params,
+        }
+      );
 
+      return response.data.data;
+    } catch (error) {
+      console.error("Failed to fetch available properties:", error);
+      return {
+        properties: [],
+        meta: { resource: { total: 0, page: 1, limit: 10, totalPages: 1 } },
+      };
+    }
+  },
   async search(
     params: SearchPropertiesParams
   ): Promise<ApiResponse<PropertiesApiResponse>> {
