@@ -1,5 +1,9 @@
 "use client";
 
+import { useEffect, useRef } from "react";
+import * as htmlToImage from "html-to-image";
+import { Save, Share2, Copy, User, KeyRound, Globe } from "lucide-react";
+
 import { useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { Controller, useForm } from "react-hook-form";
@@ -47,7 +51,7 @@ export default function CreateContractPage() {
   const router = useRouter();
   const params = useParams();
   const propertyId = params.propertyId as string;
-
+  const [canShare, setCanShare] = useState(false);
   const [currentStep, setCurrentStep] = useState(1);
   const [tenantAction, setTenantAction] = useState<"search" | "create">(
     "search"
@@ -56,13 +60,21 @@ export default function CreateContractPage() {
   const [searchingTenant, setSearchingTenant] = useState(false);
   const [foundTenants, setFoundTenants] = useState<userProps[]>([]);
   const [selectedTenant, setSelectedTenant] = useState<userProps | null>(null);
-
+  const [newTenantCredentials, setNewTenantCredentials] = useState<{
+    email: string;
+    password: string;
+  } | null>(null);
+  const credentialsCardRef = useRef<HTMLDivElement>(null);
   const steps = [
     "Encontrar Inquilino",
     "Detalhes do Contrato",
     "Contrato Criado",
   ];
-
+  useEffect(() => {
+    if (navigator && "share" in navigator) {
+      setCanShare(true);
+    }
+  }, []);
   const {
     control,
     handleSubmit,
@@ -82,14 +94,15 @@ export default function CreateContractPage() {
 
   const handleActionChange = (action: "search" | "create") => {
     setTenantAction(action);
-    setValue("tenantAction", action);
+    setValue("tenantAction", action, { shouldValidate: true });
+
     setFoundTenants([]);
     setSelectedTenant(null);
-
     resetField("tenantEmail");
     resetField("tenantName");
     resetField("tenantCpfCnpj");
     resetField("tenantPassword");
+    resetField("tenantPhone");
   };
   const cpfCnpjValue = watch("tenantCpfCnpj");
   const guaranteeTypeValue = watch("guaranteeType");
@@ -136,31 +149,32 @@ export default function CreateContractPage() {
 
   const nextStep = async () => {
     const fieldsToValidate: (keyof CreateContractFormValues)[] =
-      currentStep === 1
-        ? tenantAction === "create"
-          ? ["tenantEmail", "tenantName", "tenantCpfCnpj", "tenantPassword"]
-          : ["tenantCpfCnpj"]
-        : [
-            "rentAmount",
-            "startDate",
-            "durationInMonths",
-            "guaranteeType",
-            "securityDeposit",
-            "condoFee",
-            "iptuFee",
-          ];
+      tenantAction === "create"
+        ? [
+            "tenantName",
+            "tenantCpfCnpj",
+            "tenantEmail",
+            "tenantPhone",
+            "tenantPassword",
+          ]
+        : ["tenantCpfCnpj"];
 
     const isValid = await trigger(fieldsToValidate);
 
     if (isValid) {
       if (currentStep === 1 && tenantAction === "search" && !selectedTenant) {
-        toast.error("Por favor, busque e selecione um inquilino existente.");
+        toast.error(
+          "Por favor, busque e selecione um inquilino para continuar."
+        );
         return;
       }
       setCurrentStep((prev) => prev + 1);
+    } else {
+      toast.error(
+        "Por favor, corrija os erros no formulário antes de continuar."
+      );
     }
   };
-
   const prevStep = () => {
     setCurrentStep((prev) => prev - 1);
   };
@@ -168,9 +182,16 @@ export default function CreateContractPage() {
   const onSubmit = async (data: CreateContractFormValues) => {
     setLoading(true);
     try {
+      if (tenantAction === "create") {
+        setNewTenantCredentials({
+          email: data.tenantEmail!,
+          password: data.tenantPassword!,
+        });
+      }
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const payload: any = {
         ...data,
+
         rentAmount: unmaskNumeric(data.rentAmount),
         iptuFee: data.iptuFee ? unmaskNumeric(data.iptuFee) : undefined,
         securityDeposit: data.securityDeposit
@@ -179,7 +200,7 @@ export default function CreateContractPage() {
         condoFee: data.condoFee ? unmaskNumeric(data.condoFee) : undefined,
         startDate: toISODate(data.startDate),
       };
-      if (data.tenantAction === "search" && selectedTenant) {
+      if (tenantAction === "search" && selectedTenant) {
         delete payload.tenantEmail;
         delete payload.tenantPhone;
         delete payload.tenantName;
@@ -196,6 +217,49 @@ export default function CreateContractPage() {
       });
     } finally {
       setLoading(false);
+    }
+  };
+  const handleSaveCredentials = () => {
+    if (credentialsCardRef.current === null) {
+      toast.error("Não foi possível encontrar o card de credenciais.");
+      return;
+    }
+
+    toast.promise(
+      htmlToImage
+        .toPng(credentialsCardRef.current, { cacheBust: true })
+        .then((dataUrl) => {
+          const link = document.createElement("a");
+          link.download = `credenciais-${newTenantCredentials?.email}.png`;
+          link.href = dataUrl;
+          link.click();
+        }),
+      {
+        loading: "Salvando imagem...",
+        success: "Imagem salva com sucesso!",
+        error: "Falha ao salvar a imagem.",
+      }
+    );
+  };
+  const handleShareCredentials = async () => {
+    if (newTenantCredentials) {
+      const shareText = `Olá! Aqui estão seus dados de acesso ao Portal do Inquilino:\n\nLogin (E-mail): ${newTenantCredentials.email}\nSenha: ${newTenantCredentials.password}\n\nAcesse em: https://www.colibri.com`;
+
+      if (navigator.share) {
+        try {
+          await navigator.share({
+            title: "Acesso ao Portal do Inquilino",
+            text: shareText,
+          });
+        } catch (error) {
+          console.error("Erro ao compartilhar:", error);
+          toast.error("O compartilhamento foi cancelado ou falhou.");
+        }
+      } else {
+        // Fallback para copiar para a área de transferência
+        navigator.clipboard.writeText(shareText);
+        toast.success("Dados de acesso copiados para a área de transferência!");
+      }
     }
   };
 
@@ -222,7 +286,7 @@ export default function CreateContractPage() {
 
               <p className="text-sm text-gray-600">
                 {
-                  'Para evitar duplicidade, primeiro busque pelo e-mail do inquilino. Se ele não for encontrado, utilize a aba "Cadastrar Novo".'
+                  'Para evitar duplicidade, primeiro busque pelo CPF/CNPJ do inquilino. Se ele não for encontrado, utilize a aba "Cadastrar Novo".'
                 }
               </p>
 
@@ -416,7 +480,7 @@ export default function CreateContractPage() {
                         {...field}
                       />
                     )}
-                  />{" "}
+                  />
                   <Controller
                     name="tenantPhone"
                     control={control}
@@ -426,9 +490,10 @@ export default function CreateContractPage() {
                         label="Celular*"
                         autoComplete="tel"
                         mask="phone"
+                        maxLength={15}
                         placeholder="(89) 9 9417-8403"
                         icon={<PhoneIncoming />}
-                        error={errors.tenantEmail?.message}
+                        error={errors.tenantPhone?.message}
                         {...field}
                       />
                     )}
@@ -591,23 +656,110 @@ export default function CreateContractPage() {
           )}
 
           {currentStep === 3 && (
-            <div className="text-center space-y-4 p-8">
-              <CheckCircle className="w-16 h-16 text-green-500 mx-auto" />
-              <h2 className="text-2xl font-bold text-gray-800">
-                Contrato Criado com Sucesso!
-              </h2>
-              <p className="text-gray-600">
-                O inquilino receberá as instruções por e-mail para dar
-                continuidade ao processo de locação.
-              </p>
-              <CustomButton
-                onClick={() => router.push(`/properties`)}
-                fontSize="text-lg"
-                className="mt-4"
-              >
-                Voltar ao menu
-              </CustomButton>
-            </div>
+            <>
+              {tenantAction === "create" && newTenantCredentials ? (
+                <div className="text-center space-y-6 p-4 animate-fadeIn">
+                  <CheckCircle className="w-16 h-16 text-green-500 mx-auto" />
+                  <h2 className="text-2xl font-bold text-gray-800">
+                    Contrato Criado e Inquilino Cadastrado!
+                  </h2>
+                  <p className="text-gray-600">
+                    Guarde as informações de acesso abaixo e compartilhe com o
+                    inquilino.
+                  </p>
+
+                  <div
+                    ref={credentialsCardRef}
+                    className="bg-gray-50 border border-gray-200 rounded-lg p-6 text-left space-y-4"
+                  >
+                    <h3 className="font-bold text-lg text-gray-700 text-center mb-4">
+                      Dados de Acesso do Inquilino
+                    </h3>
+                    <div className="flex items-center gap-4">
+                      <User className="w-5 h-5 text-gray-500" />
+                      <div>
+                        <p className="text-xs text-gray-500">Login (E-mail)</p>
+                        <p className="font-mono text-gray-800">
+                          {newTenantCredentials.email}
+                        </p>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-4">
+                      <KeyRound className="w-5 h-5 text-gray-500" />
+                      <div>
+                        <p className="text-xs text-gray-500">
+                          Senha Provisória
+                        </p>
+                        <p className="font-mono text-gray-800">
+                          {newTenantCredentials.password}
+                        </p>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-4 border-t pt-4 mt-4">
+                      <Globe className="w-5 h-5 text-gray-500" />
+                      <div>
+                        <p className="text-xs text-gray-500">Acessar em</p>
+                        <a
+                          href="https://www.colibri.com"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="font-mono text-primary hover:underline"
+                        >
+                          www.colibri.com
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4">
+                    <CustomButton onClick={handleSaveCredentials} type="button">
+                      <Save className="w-4 h-4 mr-2" />
+                      Salvar
+                    </CustomButton>
+                    <CustomButton
+                      onClick={handleShareCredentials}
+                      type="button"
+                      color="bg-secondary"
+                    >
+                      {canShare ? (
+                        <Share2 className="w-4 h-4 mr-2" />
+                      ) : (
+                        <Copy className="w-4 h-4 mr-2" />
+                      )}
+                      {canShare ? "Compartilhar" : "Copiar"}
+                    </CustomButton>
+                  </div>
+
+                  <CustomButton
+                    onClick={() => router.push(`/properties`)}
+                    fontSize="text-lg"
+                    className="mt-4 border mx-auto"
+                    ghost
+                  >
+                    Voltar ao menu
+                  </CustomButton>
+                </div>
+              ) : (
+                <div className="text-center space-y-4 p-8">
+                  <CheckCircle className="w-16 h-16 text-green-500 mx-auto" />
+                  <h2 className="text-2xl font-bold text-gray-800">
+                    Contrato Criado com Sucesso!
+                  </h2>
+                  <p className="text-gray-600">
+                    O inquilino receberá as instruções por e-mail para dar
+                    continuidade ao processo de locação.
+                  </p>
+                  <CustomButton
+                    onClick={() => router.push(`/properties`)}
+                    fontSize="text-lg"
+                    className="mt-4 border mx-auto"
+                    ghost
+                  >
+                    Voltar ao menu
+                  </CustomButton>
+                </div>
+              )}
+            </>
           )}
 
           <div className="flex justify-between pt-4">

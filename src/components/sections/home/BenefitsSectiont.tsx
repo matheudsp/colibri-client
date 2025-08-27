@@ -17,7 +17,7 @@ function FeatureCard({
 }) {
   return (
     <div
-      className={`absolute bg-white/90 backdrop-blur-sm p-4 rounded-xl shadow-lg flex items-center gap-4 ${className}`}
+      className={`absolute bg-white/90 backdrop-blur-sm p-4 rounded-xl shadow-lg flex items-center gap-4 w-11/12 sm:w-auto ${className}`}
     >
       <div className="bg-primary flex-shrink-0 w-12 h-12 rounded-full flex items-center justify-center">
         {icon}
@@ -36,7 +36,7 @@ export function BenefitsSection() {
   );
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-2 gap-y-12 lg:gap-x-16 items-center">
       <div className="relative w-full aspect-[4/5] max-w-md mx-auto">
         <Image
           src="https://images.unsplash.com/photo-1580587771525-78b9dba3b914?q=80&w=1974&auto=format&fit=crop"
@@ -44,19 +44,20 @@ export function BenefitsSection() {
           width={1974}
           height={2467}
           sizes="(max-width: 1024px) 100vw, 50vw"
-          className="absolute inset-0 w-full h-full rounded-2xl object-cover shadow-2xl"
+          className="w-full h-full rounded-2xl object-cover shadow-2xl"
         />
+
         <FeatureCard
           icon={<Video className="w-6 h-6 text-secondary" />}
           title="Tour Virtual"
           subtitle="Conheça o imóvel sem sair de casa"
-          className="top-8 -left-8"
+          className="top-4 left-4 lg:top-8 lg:-left-8"
         />
         <FeatureCard
           icon={<Search className="w-6 h-6 text-secondary" />}
           title="Encontre a melhor oferta"
           subtitle="Navegue por milhares de imóveis"
-          className="bottom-8 -right-8"
+          className="bottom-4 right-4 lg:bottom-8 lg:-right-8"
         />
       </div>
 
@@ -85,9 +86,7 @@ export function BenefitsSection() {
         </div>
 
         <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 leading-tight">
-          {activeTab === "tenants"
-            ? "Pague o aluguel sem sair de casa"
-            : "Gerencie seus imóveis"}
+          Facilitamos a vida de inquilinos e locadores
         </h2>
 
         <p className="mt-4 text-gray-600 text-lg">
