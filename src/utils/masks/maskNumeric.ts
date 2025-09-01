@@ -1,11 +1,11 @@
 /**
- * Formata uma string de dígitos para um formato numérico brasileiro (ex: "1.234,56").
+ * Formata uma string de DÍGITOS (representando centavos) para um formato numérico brasileiro (ex: "1.234,56").
+ * Ex: "123456" -> "1.234,56"
  */
-export const formatNumeric = (value: string | number): string => {
-  if (value === null || value === undefined) return "";
+export const formatNumeric = (digits: string | number): string => {
+  if (digits === null || digits === undefined || digits === "") return "";
 
-  const onlyDigits = String(value).replace(/\D/g, "");
-
+  const onlyDigits = String(digits).replace(/\D/g, "");
   if (onlyDigits === "") return "";
 
   const numericValue = Number(onlyDigits) / 100;
@@ -18,17 +18,15 @@ export const formatNumeric = (value: string | number): string => {
 
 /**
  * Converte uma string de DÍGITOS (centavos) para um NÚMERO decimal (reais).
- * Ex: "300000" (do formulário) -> 3000.00 (para a API)
+ * Usado na validação do Zod ou no momento do submit.
+ * Ex: "123456" -> 1234.56
  */
 export const unmaskNumeric = (digits: string): number => {
-  if (!digits) return NaN;
+  if (digits === null || digits === undefined) return NaN;
 
-  // 1. Garante que estamos lidando apenas com dígitos
-  const onlyDigits = digits.replace(/\D/g, "");
+  const onlyDigits = String(digits).replace(/\D/g, "");
   if (onlyDigits === "") return NaN;
 
-  // 2. Converte para número e divide por 100 para obter o valor em reais
   const numericValue = Number(onlyDigits) / 100;
-
   return numericValue;
 };

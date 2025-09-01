@@ -1,3 +1,4 @@
+import { propertyType } from "@/constants";
 import { z } from "zod";
 
 export const createPropertySchema = z.object({
@@ -5,8 +6,19 @@ export const createPropertySchema = z.object({
     .string()
     .min(1, "O título do imóvel é obrigatório")
     .max(100, "O título deve ter no máximo 100 caracteres"),
-
-  description: z.string().min(1, "A descrição é obrigatória"),
+  propertyType: z
+    .string({
+      required_error: "O tipo de empresa é obrigatório",
+      invalid_type_error: "Deve ser uma string",
+    })
+    .min(1, "Tipo do imóvel é obrigatório")
+    .refine((val) => propertyType.some((type) => type.value === val), {
+      message: "Tipo do imóvel inválido",
+    }),
+  description: z
+    .string()
+    .min(1, "A descrição é obrigatória")
+    .max(250, "A descrição deve ter no máximo 250 caracteres"),
 
   cep: z
     .string()

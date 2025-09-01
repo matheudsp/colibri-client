@@ -48,7 +48,13 @@ export const landlordRegisterSchema = z
     }),
     phone: z.string().min(10, "O celular é obrigatório."),
     cpfCnpj: z.string().min(11, "CPF/CNPJ é obrigatório."),
-    cep: z.string().length(8, "O CEP deve ter 8 dígitos."),
+    cep: z
+      .string()
+      .min(1, "O CEP é obrigatório.")
+      .transform((cep) => cep.replace(/\D/g, ""))
+      .refine((cep) => cep.length === 8, {
+        message: "O CEP deve conter 8 dígitos.",
+      }),
     street: z.string().min(1, "A rua é obrigatória."),
     number: z.string().min(1, "O número é obrigatório."),
     province: z.string().min(1, "O bairro é obrigatório."),

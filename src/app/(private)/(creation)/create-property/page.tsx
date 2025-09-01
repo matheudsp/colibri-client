@@ -1,5 +1,6 @@
 "use client";
 
+import { LuListMinus } from "react-icons/lu";
 import { useRouter } from "next/navigation";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -18,6 +19,7 @@ import {
   Car,
   PlusIcon,
   ArrowRight,
+  LandPlot,
 } from "lucide-react";
 import { CustomButton } from "@/components/forms/CustomButton";
 import { CustomDropdownInput } from "@/components/forms/CustomDropdownInput";
@@ -38,6 +40,8 @@ import { Stepper } from "@/components/layout/Stepper";
 import { unmaskNumeric } from "@/utils/masks/maskNumeric";
 import { BrlCurrencyIcon } from "@/components/icons/BRLCurrencyIcon";
 import { extractAxiosError } from "@/services/api";
+import { propertyType } from "@/constants";
+import { CustomFormTextarea } from "@/components/forms/CustomFormTextarea";
 
 export default function CreatePropertyPage() {
   const router = useRouter();
@@ -67,7 +71,7 @@ export default function CreatePropertyPage() {
 
   const stateValue = watch("state");
   const formSteps = ["Cadastrar Imóvel", "Envio de Fotos"];
-
+  const propertyTypeValue = watch("propertyType");
   const handleNextStep = () => setStep((prev) => prev + 1);
   // const handlePreviousStep = () => setStep((prev) => prev - 1);
 
@@ -123,9 +127,9 @@ export default function CreatePropertyPage() {
         ...data,
         rentValue: unmaskNumeric(data.rentValue),
       };
-      console.log("DADOS DA CRIACAO DE PROPRIEDADE: ", payload);
+      // console.log("DADOS DA CRIACAO DE PROPRIEDADE: ", payload);
       const response = await PropertyService.create(payload);
-      toast.success("Detalhes salvos! Agora, envie as fotos.");
+      toast.success("Imóvel criado! Agora, envie as fotos.");
       setNewPropertyId(response.data.id);
       handleNextStep();
     } catch (error: unknown) {
@@ -211,6 +215,20 @@ export default function CreatePropertyPage() {
                   Informações Principais
                 </h2>
                 <div className="grid grid-cols-1 gap-y-4">
+                  <CustomDropdownInput
+                    label="Categoria do Imóvel*"
+                    placeholder="Selecione a categoria"
+                    options={propertyType}
+                    icon={<LandPlot />}
+                    selectedOptionValue={propertyTypeValue}
+                    onOptionSelected={(val) => {
+                      if (val)
+                        setValue("propertyType", val, {
+                          shouldValidate: true,
+                        });
+                    }}
+                    error={errors.propertyType?.message}
+                  />
                   <Controller
                     name="title"
                     control={control}
@@ -229,12 +247,13 @@ export default function CreatePropertyPage() {
                     name="description"
                     control={control}
                     render={({ field }) => (
-                      <CustomFormInput
+                      <CustomFormTextarea
                         id="description"
-                        placeholder="ex: Apartamento de alto padrão..."
-                        icon={<HomeIcon className="h-5 w-5" />}
+                        placeholder="ex: Apartamento de alto padrão, com acabamentos finos, área de lazer completa e localizado em bairro nobre..."
+                        icon={<LuListMinus className="h-5 w-5" />}
                         label="Descrição*"
                         error={errors.description?.message}
+                        maxLength={250}
                         {...field}
                       />
                     )}
@@ -278,6 +297,7 @@ export default function CreatePropertyPage() {
                           field.onBlur();
                           handleCepBlur(e);
                         }}
+                        maxLength={9}
                         onChange={field.onChange}
                         value={field.value}
                         ref={field.ref}

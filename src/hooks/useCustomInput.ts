@@ -83,7 +83,7 @@ export function useCustomInput(props: UseCustomInputProps) {
           valueToUpdate = unmaskPhone(rawValue);
           break;
         case "numeric":
-          valueToUpdate = unmaskNumeric(rawValue);
+          valueToUpdate = rawValue.replace(/\D/g, "");
           break;
         default:
           valueToUpdate = rawValue.replace(/\D/g, "");

@@ -2,12 +2,15 @@ import z from "zod";
 
 export const dateSchema = z
   .string({ required_error: "A data de nascimento é obrigatória." })
-  .refine((val) => /^\d{2}\/\d{2}\/\d{4}$/.test(val), {
-    message: "Formato de data inválido. Use DD/MM/AAAA.",
-  })
+  .transform((val) => val.replace(/\D/g, ""))
+  .pipe(
+    z.string().length(8, { message: "Formato de data inválido. Use DDMMYYYY." })
+  )
   .refine(
     (val) => {
-      const [day, month, year] = val.split("/").map(Number);
+      const day = parseInt(val.substring(0, 2), 10);
+      const month = parseInt(val.substring(2, 4), 10);
+      const year = parseInt(val.substring(4, 8), 10);
       const date = new Date(year, month - 1, day);
 
       return (
@@ -19,6 +22,8 @@ export const dateSchema = z
     { message: "Data inválida." }
   )
   .transform((val) => {
-    const [day, month, year] = val.split("/");
+    const day = val.substring(0, 2);
+    const month = val.substring(2, 4);
+    const year = val.substring(4, 8);
     return `${year}-${month}-${day}`;
   });

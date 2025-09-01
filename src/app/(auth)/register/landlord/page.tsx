@@ -337,11 +337,12 @@ export default function LandlordRegisterPage() {
                 icon={<MapPinIcon size={20} />}
                 error={errors.cep?.message}
                 disabled={isCepLoading}
+                autoComplete="postal-code"
+                {...field}
                 onBlur={(e) => {
                   field.onBlur();
                   handleCepBlur(e);
                 }}
-                autoComplete="postal-code"
               />
             )}
           />

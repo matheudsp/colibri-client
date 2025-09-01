@@ -11,8 +11,8 @@ import { destroyCookie, setCookie } from "nookies";
 
 import { LockIcon, MailIcon, Loader2 } from "lucide-react";
 
-import { LoginFormData, loginSchema } from "../../../../validations";
-import { AuthService } from "../../../../services/domains/authService";
+import { LoginFormData, loginSchema } from "../../../validations";
+import { AuthService } from "../../../services/domains/authService";
 import { CustomButton } from "@/components/forms/CustomButton";
 import { CustomInput } from "@/components/forms/CustomInput";
 import { extractAxiosError } from "@/services/api";

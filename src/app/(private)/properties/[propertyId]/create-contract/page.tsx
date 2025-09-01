@@ -1,10 +1,8 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import * as htmlToImage from "html-to-image";
 import { Save, Share2, Copy, User, KeyRound, Globe } from "lucide-react";
-
-import { useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -62,19 +60,22 @@ export default function CreateContractPage() {
   const [selectedTenant, setSelectedTenant] = useState<userProps | null>(null);
   const [newTenantCredentials, setNewTenantCredentials] = useState<{
     email: string;
-    password: string;
+    password?: string;
   } | null>(null);
+
   const credentialsCardRef = useRef<HTMLDivElement>(null);
   const steps = [
     "Encontrar Inquilino",
     "Detalhes do Contrato",
     "Contrato Criado",
   ];
+
   useEffect(() => {
     if (navigator && "share" in navigator) {
       setCanShare(true);
     }
   }, []);
+
   const {
     control,
     handleSubmit,
@@ -104,6 +105,7 @@ export default function CreateContractPage() {
     resetField("tenantPassword");
     resetField("tenantPhone");
   };
+
   const cpfCnpjValue = watch("tenantCpfCnpj");
   const guaranteeTypeValue = watch("guaranteeType");
 
@@ -182,12 +184,6 @@ export default function CreateContractPage() {
   const onSubmit = async (data: CreateContractFormValues) => {
     setLoading(true);
     try {
-      if (tenantAction === "create") {
-        setNewTenantCredentials({
-          email: data.tenantEmail!,
-          password: data.tenantPassword!,
-        });
-      }
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const payload: any = {
         ...data,
@@ -207,8 +203,15 @@ export default function CreateContractPage() {
         delete payload.tenantPassword;
       }
       delete payload.tenantAction;
-      // console.log("PAYLOAD DE CRIACAO DE CONTRATO: ", payload);
-      await ContractService.create(payload);
+      const response = await ContractService.create(payload);
+
+      if (data.tenantAction === "create") {
+        setNewTenantCredentials({
+          email: response.data.tenant.email,
+          password: data.tenantPassword,
+        });
+      }
+
       setCurrentStep(3);
     } catch (_error) {
       const errorMessage = extractAxiosError(_error);
@@ -230,7 +233,7 @@ export default function CreateContractPage() {
         .toPng(credentialsCardRef.current, { cacheBust: true })
         .then((dataUrl) => {
           const link = document.createElement("a");
-          link.download = `credenciais-${newTenantCredentials?.email}.png`;
+          link.download = `login-${newTenantCredentials?.email}.png`;
           link.href = dataUrl;
           link.click();
         }),
@@ -687,9 +690,7 @@ export default function CreateContractPage() {
                     <div className="flex items-center gap-4">
                       <KeyRound className="w-5 h-5 text-gray-500" />
                       <div>
-                        <p className="text-xs text-gray-500">
-                          Senha Provisória
-                        </p>
+                        <p className="text-xs text-gray-500">Senha</p>
                         <p className="font-mono text-gray-800">
                           {newTenantCredentials.password}
                         </p>

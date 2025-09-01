@@ -48,6 +48,7 @@ export default function DashboardPropertiesPage() {
           page: currentPage,
           limit: ITEMS_PER_PAGE,
         });
+        console.log(response);
       } else {
         const searchParams = {
           city: searchValue,
@@ -140,7 +141,13 @@ export default function DashboardPropertiesPage() {
       </div>
     );
   }
-
+  const handleAvailabilityUpdate = (propertyId: string, newStatus: boolean) => {
+    setProperties((prevProperties) =>
+      prevProperties.map((p) =>
+        p.id === propertyId ? { ...p, isAvailable: newStatus } : p
+      )
+    );
+  };
   return (
     <div className="min-h-svh flex flex-col items-center pt-8 md:pt-14 px-4 pb-24  bg-gray-50">
       <div className="w-full max-w-7xl mx-auto">
@@ -180,6 +187,7 @@ export default function DashboardPropertiesPage() {
                     property={property}
                     variant="dashboard"
                     onDelete={handleDeleteProperty}
+                    onAvailabilityChange={handleAvailabilityUpdate}
                   />
                 ))}
               </div>

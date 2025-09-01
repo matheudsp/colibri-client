@@ -1,5 +1,6 @@
-import { CheckIcon, ChevronDownIcon } from "lucide-react";
+import { ChevronDownIcon } from "lucide-react";
 import { useState } from "react";
+import { FaCheck } from "react-icons/fa";
 
 export interface DropdownOption {
   id: string;
@@ -96,7 +97,7 @@ export function CustomDropdownInput({
                 >
                   <span>{option.label}</span>
                   {selectedOptionValue === option.value && (
-                    <CheckIcon className="h-4 w-4 text-primary" />
+                    <FaCheck className="h-4 w-4 text-primary" />
                   )}
                 </div>
               </div>
