@@ -8,7 +8,7 @@ import { formatCurrency, unmaskCurrency } from "@/utils/masks/maskCurrency";
 import { dateMask } from "@/utils/masks/maskDate";
 import { phoneMask, unmaskPhone } from "@/utils/masks/maskPhone";
 import { formatCEP } from "@/utils/formatters/formatCEP";
-import { formatNumeric, unmaskNumeric } from "@/utils/masks/maskNumeric";
+import { formatNumeric } from "@/utils/masks/maskNumeric";
 import { cpfCnpjMask } from "@/utils/masks/cpfCnpjMask";
 
 export type CustomInputMask =

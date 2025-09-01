@@ -15,7 +15,7 @@ interface TooltipProps {
 export function Tooltip({
   children,
   content,
-  position = "top",
+  // position = "top",
   className,
 }: TooltipProps) {
   const [isOpen, setIsOpen] = useState(false);
@@ -37,7 +37,7 @@ export function Tooltip({
       const viewportWidth = window.innerWidth;
       const margin = 8;
 
-      let newStyle: React.CSSProperties = { position: "fixed" };
+      const newStyle: React.CSSProperties = { position: "fixed" };
 
       let left =
         triggerRect.left + triggerRect.width / 2 - tooltipRect.width / 2;
