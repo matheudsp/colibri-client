@@ -15,13 +15,13 @@ import {
 import { toast } from "sonner";
 import { type ContractWithDocuments } from "@/interfaces/contract";
 import { ContractService } from "@/services/domains/contractService";
-import { useAuth } from "@/hooks/useAuth";
+
 import { CustomButton } from "@/components/forms/CustomButton";
 
 import { PaymentsList } from "@/components/lists/PaymentLists";
 import { DeleteContractModal } from "@/components/modals/contractModals/DeleteContractModal";
 import { contractStatus } from "@/constants/contractStatus";
-import { useUserRole } from "@/hooks/useUserRole";
+import { useCurrentUser } from "@/hooks/useCurrentUser";
 import { Roles } from "@/constants";
 import { ForceActivateContractModal } from "@/components/modals/contractModals/ForceActivateContractModal";
 import { FaRegEye } from "react-icons/fa";
@@ -50,9 +50,8 @@ export default function ContractManagementPage() {
   const params = useParams();
   const router = useRouter();
   const contractId = params.contractId as string;
-  const { role, sub } = useUserRole();
+  const { role, sub } = useCurrentUser();
   const [showActivateModal, setShowActivateModal] = useState(false);
-  useAuth();
 
   const fetchContract = useCallback(async () => {
     if (!contractId) return;

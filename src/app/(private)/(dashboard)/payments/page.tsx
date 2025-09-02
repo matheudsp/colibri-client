@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState, useMemo, type JSX } from "react";
-import { useAuth } from "@/hooks/useAuth";
 import { toast } from "sonner";
 import { PaymentResponse } from "@/interfaces/payment";
 import { PaymentStatus } from "@/constants";
@@ -67,7 +66,6 @@ const statusMap: Record<
 };
 
 export default function MyPaymentsPage() {
-  useAuth();
   const [payments, setPayments] = useState<PaymentResponse[]>([]);
   const [loading, setLoading] = useState(true);
   const [generatingSlipId, setGeneratingSlipId] = useState<string | null>(null);

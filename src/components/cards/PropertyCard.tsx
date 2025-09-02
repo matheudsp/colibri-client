@@ -18,55 +18,34 @@ import { toast } from "sonner";
 import { PropertyService } from "@/services/domains/propertyService";
 import { type PropertyProps } from "@/interfaces/property";
 import { formatCurrency } from "@/utils/masks/maskCurrency";
-import { useUserRole } from "@/hooks/useUserRole";
+import { useCurrentUser } from "@/hooks/useCurrentUser";
 import { Roles } from "@/constants/userRole";
 import { CustomButton } from "@/components/forms/CustomButton";
 import { extractAxiosError } from "@/services/api";
 import { CustomSwitch } from "../forms/CustomSwitch";
-export function PropertyCard({
+
+function DashboardActions({
   property,
-  variant = "dashboard",
   onDelete,
   onAvailabilityChange,
 }: {
   property: PropertyProps;
-  variant?: "dashboard" | "public";
   onDelete?: (id: string) => void;
   onAvailabilityChange?: (id: string, newStatus: boolean) => void;
 }) {
   const router = useRouter();
-  const { role, loading: roleLoading } = useUserRole();
-  const [currentImage, setCurrentImage] = useState(0);
+  const { role, loading: roleLoading } = useCurrentUser();
   const [isAvailable, setIsAvailable] = useState(property.isAvailable);
   const [isUpdating, setIsUpdating] = useState(false);
+
   useEffect(() => {
     setIsAvailable(property.isAvailable);
   }, [property.isAvailable]);
-  const handleNextImage = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    e.preventDefault();
-    setCurrentImage((prev) => (prev + 1) % property.photos.length);
-  };
-
-  const handlePrevImage = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    e.preventDefault();
-    setCurrentImage(
-      (prev) => (prev - 1 + property.photos.length) % property.photos.length
-    );
-  };
-
-  const handleNavigate = () => {
-    router.push(`/properties/${property.id}`);
-  };
 
   const handleDelete = (e: React.MouseEvent) => {
     e.stopPropagation();
     e.preventDefault();
-
-    if (onDelete) {
-      onDelete(property.id);
-    }
+    if (onDelete) onDelete(property.id);
   };
 
   const handleEdit = (e: React.MouseEvent) => {
@@ -81,10 +60,13 @@ export function PropertyCard({
     router.push(`/properties/${property.id}/create-contract`);
   };
 
+  const handleNavigate = () => {
+    router.push(`/properties/${property.id}`);
+  };
+
   const handleAvailabilityChange = async (newStatus: boolean) => {
     setIsUpdating(true);
     setIsAvailable(newStatus);
-
     try {
       await PropertyService.update(property.id, { isAvailable: newStatus });
       toast.success(
@@ -93,18 +75,98 @@ export function PropertyCard({
       onAvailabilityChange?.(property.id, newStatus);
     } catch (error) {
       setIsAvailable(!newStatus);
-      const errorMessage = extractAxiosError(error);
       toast.error("Falha ao atualizar status", {
-        description: errorMessage,
+        description: extractAxiosError(error),
       });
     } finally {
       setIsUpdating(false);
     }
   };
 
-  const showActionButtons = variant === "dashboard" && !roleLoading;
-  const showAdminButtons =
-    showActionButtons && (role === Roles.ADMIN || role === Roles.LOCADOR);
+  if (roleLoading) {
+    return <div className="mt-4 pt-4 border-t h-[230px]"></div>; // Placeholder para evitar "layout shift"
+  }
+
+  const showAdminButtons = role === Roles.ADMIN || role === Roles.LOCADOR;
+
+  if (!showAdminButtons) return null;
+
+  return (
+    <div className="mt-4 pt-4 border-t space-y-3">
+      <CustomSwitch
+        label="Disponível"
+        tip="Ative para que o imóvel apareça nas buscas públicas. Desative para ocultá-lo."
+        checked={isAvailable}
+        onChange={handleAvailabilityChange}
+        isLoading={isUpdating}
+        disabled={isUpdating}
+      />
+      <CustomButton
+        onClick={handleNavigate}
+        icon={<Eye size={16} />}
+        color="bg-gray-200"
+        textColor="text-gray-800"
+        className="w-full text-sm"
+      >
+        Ver Detalhes
+      </CustomButton>
+      <CustomButton
+        onClick={handleCreateContract}
+        icon={<FilePlus2 size={16} />}
+        color="bg-primary"
+        textColor="text-white"
+        className="w-full text-sm"
+      >
+        Criar Contrato
+      </CustomButton>
+      <CustomButton
+        onClick={handleEdit}
+        icon={<Edit size={16} />}
+        color="bg-blue-100"
+        textColor="text-blue-800"
+        className="w-full text-sm"
+      >
+        Editar
+      </CustomButton>
+      <CustomButton
+        onClick={handleDelete}
+        icon={<Trash2 size={16} />}
+        color="bg-red-100"
+        textColor="text-red-800"
+        className="w-full text-sm"
+      >
+        Excluir
+      </CustomButton>
+    </div>
+  );
+}
+export function PropertyCard({
+  property,
+  variant = "dashboard",
+  onDelete,
+  onAvailabilityChange,
+}: {
+  property: PropertyProps;
+  variant?: "dashboard" | "public";
+  onDelete?: (id: string) => void;
+  onAvailabilityChange?: (id: string, newStatus: boolean) => void;
+}) {
+  const [currentImage, setCurrentImage] = useState(0);
+
+  const handleNextImage = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    e.preventDefault();
+    setCurrentImage((prev) => (prev + 1) % property.photos.length);
+  };
+
+  const handlePrevImage = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    e.preventDefault();
+    setCurrentImage(
+      (prev) => (prev - 1 + property.photos.length) % property.photos.length
+    );
+  };
+
   const cardContent = (
     <div className="bg-white border border-gray-200 rounded-md overflow-hidden transition-all duration-300 shadow-md flex flex-col h-full">
       <div className="relative w-full aspect-[4/3]">
@@ -201,66 +263,25 @@ export function PropertyCard({
             </span>
           </div>
         </div>
-
-        {showAdminButtons && (
-          <div className="mt-4 pt-4 border-t space-y-3">
-            <CustomSwitch
-              label="Disponível"
-              tip="Ative para que o imóvel apareça nas buscas públicas. Desative para ocultá-lo."
-              checked={isAvailable}
-              onChange={handleAvailabilityChange}
-              isLoading={isUpdating}
-              disabled={isUpdating}
-            />
-            <CustomButton
-              onClick={handleNavigate}
-              icon={<Eye size={16} />}
-              color="bg-gray-200"
-              textColor="text-gray-800"
-              className="w-full text-sm"
-            >
-              Ver Detalhes
-            </CustomButton>
-            <CustomButton
-              onClick={handleCreateContract}
-              icon={<FilePlus2 size={16} />}
-              color="bg-primary"
-              textColor="text-white"
-              className="w-full text-sm"
-            >
-              Criar Contrato
-            </CustomButton>
-            <CustomButton
-              onClick={handleEdit}
-              icon={<Edit size={16} />}
-              color="bg-blue-100"
-              textColor="text-blue-800"
-              className="w-full text-sm"
-            >
-              Editar
-            </CustomButton>
-            <CustomButton
-              onClick={handleDelete}
-              icon={<Trash2 size={16} />}
-              color="bg-red-100"
-              textColor="text-red-800"
-              className="w-full text-sm"
-            >
-              Excluir
-            </CustomButton>
-          </div>
+        {variant === "dashboard" && (
+          <DashboardActions
+            property={property}
+            onDelete={onDelete}
+            onAvailabilityChange={onAvailabilityChange}
+          />
         )}
       </div>
     </div>
   );
 
-  if (showAdminButtons) {
-    return <div className="block h-full">{cardContent}</div>;
+  if (variant === "public") {
+    return (
+      <Link href={`/properties/${property.id}`} className="block group h-full">
+        {cardContent}
+      </Link>
+    );
   }
 
-  return (
-    <Link href={`/properties/${property.id}`} className="block group h-full">
-      {cardContent}
-    </Link>
-  );
+  // Para a variante dashboard, ele não é um link, apenas um container
+  return <div className="block h-full">{cardContent}</div>;
 }

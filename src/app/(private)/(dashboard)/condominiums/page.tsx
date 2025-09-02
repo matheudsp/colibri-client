@@ -8,7 +8,6 @@ import {
   Condominium,
   CondominiumService,
 } from "@/services/domains/condominiumService";
-import { useAuth } from "@/hooks/useAuth";
 import { Pagination } from "@/components/layout/Pagination";
 import { ITEMS_PER_PAGE } from "@/constants/pagination";
 import { toast } from "sonner";
@@ -26,8 +25,6 @@ export default function CondominiumsPage() {
   });
   const searchParams = useSearchParams();
   const currentPage = Number(searchParams.get("page")) || 1;
-
-  useAuth();
 
   useEffect(() => {
     const fetchCondominiums = async () => {

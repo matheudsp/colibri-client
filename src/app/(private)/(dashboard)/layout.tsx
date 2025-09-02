@@ -1,19 +1,10 @@
 "use client";
 
-import {
-  //  useEffect,
-  useState,
-} from "react";
+import { useState } from "react";
 
 import BottomNav from "../../../components/layout/BottomNav";
 import SidebarNav from "../../../components/layout/SidebarNav";
 import { SearchProvider } from "../../../contexts/SearchContext";
-// import { useUserRole } from "../../../hooks/useUserRole";
-// import { Loader2Icon } from "lucide-react";
-// import { useRouter } from "next/navigation";
-// import { AuthService } from "@/services/domains/authService";
-// import { toast } from "sonner";
-// import { extractAxiosError } from "@/services/api";
 
 export default function DashboardLayout({
   children,
@@ -25,22 +16,6 @@ export default function DashboardLayout({
   const handleSearchChange = (value: string) => {
     setSearchValue(value);
   };
-  // useEffect(() => {
-  //   const checkAuth = async () => {
-  //     try {
-  //       await AuthService.getMe();
-  //       router.push("/properties");
-  //     } catch (_error) {
-  //       const errorMessage = extractAxiosError(_error);
-  //       toast.error("Usuário não autenticado", {
-  //         description: errorMessage,
-  //       });
-  //       router.push("/login");
-  //     }
-  //   };
-
-  //   checkAuth();
-  // }, [router]);
 
   return (
     <SearchProvider value={{ searchValue, handleSearchChange }}>

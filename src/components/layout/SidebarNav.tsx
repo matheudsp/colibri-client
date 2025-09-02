@@ -5,9 +5,9 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import clsx from "clsx";
-import { destroyCookie } from "nookies";
-import { useUserRole } from "@/hooks/useUserRole";
 import { toast } from "sonner";
+import { useUserStore } from "@/stores/userStore";
+import { AuthService } from "@/services/domains/authService";
 
 const navItems = [
   {
@@ -35,15 +35,21 @@ const navItems = [
 export default function SidebarNav() {
   const pathname = usePathname();
   const router = useRouter();
-  const { name, loading } = useUserRole();
+  const { user, loading } = useUserStore();
 
-  const handleLogout = () => {
-    destroyCookie(null, "authToken", { path: "/" });
-    toast.success("Logout realizado com sucesso!");
-    router.push("/login");
+  const handleLogout = async () => {
+    try {
+      await AuthService.logout();
+      toast.success("Você saiu com sucesso!");
+      router.push("/login");
+    } catch (error) {
+      toast.error("Não foi possível fazer logout. Tente novamente.", {
+        description: `${error}`,
+      });
+    }
   };
 
-  const userInitial = name ? name[0].toUpperCase() : "?";
+  const userInitial = user?.name ? user?.name[0].toUpperCase() : "?";
   const myAccountIsActive = pathname.startsWith("/account");
   return (
     <div className="fixed z-20 hidden md:flex w-32 min-h-screen flex-col justify-between bg-secondary py-6 px-2 shadow-xl">

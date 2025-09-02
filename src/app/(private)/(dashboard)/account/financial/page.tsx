@@ -15,8 +15,7 @@ import {
   Edit,
   ArrowLeft,
 } from "lucide-react";
-import { useAuth } from "@/hooks/useAuth";
-import { useUserRole } from "@/hooks/useUserRole";
+import { useCurrentUser } from "@/hooks/useCurrentUser";
 import { Roles } from "@/constants";
 
 import {
@@ -221,8 +220,7 @@ const BankAccountForm = ({
 };
 
 export default function FinancialPage() {
-  useAuth();
-  const { role, loading: roleLoading } = useUserRole();
+  const { role, loading: roleLoading } = useCurrentUser();
   const router = useRouter();
 
   const [account, setAccount] = useState<BankAccount | null>(null);

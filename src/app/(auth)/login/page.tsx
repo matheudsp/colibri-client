@@ -7,7 +7,6 @@ import { useForm, Controller } from "react-hook-form";
 import Image from "next/image";
 import Link from "next/link";
 import { toast } from "sonner";
-import { destroyCookie, setCookie } from "nookies";
 
 import { LockIcon, MailIcon, Loader2 } from "lucide-react";
 
@@ -33,23 +32,11 @@ export default function LoginPage() {
   const onSubmit = async (data: LoginFormData) => {
     setLoading(true);
     try {
-      destroyCookie(null, "authToken", { path: "/" });
-
-      const response = await AuthService.login(data);
-
-      setCookie(null, "authToken", response.data.access_token, {
-        sameSite: "lax",
-        path: "/",
-        secure: process.env.NODE_ENV === "production",
-      });
-
+      await AuthService.login(data);
       toast.success("Login efetuado com sucesso!");
       router.push("/properties");
     } catch (error: unknown) {
-      const errorMessage = extractAxiosError(error);
-      toast.error("Falha no login", {
-        description: errorMessage,
-      });
+      toast.error("Falha no login", { description: extractAxiosError(error) });
     } finally {
       setLoading(false);
     }

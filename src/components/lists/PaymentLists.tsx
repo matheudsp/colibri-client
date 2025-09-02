@@ -1,6 +1,6 @@
 "use client";
 
-import { useUserRole } from "@/hooks/useUserRole";
+import { useCurrentUser } from "@/hooks/useCurrentUser";
 
 import { PaymentResponse } from "@/interfaces/payment";
 import { formatDateForDisplay } from "@/utils/formatters/formatDate";
@@ -63,7 +63,7 @@ export function PaymentsList({
   payments,
   onRegisterPaymentClick,
 }: PaymentsListProps) {
-  const { role } = useUserRole();
+  const { role } = useCurrentUser();
   const canManagePayments = role === Roles.LOCADOR || role === Roles.ADMIN;
 
   return (

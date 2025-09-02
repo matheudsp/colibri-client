@@ -11,16 +11,16 @@ import {
   PropertyService,
 } from "@/services/domains/propertyService";
 import { PropertyCardSkeleton } from "@/components/skeletons/PropertyCardSkeleton";
-import { useAuth } from "@/hooks/useAuth";
 import { Pagination } from "@/components/layout/Pagination";
 import { ITEMS_PER_PAGE } from "@/constants/pagination";
 import { ApiResponse, type PropertiesApiResponse } from "@/types/api";
 import { toast } from "sonner";
-import { useUserRole } from "@/hooks/useUserRole";
+
 import { Roles } from "@/constants/userRole";
 import { DeletePropertyModal } from "@/components/modals/propertyModals/DeletePropertyModal";
 import { useSearch } from "@/contexts/SearchContext";
 import { extractAxiosError } from "@/services/api";
+import { useUserStore } from "@/stores/userStore";
 export default function DashboardPropertiesPage() {
   const { searchValue } = useSearch();
   const [properties, setProperties] = useState<PropertyResponse[]>([]);
@@ -35,8 +35,8 @@ export default function DashboardPropertiesPage() {
   const searchParams = useSearchParams();
   const currentPage = Number(searchParams.get("page")) || 1;
 
-  useAuth();
-  const { role, loading: roleLoading } = useUserRole();
+  const { user, loading: roleLoading } = useUserStore();
+  const role = user?.role;
   const fetchProperties = useCallback(async () => {
     if (roleLoading) return;
 

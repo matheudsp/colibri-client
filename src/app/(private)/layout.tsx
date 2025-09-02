@@ -1,9 +1,9 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { useUserRole } from "../../hooks/useUserRole";
-import { Loader2Icon } from "lucide-react";
+import { useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { Loader2Icon } from "lucide-react";
+import { useCurrentUser } from "../../hooks/useCurrentUser";
 
 export default function PrivateLayout({
   children,
@@ -11,40 +11,17 @@ export default function PrivateLayout({
   children: React.ReactNode;
 }) {
   const router = useRouter();
-
-  const { loading, role, sub } = useUserRole();
-  const [isChecking, setIsChecking] = useState(true);
-
-  // useEffect(() => {
-  //   const checkAuth = async () => {
-  //     try {
-  //       await AuthService.getMe();
-  //       router.push("/properties");
-  //     } catch (_error) {
-  //       const errorMessage = extractAxiosError(_error);
-  //       toast.error("Usuário não autenticado", {
-  //         description: errorMessage,
-  //       });
-  //       router.push("/login");
-  //     }
-  //   };
-
-  //   checkAuth();
-  // }, [router]);
-
+  const { loading, role, sub, status } = useCurrentUser();
+  console.log(loading, role, sub, status);
   useEffect(() => {
     if (!loading) {
-      if (!role || !sub) {
+      if (!role || !sub || !status) {
         router.push("/login");
-      } else {
-        router.push("/properties");
       }
-
-      setIsChecking(false);
     }
-  }, [loading, role, router, sub]);
+  }, [loading, role, sub, status, router]);
 
-  if (loading || isChecking) {
+  if (loading) {
     return (
       <div className="flex justify-center items-center h-svh w-screen">
         <Loader2Icon className="animate-spin w-12 h-12 text-primary" />
@@ -52,5 +29,5 @@ export default function PrivateLayout({
     );
   }
 
-  return children;
+  return <>{children}</>;
 }

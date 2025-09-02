@@ -10,7 +10,7 @@ import {
   ArrowLeft,
 } from "lucide-react";
 
-import { useUserRole } from "@/hooks/useUserRole";
+import { useCurrentUser } from "@/hooks/useCurrentUser";
 import { CustomButton } from "@/components/forms/CustomButton";
 // import { CustomFormInput } from "@/components/forms/CustomFormInput";
 import { UserService } from "@/services/domains/userService";
@@ -23,7 +23,7 @@ import { useRouter } from "next/navigation";
 import { extractAxiosError } from "@/services/api";
 
 export default function ProfilePage() {
-  const { sub, loading: userLoading } = useUserRole();
+  const { sub, loading: userLoading } = useCurrentUser();
   const router = useRouter();
   const [loading, setLoading] = useState(false);
 

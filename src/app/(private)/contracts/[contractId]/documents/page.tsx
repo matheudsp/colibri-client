@@ -19,9 +19,9 @@ import {
 import { Document, DocumentType } from "@/interfaces/document";
 import { DocumentService } from "@/services/domains/documentService";
 import { CustomButton } from "@/components/forms/CustomButton";
-import { useAuth } from "@/hooks/useAuth";
+
 import { ContractService } from "@/services/domains/contractService";
-import { useUserRole } from "@/hooks/useUserRole";
+import { useCurrentUser } from "@/hooks/useCurrentUser";
 import { extractAxiosError } from "@/services/api";
 
 const documentTypeLabels: Record<DocumentType, string> = {
@@ -126,11 +126,9 @@ export default function DocumentPage() {
   const [actionLoading, setActionLoading] = useState<string | null>(null);
   const params = useParams();
   const router = useRouter();
-  const { sub } = useUserRole();
+  const { sub } = useCurrentUser();
 
   const contractId = params.contractId as string;
-
-  useAuth();
 
   const fetchData = useCallback(async () => {
     setLoading(true);

@@ -5,7 +5,7 @@ import { useSearchParams } from "next/navigation";
 import { Loader2Icon, FileText } from "lucide-react";
 
 import { ContractService } from "@/services/domains/contractService";
-import { useAuth } from "@/hooks/useAuth";
+
 import { Pagination } from "@/components/layout/Pagination";
 import { ITEMS_PER_PAGE } from "@/constants/pagination";
 
@@ -24,8 +24,6 @@ export default function ContractsPage() {
   });
   const searchParams = useSearchParams();
   const currentPage = Number(searchParams.get("page")) || 1;
-
-  useAuth();
 
   useEffect(() => {
     const fetchContracts = async () => {

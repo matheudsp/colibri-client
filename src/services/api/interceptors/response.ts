@@ -1,63 +1,69 @@
-import { AxiosInstance } from "axios";
-import { parseCookies } from "nookies";
+import { AxiosError, AxiosInstance } from "axios";
+import { AuthService } from "../../domains/authService";
+import { useUserStore } from "@/stores/userStore";
 
-export const setupResponseInterceptor = (api: AxiosInstance) => {
-  api.interceptors.response.use(
-    (response) => {
-      console.group(
-        `[Axios] Resposta de sucesso: ${response.status} ${response.config.url}`
-      );
-      console.info("Response:", {
-        status: response.status,
-        statusText: response.statusText,
-        data: response.data.data,
-        meta: response.data.meta,
-        headers: response.headers,
-        config: {
-          method: response.config.method,
-          url: response.config.url,
-          params: response.config.params,
-        },
-      });
-      console.groupEnd();
+let isRefreshing = false;
+let failedQueue: Array<{
+  resolve: (value: unknown) => void;
+  reject: (reason?: AxiosError) => void;
+}> = [];
 
-      return response;
-    },
-    (error) => {
-      console.group("[Axios] Erro na resposta");
+const processQueue = (error: AxiosError | null) => {
+  failedQueue.forEach((prom) => {
+    if (error) {
+      prom.reject(error);
+    } else {
+      prom.resolve(null);
+    }
+  });
+  failedQueue = [];
+};
 
-      if (error.response) {
-        console.error("Detalhes do erro:", {
-          status: error.response.status,
-          headers: error.response.headers,
-          data: error.response.data.data,
-          meta: error.response.meta,
-          request: {
-            method: error.config.method,
-            url: error.config.url,
-            data: error.config.data,
-            params: error.config.params,
-          },
-        });
+export const setupResponseInterceptor = (apiInstance: AxiosInstance) => {
+  apiInstance.interceptors.response.use(
+    (response) => response,
+    async (error: AxiosError) => {
+      const originalRequest = error.config;
 
-        if (error.response?.status === 401) {
-          const cookies = parseCookies();
+      if (
+        error.response?.status === 401 &&
+        originalRequest &&
+        !originalRequest.url?.endsWith("/auth/refresh") &&
+        !originalRequest.url?.endsWith("/auth/login") // Adicione esta verificação
+      ) {
+        if (!isRefreshing) {
+          isRefreshing = true;
+          try {
+            await AuthService.refreshToken();
+            processQueue(null);
+            return apiInstance(originalRequest);
+          } catch (refreshError) {
+            processQueue(refreshError as AxiosError);
 
-          if (cookies.accessToken) {
-            window.location.href = "/login";
+            // 2. Remova a chamada à API de logout e limpe o estado localmente
+            useUserStore.getState().setUser(null);
+
+            // Redireciona apenas se não estiver já na página de login
+            if (window.location.pathname !== "/login") {
+              window.location.href = "/login";
+            }
+
+            return Promise.reject(refreshError);
+          } finally {
+            isRefreshing = false;
           }
         }
-        return Promise.reject(error);
-      } else if (error.request) {
-        console.error("Erro de rede/timeout:", {
-          message: error.message,
-          request: error.request,
-        });
-      } else {
-        console.error("Erro ao configurar requisição:", error.message);
-      }
 
-      console.groupEnd();
+        return new Promise((resolve, reject) => {
+          failedQueue.push({ resolve, reject });
+        })
+          .then(() => {
+            return apiInstance(originalRequest);
+          })
+          .catch((err) => {
+            return Promise.reject(err);
+          });
+      }
 
       return Promise.reject(error);
     }

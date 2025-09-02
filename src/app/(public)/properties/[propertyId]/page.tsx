@@ -22,7 +22,7 @@ import {
   PropertyResponse,
   PropertyService,
 } from "@/services/domains/propertyService";
-import { useAuth } from "@/hooks/useAuth";
+
 import { CustomButton } from "@/components/forms/CustomButton";
 import { PropertyGallery } from "@/components/galleries/PropertyGallery";
 import { extractAxiosError } from "@/services/api";
@@ -77,8 +77,6 @@ export default function PropertyDetailsPage() {
   const params = useParams();
   const router = useRouter();
   const propertyId = params.propertyId as string;
-
-  useAuth();
 
   useEffect(() => {
     if (!propertyId) return;

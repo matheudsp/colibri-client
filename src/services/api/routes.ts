@@ -12,6 +12,8 @@ const API_ROUTES = {
   AUTH: {
     ME: "/auth/me",
     LOGIN: "/auth/login",
+    REFRESH: "/auth/refresh",
+    LOGOUT: "/auth/logout",
     REGISTER: "/auth/register",
     REGISTER_LANDLORD: "/auth/register/landlord",
   },

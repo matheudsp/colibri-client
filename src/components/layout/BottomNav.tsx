@@ -6,7 +6,6 @@ import Link from "next/link";
 import clsx from "clsx";
 import { motion, AnimatePresence } from "framer-motion";
 import { toast } from "sonner";
-import { destroyCookie } from "nookies";
 import { usePathname, useRouter } from "next/navigation";
 import {
   CalendarArrowDown,
@@ -17,6 +16,7 @@ import {
   X,
   LogOut,
 } from "lucide-react";
+import { AuthService } from "@/services/domains/authService";
 
 const allNavItems = [
   { label: "Imóveis", href: "/properties", icon: HomeIcon },
@@ -40,10 +40,16 @@ export default function BottomNav() {
   const handleLinkClick = () => {
     setIsMenuOpen(false);
   };
-  const handleLogout = () => {
-    destroyCookie(null, "authToken", { path: "/" });
-    toast.success("Logout realizado com sucesso!");
-    router.push("/login");
+  const handleLogout = async () => {
+    try {
+      await AuthService.logout();
+      toast.success("Você saiu com sucesso!");
+      router.push("/login");
+    } catch (error) {
+      toast.error("Não foi possível fazer logout. Tente novamente.", {
+        description: `${error}`,
+      });
+    }
     setIsMenuOpen(false);
   };
 

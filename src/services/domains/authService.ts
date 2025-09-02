@@ -55,13 +55,25 @@ export interface UserData {
 export const AuthService = {
   async getMe(): Promise<ApiResponse<UserData>> {
     try {
-      const response = await api.get(API_ROUTES.AUTH.ME);
+      const response = await api.get(API_ROUTES.AUTH.ME, {
+        withCredentials: true,
+      });
       return response.data;
     } catch (error) {
       throw error;
     }
   },
-
+  async logout() {
+    try {
+      await api.post(API_ROUTES.AUTH.LOGOUT);
+    } catch (error) {
+      // Mesmo que falhe, tentamos limpar o estado do lado do cliente
+      console.error("Logout failed", error);
+    }
+  },
+  async refreshToken() {
+    return api.post(API_ROUTES.AUTH.REFRESH);
+  },
   async login(loginData: LoginData) {
     try {
       const response = await api.post(API_ROUTES.AUTH.LOGIN, loginData);

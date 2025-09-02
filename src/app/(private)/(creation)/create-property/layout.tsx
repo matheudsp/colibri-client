@@ -2,7 +2,7 @@
 
 import { Header } from "@/components/layout/Header";
 import { Roles } from "@/constants";
-import { useUserRole } from "@/hooks/useUserRole";
+import { useCurrentUser } from "@/hooks/useCurrentUser";
 
 import { Loader2Icon } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -15,7 +15,7 @@ export default function CreationLayout({
   children: React.ReactNode;
 }) {
   const router = useRouter();
-  const { loading, role } = useUserRole();
+  const { loading, role } = useCurrentUser();
   const [isChecking, setIsChecking] = useState(true);
 
   const handleBack = () => {
