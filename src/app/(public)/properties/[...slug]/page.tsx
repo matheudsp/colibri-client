@@ -101,7 +101,7 @@ export default function SearchResultsPage() {
 
   useEffect(() => {
     const slug = (params.slug as string[]) || [];
-    const [transactionSlug, ...locationParts] = slug;
+    const [...locationParts] = slug;
 
     const transactionType = slug[0] === "a-venda" ? "VENDA" : "LOCACAO";
     const qFromSlug = locationParts
