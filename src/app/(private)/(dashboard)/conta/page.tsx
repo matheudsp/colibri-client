@@ -24,13 +24,13 @@ export default function AccountPage() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <NavigationCard
-            href="/account/profile"
+            href="/conta/perfil"
             title="Meus Dados"
             icon={<UserCog size={32} className="text-primary mx-auto" />}
           />
           {role === Roles.LOCADOR && (
             <NavigationCard
-              href="/account/financial"
+              href="/conta/financeiro"
               title="Dados Financeiros"
               icon={<CreditCard size={32} className="text-primary mx-auto" />}
             />

@@ -1,6 +1,6 @@
 "use client";
 
-import Image from "next/image";
+// import Image from "next/image";
 import { motion } from "framer-motion";
 
 interface FormWrapperProps {
@@ -15,8 +15,8 @@ export const FormWrapper = ({
   children,
 }: FormWrapperProps) => {
   return (
-    <div className="min-h-svh w-full bg-background flex flex-col items-center justify-center py-8 px-4">
-      <motion.div
+    <div className="min-h-svh w-full bg-background flex flex-col items-center justify-center pt-32 pb-10 px-4">
+      {/* <motion.div
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
@@ -27,14 +27,14 @@ export const FormWrapper = ({
           src="/icons/logo-purple-black.svg"
           alt="Logo Colibri"
           priority
-          className="w-auto h-32 sm:h-40 mb-8"
+          className="w-auto h-20 mx-auto mb-6 mt-12"
         />
-      </motion.div>
+      </motion.div> */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 0.1 }}
-        className="bg-white shadow-xl p-6 sm:p-8 rounded-2xl w-full max-w-lg"
+        className="w-full max-w-lg"
       >
         <div className="text-center mb-8">
           <h1 className="text-3xl font-bold text-secondary">{title}</h1>

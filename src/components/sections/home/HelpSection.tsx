@@ -31,14 +31,14 @@ const helpItems = [
     icon: <ShieldCheck className="w-6 h-6 text-primary" />,
     title: "Segurança e Controle para Locadores",
     description:
-      "Tenha contratos digitais, gestão centralizada e recebimentos garantidos. Aproveite a taxa promocional de 5% — por tempo limitado.",
+      "Tenha contratos digitais, gestão centralizada e recebimentos garantidos. Aproveite a taxa promocional de 8% — por tempo limitado.",
     linkText: "Entenda",
     href: "/saiba-mais",
   },
 ];
 export function HelpSection() {
   return (
-    <div className="w-full bg-gray-50 py-16 px-4 sm:px-6 lg:px-8">
+    <div className="w-full bg-background py-16 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
         <h2 className="text-3xl font-bold text-start text-gray-800 mb-12">
           Como a Colibri pode te ajudar?

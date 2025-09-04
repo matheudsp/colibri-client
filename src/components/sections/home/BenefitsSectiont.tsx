@@ -17,7 +17,7 @@ function FeatureCard({
 }) {
   return (
     <div
-      className={`absolute bg-white/90 backdrop-blur-sm p-4 rounded-xl shadow-lg flex items-center gap-4 w-11/12 sm:w-auto ${className}`}
+      className={`absolute bg-slate-50/80 backdrop-blur-sm p-4 rounded-xl shadow-lg flex items-center gap-4 w-11/12 sm:w-auto ${className}`}
     >
       <div className="bg-primary flex-shrink-0 w-12 h-12 rounded-full flex items-center justify-center">
         {icon}
@@ -62,7 +62,7 @@ export function BenefitsSection() {
       </div>
 
       <div className="text-center lg:text-left">
-        <div className="inline-flex p-1 bg-gray-100 rounded-lg space-x-1 mb-6">
+        <div className="inline-flex p-1 bg-slate-200 rounded-lg space-x-1 mb-6">
           <button
             onClick={() => setActiveTab("tenants")}
             className={`px-4 py-2 text-sm font-semibold rounded-md transition-colors ${
@@ -100,7 +100,9 @@ export function BenefitsSection() {
             color="bg-primary hover:bg-primary-hover"
             textColor="text-secondary"
             rounded="rounded-lg"
-            className="px-6 py-3 font-bold"
+            fontSize="font-bold"
+            type="button"
+            className="px-6 py-3 font-sans font-bold"
           >
             Veja mais <ArrowRight className="w-4 h-4 ml-2" />
           </CustomButton>

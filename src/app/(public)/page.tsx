@@ -33,7 +33,7 @@ export default function Home() {
       <section className="max-w-7xl mx-auto">
         <RecentPropertiesList />
       </section>
-      <section className="bg-white py-16 sm:py-24">
+      <section className="bg-slate-50 py-16 sm:py-24">
         <BenefitsSection />
       </section>
       <section>

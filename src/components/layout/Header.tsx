@@ -54,11 +54,13 @@ export function Header({
 
   if (type === "default" || type === "search") {
     return (
-      <>
-        <header
-          className={`fixed z-50 top-0 w-full px-4 sm:px-6 lg:px-8 xl:px-16 2xl:px-24 py-4 flex items-center justify-between gap-6 transition-all duration-300 ease-in-out ${
-            isScrolledOrSearch ? "bg-white shadow-sm" : "bg-secondary"
-          }`}
+      <header
+        className={` fixed z-50 top-0 w-full flex items-center justify-center ${
+          isScrolledOrSearch ? "bg-white/90 backdrop-blur-sm " : "bg-secondary"
+        }`}
+      >
+        <div
+          className={` w-full max-w-7xl px-4 2xl:px-0 h-20 flex items-center justify-between gap-6 transition-all duration-300 ease-in-out `}
         >
           {/* Logo */}
           <div className="flex-shrink-0">
@@ -114,14 +116,14 @@ export function Header({
             <Link
               key={"menu"}
               href={"/imoveis"}
-              className={`text-sm font-semibold transition-colors whitespace-nowrap ${
+              className={`text-sm font-semibold transition-colors whitespace-nowrap border-2 py-2 px-8  rounded-lg ${
                 isScrolledOrSearch
-                  ? "text-secondary hover:text-accent"
-                  : "text-white hover:text-gray-200 "
+                  ? "text-secondary  border-secondary  hover:bg-secondary hover:text-white"
+                  : "text-white hover:text-secondary hover:bg-white border-white"
               }`}
             >
               {/* Se estiver logado, exibir acessar painel, se nao estiver mostre botao de login e cadastro */}
-              Acessar plataforma
+              Entrar
             </Link>
             {navItems.map((item) => (
               <Link
@@ -149,7 +151,7 @@ export function Header({
               {isMenuOpen ? <XIcon size={24} /> : <MenuIcon size={24} />}
             </button>
           </div>
-        </header>
+        </div>
 
         <AnimatePresence>
           {isMenuOpen && (
@@ -185,10 +187,10 @@ export function Header({
                     key={"access"}
                     href={"/imoveis"}
                     onClick={() => setIsMenuOpen(false)}
-                    className="text-lg p-3 rounded-md font-semibold text-secondary hover:bg-gray-200"
+                    className="text-lg p-3 rounded-md font-semibold text-secondary hover:bg-gray-200 border-secondary border-2 hover:text-white hover:bg-secondary"
                   >
                     {/* Se estiver logado, exibir acessar painel, se nao estiver mostre botao de login e cadastro */}
-                    Acessar plataforma
+                    Entrar
                   </Link>
                   {navItems.map((item) => (
                     <Link
@@ -205,13 +207,13 @@ export function Header({
             </motion.div>
           )}
         </AnimatePresence>
-      </>
+      </header>
     );
   }
 
   if (type === "logoOnly") {
     return (
-      <header className="fixed z-40 top-0 w-full bg-white px-4 py-2 shadow-sm flex items-center justify-center">
+      <header className="fixed z-40 top-0 w-full bg-white px-4 py-2  flex items-center justify-center">
         <Image
           height={50}
           width={120}
@@ -224,9 +226,7 @@ export function Header({
     );
   }
   return (
-    <header
-      className={`fixed z-40 top-0 w-full bg-white px-8 md:px-16 py-2 shadow flex items-center justify-between gap-4`}
-    >
+    <header>
       {onBack && (
         <button
           title="Botão de voltar"

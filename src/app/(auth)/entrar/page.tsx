@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, Controller } from "react-hook-form";
-import Image from "next/image";
+// import Image from "next/image";
 import Link from "next/link";
 import { toast } from "sonner";
 
@@ -43,21 +43,19 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-svh w-full bg-background flex flex-col items-center justify-center p-4">
+    <div className="min-h-[90svh] w-full bg-background flex flex-col items-center justify-center p-4">
       <div className="w-full max-w-md">
-        <Image
+        {/* <Image
           width={200}
           height={200}
           src="/icons/logo-purple-black.svg"
           alt="Logo Colibri"
           priority
-          className="w-auto h-36 sm:h-44 mx-auto mb-8"
-        />
-        <div className="bg-white p-6 sm:p-8 rounded-2xl shadow-xl border">
+          className="w-auto h-20 mx-auto mb-8"
+        /> */}
+        <div className=" ">
           <div className="text-center mb-8">
-            <h1 className="text-3xl font-bold text-secondary">
-              Acesse sua Conta
-            </h1>
+            <h1 className="text-3xl font-bold text-secondary">Entrar</h1>
             <p className="text-foreground/70 mt-2">Bem-vindo de volta!</p>
           </div>
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
@@ -67,7 +65,7 @@ export default function LoginPage() {
               render={({ field }) => (
                 <CustomInput
                   id="email"
-                  label="Email"
+                  label="Email *"
                   placeholder="ex: johndoe@gmail.com"
                   type="email"
                   icon={<MailIcon size={20} />}
@@ -84,7 +82,7 @@ export default function LoginPage() {
                 render={({ field }) => (
                   <CustomInput
                     id="password"
-                    label="Senha"
+                    label="Senha *"
                     type="password"
                     placeholder="********"
                     icon={<LockIcon size={20} />}
@@ -119,7 +117,7 @@ export default function LoginPage() {
                 ghost
                 className="w-full"
               >
-                Não tenho uma conta
+                Ainda não possui conta? Crie agora
               </CustomButton>
             </div>
           </form>

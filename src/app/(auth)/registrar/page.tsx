@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import Image from "next/image";
+// import Image from "next/image";
 
 import { KeyRound, Building, ArrowRight } from "lucide-react";
 import Link from "next/link";
@@ -37,16 +37,16 @@ export default function RegisterPage() {
   const router = useRouter();
 
   return (
-    <div className="min-h-svh w-full bg-background flex flex-col items-center justify-center p-4">
+    <div className="min-h-[90svh] w-full bg-background flex flex-col items-center justify-center p-4">
       <div className="text-center mb-8">
-        <Image
-          width={150}
-          height={150}
+        {/* <Image
+          width={200}
+          height={200}
           src="/icons/logo-purple-black.svg"
           alt="Logo Colibri"
           priority
-          className="w-auto h-32 mx-auto"
-        />
+          className="w-auto h-20 mx-auto mb-8"
+        /> */}
         <h1 className="text-3xl font-bold text-secondary mt-4">Bem-vindo!</h1>
         <p className="text-foreground/80 mt-1">
           Escolha seu perfil para iniciar o cadastro.
