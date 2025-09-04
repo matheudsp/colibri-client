@@ -113,7 +113,7 @@ export function Header({
           <nav className="hidden lg:flex items-center gap-6 flex-shrink-0">
             <Link
               key={"menu"}
-              href={"/properties"}
+              href={"/imoveis"}
               className={`text-sm font-semibold transition-colors whitespace-nowrap ${
                 isScrolledOrSearch
                   ? "text-secondary hover:text-accent"
@@ -183,7 +183,7 @@ export function Header({
                 <nav className="flex flex-col space-y-2">
                   <Link
                     key={"access"}
-                    href={"/properties"}
+                    href={"/imoveis"}
                     onClick={() => setIsMenuOpen(false)}
                     className="text-lg p-3 rounded-md font-semibold text-secondary hover:bg-gray-200"
                   >

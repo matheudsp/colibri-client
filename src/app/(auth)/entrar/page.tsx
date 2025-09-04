@@ -34,7 +34,7 @@ export default function LoginPage() {
     try {
       await AuthService.login(data);
       toast.success("Login efetuado com sucesso!");
-      router.push("/properties");
+      router.push("/imoveis");
     } catch (error: unknown) {
       toast.error("Falha no login", { description: extractAxiosError(error) });
     } finally {
@@ -115,7 +115,7 @@ export default function LoginPage() {
               </CustomButton>
               <CustomButton
                 type="button"
-                onClick={() => router.push("/register")}
+                onClick={() => router.push("/registrar")}
                 ghost
                 className="w-full"
               >

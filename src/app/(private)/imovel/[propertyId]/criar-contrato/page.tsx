@@ -233,7 +233,7 @@ export default function CreateContractPage() {
         .toPng(credentialsCardRef.current, { cacheBust: true })
         .then((dataUrl) => {
           const link = document.createElement("a");
-          link.download = `login-${newTenantCredentials?.email}.png`;
+          link.download = `acesso-${newTenantCredentials?.email}.png`;
           link.href = dataUrl;
           link.click();
         }),
@@ -732,7 +732,7 @@ export default function CreateContractPage() {
                   </div>
 
                   <CustomButton
-                    onClick={() => router.push(`/properties`)}
+                    onClick={() => router.push(`/imoveis`)}
                     fontSize="text-lg"
                     className="mt-4 border mx-auto"
                     ghost
@@ -751,7 +751,7 @@ export default function CreateContractPage() {
                     continuidade ao processo de locação.
                   </p>
                   <CustomButton
-                    onClick={() => router.push(`/properties`)}
+                    onClick={() => router.push(`/imoveis`)}
                     fontSize="text-lg"
                     className="mt-4 border mx-auto"
                     ghost

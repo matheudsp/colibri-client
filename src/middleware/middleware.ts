@@ -2,9 +2,10 @@ import { NextRequest, NextResponse } from "next/server";
 
 const publicRoutes = [
   "/",
-  "/login",
-  "/register",
-  /^\/properties\/[^/]+$/, // Corresponde a /properties/{qualquer-id}
+  "/entrar",
+  "/registrar",
+  /^\/imoveis\/[^/]+$/,
+  /^\/imovel\/[^/]+$/, // Corresponde a /imovel/{qualquer-id}
 ];
 
 export function middleware(req: NextRequest) {
@@ -23,7 +24,7 @@ export function middleware(req: NextRequest) {
   }
 
   if (!token) {
-    const loginUrl = new URL("/login", req.url);
+    const loginUrl = new URL("/entrar", req.url);
     loginUrl.searchParams.set("redirectedFrom", pathname);
     return NextResponse.redirect(loginUrl);
   }

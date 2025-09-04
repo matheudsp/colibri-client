@@ -9,12 +9,12 @@ const actions = [
   {
     label: "Adicionar Imóvel",
     icon: <HomeIcon size={20} className="text-primary" />,
-    href: "/create-property",
+    href: "/novo/imovel",
   },
   {
     label: "Adicionar Condomínio",
     icon: <Building2 size={20} className="text-primary" />,
-    href: "/create-condominium",
+    href: "/novo/condominio",
   },
 ];
 

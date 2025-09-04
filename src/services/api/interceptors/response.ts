@@ -44,8 +44,8 @@ export const setupResponseInterceptor = (apiInstance: AxiosInstance) => {
             useUserStore.getState().setUser(null);
 
             // Redireciona apenas se não estiver já na página de login
-            if (window.location.pathname !== "/login") {
-              window.location.href = "/login";
+            if (window.location.pathname !== "/entrar") {
+              window.location.href = "/entrar";
             }
 
             return Promise.reject(refreshError);

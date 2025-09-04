@@ -12,11 +12,11 @@ export default function PrivateLayout({
 }) {
   const router = useRouter();
   const { loading, role, sub, status } = useCurrentUser();
-  console.log(loading, role, sub, status);
+  // console.log(loading, role, sub, status);
   useEffect(() => {
     if (!loading) {
       if (!role || !sub || !status) {
-        router.push("/login");
+        router.push("/entrar");
       }
     }
   }, [loading, role, sub, status, router]);

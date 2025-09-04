@@ -277,7 +277,7 @@ export function PropertyCard({
 
   if (variant === "public") {
     return (
-      <Link href={`/property/${property.id}`} className="block group h-full">
+      <Link href={`/imovel/${property.id}`} className="block group h-full">
         {cardContent}
       </Link>
     );

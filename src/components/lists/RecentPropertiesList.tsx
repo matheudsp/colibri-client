@@ -60,7 +60,7 @@ export function RecentPropertiesList() {
       {!isLoading && properties.length > 0 && (
         <div className="mt-8 text-center">
           <Link
-            href="/properties"
+            href="/imoveis"
             className="text-primary hover:underline underline-offset-4 font-semibold inline-flex items-center gap-2 group"
           >
             Ver mais imóveis para alugar

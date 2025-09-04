@@ -17,7 +17,7 @@ const helpItems = [
     description:
       "Gerencie e receba seus aluguéis com praticidade. Garantimos segurança, previsibilidade e menos preocupações.",
     linkText: "Saiba mais",
-    href: "/pagamentos",
+    href: "/saiba-mais",
   },
   {
     icon: <Megaphone className="w-6 h-6 text-primary" />,
@@ -25,7 +25,7 @@ const helpItems = [
     description:
       "Anuncie grátis e alcance milhares de potenciais inquilinos. Mais agilidade, mais chances de locação, sem custo inicial.",
     linkText: "Criar conta agora",
-    href: "/register",
+    href: "/registrar",
   },
   {
     icon: <ShieldCheck className="w-6 h-6 text-primary" />,

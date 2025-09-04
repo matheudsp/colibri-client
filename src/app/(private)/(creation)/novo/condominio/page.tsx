@@ -103,7 +103,7 @@ export default function CreateCondominiumPage() {
     try {
       await CondominiumService.create(data);
       toast.success("Condomínio cadastrado com sucesso!");
-      router.push("/condominiums");
+      router.push("/condominios");
     } catch (error: unknown) {
       const errorMessage = extractAxiosError(error);
       toast.error("Falha ao cadastrar condomínio", {

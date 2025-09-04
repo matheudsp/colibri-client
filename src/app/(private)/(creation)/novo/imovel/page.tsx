@@ -179,7 +179,7 @@ export default function CreatePropertyPage() {
     try {
       await PhotoService.upload(newPropertyId, filesToUpload);
       toast.success("Imóvel cadastrado com sucesso!");
-      router.push("/properties");
+      router.push("/imoveis");
     } catch (error) {
       toast.error(`Falha no upload das fotos: ${error}`);
     } finally {

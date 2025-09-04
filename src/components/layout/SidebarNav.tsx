@@ -12,7 +12,7 @@ import { AuthService } from "@/services/domains/authService";
 const navItems = [
   {
     label: "Imóveis",
-    href: "/properties",
+    href: "/imoveis",
     icon: HomeIcon,
   },
   // {
@@ -22,12 +22,12 @@ const navItems = [
   // },
   {
     label: "Contratos",
-    href: "/contracts",
+    href: "/contratos",
     icon: FileText,
   },
   {
     label: "Pagamentos",
-    href: "/payments",
+    href: "/pagamentos",
     icon: CalendarArrowDown,
   },
 ];
@@ -41,7 +41,7 @@ export default function SidebarNav() {
     try {
       await AuthService.logout();
       toast.success("Você saiu com sucesso!");
-      router.push("/login");
+      router.push("/entrar");
     } catch (error) {
       toast.error("Não foi possível fazer logout. Tente novamente.", {
         description: `${error}`,
@@ -55,7 +55,7 @@ export default function SidebarNav() {
     <div className="fixed z-20 hidden md:flex w-32 min-h-screen flex-col justify-between bg-secondary py-6 px-2 shadow-xl">
       <div>
         <div className="mb-12 flex justify-center">
-          <Link href="/properties">
+          <Link href="/">
             <Image
               width={50}
               height={50}
@@ -96,7 +96,7 @@ export default function SidebarNav() {
 
       <div className="flex flex-col items-center gap-4 w-full ">
         <Link
-          href={"/account"}
+          href={"/conta"}
           className={clsx(
             "flex flex-col items-center justify-center gap-1 p-2 w-full rounded-lg transition-all duration-300 ease-in-out transform",
             myAccountIsActive

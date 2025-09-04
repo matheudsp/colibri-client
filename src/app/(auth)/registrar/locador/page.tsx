@@ -164,7 +164,7 @@ export default function LandlordRegisterPage() {
         incomeValue: unmaskNumeric(data.incomeValue),
       });
       toast.success("Cadastro de locador realizado com sucesso!");
-      router.push("/login");
+      router.push("/entrar");
     } catch (error) {
       const errorMessage = extractAxiosError(error);
       toast.error("Falha ao criar conta", {

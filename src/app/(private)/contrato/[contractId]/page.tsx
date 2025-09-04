@@ -64,7 +64,7 @@ export default function ContractManagementPage() {
       toast.error("Contrato não encontrado ou acesso negado", {
         description: errorMessage,
       });
-      router.push("/contracts");
+      router.push("/contratos");
     } finally {
       setLoading(false);
     }
@@ -201,7 +201,7 @@ export default function ContractManagementPage() {
     try {
       await ContractService.remove(contract.id);
       toast.success("Contrato removido com sucesso.");
-      router.push("/contracts");
+      router.push("/contratos");
     } catch (_error) {
       const errorMessage = extractAxiosError(_error);
       toast.error("Erro ao remover contrato", {
@@ -239,7 +239,7 @@ export default function ContractManagementPage() {
               </p>
               <CustomButton
                 onClick={() =>
-                  router.push(`/contracts/${contract.id}/documents`)
+                  router.push(`/contratos/${contract.id}/documentos`)
                 }
                 className="mt-4 w-full"
               >
@@ -267,7 +267,7 @@ export default function ContractManagementPage() {
                 </p>
                 <CustomButton
                   onClick={() =>
-                    router.push(`/contracts/${contract.id}/documents`)
+                    router.push(`/contratos/${contract.id}/documentos`)
                   }
                   color="bg-red-600"
                   textColor="text-white"
@@ -367,7 +367,7 @@ export default function ContractManagementPage() {
               </p>
               <CustomButton
                 onClick={() =>
-                  router.push(`/contracts/${contract.id}/documents`)
+                  router.push(`/contratos/${contract.id}/documentos`)
                 }
                 color="bg-blue-600"
                 textColor="text-white"
@@ -388,7 +388,9 @@ export default function ContractManagementPage() {
               enquanto isso, você pode verificar quais foram enviados.
             </p>
             <CustomButton
-              onClick={() => router.push(`/contracts/${contract.id}/documents`)}
+              onClick={() =>
+                router.push(`/contratos/${contract.id}/documentos`)
+              }
               color="bg-orange-600"
               textColor="text-white"
               className="w-full mt-4"
@@ -409,7 +411,7 @@ export default function ContractManagementPage() {
         <div className="max-w-5xl mx-auto px-4">
           <header className="mb-6">
             <CustomButton
-              onClick={() => router.push("/contracts")}
+              onClick={() => router.push("/contratos")}
               ghost
               className="text-gray-600 hover:text-gray-900"
             >

@@ -67,7 +67,7 @@ const PriceAndContactCard = ({ property }: { property: PropertyResponse }) => {
               </CustomButton>
             </a>
           )}
-          <a href={`mailto:${property.landlord.email}`}></a>
+          {/* <a href={`mailto:${property.landlord.email}`}></a> */}
         </div>
       </div>
     </div>

@@ -47,7 +47,7 @@ export default function TenantRegisterPage() {
       toast.success("Cadastro realizado com sucesso!", {
         description: "Você será redirecionado para a página de login.",
       });
-      setTimeout(() => router.push("/login"), 2000);
+      setTimeout(() => router.push("/entrar"), 2000);
     } catch (error) {
       const errorMessage = extractAxiosError(error);
       toast.error("Falha ao criar conta", {

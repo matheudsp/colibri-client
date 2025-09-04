@@ -55,14 +55,14 @@ export default function RegisterPage() {
 
       <div className="w-full max-w-md space-y-4">
         <ProfileSelectionCard
-          onClick={() => router.push("/register/tenant")}
+          onClick={() => router.push("/registrar/locatario")}
           icon={<KeyRound size={28} />}
           title="Sou Inquilino"
           description="Quero encontrar um imóvel para alugar."
         />
 
         <ProfileSelectionCard
-          onClick={() => router.push("/register/landlord")}
+          onClick={() => router.push("/registrar/locador")}
           icon={<Building size={28} />}
           title="Sou Locador"
           description="Quero anunciar meus imóveis na plataforma."
@@ -73,10 +73,10 @@ export default function RegisterPage() {
         <p className="text-foreground/80">
           Já tem uma conta?{" "}
           <Link
-            href="/login"
+            href="/entrar"
             className="font-bold text-secondary hover:text-primary underline transition-colors"
           >
-            Faça login
+            Entre agora
           </Link>
         </p>
       </div>

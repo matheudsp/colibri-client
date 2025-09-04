@@ -28,7 +28,7 @@ export function SearchBar() {
     const transactionSlug = selectedTransaction?.slug || "para-alugar";
     const locationSlug = slugify(location);
 
-    let path = `/properties/${transactionSlug}`;
+    let path = `/imoveis/${transactionSlug}`;
     if (locationSlug) {
       path += `/${locationSlug}`;
     }

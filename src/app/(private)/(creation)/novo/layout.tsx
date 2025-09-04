@@ -1,9 +1,8 @@
 "use client";
 
-import { Header } from "@/components/layout/Header";
 import { Roles } from "@/constants";
-import { useCurrentUser } from "@/hooks/useCurrentUser";
-
+import { Header } from "../../../../components/layout/Header";
+import { useCurrentUser } from "../../../../hooks/useCurrentUser";
 import { Loader2Icon } from "lucide-react";
 import { useRouter } from "next/navigation";
 
@@ -19,12 +18,12 @@ export default function CreationLayout({
   const [isChecking, setIsChecking] = useState(true);
 
   const handleBack = () => {
-    router.push("/properties");
+    router.push("/imoveis");
   };
   useEffect(() => {
     if (!loading) {
       if (role === Roles.LOCATARIO || !role) {
-        router.push("/properties");
+        router.push("/imoveis");
       }
       setIsChecking(false);
     }

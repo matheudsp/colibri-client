@@ -19,10 +19,10 @@ import {
 import { AuthService } from "@/services/domains/authService";
 
 const allNavItems = [
-  { label: "Imóveis", href: "/properties", icon: HomeIcon },
-  { label: "Contratos", href: "/contracts", icon: FileText },
-  { label: "Pagamentos", href: "/payments", icon: CalendarArrowDown },
-  { label: "Minha Conta", href: "/account", icon: User2 },
+  { label: "Imóveis", href: "/imoveis", icon: HomeIcon },
+  { label: "Contratos", href: "/contratos", icon: FileText },
+  { label: "Pagamentos", href: "/pagamentos", icon: CalendarArrowDown },
+  { label: "Minha Conta", href: "/conta", icon: User2 },
 ];
 
 const mainNavItems = allNavItems.slice(0, 2);
@@ -44,7 +44,7 @@ export default function BottomNav() {
     try {
       await AuthService.logout();
       toast.success("Você saiu com sucesso!");
-      router.push("/login");
+      router.push("/entrar");
     } catch (error) {
       toast.error("Não foi possível fazer logout. Tente novamente.", {
         description: `${error}`,
