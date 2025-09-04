@@ -28,19 +28,20 @@ import { PropertyGallery } from "@/components/galleries/PropertyGallery";
 import { extractAxiosError } from "@/services/api";
 
 const PriceAndContactCard = ({ property }: { property: PropertyResponse }) => {
-  const whatsappLink = `https://wa.me/${property.landlord.phone.replace(
-    /\D/g,
-    ""
-  )}?text=Olá, tenho interesse no imóvel "${encodeURIComponent(
-    property.title
-  )}" (Cód: ${property.id.substring(0, 8)})`;
-
+  const whatsappLink = property.landlord?.phone
+    ? `https://wa.me/${property.landlord.phone.replace(
+        /\D/g,
+        ""
+      )}?text=Olá, tenho interesse no imóvel "${encodeURIComponent(
+        property.title
+      )}" (Cód: ${property.id.substring(0, 8)})`
+    : null;
   return (
     <div className="bg-white border border-gray-200 rounded-xl p-5 space-y-5">
       <div>
         <p className="text-gray-500 text-sm">Valor do Aluguel (mensal)</p>
         <p className="text-3xl font-bold text-primary">
-          {formatCurrency(property.rentValue)}
+          {formatCurrency(property.value)}
         </p>
       </div>
 
@@ -59,11 +60,13 @@ const PriceAndContactCard = ({ property }: { property: PropertyResponse }) => {
           </div>
         </div>
         <div className="mt-4 space-y-2">
-          <a href={whatsappLink} target="_blank" rel="noopener noreferrer">
-            <CustomButton className="w-full bg-green-500 hover:bg-green-600">
-              <FaWhatsapp size={18} className="mr-2" /> Conversar no WhatsApp
-            </CustomButton>
-          </a>
+          {whatsappLink && (
+            <a href={whatsappLink} target="_blank" rel="noopener noreferrer">
+              <CustomButton className="w-full bg-green-500 hover:bg-green-600">
+                <FaWhatsapp size={18} className="mr-2" /> Conversar no WhatsApp
+              </CustomButton>
+            </a>
+          )}
           <a href={`mailto:${property.landlord.email}`}></a>
         </div>
       </div>

@@ -15,7 +15,7 @@ export const createCondominiumSchema = z.object({
   number: z.string().min(1, "O número é obrigatório."),
   district: z.string().min(1, "O bairro é obrigatório."),
   city: z.string().min(1, "A cidade é obrigatória."),
-  state: z.string().length(2, "O estado (UF) é obrigatório."),
+  state: z.string().min(1, "O estado é obrigatório"),
 });
 
 export type CreateCondominiumFormValues = z.infer<

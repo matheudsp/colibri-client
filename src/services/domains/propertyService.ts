@@ -3,12 +3,14 @@ import { api, extractAxiosError } from "../api";
 import API_ROUTES from "../api/routes";
 import { PropertyProps } from "../../interfaces/property";
 import { ApiResponse, type PropertiesApiResponse } from "../../types/api";
+import type { PropertySearchFormValues } from "@/validations/properties/propertySearchValidation";
 
 export interface PropertyResponse {
   id: string;
   title: string;
   description: string;
-  rentValue: string;
+  transactionType: string;
+  value: string;
   cep: string;
   street: string;
   district: string;
@@ -21,6 +23,7 @@ export interface PropertyResponse {
   numBathrooms: number;
   numParking: number;
   isAvailable: boolean;
+  propertyType: string;
   condominiumId: string | null;
   landlordId: string;
   landlord: {
@@ -41,7 +44,7 @@ export interface PropertyResponse {
 interface PropertyCreateData {
   title: string;
   description: string;
-  rentValue: number;
+  value: number;
   cep: string;
   street: string;
   district: string;
@@ -66,6 +69,13 @@ interface SearchPropertiesParams {
   title?: string;
   state?: string;
   city?: string;
+  q?: string;
+  propertyType?: string;
+  transactionType?: string;
+  page?: number;
+  limit?: number;
+  sortBy?: "createdAt" | "rentValue";
+  sortOrder?: "asc" | "desc";
 }
 
 export const PropertyService = {
@@ -97,7 +107,7 @@ export const PropertyService = {
   ): Promise<PropertiesApiResponse> {
     try {
       const response = await api.get<ApiResponse<PropertiesApiResponse>>(
-        "/properties/public",
+        API_ROUTES.PROPERTIES.LIST_AVAILABLE_PUBLIC,
         {
           params: params,
         }
@@ -130,7 +140,18 @@ export const PropertyService = {
       throw new Error(extractAxiosError(error));
     }
   },
-
+  async publicSearch(
+    params: Partial<PropertySearchFormValues>
+  ): Promise<ApiResponse<PropertiesApiResponse>> {
+    try {
+      const response = await api.get(API_ROUTES.PROPERTIES.PUBLIC_SEARCH, {
+        params,
+      });
+      return response.data;
+    } catch (error) {
+      throw new Error(extractAxiosError(error));
+    }
+  },
   async getById(id: string): Promise<ApiResponse<PropertyProps>> {
     try {
       const response = await api.get(API_ROUTES.PROPERTIES.BY_ID({ id }));

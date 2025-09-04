@@ -49,7 +49,8 @@ export function Header({
   };
 
   const isScrolledOrSearch = isScrolled || type === "search";
-  const showSearchBar = type === "search" || (type === "default" && isScrolled);
+  const showSearchBar = false;
+  // const showSearchBar = type === "search" || (type === "default" && isScrolled);
 
   if (type === "default" || type === "search") {
     return (

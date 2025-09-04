@@ -17,3 +17,8 @@ export const propertyType = [
   { id: "predio", value: "PREDIO", label: "Prédio" },
   { id: "terreno", value: "TERRENO", label: "Terreno" },
 ];
+
+export const PropertyTransactionType = [
+  { id: "locacao", value: "LOCACAO", label: "Locação" },
+  { id: "venda", value: "VENDA", label: "Venda" },
+];

@@ -29,7 +29,7 @@ export const setupResponseInterceptor = (apiInstance: AxiosInstance) => {
         error.response?.status === 401 &&
         originalRequest &&
         !originalRequest.url?.endsWith("/auth/refresh") &&
-        !originalRequest.url?.endsWith("/auth/login") // Adicione esta verificação
+        !originalRequest.url?.endsWith("/auth/login")
       ) {
         if (!isRefreshing) {
           isRefreshing = true;
@@ -40,7 +40,7 @@ export const setupResponseInterceptor = (apiInstance: AxiosInstance) => {
           } catch (refreshError) {
             processQueue(refreshError as AxiosError);
 
-            // 2. Remova a chamada à API de logout e limpe o estado localmente
+            // Remova a chamada à API de logout e limpe o estado localmente
             useUserStore.getState().setUser(null);
 
             // Redireciona apenas se não estiver já na página de login

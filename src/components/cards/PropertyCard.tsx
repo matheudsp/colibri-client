@@ -23,6 +23,7 @@ import { Roles } from "@/constants/userRole";
 import { CustomButton } from "@/components/forms/CustomButton";
 import { extractAxiosError } from "@/services/api";
 import { CustomSwitch } from "../forms/CustomSwitch";
+import { getPropertyTypeLabel } from "@/utils/helpers/getPropertyType";
 
 function DashboardActions({
   property,
@@ -57,11 +58,11 @@ function DashboardActions({
   const handleCreateContract = (e: React.MouseEvent) => {
     e.stopPropagation();
     e.preventDefault();
-    router.push(`/properties/${property.id}/create-contract`);
+    router.push(`/property/${property.id}/create-contract`);
   };
 
   const handleNavigate = () => {
-    router.push(`/properties/${property.id}`);
+    router.push(`/property/${property.id}`);
   };
 
   const handleAvailabilityChange = async (newStatus: boolean) => {
@@ -84,7 +85,7 @@ function DashboardActions({
   };
 
   if (roleLoading) {
-    return <div className="mt-4 pt-4 border-t h-[230px]"></div>; // Placeholder para evitar "layout shift"
+    return <div className="mt-4 pt-4 border-t h-[230px]"></div>;
   }
 
   const showAdminButtons = role === Roles.ADMIN || role === Roles.LOCADOR;
@@ -228,9 +229,9 @@ export function PropertyCard({
       </div>
 
       <div className="p-4 flex flex-col flex-grow">
-        {variant === "public" && (
-          <p className="text-sm text-primary font-semibold">Apartamento</p>
-        )}
+        <p className="text-sm text-primary font-semibold">
+          {getPropertyTypeLabel(property.propertyType)}
+        </p>
 
         <h3 className="text-lg font-bold text-gray-800 truncate mt-1">
           {property.title}
@@ -259,7 +260,7 @@ export function PropertyCard({
           <div className="mt-3 flex justify-between items-center">
             <span className="text-gray-500 text-sm">Aluguel</span>
             <span className="font-bold text-gray-800">
-              {formatCurrency(property.rentValue)}
+              {formatCurrency(property.value)}
             </span>
           </div>
         </div>
@@ -276,7 +277,7 @@ export function PropertyCard({
 
   if (variant === "public") {
     return (
-      <Link href={`/properties/${property.id}`} className="block group h-full">
+      <Link href={`/property/${property.id}`} className="block group h-full">
         {cardContent}
       </Link>
     );

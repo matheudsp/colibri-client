@@ -53,7 +53,9 @@ const API_ROUTES = {
   },
   PROPERTIES: {
     BASE: "/properties",
+    LIST_AVAILABLE_PUBLIC: "/properties/public",
     SEARCH: "/properties/search",
+    PUBLIC_SEARCH: "/properties/public/search",
     CREATE: "/properties",
     BY_ID: ({ id }: Params) => `/properties/${id}`,
     UPDATE: ({ id }: Params) => `/properties/${id}`,

@@ -2,7 +2,8 @@ export interface PropertyProps {
   id: string;
   title: string;
   description: string;
-  rentValue: string;
+  transactionType: string;
+  value: string;
   cep: string;
   street: string;
   district: string;
@@ -12,6 +13,7 @@ export interface PropertyProps {
   complement: string | null;
   areaInM2: number;
   numRooms: number;
+  propertyType: string;
   numBathrooms: number;
   numParking: number;
   isAvailable: boolean;

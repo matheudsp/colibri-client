@@ -125,7 +125,7 @@ export default function CreatePropertyPage() {
     try {
       const payload = {
         ...data,
-        rentValue: unmaskNumeric(data.rentValue),
+        value: unmaskNumeric(data.value),
       };
       // console.log("DADOS DA CRIACAO DE PROPRIEDADE: ", payload);
       const response = await PropertyService.create(payload);
@@ -259,15 +259,15 @@ export default function CreatePropertyPage() {
                     )}
                   />
                   <Controller
-                    name="rentValue"
+                    name="value"
                     control={control}
                     render={({ field }) => (
                       <CustomFormInput
-                        id="rentValue"
+                        id="value"
                         placeholder="ex: 2.650,00"
                         icon={<BrlCurrencyIcon className="h-6 w-6" />}
                         label="Valor do Aluguel*"
-                        error={errors.rentValue?.message}
+                        error={errors.value?.message}
                         mask="numeric"
                         {...field}
                       />
