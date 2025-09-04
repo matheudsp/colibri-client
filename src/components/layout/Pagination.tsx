@@ -7,12 +7,14 @@ interface PaginationProps {
   currentPage: number;
   totalPages: number;
   maxVisiblePages?: number;
+  total?: number;
 }
 
 export function Pagination({
   currentPage,
   totalPages,
   maxVisiblePages = 5,
+  total,
 }: PaginationProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -24,10 +26,6 @@ export function Pagination({
 
     router.push(`${pathname}?${params.toString()}`);
   };
-
-  if (totalPages <= 1) {
-    return null;
-  }
 
   let startPage = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2));
   const endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
@@ -42,77 +40,88 @@ export function Pagination({
   );
 
   return (
-    <div className="flex items-center justify-center gap-2 mt-6">
-      <button
-        title="Página anterior"
-        className={`flex items-center justify-center p-2 h-9 w-9 rounded-md border ${
-          currentPage === 1
-            ? "opacity-50 cursor-not-allowed"
-            : "hover:bg-gray-100"
-        }`}
-        disabled={currentPage === 1}
-        onClick={() => handlePageChange(currentPage - 1)}
-      >
-        <ChevronLeft className="h-4 w-4" />
-      </button>
-
-      {startPage > 1 && (
-        <>
-          <button
-            title={`Ir para página 1`}
-            className={`flex items-center justify-center p-2 h-9 w-9 rounded-md border ${
-              currentPage === 1 ? "bg-primary text-white" : "hover:bg-gray-100"
-            }`}
-            onClick={() => handlePageChange(1)}
-          >
-            1
-          </button>
-          {startPage > 2 && <span className="px-2">...</span>}
-        </>
+    <div className="flex flex-col  items-center justify-center gap-4 mt-6">
+      {typeof total === "number" && (
+        <div className="text-sm text-gray-700">
+          <span className="font-semibold">{total}</span> itens encontrados.
+        </div>
       )}
-
-      {pages.map((page) => (
+      <div className="flex items-center justify-center gap-2">
         <button
-          key={page}
-          title={`Ir para página ${page}`}
+          title="Página anterior"
           className={`flex items-center justify-center p-2 h-9 w-9 rounded-md border ${
-            currentPage === page ? "bg-primary text-white" : "hover:bg-gray-100"
+            currentPage === 1
+              ? "opacity-50 cursor-not-allowed"
+              : "hover:bg-gray-100"
           }`}
-          onClick={() => handlePageChange(page)}
+          disabled={currentPage === 1}
+          onClick={() => handlePageChange(currentPage - 1)}
         >
-          {page}
+          <ChevronLeft className="h-4 w-4" />
         </button>
-      ))}
 
-      {endPage < totalPages && (
-        <>
-          {endPage < totalPages - 1 && <span className="px-2">...</span>}
+        {startPage > 1 && (
+          <>
+            <button
+              title={`Ir para página 1`}
+              className={`flex items-center justify-center p-2 h-9 w-9 rounded-md border ${
+                currentPage === 1
+                  ? "bg-primary text-white"
+                  : "hover:bg-gray-100"
+              }`}
+              onClick={() => handlePageChange(1)}
+            >
+              1
+            </button>
+            {startPage > 2 && <span className="px-2">...</span>}
+          </>
+        )}
+
+        {pages.map((page) => (
           <button
-            title={`Ir para página ${totalPages} (última página)`}
+            key={page}
+            title={`Ir para página ${page}`}
             className={`flex items-center justify-center p-2 h-9 w-9 rounded-md border ${
-              currentPage === totalPages
+              currentPage === page
                 ? "bg-primary text-white"
                 : "hover:bg-gray-100"
             }`}
-            onClick={() => handlePageChange(totalPages)}
+            onClick={() => handlePageChange(page)}
           >
-            {totalPages}
+            {page}
           </button>
-        </>
-      )}
+        ))}
 
-      <button
-        title="Próxima página"
-        className={`flex items-center justify-center p-2 h-9 w-9 rounded-md border ${
-          currentPage === totalPages
-            ? "opacity-50 cursor-not-allowed"
-            : "hover:bg-gray-100"
-        }`}
-        disabled={currentPage === totalPages}
-        onClick={() => handlePageChange(currentPage + 1)}
-      >
-        <ChevronRight className="h-4 w-4" />
-      </button>
+        {endPage < totalPages && (
+          <>
+            {endPage < totalPages - 1 && <span className="px-2">...</span>}
+            <button
+              title={`Ir para página ${totalPages} (última página)`}
+              className={`flex items-center justify-center p-2 h-9 w-9 rounded-md border ${
+                currentPage === totalPages
+                  ? "bg-primary text-white"
+                  : "hover:bg-gray-100"
+              }`}
+              onClick={() => handlePageChange(totalPages)}
+            >
+              {totalPages}
+            </button>
+          </>
+        )}
+
+        <button
+          title="Próxima página"
+          className={`flex items-center justify-center p-2 h-9 w-9 rounded-md border ${
+            currentPage === totalPages
+              ? "opacity-50 cursor-not-allowed"
+              : "hover:bg-gray-100"
+          }`}
+          disabled={currentPage === totalPages}
+          onClick={() => handlePageChange(currentPage + 1)}
+        >
+          <ChevronRight className="h-4 w-4" />
+        </button>
+      </div>
     </div>
   );
 }

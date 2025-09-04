@@ -97,6 +97,7 @@ export const PropertyService = {
       const response = await api.get(API_ROUTES.PROPERTIES.BASE, {
         params: params,
       });
+      // console.log(response.data);
       return response.data;
     } catch (error) {
       throw new Error(extractAxiosError(error));

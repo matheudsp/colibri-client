@@ -14,7 +14,8 @@
     },
     "dependencies": {
         "@fontsource/open-sans": "^5.2.5",
-        "@headlessui/react": "^2.2.2",
+        "@headlessui/react": "^2.2.7",
+        "@heroicons/react": "^2.2.0",
         "@hookform/resolvers": "^5.2.1",
         "@radix-ui/react-dropdown-menu": "^2.1.14",
         "@supabase/ssr": "^0.6.1",

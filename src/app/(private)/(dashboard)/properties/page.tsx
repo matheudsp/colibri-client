@@ -72,9 +72,9 @@ export default function DashboardPropertiesPage() {
         Array.isArray(response.data.properties) ? response.data.properties : []
       );
       setPagination({
-        total: response.data.meta?.resource?.total || 0,
-        page: 1,
-        totalPages: 1,
+        total: response.meta?.resource?.total || 0,
+        page: response.meta?.resource?.page || 1,
+        totalPages: response.meta?.resource?.totalPages || 1,
       });
     } catch (err) {
       console.error("Erro ao carregar propriedades:", err);
@@ -192,12 +192,11 @@ export default function DashboardPropertiesPage() {
                 ))}
               </div>
 
-              {pagination.totalPages > 1 && (
-                <Pagination
-                  currentPage={pagination.page}
-                  totalPages={pagination.totalPages}
-                />
-              )}
+              <Pagination
+                currentPage={pagination.page}
+                totalPages={pagination.totalPages}
+                total={pagination.total}
+              />
             </div>
           )}
         </div>

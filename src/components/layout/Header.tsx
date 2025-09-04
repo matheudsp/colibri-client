@@ -25,7 +25,7 @@ interface HeaderProps {
 
 const navItems = [
   { label: "Ajuda", href: "#" },
-  { label: "Mais", href: "#" },
+  // { label: "Mais", href: "#" },
 ];
 
 const menuVariants = {

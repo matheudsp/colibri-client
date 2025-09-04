@@ -22,6 +22,7 @@ import { ITEMS_PER_PAGE } from "@/constants/pagination";
 import { FilterBar } from "@/components/forms/FilterBar";
 import { slugify } from "@/utils/helpers/slugify";
 import { Breadcrumb } from "@/components/layout/Breadcrumb";
+import { capitalize } from "@/utils/helpers/capitalize";
 
 const cleanupFilters = (
   filters: Partial<PropertySearchFormValues>
@@ -83,9 +84,9 @@ export default function SearchResultsPage() {
           });
         setProperties(response.data.properties || []);
         setPagination({
-          total: response.data.meta?.resource?.total || 0,
-          page: response.data.meta?.resource?.page || 1,
-          totalPages: response.data.meta?.resource?.totalPages || 1,
+          total: response.meta?.resource?.total || 0,
+          page: response.meta?.resource?.page || 1,
+          totalPages: response.meta?.resource?.totalPages || 1,
         });
       } catch (err) {
         toast.error("Não foi possível carregar as propriedades.", {
@@ -102,7 +103,7 @@ export default function SearchResultsPage() {
     const slug = (params.slug as string[]) || [];
     const [transactionSlug, ...locationParts] = slug;
 
-    const transactionType = transactionSlug === "a-venda" ? "VENDA" : "LOCACAO";
+    const transactionType = slug[0] === "a-venda" ? "VENDA" : "LOCACAO";
     const qFromSlug = locationParts
       .join(" ")
       .replace(/-/g, " ")
@@ -133,11 +134,11 @@ export default function SearchResultsPage() {
       propertyType: searchParams.get("propertyType") ?? undefined,
       sortBy:
         (searchParams.get("sortBy") as PropertySearchFormValues["sortBy"]) ??
-        undefined,
+        "createdAt",
       sortOrder:
         (searchParams.get(
           "sortOrder"
-        ) as PropertySearchFormValues["sortOrder"]) ?? undefined,
+        ) as PropertySearchFormValues["sortOrder"]) ?? "desc",
     };
 
     reset(cleanupFilters(filtersFromUrl) as PropertySearchFormValues);
@@ -145,7 +146,7 @@ export default function SearchResultsPage() {
   }, [params, searchParams, fetchProperties, reset]);
 
   const onSearch = (data: PropertySearchFormValues) => {
-    const { transactionType, q, ...otherFilters } = data;
+    const { transactionType, q, sortBy, sortOrder, ...otherFilters } = data;
     const cleanedFilters = cleanupFilters(otherFilters);
 
     const transactionSlug =
@@ -162,9 +163,22 @@ export default function SearchResultsPage() {
       queryParams.set(key, String(value));
     });
 
+    // Corrige o erro TypeScript, garantindo que os valores não são undefined
+    queryParams.set("sortBy", sortBy ?? "createdAt");
+    queryParams.set("sortOrder", sortOrder ?? "desc");
+
     queryParams.set("page", "1");
     const newUrl = `${path}?${queryParams.toString()}`;
     router.push(newUrl);
+  };
+  const city = capitalize(searchParams.get("city") || "");
+  const state = capitalize(searchParams.get("state") || "");
+
+  const getEmptyMessage = () => {
+    if (city && state) {
+      return `Nenhum imóvel encontrado em ${city}, ${state}.`;
+    }
+    return `Nenhum imóvel encontrado.`;
   };
 
   return (
@@ -198,7 +212,7 @@ export default function SearchResultsPage() {
                 <div className="col-span-full flex flex-col items-center justify-center gap-3 text-center mt-10 p-6 bg-white rounded-lg shadow-sm">
                   <Building2 size={40} className="text-gray-400" />
                   <p className="text-gray-600 font-semibold">
-                    Nenhum imóvel encontrado.
+                    {getEmptyMessage()}
                   </p>
                   <p className="text-sm text-gray-500">
                     Tente alterar os filtros da sua busca.
@@ -206,12 +220,11 @@ export default function SearchResultsPage() {
                 </div>
               )}
             </div>
-            {pagination.totalPages > 1 && (
-              <Pagination
-                currentPage={pagination.page}
-                totalPages={pagination.totalPages}
-              />
-            )}
+            <Pagination
+              currentPage={pagination.page}
+              totalPages={pagination.totalPages}
+              total={pagination.total}
+            />
           </div>
         )}
       </div>

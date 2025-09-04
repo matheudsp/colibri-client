@@ -9,7 +9,7 @@ import { HelpSection } from "@/components/sections/home/HelpSection";
 export default function Home() {
   return (
     <div className="bg-white flex-col justify-center items-center ">
-      <section className="min-h-[64svh] w-full bg-secondary flex flex-col items-center justify-center text-center text-white">
+      <section className="md:min-h-[64svh] min-h-[76svh] w-full bg-secondary flex flex-col items-center justify-center text-center text-white">
         <div className="w-full flex flex-col items-center justify-center">
           <div className=" px-4">
             <h1 className="text-4xl md:text-6xl font-bold">

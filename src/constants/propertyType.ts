@@ -1,4 +1,5 @@
 export const propertyType = [
+  { id: "nenhum", value: "", label: "Tanto Faz" },
   { id: "apartamento", value: "APARTAMENTO", label: "Apartamento" },
   {
     id: "apartamento_duplex",
