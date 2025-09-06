@@ -177,9 +177,20 @@ export const PropertyService = {
     }
   },
 
-  async delete(id: string): Promise<void> {
+  async delete(
+    id: string,
+    actionToken: string
+  ): Promise<ApiResponse<{ message: string }>> {
     try {
-      await api.delete(API_ROUTES.PROPERTIES.DELETE({ id }));
+      // console.log("CHAMANADO ROTA PARA DELETAR PROPERTY");
+      const response = await api.post(
+        API_ROUTES.PROPERTIES.DELETE({ propertyId: id }),
+        {
+          actionToken,
+        }
+      );
+      // console.log("CHAMANADO ROTA PARA DELETAR PROPERTY", response.data);
+      return response.data;
     } catch (error) {
       throw new Error(extractAxiosError(error));
     }

@@ -21,11 +21,14 @@ import { DeletePropertyModal } from "@/components/modals/propertyModals/DeletePr
 import { useSearch } from "@/contexts/SearchContext";
 import { extractAxiosError } from "@/services/api";
 import { useUserStore } from "@/stores/userStore";
+import { VerificationService } from "@/services/domains/verificationService";
+import { OtpVerificationModal } from "@/components/modals/verificationModals/OtpVerificationModal";
+import { VerificationContexts } from "@/constants/VerificationContexts";
+
 export default function DashboardPropertiesPage() {
   const { searchValue } = useSearch();
   const [properties, setProperties] = useState<PropertyResponse[]>([]);
   const [loading, setLoading] = useState(true);
-  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [propertyToDelete, setPropertyToDelete] = useState<string | null>(null);
   const [pagination, setPagination] = useState({
     total: 0,
@@ -34,7 +37,7 @@ export default function DashboardPropertiesPage() {
   });
   const searchParams = useSearchParams();
   const currentPage = Number(searchParams.get("page")) || 1;
-
+  const [isOtpModalOpen, setIsOtpModalOpen] = useState(false);
   const { user, loading: roleLoading } = useUserStore();
   const role = user?.role;
   const fetchProperties = useCallback(async () => {
@@ -48,7 +51,7 @@ export default function DashboardPropertiesPage() {
           page: currentPage,
           limit: ITEMS_PER_PAGE,
         });
-        console.log(response);
+        // console.log(response);
       } else {
         const searchParams = {
           city: searchValue,
@@ -91,29 +94,37 @@ export default function DashboardPropertiesPage() {
 
   const handleDeleteProperty = (id: string) => {
     setPropertyToDelete(id);
-    setIsDeleteModalOpen(true);
+    setIsOtpModalOpen(true);
   };
-  const confirmDelete = async () => {
+  const confirmDeleteWithOtp = async (otp: string) => {
     if (!propertyToDelete) return;
 
     setLoading(true);
     try {
-      await PropertyService.delete(propertyToDelete);
-      toast.success("Imóvel excluído com sucesso!");
+      const verificationResponse = await VerificationService.confirm(
+        VerificationContexts.DELETE_PROPERTY,
+        otp
+      );
+      if (verificationResponse.data.actionToken) {
+        await PropertyService.delete(
+          propertyToDelete,
+          verificationResponse.data.actionToken
+        );
 
-      setProperties((prev) => prev.filter((p) => p.id !== propertyToDelete));
-    } catch (_error) {
-      const errorMessage = extractAxiosError(_error);
-      toast.error("Não foi possível carregar os contratos", {
-        description: errorMessage,
+        toast.success("Imóvel excluído com sucesso!");
+        setProperties((prev) => prev.filter((p) => p.id !== propertyToDelete));
+        setIsOtpModalOpen(false);
+      }
+    } catch (error) {
+      toast.error("Falha na exclusão do imóvel", {
+        description: extractAxiosError(error),
       });
+      console.error("Falha na exclusão do imóvel:", error);
     } finally {
-      setIsDeleteModalOpen(false);
       setPropertyToDelete(null);
       setLoading(false);
     }
   };
-
   const pageContent = {
     title: "Meus Imóveis",
     subtitle: "Gerencie e visualize todos os seus imóveis.",
@@ -202,11 +213,23 @@ export default function DashboardPropertiesPage() {
         </div>
       </div>
       {(role === Roles.ADMIN || role === Roles.LOCADOR) && <FabButton />}
-      <DeletePropertyModal
+      {/* <DeletePropertyModal
         isOpen={isDeleteModalOpen}
         onClose={() => setIsDeleteModalOpen(false)}
         onConfirm={confirmDelete}
         isLoading={loading}
+      /> */}
+      <OtpVerificationModal
+        isOpen={isOtpModalOpen}
+        onClose={() => setIsOtpModalOpen(false)}
+        onConfirm={confirmDeleteWithOtp}
+        onResendOtp={() =>
+          VerificationService.request(VerificationContexts.DELETE_PROPERTY)
+        }
+        isLoading={loading}
+        title="Confirmar Exclusão de Imóvel"
+        description="Para sua segurança, por favor, insira o código de 6 dígitos enviado para o seu e-mail."
+        actionText="Excluir Imóvel"
       />
     </div>
   );

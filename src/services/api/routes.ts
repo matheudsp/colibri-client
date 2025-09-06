@@ -57,9 +57,9 @@ const API_ROUTES = {
     SEARCH: "/properties/search",
     PUBLIC_SEARCH: "/properties/public/search",
     CREATE: "/properties",
-    BY_ID: ({ id }: Params) => `/properties/${id}`,
-    UPDATE: ({ id }: Params) => `/properties/${id}`,
-    DELETE: ({ id }: Params) => `/properties/${id}`,
+    BY_ID: ({ propertyId }: Params) => `/properties/${propertyId}`,
+    UPDATE: ({ propertyId }: Params) => `/properties/${propertyId}`,
+    DELETE: ({ propertyId }: Params) => `/properties/${propertyId}/delete`,
   },
   BANKSLIP: {
     BASE: "/bank-slips",
@@ -110,6 +110,10 @@ const API_ROUTES = {
     BALANCE: "/bank-accounts/balance",
     MY_ACCOUNT: "/bank-accounts/my-account",
     UPDATE: "/bank-accounts",
+  },
+  VERIFICATION: {
+    REQUEST: "/verification/request",
+    CONFIRM: "/verification/confirm",
   },
 };
 

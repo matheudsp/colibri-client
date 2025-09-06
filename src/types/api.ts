@@ -44,3 +44,7 @@ export interface PropertiesApiResponse {
   meta?: ApiMeta;
   properties: PropertyProps[];
 }
+
+export interface VerificationApiResponse {
+  actionToken: string;
+}
