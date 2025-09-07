@@ -23,6 +23,7 @@ import { CustomButton } from "@/components/forms/CustomButton";
 import { formatDateForDisplay } from "@/utils/formatters/formatDate";
 import { formatDecimalValue } from "@/utils/formatters/formatDecimal";
 import { extractAxiosError } from "@/services/api";
+import { EmptyCard } from "@/components/common/EmptyCard";
 
 const statusMap: Record<
   PaymentStatus,
@@ -121,11 +122,11 @@ export default function MyPaymentsPage() {
   }, [payments]);
 
   return (
-    <div className="bg-gray-50 min-h-screen pt-24 md:pt-28 pb-10">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="min-h-svh flex flex-col items-center pt-8 md:pt-14 px-4 pb-24  bg-gray-50">
+      <div className="w-full max-w-7xl mx-auto">
         <header className="mb-6 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
           <div>
-            <h1 className="text-3xl font-bold text-gray-800">
+            <h1 className="text-3xl sm:text-4xl font-bold text-gray-800">
               Meus Pagamentos
             </h1>
             <p className="text-gray-500 mt-1">
@@ -174,22 +175,17 @@ export default function MyPaymentsPage() {
             </select>
           </div>
         </header>
-
-        <div className="bg-white rounded-lg shadow-md border overflow-hidden">
+        <div className="w-full  grid gap-4 pb-10">
           {loading ? (
             <div className="flex justify-center items-center h-64">
               <Loader2 className="animate-spin text-primary" size={32} />
             </div>
           ) : payments.length === 0 ? (
-            <div className="flex flex-col items-center justify-center py-16 text-center">
-              <FileText className="mx-auto text-gray-400" size={48} />
-              <p className="mt-4 text-lg font-semibold text-gray-700">
-                Nenhum pagamento encontrado
-              </p>
-              <p className="mt-1 text-sm text-gray-500">
-                Tente ajustar os filtros ou verifique mais tarde.
-              </p>
-            </div>
+            <EmptyCard
+              icon={<FileText size={48} />}
+              title="Nenhum pagamento encontrado"
+              subtitle="Tente ajustar os filtros ou verifique mais tarde."
+            />
           ) : (
             <div className="overflow-x-auto">
               <table className="min-w-full">

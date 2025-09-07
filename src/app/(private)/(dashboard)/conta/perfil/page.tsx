@@ -82,9 +82,9 @@ export default function ProfilePage() {
 
   return (
     <div className="min-h-screen bg-gray-50 pt-24 md:pt-28 pb-10">
-      <div className="max-w-2xl mx-auto px-4">
+      <div className="max-w-7xl mx-auto px-4">
         <CustomButton
-          onClick={() => router.push("/account")}
+          onClick={() => router.push("/conta")}
           ghost
           className="text-gray-600 hover:text-gray-900 mb-6"
         >

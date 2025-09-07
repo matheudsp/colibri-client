@@ -40,6 +40,9 @@ export interface ApiResponse<T> {
   success?: boolean;
 }
 
+export interface MessageResponse {
+  message: string;
+}
 export interface PropertiesApiResponse {
   meta?: ApiMeta;
   properties: PropertyProps[];

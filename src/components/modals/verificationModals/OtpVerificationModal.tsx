@@ -3,7 +3,7 @@
 import { useState, useRef, KeyboardEvent, useEffect } from "react";
 import { Modal } from "@/components/modals/Modal";
 import { CustomButton } from "@/components/forms/CustomButton";
-import { Loader2, Send } from "lucide-react";
+import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import clsx from "clsx";
 import type { ApiResponse } from "@/types/api";
@@ -17,6 +17,7 @@ interface OtpVerificationModalProps {
   title: string;
   description: string;
   actionText?: string;
+  codeAlreadySent?: boolean;
 }
 
 export function OtpVerificationModal({
@@ -28,11 +29,27 @@ export function OtpVerificationModal({
   title,
   description,
   actionText = "Confirmar",
+  codeAlreadySent = false,
 }: OtpVerificationModalProps) {
   const [otp, setOtp] = useState<string[]>(new Array(6).fill(""));
-  const [isInitialSend, setIsInitialSend] = useState(true);
+  const [isInitialSend, setIsInitialSend] = useState(!codeAlreadySent);
   const [countdown, setCountdown] = useState(0);
   const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
+
+  useEffect(() => {
+    if (isOpen) {
+      if (codeAlreadySent) {
+        setIsInitialSend(false);
+        setCountdown(60);
+        inputRefs.current[0]?.focus();
+      }
+    } else {
+      // Reseta o estado ao fechar, respeitando a prop
+      setOtp(new Array(6).fill(""));
+      setIsInitialSend(!codeAlreadySent);
+      setCountdown(0);
+    }
+  }, [isOpen, codeAlreadySent]);
 
   useEffect(() => {
     if (countdown > 0) {
@@ -40,14 +57,6 @@ export function OtpVerificationModal({
       return () => clearTimeout(timer);
     }
   }, [countdown]);
-
-  useEffect(() => {
-    if (!isOpen) {
-      setOtp(new Array(6).fill(""));
-      setIsInitialSend(true);
-      setCountdown(0);
-    }
-  }, [isOpen]);
 
   const handleSendOrResendCode = async () => {
     if (countdown > 0) return;

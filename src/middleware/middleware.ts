@@ -1,7 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 
-const publicRoutes = [
+export const publicRoutes = [
   "/",
+  "/esqueci-senha",
+  "/redefinir-senha",
   "/entrar",
   "/registrar",
   /^\/imoveis\/[^/]+$/,

@@ -1,18 +1,11 @@
 "use client";
+import type { UserData } from "@/services/domains/authService";
 import { create } from "zustand";
 
-export interface User {
-  id: string;
-  name: string;
-  email?: string;
-  role: string;
-  status: boolean;
-}
-
 interface UserState {
-  user: User | null;
+  user: UserData | null;
   loading: boolean;
-  setUser: (user: User | null) => void;
+  setUser: (user: UserData | null) => void;
   setLoading: (loading: boolean) => void;
 }
 

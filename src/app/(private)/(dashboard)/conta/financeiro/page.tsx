@@ -42,7 +42,7 @@ const ViewBankAccount = ({
   balance: Balance;
   onEdit: () => void;
 }) => (
-  <div className="space-y-6">
+  <div className="space-y-6 ">
     <div className="bg-white p-6 rounded-xl shadow-md border text-center">
       <Wallet size={48} className="mx-auto text-primary" />
       <h2 className="text-2xl font-bold text-gray-800 mt-4">
@@ -303,16 +303,16 @@ export default function FinancialPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 pt-24 md:pt-28 pb-10">
+    <div className="min-h-screen mx-auto pt-24 md:pt-28 pb-10 max-w-7xl">
       <CustomButton
-        onClick={() => router.push("/account")}
+        onClick={() => router.push("/conta")}
         ghost
         className="text-gray-600 hover:text-gray-900 mb-6 ml-4"
       >
         <ArrowLeft className="mr-2" />
         Voltar para Conta
       </CustomButton>
-      <div className="max-w-2xl mx-auto px-4">{renderContent()}</div>
+      <div className=" mx-auto px-4">{renderContent()}</div>
     </div>
   );
 }

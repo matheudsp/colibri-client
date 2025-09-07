@@ -12,10 +12,13 @@ const API_ROUTES = {
   AUTH: {
     ME: "/auth/me",
     LOGIN: "/auth/login",
+    LOGIN_2FA: "/auth/login/2fa",
     REFRESH: "/auth/refresh",
     LOGOUT: "/auth/logout",
     REGISTER: "/auth/register",
     REGISTER_LANDLORD: "/auth/register/landlord",
+    FORGOT_PASSWORD: "/auth/forgot-password",
+    RESET_PASSWORD: "/auth/reset-password",
   },
 
   LOGS: {

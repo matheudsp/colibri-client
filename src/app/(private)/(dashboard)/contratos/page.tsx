@@ -13,6 +13,7 @@ import { toast } from "sonner";
 import { ContractCard } from "@/components/cards/ContractCard";
 import type { Contract } from "@/interfaces/contract";
 import { extractAxiosError } from "@/services/api";
+import { EmptyCard } from "@/components/common/EmptyCard";
 
 export default function ContractsPage() {
   const [contracts, setContracts] = useState<Contract[]>([]);
@@ -67,9 +68,9 @@ export default function ContractsPage() {
   }
 
   return (
-    <div className="min-h-svh flex flex-col items-center pt-24 px-4 pb-24 md:pt-28 md:px-8 md:pb-8 bg-gray-50">
-      <div className="w-full max-w-5xl mx-auto">
-        <div className="text-center mb-8">
+    <div className="min-h-svh flex flex-col items-center pt-8 md:pt-14 px-4 pb-24  bg-gray-50">
+      <div className="w-full max-w-7xl mx-auto">
+        <div className="text-start mb-8">
           <h1 className="text-3xl sm:text-4xl font-bold text-gray-800">
             Meus Contratos
           </h1>
@@ -80,12 +81,11 @@ export default function ContractsPage() {
 
         <div className="w-full grid gap-4">
           {contracts.length === 0 ? (
-            <div className="flex flex-col items-center justify-center gap-3 text-center mt-10 p-6 bg-white rounded-lg shadow-sm">
-              <FileText size={40} className="text-gray-400" />
-              <p className="text-gray-600 font-semibold">
-                Nenhum contrato encontrado.
-              </p>
-            </div>
+            <EmptyCard
+              icon={<FileText size={48} />}
+              title="Nenhum contrato encontrado"
+              subtitle="Seus contratos serão listados aqui assim que forem criados."
+            />
           ) : (
             <>
               {contracts.map((contract) => (
@@ -94,6 +94,7 @@ export default function ContractsPage() {
               <Pagination
                 currentPage={pagination.page}
                 totalPages={pagination.totalPages}
+                total={pagination.total}
               />
             </>
           )}

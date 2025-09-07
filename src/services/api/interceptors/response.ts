@@ -1,6 +1,7 @@
 import { AxiosError, AxiosInstance } from "axios";
 import { AuthService } from "../../domains/authService";
 import { useUserStore } from "@/stores/userStore";
+import { publicRoutes } from "@/middleware/middleware";
 
 let isRefreshing = false;
 let failedQueue: Array<{
@@ -41,10 +42,16 @@ export const setupResponseInterceptor = (apiInstance: AxiosInstance) => {
             processQueue(refreshError as AxiosError);
 
             // Remova a chamada à API de logout e limpe o estado localmente
-            useUserStore.getState().setUser(null);
-
-            // Redireciona apenas se não estiver já na página de login
-            if (window.location.pathname !== "/entrar") {
+            const { user, setUser } = useUserStore.getState();
+            if (user) {
+              setUser(null);
+            }
+            const isPublic = publicRoutes.some((route) =>
+              route instanceof RegExp
+                ? route.test(window.location.pathname)
+                : route === window.location.pathname
+            );
+            if (!isPublic) {
               window.location.href = "/entrar";
             }
 

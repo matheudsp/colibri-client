@@ -17,7 +17,6 @@ import { ApiResponse, type PropertiesApiResponse } from "@/types/api";
 import { toast } from "sonner";
 
 import { Roles } from "@/constants/userRole";
-import { DeletePropertyModal } from "@/components/modals/propertyModals/DeletePropertyModal";
 import { useSearch } from "@/contexts/SearchContext";
 import { extractAxiosError } from "@/services/api";
 import { useUserStore } from "@/stores/userStore";
@@ -213,12 +212,7 @@ export default function DashboardPropertiesPage() {
         </div>
       </div>
       {(role === Roles.ADMIN || role === Roles.LOCADOR) && <FabButton />}
-      {/* <DeletePropertyModal
-        isOpen={isDeleteModalOpen}
-        onClose={() => setIsDeleteModalOpen(false)}
-        onConfirm={confirmDelete}
-        isLoading={loading}
-      /> */}
+
       <OtpVerificationModal
         isOpen={isOtpModalOpen}
         onClose={() => setIsOtpModalOpen(false)}

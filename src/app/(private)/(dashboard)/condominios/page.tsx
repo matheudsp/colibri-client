@@ -67,9 +67,9 @@ export default function CondominiumsPage() {
   }
 
   return (
-    <div className="min-h-svh flex flex-col items-center pt-24 px-4 pb-24 md:pt-28 md:px-8 md:pb-8 bg-gray-50">
-      <div className="w-full max-w-5xl mx-auto">
-        <div className="text-center mb-8">
+    <div className="min-h-svh flex flex-col items-center pt-8 md:pt-14 px-4 pb-24  bg-gray-50">
+      <div className="w-full max-w-7xl mx-auto">
+        <div className="text-start mb-8">
           <h1 className="text-3xl sm:text-4xl font-bold text-gray-800">
             Meus Condomínios
           </h1>
