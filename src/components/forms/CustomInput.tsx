@@ -1,3 +1,5 @@
+// src/components/forms/CustomInput.tsx
+
 "use client";
 
 import { forwardRef, useState } from "react";
@@ -18,7 +20,7 @@ export const CustomInput = forwardRef<HTMLInputElement, CustomInputProps>(
       error,
       disabled,
       displayValue,
-      // isFocused: _isFocused,
+      isFocused,
       baseClasses,
       containerClasses,
       inputClasses: originalInputClasses,
@@ -29,6 +31,7 @@ export const CustomInput = forwardRef<HTMLInputElement, CustomInputProps>(
       handleChange,
       ...restProps
     } = useCustomInput(props);
+
     const [showPassword, setShowPassword] = useState(false);
     const isPassword = props.type === "password";
     const inputType = isPassword

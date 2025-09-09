@@ -1,18 +1,36 @@
 import type { ApiResponse } from "@/types/api";
 import { api, extractAxiosError } from "../api";
 import API_ROUTES from "../api/routes";
+import type { UserProfileFormValues } from "@/validations/users/userProfileValidation";
 
+// Interface base do usuário
 export interface User {
   id: string;
   name: string;
   email: string;
   role?: "ADMIN" | "LOCADOR" | "LOCATARIO";
   status: boolean;
+  emailVerified: boolean;
+  isTwoFactorAuthEnabled: boolean;
   cpfCnpj?: string;
-  // createdAt: string;
-  // updatedAt: string;
 }
 
+// Interface completa com todos os dados do locador/usuário
+export interface UserComplete extends User {
+  birthDate?: string;
+  companyType?: string;
+  phone?: string;
+  street?: string;
+  number?: string;
+  complement?: string | null;
+  province?: string; // Bairro
+  city?: string;
+  state?: string;
+  cep?: string;
+  incomeValue?: string;
+  createdAt: string;
+  updatedAt: string;
+}
 interface ListUserParams {
   status?: boolean;
 }
@@ -25,13 +43,7 @@ interface SearchUserParams {
   cpfCnpj?: string;
 }
 
-interface UpdateUserData {
-  name?: string;
-  email?: string;
-  password?: string;
-  role?: "ADMIN" | "LOCADOR" | "LOCATARIO";
-  status?: boolean;
-}
+export type UpdateUserData = Partial<UserProfileFormValues>;
 
 export const UserService = {
   async listAll(params?: ListUserParams): Promise<User[]> {
@@ -51,6 +63,15 @@ export const UserService = {
         params: params,
       });
 
+      return response.data;
+    } catch (error) {
+      throw new Error(extractAxiosError(error));
+    }
+  },
+
+  async findMe(): Promise<ApiResponse<UserComplete>> {
+    try {
+      const response = await api.get(API_ROUTES.USERS.ME);
       return response.data;
     } catch (error) {
       throw new Error(extractAxiosError(error));

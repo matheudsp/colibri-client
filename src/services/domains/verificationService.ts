@@ -1,7 +1,7 @@
 import type { ApiResponse, VerificationApiResponse } from "@/types/api";
 import { api, extractAxiosError } from "../api";
 import API_ROUTES from "../api/routes";
-import { type VerificationContext } from "@/constants/VerificationContexts";
+import { type VerificationContext } from "@/constants/verificationContexts";
 export const VerificationService = {
   /**
    * Solicita ao backend o envio de um código OTP para o usuário.

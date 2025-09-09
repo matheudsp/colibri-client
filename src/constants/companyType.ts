@@ -4,3 +4,9 @@ export const companyType = [
   { id: "individual", value: "INDIVIDUAL", label: "INDIVIDUAL" },
   { id: "association", value: "ASSOCIATION", label: "ASSOCIAÇÃO" },
 ];
+
+export const getCompanyTypeLabel = (value: string | null | undefined) => {
+  if (!value) return "";
+  const found = companyType.find((opt) => opt.value === value);
+  return found ? found.label : value;
+};

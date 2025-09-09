@@ -22,7 +22,7 @@ import { extractAxiosError } from "@/services/api";
 import { useUserStore } from "@/stores/userStore";
 import { VerificationService } from "@/services/domains/verificationService";
 import { OtpVerificationModal } from "@/components/modals/verificationModals/OtpVerificationModal";
-import { VerificationContexts } from "@/constants/VerificationContexts";
+import { VerificationContexts } from "@/constants/verificationContexts";
 
 export default function DashboardPropertiesPage() {
   const { searchValue } = useSearch();

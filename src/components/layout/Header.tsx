@@ -226,29 +226,35 @@ export function Header({
     );
   }
   return (
-    <header>
-      {onBack && (
-        <button
-          title="Botão de voltar"
-          aria-label="Botão de voltar"
-          onClick={onBack}
-          className="hover:bg-gray-500/10 p-2 rounded-full transition-all"
-        >
-          <ArrowLeftIcon className="w-7 h-7" />
-        </button>
-      )}
-      <div className="flex-1 flex justify-center">
-        <Image
-          height={50}
-          width={120}
-          src="/icons/logo-black-green.svg"
-          alt="Logo Colibri"
-          className="w-auto h-12"
-          priority
-        />
+    <header
+      className={` fixed z-50 top-0 w-full flex items-center justify-center bg-white/90 backdrop-blur-sm `}
+    >
+      <div
+        className={` w-full max-w-7xl px-4 2xl:px-0 h-20 flex items-center justify-between gap-6 transition-all duration-300 ease-in-out `}
+      >
+        {onBack && (
+          <button
+            title="Botão de voltar"
+            aria-label="Botão de voltar"
+            onClick={onBack}
+            className="hover:bg-gray-500/10 p-2 rounded-full transition-all"
+          >
+            <ArrowLeftIcon className="w-7 h-7" />
+          </button>
+        )}
+        <div className="flex-1 flex justify-center">
+          <Image
+            height={50}
+            width={120}
+            src="/icons/logo-black-green.svg"
+            alt="Logo Colibri"
+            className="w-auto h-12"
+            priority
+          />
+        </div>
+        {type === "back" && <span className="w-11 h-11"></span>}
+        {type === "backMenu" && dropdownMenu}
       </div>
-      {type === "back" && <span className="w-11 h-11"></span>}
-      {type === "backMenu" && dropdownMenu}
     </header>
   );
 }

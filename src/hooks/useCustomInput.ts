@@ -20,7 +20,10 @@ export type CustomInputMask =
   | "cpfCnpj";
 
 export interface UseCustomInputProps
-  extends Omit<React.InputHTMLAttributes<HTMLInputElement>, "onChange"> {
+  extends Omit<
+    React.InputHTMLAttributes<HTMLInputElement>,
+    "onChange" | "onFocus" | "onBlur"
+  > {
   label?: string;
   icon?: React.ReactElement;
   error?: string;
@@ -28,6 +31,7 @@ export interface UseCustomInputProps
   value?: string | number;
   onChange?: (value: string) => void;
   onBlur?: (e: FocusEvent<HTMLInputElement>) => void;
+  onFocus?: (e: FocusEvent<HTMLInputElement>) => void;
   registration?: UseFormRegisterReturn;
   baseClassName?: string;
   inputClassName?: string;
@@ -45,6 +49,7 @@ export function useCustomInput(props: UseCustomInputProps) {
     defaultValue,
     onChange: controlledOnChange,
     onBlur: controlledOnBlur,
+    onFocus: controlledOnFocus,
     registration,
     baseClassName,
     inputClassName,
@@ -59,9 +64,11 @@ export function useCustomInput(props: UseCustomInputProps) {
     controlledValue !== undefined
       ? String(controlledValue)
       : String(internalValue);
-  // const hasValue = !!value;
 
-  const handleFocus = () => setIsFocused(true);
+  const handleFocus = (e: FocusEvent<HTMLInputElement>) => {
+    setIsFocused(true);
+    controlledOnFocus?.(e);
+  };
 
   const handleBlur = (e: FocusEvent<HTMLInputElement>) => {
     setIsFocused(false);
@@ -73,20 +80,23 @@ export function useCustomInput(props: UseCustomInputProps) {
     const rawValue = e.target.value;
     let valueToUpdate: string | number = rawValue;
 
-    // Unmask para o state do formulário
     if (mask) {
-      switch (mask) {
-        case "currency":
-          valueToUpdate = unmaskCurrency(rawValue);
-          break;
-        case "phone":
-          valueToUpdate = unmaskPhone(rawValue);
-          break;
-        case "numeric":
-          valueToUpdate = rawValue.replace(/\D/g, "");
-          break;
-        default:
-          valueToUpdate = rawValue.replace(/\D/g, "");
+      if (!String(value).includes("*")) {
+        switch (mask) {
+          case "currency":
+            valueToUpdate = unmaskCurrency(rawValue);
+            break;
+          case "phone":
+            valueToUpdate = unmaskPhone(rawValue);
+            break;
+          case "numeric":
+          case "cep":
+          case "cpfCnpj":
+            valueToUpdate = rawValue.replace(/\D/g, "");
+            break;
+          default:
+            valueToUpdate = rawValue;
+        }
       }
     }
 
@@ -103,30 +113,27 @@ export function useCustomInput(props: UseCustomInputProps) {
     }
   };
 
-  // Formata o valor para exibição no input
   const displayValue = useMemo(() => {
-    let formatted = String(value);
+    const stringValue = String(value);
+    if (stringValue.includes("*")) return stringValue;
+    if (!mask) return stringValue;
+
     switch (mask) {
       case "currency":
-        formatted = formatCurrency(formatted);
-        break;
+        return formatCurrency(stringValue);
       case "numeric":
-        formatted = formatNumeric(formatted);
-        break;
+        return formatNumeric(stringValue);
       case "date":
-        formatted = dateMask(formatted);
-        break;
+        return dateMask(stringValue);
       case "phone":
-        formatted = phoneMask(formatted);
-        break;
+        return phoneMask(stringValue);
       case "cep":
-        formatted = formatCEP(formatted);
-        break;
+        return formatCEP(stringValue);
       case "cpfCnpj":
-        formatted = cpfCnpjMask(formatted);
-        break;
+        return cpfCnpjMask(stringValue);
+      default:
+        return stringValue;
     }
-    return formatted;
   }, [value, mask]);
 
   const baseClasses = useMemo(
@@ -137,14 +144,13 @@ export function useCustomInput(props: UseCustomInputProps) {
   const containerClasses = useMemo(
     () =>
       clsx(
-        "flex items-center w-full px-3 py-2 rounded-lg border-2 transition-all duration-300 bg-white",
+        "flex items-center w-full px-3 py-2 rounded-lg border-2 transition-all duration-300",
         {
           "border-primary ring-2 ring-primary/20": isFocused && !error,
           "border-error ring-2 ring-error/20": !!error,
-          "border-gray-300": !isFocused && !error,
+          "border-gray-300 bg-white": !isFocused && !error && !disabled,
           "hover:border-gray-400": !disabled && !error && !isFocused,
-          "bg-gray-100 text-gray-400 border-gray-200 cursor-not-allowed":
-            disabled,
+          "bg-gray-100 border-gray-50 cursor-not-allowed ": disabled,
         }
       ),
     [isFocused, error, disabled]
@@ -154,7 +160,9 @@ export function useCustomInput(props: UseCustomInputProps) {
     () =>
       clsx(
         "w-full bg-transparent outline-none text-foreground placeholder:text-gray-400",
-        { "cursor-not-allowed": disabled },
+        {
+          "cursor-not-allowed text-gray-700": disabled,
+        },
         inputClassName
       ),
     [disabled, inputClassName]
@@ -162,15 +170,12 @@ export function useCustomInput(props: UseCustomInputProps) {
 
   const labelClasses = useMemo(
     () =>
-      clsx(
-        "block text-sm font-medium mb-1",
-        {
-          "text-error": !!error,
-          "text-secondary": !error,
-        },
-        labelClassName
-      ),
-    [error, labelClassName]
+      clsx("block text-sm font-medium mb-1", {
+        "text-error": !!error,
+        "text-secondary": !error,
+        "text-gray-600": disabled,
+      }),
+    [error, labelClassName, disabled]
   );
 
   const iconContainerClasses = useMemo(
@@ -179,7 +184,7 @@ export function useCustomInput(props: UseCustomInputProps) {
         "text-primary": isFocused && !error,
         "text-error": !!error,
         "text-gray-400": !isFocused && !error,
-        "text-gray-300": disabled,
+        "text-gray-500": disabled,
       }),
     [isFocused, error, disabled]
   );

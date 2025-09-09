@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 
 export const publicRoutes = [
   "/",
+  "/verificar-email",
   "/esqueci-senha",
   "/redefinir-senha",
   "/entrar",

@@ -1,5 +1,5 @@
 import { ApiResponse, MessageResponse } from "../../types/api";
-import { api } from "../api";
+import { api, extractAxiosError } from "../api";
 import API_ROUTES from "../api/routes";
 
 interface TenantRegisterData {
@@ -68,7 +68,7 @@ export const AuthService = {
       const response = await api.post(API_ROUTES.AUTH.FORGOT_PASSWORD, data);
       return response.data;
     } catch (error) {
-      throw error;
+      throw new Error(extractAxiosError(error));
     }
   },
 
@@ -83,7 +83,7 @@ export const AuthService = {
       });
       return response.data;
     } catch (error) {
-      throw error;
+      throw new Error(extractAxiosError(error));
     }
   },
   async getMe(): Promise<ApiResponse<UserData>> {
@@ -93,7 +93,7 @@ export const AuthService = {
       });
       return response.data;
     } catch (error) {
-      throw error;
+      throw new Error(extractAxiosError(error));
     }
   },
   async login(loginData: LoginData): Promise<LoginPayload> {
@@ -104,7 +104,7 @@ export const AuthService = {
       );
       return response.data.data;
     } catch (error) {
-      throw error;
+      throw new Error(extractAxiosError(error));
     }
   },
 
@@ -115,7 +115,7 @@ export const AuthService = {
       const response = await api.post(API_ROUTES.AUTH.LOGIN_2FA, data);
       return response.data;
     } catch (error) {
-      throw error;
+      throw new Error(extractAxiosError(error));
     }
   },
 
@@ -125,6 +125,7 @@ export const AuthService = {
     } catch (error) {
       // Mesmo que falhe, tentamos limpar o estado do lado do cliente
       console.error("Logout failed", error);
+      throw new Error(extractAxiosError(error));
     }
   },
 
@@ -137,7 +138,7 @@ export const AuthService = {
       const response = await api.post(API_ROUTES.AUTH.REGISTER, registerData);
       return response.data;
     } catch (error) {
-      throw error;
+      throw new Error(extractAxiosError(error));
     }
   },
 
@@ -150,7 +151,27 @@ export const AuthService = {
       );
       return response.data;
     } catch (error) {
-      throw error;
+      throw new Error(extractAxiosError(error));
+    }
+  },
+
+  async resendVerificationEmail(): Promise<ApiResponse<{ message: string }>> {
+    try {
+      const response = await api.post(API_ROUTES.AUTH.RESEND_VERIFICATION);
+      return response.data;
+    } catch (error) {
+      throw new Error(extractAxiosError(error));
+    }
+  },
+
+  async verifyEmail(token: string): Promise<ApiResponse<{ message: string }>> {
+    try {
+      const response = await api.get(API_ROUTES.AUTH.VERIFY_EMAIL, {
+        params: { token },
+      });
+      return response.data;
+    } catch (error) {
+      throw new Error(extractAxiosError(error));
     }
   },
 };

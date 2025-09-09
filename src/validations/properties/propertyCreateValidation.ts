@@ -40,7 +40,7 @@ export const createPropertySchema = z.object({
   value: z
     .string({ required_error: "O valor do aluguel é obrigatório." })
     .min(1, "O valor do aluguel é obrigatório."),
-  state: z.string().min(1, "O estado é obrigatório"),
+  state: z.string().min(1, "O estado é obrigatório."),
 
   areaInM2: z.coerce
     .number({

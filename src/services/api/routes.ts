@@ -19,6 +19,13 @@ const API_ROUTES = {
     REGISTER_LANDLORD: "/auth/register/landlord",
     FORGOT_PASSWORD: "/auth/forgot-password",
     RESET_PASSWORD: "/auth/reset-password",
+    RESEND_VERIFICATION: "/auth/resend-verification",
+    VERIFY_EMAIL: "/auth/verify-email",
+  },
+  TWO_FACTOR_AUTH: {
+    ENABLE: "/2fa/enable",
+    CONFIRM_ENABLE: "/2fa/confirm-enable",
+    DISABLE: "/2fa/disable",
   },
 
   LOGS: {
@@ -37,6 +44,7 @@ const API_ROUTES = {
 
   USERS: {
     BASE: "/users",
+    ME: "/users/me",
     SEARCH: "/users/search",
     BY_ID: ({ id }: Params) => `/users/${id}`,
     UPDATE: ({ id }: Params) => `/users/${id}`,

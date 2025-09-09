@@ -59,7 +59,7 @@ export const landlordRegisterSchema = z
     number: z.string().min(1, "O número é obrigatório."),
     province: z.string().min(1, "O bairro é obrigatório."),
     city: z.string().min(1, "A cidade é obrigatória."),
-    state: z.string().length(2, "O estado deve ter 2 caracteres."),
+    state: z.string().min(1, "O estado é obrigatório."),
     complement: z.string().optional(),
     incomeValue: z.string(),
 

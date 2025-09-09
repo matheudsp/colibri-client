@@ -85,18 +85,18 @@ export default function CreatePropertyPage() {
         setValue("street", address.street, { shouldValidate: true });
         setValue("district", address.district, { shouldValidate: true });
         setCityFromCep(address.city);
-        setValue("state", address.rawUf, { shouldValidate: true });
+
+        setValue("state", address.state, { shouldValidate: true });
         // setFocus("number");
       } else {
-        toast.error("CEP não encontrado.");
+        toast.error("CEP não encontrado. Preencha manualmente.");
       }
     } catch (error) {
-      toast.error(`Erro ao buscar o CEP: ${error}`);
+      toast.error(`Erro ao buscar o CEP: ${error}. Preencha manualmente.`);
     } finally {
       setIsCepLoading(false);
     }
   };
-
   useEffect(() => {
     if (!stateValue) {
       setCities([]);
@@ -105,7 +105,12 @@ export default function CreatePropertyPage() {
     }
     const loadCities = async () => {
       setIsCitiesLoading(true);
-      const cityOptions = await fetchCitiesByState(stateValue);
+      const selectedState = brazilianStates.find(
+        (state) => state.value === stateValue
+      );
+      const stateUf = selectedState ? selectedState.id : "";
+
+      const cityOptions = await fetchCitiesByState(stateUf);
       setCities(
         cityOptions.map((c) => ({ id: c.id, value: c.value, label: c.label }))
       );

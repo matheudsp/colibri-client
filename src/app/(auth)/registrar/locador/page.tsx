@@ -89,7 +89,8 @@ export default function LandlordRegisterPage() {
         setValue("street", address.street, { shouldValidate: true });
         setValue("province", address.district, { shouldValidate: true });
         setCityFromCep(address.city);
-        setValue("state", address.rawUf, { shouldValidate: true });
+
+        setValue("state", address.state, { shouldValidate: true });
         setFocus("number");
       } else {
         toast.error("CEP não encontrado. Preencha manualmente.");
@@ -109,7 +110,12 @@ export default function LandlordRegisterPage() {
     }
     const loadCities = async () => {
       setIsCitiesLoading(true);
-      const cityOptions = await fetchCitiesByState(stateValue);
+      const selectedState = brazilianStates.find(
+        (state) => state.value === stateValue
+      );
+      const stateUf = selectedState ? selectedState.id : "";
+
+      const cityOptions = await fetchCitiesByState(stateUf);
       setCities(
         cityOptions.map((c) => ({ id: c.id, value: c.value, label: c.label }))
       );
@@ -333,6 +339,7 @@ export default function LandlordRegisterPage() {
                 label="CEP*"
                 id="cep"
                 mask="cep"
+                maxLength={9}
                 placeholder="ex: 63233-239"
                 icon={<MapPinIcon size={20} />}
                 error={errors.cep?.message}

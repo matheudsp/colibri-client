@@ -29,12 +29,29 @@ body {
   }
 }
 
-*::-webkit-scrollbar-thumb {
-    background-color: var(--accent);
-    border-radius: 10px;
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--secondary) transparent; /* Cor da barra e do fundo transparente */
 }
 
+/* Para Chrome, Edge, Safari e outros baseados em WebKit */
 *::-webkit-scrollbar {
-    width: 0.5em;
+  width: 6px;  /* Largura da scrollbar vertical */
+  height: 6px; /* Altura da scrollbar horizontal (para as abas no mobile) */
+}
+
+*::-webkit-scrollbar-track {
+  background: transparent; /* O fundo da scrollbar fica invisível */
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: #C1C1C1; /* Cor padrão da barra, um cinza bem sutil */
+  border-radius: 10px;
+  transition: background-color 0.2s ease-in-out;
+}
+
+/* Efeito ao passar o mouse: a barra fica mais escura e visível */
+*:hover::-webkit-scrollbar-thumb {
+    background-color: var(--secondary); /* Usa a cor secundária do seu tema */
 }
 

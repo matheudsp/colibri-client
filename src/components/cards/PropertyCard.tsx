@@ -58,11 +58,11 @@ function DashboardActions({
   const handleCreateContract = (e: React.MouseEvent) => {
     e.stopPropagation();
     e.preventDefault();
-    router.push(`/property/${property.id}/create-contract`);
+    router.push(`/imovel/${property.id}/criar-contrato`);
   };
 
   const handleNavigate = () => {
-    router.push(`/property/${property.id}`);
+    router.push(`/imovel/${property.id}`);
   };
 
   const handleAvailabilityChange = async (newStatus: boolean) => {

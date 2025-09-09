@@ -7,6 +7,8 @@ export const VerificationContexts = {
   DELETE_PROPERTY: "DELETE_PROPERTY",
   CANCEL_CONTRACT: "CANCEL_CONTRACT",
   LOGIN_2FA: "LOGIN_2FA",
+  DISABLE_2FA: "DISABLE_2FA",
+  UPDATE_USER_PROFILE: "UPDATE_USER_PROFILE",
 } as const;
 
 // Gera um tipo TypeScript a partir das chaves do objeto acima.VerificationContexts
