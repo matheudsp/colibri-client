@@ -20,7 +20,6 @@ import { PropertyCard } from "@/components/cards/PropertyCard";
 import { Pagination } from "@/components/layout/Pagination";
 import { ITEMS_PER_PAGE } from "@/constants/pagination";
 import { FilterBar } from "@/components/forms/FilterBar";
-import { slugify } from "@/utils/helpers/slugify";
 import { Breadcrumb } from "@/components/layout/Breadcrumb";
 import { capitalize } from "@/utils/helpers/capitalize";
 
@@ -33,7 +32,7 @@ const cleanupFilters = (
       const K = key as keyof PropertySearchFormValues;
       const value = filters[K];
       if (value !== "" && value !== null && value !== undefined) {
-        (cleanedFilters[K] as unknown) = value;
+        (cleanedFilters[K] as any) = value;
       }
     }
   }
@@ -63,11 +62,11 @@ export default function SearchResultsPage() {
 
   const form = useForm<PropertySearchFormValues>({
     resolver: zodResolver(propertySearchSchema),
+    // CORREÇÃO: Usar 'sort' como valor padrão
     defaultValues: {
       q: "",
       transactionType: "LOCACAO",
-      sortBy: "createdAt",
-      sortOrder: "desc",
+      sort: "createdAt:desc",
     },
   });
   const { reset } = form;
@@ -101,44 +100,28 @@ export default function SearchResultsPage() {
 
   useEffect(() => {
     const slug = (params.slug as string[]) || [];
-    const [...locationParts] = slug;
-
     const transactionType = slug[0] === "a-venda" ? "VENDA" : "LOCACAO";
-    const qFromSlug = locationParts
-      .join(" ")
-      .replace(/-/g, " ")
-      .replace("imoveis", "")
-      .trim();
 
+    const qFromQuery = searchParams.get("q") || "";
     const cityFromQuery = searchParams.get("city");
     const stateFromQuery = searchParams.get("state");
+    const propertyTypeFromQuery = searchParams.get("propertyType");
 
-    let displayLocation = "Brasil";
-    if (qFromSlug) {
-      displayLocation = qFromSlug;
-    } else if (cityFromQuery && stateFromQuery) {
-      displayLocation = `${cityFromQuery}, ${stateFromQuery}`;
-    } else if (cityFromQuery) {
-      displayLocation = cityFromQuery;
-    } else if (stateFromQuery) {
-      displayLocation = stateFromQuery;
-    }
+    // CORREÇÃO: Lê o parâmetro 'sort' da URL
+    const sortFromQuery = searchParams.get("sort") || "createdAt:desc";
+
+    const displayLocation =
+      qFromQuery || cityFromQuery || stateFromQuery || "Brasil";
 
     setSearchQuery({ location: displayLocation, transactionType });
 
     const filtersFromUrl: Partial<PropertySearchFormValues> = {
-      q: qFromSlug,
+      q: qFromQuery,
       transactionType,
       city: cityFromQuery ?? undefined,
       state: stateFromQuery ?? undefined,
-      propertyType: searchParams.get("propertyType") ?? undefined,
-      sortBy:
-        (searchParams.get("sortBy") as PropertySearchFormValues["sortBy"]) ??
-        "createdAt",
-      sortOrder:
-        (searchParams.get(
-          "sortOrder"
-        ) as PropertySearchFormValues["sortOrder"]) ?? "desc",
+      propertyType: propertyTypeFromQuery ?? undefined,
+      sort: sortFromQuery, // CORREÇÃO: Usa o novo parâmetro 'sort'
     };
 
     reset(cleanupFilters(filtersFromUrl) as PropertySearchFormValues);
@@ -146,35 +129,30 @@ export default function SearchResultsPage() {
   }, [params, searchParams, fetchProperties, reset]);
 
   const onSearch = (data: PropertySearchFormValues) => {
-    const { transactionType, q, sortBy, sortOrder, ...otherFilters } = data;
-    const cleanedFilters = cleanupFilters(otherFilters);
+    const { transactionType, q, ...otherFilters } = data;
+    let cleanedFilters = cleanupFilters(otherFilters);
+
+    if (cleanedFilters.city || cleanedFilters.state) {
+      delete cleanedFilters.q;
+    } else if (q) {
+      cleanedFilters.q = q;
+    }
 
     const transactionSlug =
       transactionType === "VENDA" ? "a-venda" : "para-alugar";
-    const locationSlug = slugify(q || "");
+    const path = `/imoveis/${transactionSlug}`;
 
-    let path = `/properties/${transactionSlug}`;
-    if (locationSlug) {
-      path += `/${locationSlug}`;
-    }
-
-    const queryParams = new URLSearchParams();
-    Object.entries(cleanedFilters).forEach(([key, value]) => {
-      queryParams.set(key, String(value));
-    });
-
-    // Corrige o erro TypeScript, garantindo que os valores não são undefined
-    queryParams.set("sortBy", sortBy ?? "createdAt");
-    queryParams.set("sortOrder", sortOrder ?? "desc");
-
+    const queryParams = new URLSearchParams(
+      cleanedFilters as Record<string, string>
+    );
     queryParams.set("page", "1");
-    const newUrl = `${path}?${queryParams.toString()}`;
-    router.push(newUrl);
+
+    router.push(`${path}?${queryParams.toString()}`);
   };
-  const city = capitalize(searchParams.get("city") || "");
-  const state = capitalize(searchParams.get("state") || "");
 
   const getEmptyMessage = () => {
+    const city = capitalize(searchParams.get("city") || "");
+    const state = capitalize(searchParams.get("state") || "");
     if (city && state) {
       return `Nenhum imóvel encontrado em ${city}, ${state}.`;
     }
@@ -201,7 +179,7 @@ export default function SearchResultsPage() {
           <div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 pb-10">
               {properties.length > 0 ? (
-                properties.map((property) => (
+                properties.map((property, index) => (
                   <PropertyCard
                     key={property.id}
                     property={property}

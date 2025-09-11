@@ -18,37 +18,37 @@ type StatusInfo = {
 
 const statusMap: Record<PaymentStatus, StatusInfo> = {
   PENDENTE: {
-    icon: <Clock className="text-yellow-500" />,
+    icon: <Clock className="text-yellow-600" />,
     label: "Pendente",
     color: "text-yellow-600",
   },
   PAGO: {
-    icon: <CheckCircle className="text-green-500" />,
+    icon: <CheckCircle className="text-green-600" />,
     label: "Pago",
     color: "text-green-600",
   },
   ATRASADO: {
-    icon: <Clock className="text-red-500" />,
+    icon: <Clock className="text-red-600" />,
     label: "Atrasado",
     color: "text-red-600",
   },
   CANCELADO: {
-    icon: <XCircle className="text-gray-500" />,
+    icon: <XCircle className="text-gray-600" />,
     label: "Cancelado",
     color: "text-gray-500",
   },
   ISENTO: {
-    icon: <CheckCircle className="text-blue-500" />,
+    icon: <CheckCircle className="text-blue-600" />,
     label: "Isento",
     color: "text-blue-600",
   },
   CONFIRMADO: {
-    icon: <CheckCircle className="text-green-500" />,
+    icon: <CheckCircle className="text-green-600" />,
     label: "Confirmado",
     color: "text-green-600",
   },
   FALHOU: {
-    icon: <XCircle className="text-red-500" />,
+    icon: <XCircle className="text-red-600" />,
     label: "Falhou",
     color: "text-red-600",
   },
@@ -67,20 +67,22 @@ export function PaymentsList({
   const canManagePayments = role === Roles.LOCADOR || role === Roles.ADMIN;
 
   return (
-    <div className="bg-white p-5 rounded-xl shadow-sm border">
+    <div className=" p-5 rounded-xl shadow-sm border">
       <h2 className="font-bold text-xl mb-4 border-b pb-2">
         Histórico de Pagamentos
       </h2>
-      <ul className="space-y-3">
+      <ul className="divide-y p-2">
         {payments.map((payment) => {
           const status = statusMap[payment.status] || statusMap.PENDENTE;
           const isPayable =
-            payment.status === "PENDENTE" || payment.status === "ATRASADO";
+            payment.status === "PENDENTE" ||
+            payment.status === "ATRASADO" ||
+            payment.status === "FALHOU";
 
           return (
             <li
               key={payment.id}
-              className="flex flex-col sm:flex-row justify-between sm:items-center p-3 bg-gray-50 rounded-lg transition-all hover:bg-gray-100"
+              className="flex flex-row justify-between items-center p-3 transition-all hover:bg-gray-100"
             >
               <div className="flex items-center gap-4">
                 {status.icon}

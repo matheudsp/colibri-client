@@ -18,12 +18,14 @@ import {
   Eye,
   DownloadCloud,
   XCircle,
+  Calendar as CalendarIcon,
 } from "lucide-react";
 import { CustomButton } from "@/components/forms/CustomButton";
 import { formatDateForDisplay } from "@/utils/formatters/formatDate";
 import { formatDecimalValue } from "@/utils/formatters/formatDecimal";
 import { extractAxiosError } from "@/services/api";
 import { EmptyCard } from "@/components/common/EmptyCard";
+import { CustomInput } from "@/components/forms/CustomInput";
 
 const statusMap: Record<
   PaymentStatus,
@@ -70,11 +72,13 @@ export default function MyPaymentsPage() {
   const [payments, setPayments] = useState<PaymentResponse[]>([]);
   const [loading, setLoading] = useState(true);
   const [generatingSlipId, setGeneratingSlipId] = useState<string | null>(null);
+
   const [filters, setFilters] = useState<PaymentFilters>({});
+  const [localFilters, setLocalFilters] = useState<PaymentFilters>({});
 
   const fetchPayments = async (currentFilters: PaymentFilters) => {
+    setLoading(true);
     try {
-      setLoading(true);
       const response = await PaymentService.findUserPayments(currentFilters);
       setPayments(response.data);
     } catch (error: unknown) {
@@ -90,6 +94,16 @@ export default function MyPaymentsPage() {
   useEffect(() => {
     fetchPayments(filters);
   }, [filters]);
+
+  const handleApplyFilters = () => {
+    // Agora o valor da data já vem no formato 'yyyy-mm-dd', pronto para a API.
+    setFilters(localFilters);
+  };
+
+  const handleClearFilters = () => {
+    setLocalFilters({});
+    setFilters({});
+  };
 
   const handleGenerateSlip = async (paymentOrderId: string) => {
     setGeneratingSlipId(paymentOrderId);
@@ -121,31 +135,46 @@ export default function MyPaymentsPage() {
     );
   }, [payments]);
 
+  const uniqueTenants = useMemo(() => {
+    const tenantMap = new Map<string, { id: string; name: string }>();
+    payments.forEach((p) => {
+      if (p.contract.tenant?.id && p.contract.tenant?.name) {
+        tenantMap.set(p.contract.tenant.id, p.contract.tenant);
+      }
+    });
+    return Array.from(tenantMap.values()).sort((a, b) =>
+      a.name.localeCompare(b.name)
+    );
+  }, [payments]);
+
   return (
-    <div className="min-h-svh flex flex-col items-center pt-8 md:pt-14 px-4 pb-24  bg-gray-50">
+    <div className="min-h-svh flex flex-col items-center pt-8 md:pt-14 px-4 pb-24 bg-gray-50">
       <div className="w-full max-w-7xl mx-auto">
-        <header className="mb-6 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
-          <div>
-            <h1 className="text-3xl sm:text-4xl font-bold text-gray-800">
-              Meus Pagamentos
-            </h1>
-            <p className="text-gray-500 mt-1">
-              Consulte o seu histórico de faturas e gere os seus boletos.
-            </p>
+        <header className="mb-6">
+          <h1 className="text-3xl sm:text-4xl font-bold text-gray-800">
+            Meus Pagamentos
+          </h1>
+          <p className="text-gray-500 mt-1">
+            Consulte o seu histórico de faturas e gere os seus boletos.
+          </p>
+        </header>
+
+        <div className="bg-white p-4 rounded-xl shadow-sm border mb-6">
+          <div className="flex items-center gap-2 mb-4">
+            <Filter size={18} className="text-gray-600" />
+            <h3 className="font-semibold text-gray-700">Filtros</h3>
           </div>
-          <div className="flex items-center gap-2 w-full md:w-auto">
-            <div className="hidden sm:flex items-center text-gray-600 font-semibold mr-2">
-              <Filter size={18} className="mr-1" /> <span>Filtrar:</span>
-            </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             <select
+              value={localFilters.propertyId || "all"}
               onChange={(e) =>
-                setFilters((prev) => ({
+                setLocalFilters((prev) => ({
                   ...prev,
                   propertyId:
                     e.target.value === "all" ? undefined : e.target.value,
                 }))
               }
-              className="flex-1 md:flex-initial p-2 border rounded-md bg-white text-gray-700 shadow-sm focus:outline-none focus:ring-primary focus:border-primary"
+              className="p-2 border rounded-md bg-white text-gray-700 shadow-sm focus:outline-none focus:ring-primary focus:border-primary w-full"
             >
               <option value="all">Todos os Imóveis</option>
               {uniqueProperties.map((prop) => (
@@ -155,8 +184,27 @@ export default function MyPaymentsPage() {
               ))}
             </select>
             <select
+              value={localFilters.tenantId || "all"}
               onChange={(e) =>
-                setFilters((prev) => ({
+                setLocalFilters((prev) => ({
+                  ...prev,
+                  tenantId:
+                    e.target.value === "all" ? undefined : e.target.value,
+                }))
+              }
+              className="p-2 border rounded-md bg-white text-gray-700 shadow-sm focus:outline-none focus:ring-primary focus:border-primary w-full"
+            >
+              <option value="all">Todos os Inquilinos</option>
+              {uniqueTenants.map((tenant) => (
+                <option key={tenant.id} value={tenant.id}>
+                  {tenant.name}
+                </option>
+              ))}
+            </select>
+            <select
+              value={localFilters.status || "all"}
+              onChange={(e) =>
+                setLocalFilters((prev) => ({
                   ...prev,
                   status:
                     e.target.value === "all"
@@ -164,7 +212,7 @@ export default function MyPaymentsPage() {
                       : (e.target.value as PaymentStatus),
                 }))
               }
-              className="flex-1 md:flex-initial p-2 border rounded-md bg-white text-gray-700 shadow-sm focus:outline-none focus:ring-primary focus:border-primary"
+              className="p-2 border rounded-md bg-white text-gray-700 shadow-sm focus:outline-none focus:ring-primary focus:border-primary w-full"
             >
               <option value="all">Todos os Status</option>
               {Object.entries(statusMap).map(([status, { label }]) => (
@@ -174,7 +222,42 @@ export default function MyPaymentsPage() {
               ))}
             </select>
           </div>
-        </header>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mt-4">
+            <CustomInput
+              id="startDate"
+              label="Vencimento De"
+              type="date"
+              icon={<CalendarIcon size={20} />}
+              value={localFilters.startDate || ""}
+              onChange={(value) =>
+                setLocalFilters((prev) => ({ ...prev, startDate: value }))
+              }
+            />
+            <CustomInput
+              id="endDate"
+              label="Vencimento Até"
+              type="date"
+              icon={<CalendarIcon size={20} />}
+              value={localFilters.endDate || ""}
+              onChange={(value) =>
+                setLocalFilters((prev) => ({ ...prev, endDate: value }))
+              }
+            />
+            <div className="flex items-end gap-2 col-span-1 sm:col-span-2 lg:col-span-2">
+              <CustomButton onClick={handleApplyFilters} className="w-full">
+                Aplicar Filtros
+              </CustomButton>
+              <CustomButton
+                onClick={handleClearFilters}
+                ghost
+                className="w-full"
+              >
+                Limpar
+              </CustomButton>
+            </div>
+          </div>
+        </div>
+
         <div className="w-full  grid gap-4 pb-10">
           {loading ? (
             <div className="flex justify-center items-center h-64">
@@ -187,8 +270,8 @@ export default function MyPaymentsPage() {
               subtitle="Tente ajustar os filtros ou verifique mais tarde."
             />
           ) : (
-            <div className="overflow-x-auto">
-              <table className="min-w-full">
+            <div className="overflow-x-auto border border-gray-200 rounded-lg shadow-sm">
+              <table className="min-w-full ">
                 <thead className="bg-gray-50 hidden md:table-header-group">
                   <tr>
                     <th
@@ -214,6 +297,12 @@ export default function MyPaymentsPage() {
                       className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                     >
                       Status
+                    </th>
+                    <th
+                      scope="col"
+                      className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                    >
+                      Pagador
                     </th>
                     <th scope="col" className="relative px-6 py-3">
                       <span className="sr-only">Ações</span>
@@ -256,6 +345,12 @@ export default function MyPaymentsPage() {
                           {statusMap[payment.status]?.icon}
                           {statusMap[payment.status]?.label || payment.status}
                         </span>
+                      </td>
+                      <td
+                        data-label="Pagador"
+                        className="px-4 py-3 md:px-6 md:py-4 whitespace-nowrap block md:table-cell text-right md:text-left text-sm text-gray-600 before:content-[attr(data-label)] before:font-semibold before:text-gray-500 before:float-left md:before:content-none"
+                      >
+                        {payment.contract.tenant?.name || "N/A"}
                       </td>
                       <td className="px-4 py-3 md:px-6 md:py-4 whitespace-nowrap block md:table-cell text-right text-sm font-medium">
                         <div className="flex items-center justify-end gap-2 mt-2 md:mt-0">

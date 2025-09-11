@@ -145,9 +145,11 @@ export function PropertyCard({
   property,
   variant = "dashboard",
   onDelete,
+
   onAvailabilityChange,
 }: {
   property: PropertyProps;
+
   variant?: "dashboard" | "public";
   onDelete?: (id: string) => void;
   onAvailabilityChange?: (id: string, newStatus: boolean) => void;
@@ -236,23 +238,33 @@ export function PropertyCard({
         <h3 className="text-lg font-bold text-gray-800 truncate mt-1">
           {property.title}
         </h3>
-        <p className="text-sm text-gray-500 truncate">{property.district}</p>
+        <p className="text-sm text-gray-500 truncate">
+          {property.street}, {property.number} - {property.district}
+        </p>
         <p className="text-sm text-gray-500 truncate">
           {property.city} - {property.state}
         </p>
 
         <div className="flex-grow">
           {variant === "public" && (
-            <div className="flex items-center flex-wrap gap-x-4 gap-y-1 text-sm text-gray-600 mt-3 border-b pb-3">
+            <div className="flex flex-col px-4 items-start flex-wrap gap-y-1 text-sm text-gray-600 mt-3 border-b pb-3">
               <span className="flex items-center gap-1">
-                <Maximize size={16} /> <strong>{property.areaInM2}</strong> m²
+                <div className="bg-primary p-1.5 rounded-lg">
+                  <Maximize className="text-white" size={14} />
+                </div>
+                <strong>{property.areaInM2}</strong> m²
               </span>
               <span className="flex items-center gap-1">
-                <Bed size={16} />
+                <div className="bg-primary p-1.5 rounded-lg">
+                  <Bed className="text-white" size={14} />
+                </div>
                 <strong> {property.numRooms}</strong>Quartos
               </span>
               <span className="flex items-center gap-1">
-                <Bath size={16} /> <strong>{property.numBathrooms}</strong>
+                <div className="bg-primary p-1.5 rounded-lg">
+                  <Bath className="text-white" size={14} />
+                </div>
+                <strong>{property.numBathrooms}</strong>
                 Banheiros
               </span>
             </div>

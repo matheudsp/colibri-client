@@ -21,29 +21,18 @@ interface FilterBarProps {
   loading: boolean;
 }
 
-type SortByValue = PropertySearchFormValues["sortBy"];
-type SortOrderValue = PropertySearchFormValues["sortOrder"];
-
 export function FilterBar({ form, onSearch, loading }: FilterBarProps) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { watch, setValue, handleSubmit } = form;
   const transactionType = watch("transactionType");
-  const sortBy = watch("sortBy");
-  const sortOrder = watch("sortOrder");
-
+  const sort = watch("sort");
   const handleTransactionChange = (type: "VENDA" | "LOCACAO") => {
     setValue("transactionType", type, { shouldDirty: true });
     handleSubmit(onSearch)();
   };
 
   const handleSortChange = (value: string) => {
-    const [newSortBy, newSortOrder] = value.split(":");
-
-    setValue("sortBy", newSortBy as SortByValue, { shouldDirty: true });
-    setValue("sortOrder", newSortOrder as SortOrderValue, {
-      shouldDirty: true,
-    });
-
+    setValue("sort", value, { shouldDirty: true });
     handleSubmit(onSearch)();
   };
 
@@ -54,15 +43,13 @@ export function FilterBar({ form, onSearch, loading }: FilterBarProps) {
 
   const options = [
     { value: "createdAt:desc", label: "Mais Recentes" },
-    // { value: "price:asc", label: "Menor Preço" },
-    // { value: "price:desc", label: "Maior Preço" },
-    // { value: "size:asc", label: "Menor Área" },
-    // { value: "size:desc", label: "Maior Área" },
+    { value: "price:asc", label: "Menor Preço" },
+    { value: "price:desc", label: "Maior Preço" },
+    { value: "size:asc", label: "Menor Área" },
+    { value: "size:desc", label: "Maior Área" },
   ];
 
-  const currentOption = options.find(
-    (option) => option.value === `${sortBy}:${sortOrder}`
-  );
+  const currentOption = options.find((option) => option.value === sort);
 
   return (
     <>
@@ -113,7 +100,6 @@ export function FilterBar({ form, onSearch, loading }: FilterBarProps) {
           <Filter size={16} /> Filtros
         </button>
 
-        {/* Seletor de Ordenação (Substitui o botão 'Mais próximos') */}
         <Menu as="div" className="relative inline-block text-left">
           <div>
             <Menu.Button

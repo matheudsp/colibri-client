@@ -1,6 +1,12 @@
 "use client";
 
-import { CalendarArrowDown, FileText, HomeIcon, LogOut } from "lucide-react";
+import {
+  CalendarArrowDown,
+  FileText,
+  HomeIcon,
+  LayoutDashboard,
+  LogOut,
+} from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
@@ -8,35 +14,46 @@ import clsx from "clsx";
 import { toast } from "sonner";
 import { useUserStore } from "@/stores/userStore";
 import { AuthService } from "@/services/domains/authService";
+import { Roles } from "@/constants";
+import { useCurrentUser } from "@/hooks/useCurrentUser";
 
 const navItems = [
+  {
+    label: "Painel",
+    href: "/painel",
+    icon: LayoutDashboard,
+    roles: [Roles.ADMIN, Roles.LOCADOR],
+  },
   {
     label: "Imóveis",
     href: "/imoveis",
     icon: HomeIcon,
+    roles: [Roles.ADMIN, Roles.LOCADOR, Roles.LOCATARIO],
+  },
+  {
+    label: "Contratos",
+    href: "/contratos",
+    icon: FileText,
+    roles: [Roles.ADMIN, Roles.LOCADOR, Roles.LOCATARIO],
+  },
+  {
+    label: "Pagamentos",
+    href: "/pagamentos",
+    icon: CalendarArrowDown,
+    roles: [Roles.ADMIN, Roles.LOCADOR, Roles.LOCATARIO],
   },
   // {
   //   label: "Condomínios",
   //   href: "/condominiums",
   //   icon: Building2,
   // },
-  {
-    label: "Contratos",
-    href: "/contratos",
-    icon: FileText,
-  },
-  {
-    label: "Pagamentos",
-    href: "/pagamentos",
-    icon: CalendarArrowDown,
-  },
 ];
 
 export default function SidebarNav() {
   const pathname = usePathname();
   const router = useRouter();
   const { user, loading } = useUserStore();
-
+  const { role } = useCurrentUser();
   const handleLogout = async () => {
     try {
       await AuthService.logout();
@@ -48,7 +65,9 @@ export default function SidebarNav() {
       });
     }
   };
-
+  const accessibleNavItems = navItems.filter((item) =>
+    item.roles.includes(role || "")
+  );
   const userInitial = user?.name ? user?.name[0].toUpperCase() : "?";
   const myAccountIsActive = pathname.startsWith("/account");
   return (
@@ -68,7 +87,7 @@ export default function SidebarNav() {
         </div>
 
         <nav className="flex flex-col gap-4 w-full items-center">
-          {navItems.map((item) => {
+          {accessibleNavItems.map((item) => {
             const Icon = item.icon;
             const isActive = pathname.startsWith(item.href);
 

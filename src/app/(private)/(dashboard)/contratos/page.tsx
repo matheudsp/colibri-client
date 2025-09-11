@@ -79,26 +79,32 @@ export default function ContractsPage() {
           </p>
         </div>
 
-        <div className="w-full grid gap-4">
-          {contracts.length === 0 ? (
+        {contracts.length === 0 ? (
+          <div className="w-full">
             <EmptyCard
               icon={<FileText size={48} />}
               title="Nenhum contrato encontrado"
               subtitle="Seus contratos serão listados aqui assim que forem criados."
             />
-          ) : (
-            <>
+          </div>
+        ) : (
+          <div>
+            {/* --- ALTERAÇÃO AQUI --- */}
+            <div className="w-full grid grid-cols-1 lg:grid-cols-2 gap-6">
               {contracts.map((contract) => (
                 <ContractCard key={contract.id} contract={contract} />
               ))}
+            </div>
+
+            <div className="mt-8">
               <Pagination
                 currentPage={pagination.page}
                 totalPages={pagination.totalPages}
                 total={pagination.total}
               />
-            </>
-          )}
-        </div>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

@@ -155,7 +155,9 @@ export const PropertyService = {
   },
   async getById(id: string): Promise<ApiResponse<PropertyProps>> {
     try {
-      const response = await api.get(API_ROUTES.PROPERTIES.BY_ID({ id }));
+      const response = await api.get(
+        API_ROUTES.PROPERTIES.BY_ID({ propertyId: id })
+      );
       return response.data;
     } catch (error) {
       throw new Error(extractAxiosError(error));
@@ -168,7 +170,7 @@ export const PropertyService = {
   ): Promise<ApiResponse<PropertyProps>> {
     try {
       const response = await api.patch(
-        API_ROUTES.PROPERTIES.UPDATE({ id }),
+        API_ROUTES.PROPERTIES.UPDATE({ propertyId: id }),
         data
       );
       return response.data;

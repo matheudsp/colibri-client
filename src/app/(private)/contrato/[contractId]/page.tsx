@@ -407,7 +407,7 @@ export default function ContractManagementPage() {
 
   return (
     <>
-      <div className="bg-gray-50 min-h-screen pt-24 md:pt-28 pb-10">
+      <div className="min-h-screen pt-24 md:pt-28 pb-10">
         <div className="max-w-5xl mx-auto px-4">
           <header className="mb-6">
             <CustomButton

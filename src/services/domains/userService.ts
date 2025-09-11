@@ -43,7 +43,9 @@ interface SearchUserParams {
   cpfCnpj?: string;
 }
 
-export type UpdateUserData = Partial<UserProfileFormValues>;
+export type UpdateUserData = Partial<UserProfileFormValues> & {
+  actionToken?: string;
+};
 
 export const UserService = {
   async listAll(params?: ListUserParams): Promise<User[]> {

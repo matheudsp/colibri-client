@@ -102,7 +102,7 @@ export default function PropertyDetailsPage() {
 
   if (loading) {
     return (
-      <div className="flex justify-center items-center h-screen bg-gray-50">
+      <div className="flex justify-center items-center h-screen ">
         <Loader2 className="animate-spin text-primary" size={48} />
       </div>
     );
@@ -110,7 +110,7 @@ export default function PropertyDetailsPage() {
 
   if (!property) {
     return (
-      <div className="flex flex-col justify-center items-center h-screen bg-gray-50">
+      <div className="flex flex-col justify-center items-center h-screen ">
         <p className="text-gray-600 text-lg">Imóvel não encontrado.</p>
         <CustomButton onClick={() => router.back()} className="mt-4">
           <ArrowLeft className="mr-2" /> Voltar
@@ -120,7 +120,7 @@ export default function PropertyDetailsPage() {
   }
 
   return (
-    <div className="bg-gray-50 min-h-screen">
+    <div className=" min-h-screen">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-10">
         <nav className="mt-24 pb-6">
           <CustomButton

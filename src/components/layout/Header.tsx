@@ -10,7 +10,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useState, ReactNode, ChangeEvent } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-
+import { useCurrentUser } from "@/hooks/useCurrentUser";
 type HeaderType = "default" | "back" | "backMenu" | "search" | "logoOnly";
 
 interface HeaderProps {
@@ -43,7 +43,7 @@ export function Header({
   onSearchChange,
 }: HeaderProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-
+  const { isAuthenticated, loading } = useCurrentUser();
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     onSearchChange?.(e.target.value);
   };
@@ -56,7 +56,9 @@ export function Header({
     return (
       <header
         className={` fixed z-50 top-0 w-full flex items-center justify-center ${
-          isScrolledOrSearch ? "bg-white/90 backdrop-blur-sm " : "bg-secondary"
+          isScrolledOrSearch
+            ? "bg-white/90 backdrop-blur-sm border-b"
+            : "bg-secondary"
         }`}
       >
         <div
@@ -115,15 +117,15 @@ export function Header({
           <nav className="hidden lg:flex items-center gap-6 flex-shrink-0">
             <Link
               key={"menu"}
-              href={"/imoveis"}
+              href={isAuthenticated ? "/imoveis" : "/entrar"}
               className={`text-sm font-semibold transition-colors whitespace-nowrap border-2 py-2 px-8  rounded-lg ${
                 isScrolledOrSearch
                   ? "text-secondary  border-secondary  hover:bg-secondary hover:text-white"
-                  : "text-white hover:text-secondary hover:bg-white border-white"
+                  : "text-white hover:text-secondary hover:bg-white border-white border-b"
               }`}
             >
               {/* Se estiver logado, exibir acessar painel, se nao estiver mostre botao de login e cadastro */}
-              Entrar
+              {isAuthenticated ? "Acessar Sistema" : "Login | Cadastre-se"}
             </Link>
             {navItems.map((item) => (
               <Link
@@ -185,12 +187,14 @@ export function Header({
                 <nav className="flex flex-col space-y-2">
                   <Link
                     key={"access"}
-                    href={"/imoveis"}
+                    href={isAuthenticated ? "/imoveis" : "/entrar"}
                     onClick={() => setIsMenuOpen(false)}
                     className="text-lg p-3 rounded-md font-semibold text-secondary hover:bg-gray-200 border-secondary border-2 hover:text-white hover:bg-secondary"
                   >
                     {/* Se estiver logado, exibir acessar painel, se nao estiver mostre botao de login e cadastro */}
-                    Entrar
+                    {isAuthenticated
+                      ? "Acessar Sistema"
+                      : "Login | Cadastre-se"}
                   </Link>
                   {navItems.map((item) => (
                     <Link
@@ -213,7 +217,7 @@ export function Header({
 
   if (type === "logoOnly") {
     return (
-      <header className="fixed z-40 top-0 w-full bg-white px-4 py-2  flex items-center justify-center">
+      <header className="fixed z-40 top-0 w-full bg-white/90 backdrop-blur-sm px-4 py-2  flex items-center justify-center border-b">
         <Image
           height={50}
           width={120}
@@ -227,7 +231,7 @@ export function Header({
   }
   return (
     <header
-      className={` fixed z-50 top-0 w-full flex items-center justify-center bg-white/90 backdrop-blur-sm `}
+      className={` fixed z-50 top-0 w-full flex items-center justify-center bg-white/90 backdrop-blur-sm border-b`}
     >
       <div
         className={` w-full max-w-7xl px-4 2xl:px-0 h-20 flex items-center justify-between gap-6 transition-all duration-300 ease-in-out `}

@@ -152,6 +152,7 @@ export default function DashboardPropertiesPage() {
     );
   }
   const handleAvailabilityUpdate = (propertyId: string, newStatus: boolean) => {
+    console.log("Updating property availability:", propertyId, newStatus);
     setProperties((prevProperties) =>
       prevProperties.map((p) =>
         p.id === propertyId ? { ...p, isAvailable: newStatus } : p

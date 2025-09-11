@@ -12,7 +12,6 @@ const transactionOptions = [
   { id: "LOCACAO", slug: "para-alugar", label: "Locação" },
   { id: "VENDA", slug: "a-venda", label: "Venda" },
 ];
-
 export function SearchBar() {
   const router = useRouter();
   const [transaction, setTransaction] = useState("LOCACAO");
@@ -22,21 +21,20 @@ export function SearchBar() {
   const [isPropertyTypeOpen, setIsPropertyTypeOpen] = useState(false);
 
   const handleSearch = () => {
-    const selectedTransaction = transactionOptions.find(
-      (opt) => opt.id === transaction
-    );
-    const transactionSlug = selectedTransaction?.slug || "para-alugar";
-    const locationSlug = slugify(location);
-
-    let path = `/imoveis/${transactionSlug}`;
-    if (locationSlug) {
-      path += `/${locationSlug}`;
-    }
+    const transactionSlug = transaction === "VENDA" ? "a-venda" : "para-alugar";
+    const path = `/imoveis/${transactionSlug}`;
 
     const queryParams = new URLSearchParams();
+
+    if (location.trim()) {
+      queryParams.set("q", location.trim());
+    }
+
     if (propertyType) {
       queryParams.set("propertyType", propertyType);
     }
+
+    queryParams.set("transactionType", transaction);
 
     router.push(`${path}?${queryParams.toString()}`);
   };

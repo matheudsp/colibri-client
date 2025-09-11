@@ -5,18 +5,21 @@ import { ApiResponse } from "@/types/api";
 import { CreateBankAccountFormValues } from "@/validations/bankAccounts/bankAccountCreateValidation";
 
 export interface BankAccount {
-  id: string;
-  // bank: string;
-  // agency: string;
-  // account: string;
-  // accountType: "CONTA_CORRENTE" | "CONTA_POUPANCA";
-  userId: string;
-  pixAddressKeyType?: string;
-  pixAddressKey?: string;
-  subAccount?: {
+  balance?: {
+    balance?: number;
+  };
+  bankAccount?: {
     id: string;
+    pixAddressKeyType?: "CPF" | "CNPJ" | "EMAIL" | "PHONE" | "EVP" | undefined;
+    pixAddressKey?: string;
+    createdAt: string;
+    updatedAt: string;
+  };
+  subAccount?: {
     statusGeneral: "PENDING" | "APPROVED" | "REJECTED";
     statusDocumentation: "PENDING" | "APPROVED" | "REJECTED";
+    statusCommercialInfo: "PENDING" | "APPROVED" | "REJECTED";
+    statusBankAccountInfo: "PENDING" | "APPROVED" | "REJECTED";
     onboardingUrl?: string;
   };
 }

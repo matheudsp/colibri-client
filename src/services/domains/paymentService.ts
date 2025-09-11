@@ -11,6 +11,9 @@ export interface RegisterPaymentData {
 export interface PaymentFilters {
   propertyId?: string;
   status?: PaymentStatus;
+  tenantId?: string;
+  startDate?: string;
+  endDate?: string;
 }
 
 export const PaymentService = {

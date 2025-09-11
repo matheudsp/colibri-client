@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import Link from "next/link";
 
 import clsx from "clsx";
@@ -15,14 +15,42 @@ import {
   Menu,
   X,
   LogOut,
+  LayoutDashboard,
 } from "lucide-react";
 import { AuthService } from "@/services/domains/authService";
-
+import { useCurrentUser } from "@/hooks/useCurrentUser";
+import { Roles } from "@/constants";
 const allNavItems = [
-  { label: "Imóveis", href: "/imoveis", icon: HomeIcon },
-  { label: "Contratos", href: "/contratos", icon: FileText },
-  { label: "Pagamentos", href: "/pagamentos", icon: CalendarArrowDown },
-  { label: "Minha Conta", href: "/conta", icon: User2 },
+  {
+    label: "Painel",
+    href: "/painel",
+    icon: LayoutDashboard,
+    roles: [Roles.ADMIN, Roles.LOCADOR],
+  },
+  {
+    label: "Imóveis",
+    href: "/imoveis",
+    icon: HomeIcon,
+    roles: [Roles.ADMIN, Roles.LOCADOR, Roles.LOCATARIO],
+  },
+  {
+    label: "Contratos",
+    href: "/contratos",
+    icon: FileText,
+    roles: [Roles.ADMIN, Roles.LOCADOR, Roles.LOCATARIO],
+  },
+  {
+    label: "Pagamentos",
+    href: "/pagamentos",
+    icon: CalendarArrowDown,
+    roles: [Roles.ADMIN, Roles.LOCADOR, Roles.LOCATARIO],
+  },
+  {
+    label: "Minha Conta",
+    href: "/conta",
+    icon: User2,
+    roles: [Roles.ADMIN, Roles.LOCADOR, Roles.LOCATARIO],
+  },
 ];
 
 const mainNavItems = allNavItems.slice(0, 2);
@@ -32,11 +60,17 @@ export default function BottomNav() {
   const pathname = usePathname();
   const router = useRouter();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const { role } = useCurrentUser();
+  const accessibleNavItems = useMemo(
+    () => allNavItems.filter((item) => item.roles.includes(role || "")),
+    [role]
+  );
+  const mainNavItems = accessibleNavItems.slice(0, 2);
+  const menuNavItems = accessibleNavItems.slice(2);
 
   const isMenuActive = menuNavItems.some((item) =>
     pathname.startsWith(item.href)
   );
-
   const handleLinkClick = () => {
     setIsMenuOpen(false);
   };

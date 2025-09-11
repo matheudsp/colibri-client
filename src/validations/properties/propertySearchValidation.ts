@@ -9,8 +9,7 @@ export const propertySearchSchema = z.object({
   transactionType: z.string().optional(),
   page: z.number().int().positive().optional(),
   limit: z.number().int().positive().optional(),
-  sortBy: z.enum(["createdAt", "value"]).optional(),
-  sortOrder: z.enum(["asc", "desc"]).optional(),
+  sort: z.string().optional(),
 });
 
 export type PropertySearchFormValues = z.infer<typeof propertySearchSchema>;

@@ -203,7 +203,7 @@ export default function CreatePropertyPage() {
   return (
     <>
       <div className="min-h-svh pt-16 w-full flex flex-col items-center justify-center">
-        <div className="bg-white shadow-lg p-4 sm:p-6 md:p-8 w-full max-w-4xl">
+        <div className="p-4 sm:p-6 md:p-8 w-full md:max-w-2xl">
           <Stepper
             steps={formSteps}
             currentStep={step}

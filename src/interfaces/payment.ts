@@ -15,5 +15,9 @@ export interface PaymentResponse {
       id: string;
       title: string;
     };
+    tenant?: {
+      id: string;
+      name: string;
+    };
   };
 }

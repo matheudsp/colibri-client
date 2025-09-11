@@ -29,7 +29,7 @@ const SecuritySection = ({
   statusBadge?: React.ReactNode;
   children: React.ReactNode;
 }) => (
-  <div className="border-t border-gray-200 pt-5">
+  <div className="px-0 md:px-6 border-b border-gray-200 pb-12">
     <div className="flex items-center justify-between mb-1">
       <h3 className="text-lg font-semibold text-gray-800">{title}</h3>
       {statusBadge}
@@ -122,7 +122,7 @@ export function SecurityForm() {
 
   return (
     <>
-      <div className="p-0 md:p-6 rounded-b-xl rounded-tr-xl space-y-6">
+      <div className="p-0 md:p-6 rounded-b-xl rounded-tr-xl space-y-12 ">
         <SecuritySection
           title="Verificação de E-mail"
           description="Garanta que seu e-mail está correto para receber notificações e códigos de segurança."
