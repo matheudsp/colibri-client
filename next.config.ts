@@ -34,11 +34,7 @@ const nextConfig: NextConfig = {
   webpack: (config) => {
     config.resolve.alias = {
       ...config.resolve.alias,
-      "@/components": path.resolve(__dirname, "src/components"),
-      "@/services": path.resolve(__dirname, "src/services"),
-      "@/validations": path.resolve(__dirname, "src/validations"),
-      "@/modals": path.resolve(__dirname, "src/components/modals"),
-      "@/constants": path.resolve(__dirname, "src/components/constants"),
+      "@": path.resolve(__dirname, "src"),
     };
     return config;
   },
