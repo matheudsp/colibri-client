@@ -21,17 +21,17 @@
     "baseUrl": ".",
     "paths": {
       "@/*": [
-        "./src/*"
+        "src/*"
       ],
-      "@/components/*": [
-        "./src/components/*"
-      ],
-      "@/services/*": [
-        "./src/services/*"
-      ],
-      "@/validations/*": [
-        "./src/validations/*"
-      ]
+      // "@/components/*": [
+      //   "./src/components/*"
+      // ],
+      // "@/services/*": [
+      //   "./src/services/*"
+      // ],
+      // "@/validations/*": [
+      //   "./src/validations/*"
+      // ]
     },
     "plugins": [
       {
