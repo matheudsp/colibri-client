@@ -4,14 +4,34 @@
 
 
 :root {
-    --background: #FFFFFF;
-    --foreground: #2D2B2E;
-    --primary: #B9C72A;
-    --primary-hover: #A2B025;
-    --secondary: #4A3A6B;
-    --secondary-hover: #5F4A8B;
-    --accent: #7F2AC7;
-    --error: #c62828;
+  /* Base */
+  --background: #FFFFFF;      /* fundo principal suave */
+  --background-alt: #ECEDE9;  /* cartões, inputs, áreas elevadas */
+  --foreground: #2D2B2E;      /* texto principal */
+  --foreground-muted: #666468; /* texto secundário */
+
+  /* Paleta principal */
+  --primary: #97C52A;          /* verde principal (grama) */
+  --primary-hover: #7DA623;    /* verde escurecido para hover */
+  --primary-light: #C4E173;    /* destaque e bordas verdes suaves */
+
+  /* Paleta secundária */
+  --secondary: #6B5C86;        /* roxo sóbrio */
+  --secondary-hover: #5A4A73;  /* hover do roxo */
+  --secondary-light: #9C8EB5;  /* roxo suave para detalhes */
+
+  /* Acentos e feedback */
+  --accent: #7F2AC7;            /* cor de destaque opcional */
+  --success: #4CAF50;
+  --warning: #FFC107;
+  --error: #C62828;
+
+  /* Elementos */
+  --border: #D6D8D2;
+  --input-bg: #FFFFFF;
+  --input-border: #D6D8D2;
+  --card-bg: #FFFFFF;
+  --shadow: rgba(0, 0, 0, 0.05);
 }
 
 body {

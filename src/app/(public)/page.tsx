@@ -9,7 +9,7 @@ import { HelpSection } from "@/components/sections/home/HelpSection";
 export default function Home() {
   return (
     <div className="bg-white flex-col justify-center items-center ">
-      <section className="md:min-h-[64svh] min-h-[76svh] w-full bg-secondary flex flex-col items-center justify-center text-center text-white">
+      <section className="lg:min-h-[48svh] md:min-h-[54svh] sm:min-h-[72svh] min-h-[96svh] w-full bg-secondary flex flex-col items-center justify-center text-center text-white">
         <div className="w-full flex flex-col items-center justify-center">
           <div className=" px-4">
             <h1 className="text-4xl md:text-6xl font-bold">
@@ -20,7 +20,7 @@ export default function Home() {
               morar bem
             </h1>
             <p className="mt-4 text-lg md:text-xl text-gray-200">
-              Busque seu imóvel na Colibri.
+              Busque seu imóvel na Locaterra.
             </p>
           </div>
 

@@ -78,7 +78,8 @@ export default function SidebarNav() {
             <Image
               width={50}
               height={50}
-              src="/icons/logo-white-green.svg"
+              // src="/logo/vertical/vertical-svg/3.svg"
+              src="/logo/icon/icon.svg"
               alt="Logo Colibri"
               className="w-20 h-auto"
               priority

@@ -98,7 +98,7 @@ export default function LoginPage() {
         {/* O JSX da sua página de login continua o mesmo */}
         <div className="w-full max-w-md">
           <div className=" ">
-            <div className="text-center mb-8">
+            <div className="text-center mb-8 mt-20">
               <h1 className="text-3xl font-bold text-secondary">Entrar</h1>
               <p className="text-foreground/70 mt-2">Bem-vindo de volta!</p>
             </div>

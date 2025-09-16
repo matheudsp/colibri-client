@@ -38,7 +38,7 @@ export default function RegisterPage() {
 
   return (
     <div className="min-h-[90svh] w-full bg-background flex flex-col items-center justify-center p-4">
-      <div className="text-center mb-8">
+      <div className="text-center mb-8 mt-20">
         {/* <Image
           width={200}
           height={200}

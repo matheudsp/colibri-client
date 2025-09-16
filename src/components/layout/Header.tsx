@@ -72,10 +72,11 @@ export function Header({
                 width={90}
                 src={
                   isScrolledOrSearch
-                    ? "/icons/logo-purple-black.svg"
-                    : "/icons/logo-white-green.svg"
+                    ? "/logo/paisagem/paisagem-svg/5.svg"
+                    : "/logo/paisagem/paisagem-svg/7.svg"
                 }
-                alt="Logo Colibri"
+                alt="Logo Locaterra"
+                priority
                 className="h-14 w-auto"
               />
             </Link>
@@ -118,10 +119,10 @@ export function Header({
             <Link
               key={"menu"}
               href={isAuthenticated ? "/imoveis" : "/entrar"}
-              className={`text-sm font-semibold transition-colors whitespace-nowrap border-2 py-2 px-8  rounded-lg ${
+              className={`text-sm font-semibold transition-colors whitespace-nowrap border py-2 px-8  rounded-lg ${
                 isScrolledOrSearch
                   ? "text-secondary  border-secondary  hover:bg-secondary hover:text-white"
-                  : "text-white hover:text-secondary hover:bg-white border-white border-b"
+                  : "text-white hover:text-secondary hover:bg-white border-white/50 border-b"
               }`}
             >
               {/* Se estiver logado, exibir acessar painel, se nao estiver mostre botao de login e cadastro */}
@@ -221,8 +222,8 @@ export function Header({
         <Image
           height={50}
           width={120}
-          src="/icons/logo-black-green.svg"
-          alt="Logo Colibri"
+          src="/logo/icon/icon.svg"
+          alt="Logo Locaterra"
           className="w-auto h-12"
           priority
         />
@@ -250,8 +251,8 @@ export function Header({
           <Image
             height={50}
             width={120}
-            src="/icons/logo-black-green.svg"
-            alt="Logo Colibri"
+            src="/logo/icon/icon.svg"
+            alt="Logo Locaterra"
             className="w-auto h-12"
             priority
           />

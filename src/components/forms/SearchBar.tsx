@@ -47,7 +47,7 @@ export function SearchBar() {
   };
 
   const baseButtonClass =
-    "flex items-center justify-between w-full h-full px-4 text-gray-700 focus:outline-none bg-white shadow-md md:shadow-none";
+    "flex items-center justify-between w-full h-full px-4 text-gray-700 focus:outline-none bg-white shadow-sm md:shadow-none";
 
   return (
     <div className="w-full max-w-4xl relative flex flex-col md:flex-row md:rounded-full md:shadow-lg md:h-14 space-y-3 md:space-y-0 ">
@@ -56,7 +56,7 @@ export function SearchBar() {
           onClick={() => setIsTransactionOpen(!isTransactionOpen)}
           className={`${baseButtonClass} rounded-full md:rounded-l-full md:rounded-r-none`}
         >
-          <span className="font-normal mx-auto text-sm text-gray-800">
+          <span className="font-medium mx-auto text-sm  text-gray-800">
             {transaction === "LOCACAO" ? "Locação" : "Venda"}
           </span>
           <ChevronDown
@@ -66,7 +66,7 @@ export function SearchBar() {
           />
         </button>
         {isTransactionOpen && (
-          <div className="absolute top-full mt-2 w-full bg-white py-2 rounded-md shadow-md shadow-gray-700 border z-10">
+          <div className="absolute top-full mt-2 w-full bg-white py-1 divide-y rounded-md shadow-sm shadow-black/70 border z-10">
             {transactionOptions.map((opt) => (
               <div
                 key={opt.id}
@@ -74,7 +74,7 @@ export function SearchBar() {
                   setTransaction(opt.id);
                   setIsTransactionOpen(false);
                 }}
-                className="px-4 py-2 hover:bg-primary text-start cursor-pointer hover:text-white text-gray-700 text-xs font-light "
+                className="px-4 md:py-2 py-4 hover:bg-primary text-start font-medium flex items-center cursor-pointer hover:text-white text-gray-700 text-xs  "
               >
                 {opt.label}
               </div>
@@ -92,8 +92,10 @@ export function SearchBar() {
         >
           <span
             className={`${
-              propertyType ? "text-gray-800" : "text-gray-500"
-            } font-normal text-sm mx-auto`}
+              propertyType
+                ? "text-gray-800 font-medium"
+                : "text-gray-500 font-normal"
+            } text-sm mx-auto`}
           >
             {getPropertyTypeLabel()}
           </span>
@@ -104,7 +106,7 @@ export function SearchBar() {
           />
         </button>
         {isPropertyTypeOpen && (
-          <div className="absolute top-full mt-2 w-full bg-white py-2 rounded-md shadow-md shadow-gray-700 border z-10">
+          <div className="absolute top-full mt-2 w-full bg-white py-1 divide-y rounded-md shadow-sm shadow-black/70 border z-10">
             {propertyTypeOptions.map((opt) => (
               <div
                 key={opt.id}
@@ -112,7 +114,7 @@ export function SearchBar() {
                   setPropertyType(opt.value);
                   setIsPropertyTypeOpen(false);
                 }}
-                className="px-4 py-2 hover:bg-primary text-start cursor-pointer hover:text-white text-gray-700 text-xs font-light "
+                className="px-4 md:py-2 py-4 hover:bg-primary text-start font-medium flex items-center cursor-pointer hover:text-white text-gray-700 text-xs  "
               >
                 {opt.label}
               </div>
@@ -123,7 +125,7 @@ export function SearchBar() {
 
       <div className="h-full border-x border-gray-200 self-center hidden md:block "></div>
 
-      <div className="flex-grow flex items-center h-14 md:h-full bg-white rounded-full md:rounded-none shadow-md md:shadow-none">
+      <div className="flex-grow flex items-center h-14 md:h-full bg-white rounded-full md:rounded-none shadow-sm md:shadow-none">
         <input
           type="text"
           value={location}

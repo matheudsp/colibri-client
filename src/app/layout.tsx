@@ -22,9 +22,9 @@ const poppins = Poppins({
 });
 
 export const metadata: Metadata = {
-  title: "Sistema Colibri",
+  title: "Sistema Locaterra",
   description: "Gestão de imóveis e locações",
-  icons: "/icons/logo-green.svg",
+  icons: "/logo/icon/favicon.ico",
 };
 
 export default function RootLayout({

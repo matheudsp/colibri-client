@@ -1,15 +1,15 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Termos de Uso - Colibri",
+  title: "Termos de Uso - Locaterra",
   description:
-    "Termos e condições de uso da plataforma Colibri para locadores e locatários.",
+    "Termos e condições de uso da plataforma Locaterra para locadores e locatários.",
   openGraph: {
-    title: "Termos de Uso - Colibri",
+    title: "Termos de Uso - Locaterra",
     description:
-      "Termos e condições de uso da plataforma Colibri para locadores e locatários.",
+      "Termos e condições de uso da plataforma Locaterra para locadores e locatários.",
     url: "https://colibri.app/termos-de-uso",
-    siteName: "Colibri",
+    siteName: "Locaterra",
     locale: "pt_BR",
     type: "website",
   },
@@ -82,7 +82,7 @@ export default function TermosDeUsoPage() {
           1. Aceitação dos Termos
         </h2>
         <p className="text-justify break-words">
-          Ao acessar ou utilizar a plataforma Colibri, você concorda com estes
+          Ao acessar ou utilizar a plataforma Locaterra, você concorda com estes
           Termos de Uso e com as demais políticas a que eles se remetem, em
           especial a Política de Privacidade. Caso não concorde com qualquer
           disposição destes Termos, não utilize a Plataforma.
@@ -120,7 +120,7 @@ export default function TermosDeUsoPage() {
         <p className="text-justify break-words">
           A Plataforma oferece meios para divulgação de imóveis, comunicação
           entre partes, gestão de contratos eletrônicos e facilitação de
-          cobranças e repasses financeiros. A Colibri atua como provedor
+          cobranças e repasses financeiros. A Locaterra atua como provedor
           tecnológico da Plataforma, conectando locadores, locatários e
           provedores de serviços essenciais — não sendo parte diretamente nas
           obrigações contratuais firmadas entre locador e locatário, salvo
@@ -185,7 +185,7 @@ export default function TermosDeUsoPage() {
           Contratos celebrados entre locador e locatário por meio da Plataforma
           são acordos privados entre as partes. A Plataforma facilita a geração
           e a assinatura eletrônica desses documentos; a validade, eficácia e
-          cumprimento dos contratos seguem as leis aplicáveis. A Colibri não
+          cumprimento dos contratos seguem as leis aplicáveis. A Locaterra não
           substitui o aconselhamento jurídico das partes quando necessário.
         </p>
       </section>
@@ -208,8 +208,8 @@ export default function TermosDeUsoPage() {
           9. Proteção de Dados e Privacidade
         </h2>
         <p className="text-justify break-words">
-          O tratamento de dados pessoais realizado pela Colibri está descrito na
-          Política de Privacidade, que integra estes Termos por referência.
+          O tratamento de dados pessoais realizado pela Locaterra está descrito
+          na Política de Privacidade, que integra estes Termos por referência.
           Atuamos em conformidade com a LGPD, adotando medidas técnicas e
           administrativas para proteger os dados pessoais dos Usuários.
         </p>
@@ -223,7 +223,7 @@ export default function TermosDeUsoPage() {
           A Plataforma pode integrar-se a serviços de terceiros para
           disponibilizar funcionalidades (por exemplo, serviços de pagamento e
           assinatura eletrônica). O uso desses serviços está sujeito aos termos
-          e políticas dos respectivos fornecedores, e a Colibri não se
+          e políticas dos respectivos fornecedores, e a Locaterra não se
           responsabiliza por práticas de privacidade ou segurança adotadas por
           terceiros.
         </p>
@@ -234,8 +234,8 @@ export default function TermosDeUsoPage() {
           11. Limitação de Responsabilidade
         </h2>
         <p className="text-justify break-words">
-          Na máxima extensão permitida pela lei, a Colibri não será responsável
-          por danos indiretos, especiais, exemplares, incidentais ou
+          Na máxima extensão permitida pela lei, a Locaterra não será
+          responsável por danos indiretos, especiais, exemplares, incidentais ou
           consequenciais decorrentes do uso da Plataforma ou de contratos
           firmados entre usuários. Nossa responsabilidade total em relação a
           qualquer reclamação será limitada ao montante efetivamente pago por
@@ -248,7 +248,7 @@ export default function TermosDeUsoPage() {
           12. Suspensão e Rescisão
         </h2>
         <p className="text-justify break-words">
-          A Colibri pode suspender, limitar ou encerrar o acesso de qualquer
+          A Locaterra pode suspender, limitar ou encerrar o acesso de qualquer
           Usuário que viole estes Termos ou que pratique condutas vedadas pela
           Plataforma, mediante notificação quando possível. Usuários também
           podem encerrar suas contas conforme as opções disponíveis na
