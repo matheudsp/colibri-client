@@ -22,11 +22,13 @@ export function SortBySelector({
   onSortChange,
   loading,
 }: SortBySelectorProps) {
-  const { watch } = form;
-  const sortBy = watch("sortBy");
-  const sortOrder = watch("sortOrder");
+  const { watch, setValue } = form;
+
+  const currentSortValue = watch("sort");
 
   const handleValueChange = (value: string) => {
+    setValue("sort", value, { shouldDirty: true });
+
     const [newSortBy, newSortOrder] = value.split(":");
     onSortChange(newSortBy, newSortOrder);
   };
@@ -40,7 +42,7 @@ export function SortBySelector({
   ];
 
   const currentOption = options.find(
-    (option) => option.value === `${sortBy}:${sortOrder}`
+    (option) => option.value === currentSortValue
   );
 
   return (

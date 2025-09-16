@@ -170,12 +170,16 @@ export function useCustomInput(props: UseCustomInputProps) {
 
   const labelClasses = useMemo(
     () =>
-      clsx("block text-sm font-medium mb-1", {
-        "text-error": !!error,
-        "text-secondary": !error,
-        "text-gray-600": disabled,
-      }),
-    [error, labelClassName, disabled]
+      clsx(
+        "block text-sm font-medium mb-1",
+        {
+          "text-error": !!error,
+          "text-secondary": !error,
+          "text-gray-600": disabled,
+        },
+        labelClassName
+      ),
+    [error, disabled, labelClassName]
   );
 
   const iconContainerClasses = useMemo(

@@ -1,134 +1,171 @@
 "use client";
 
+import { Fragment, useCallback, useEffect, useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
-import { Fragment, useEffect, useRef, useState } from "react";
-import { Loader2Icon, XIcon } from "lucide-react";
+import { motion, AnimatePresence, Variants } from "framer-motion";
+import {
+  XIcon,
+  ChevronLeft,
+  ChevronRight,
+  ImageIcon,
+  Loader2,
+} from "lucide-react";
 import Image from "next/image";
-import { PhotoService } from "../../../services/domains/photoService";
+import { Photo } from "@/interfaces/photo";
 
 interface PhotoViewModalProps {
-  photoId?: string;
-  file?: File;
+  photos: Photo[];
+  initialIndex?: number;
   isOpen: boolean;
   onClose: () => void;
-  isPathologyPhoto?: boolean;
+  altText: string;
 }
 
 export function PhotoViewModal({
-  photoId,
-  file,
+  photos,
+  initialIndex = 0,
   isOpen,
   onClose,
-  isPathologyPhoto = false,
+  altText,
 }: PhotoViewModalProps) {
-  const [imageUrl, setImageUrl] = useState<string | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
-  const imageUrlRef = useRef<string | null>(null);
+  const [currentIndex, setCurrentIndex] = useState(initialIndex);
+  const [touchStart, setTouchStart] = useState<number | null>(null);
+  const [touchEnd, setTouchEnd] = useState<number | null>(null);
 
   useEffect(() => {
-    if (!isOpen) return;
+    if (isOpen) {
+      setCurrentIndex(initialIndex);
+    }
+  }, [isOpen, initialIndex]);
 
-    const loadPhoto = async () => {
-      setIsLoading(true);
-      try {
-        if (file instanceof File) {
-          const url = URL.createObjectURL(file);
-          setImageUrl(url);
-          imageUrlRef.current = url;
-          return;
-        }
-
-        const timestamp = Date.now();
-
-        const signedUrl = await PhotoService.getSignedUrl(photoId || "");
-
-        const urlWithTimestamp = signedUrl.includes("?")
-          ? `${signedUrl}&t=${timestamp}`
-          : `${signedUrl}?t=${timestamp}`;
-
-        setImageUrl(urlWithTimestamp);
-      } catch (error) {
-        console.error("Failed to load photo:", error);
-        setImageUrl(null);
-      } finally {
-        setIsLoading(false);
+  const changeImage = useCallback(
+    (newDirection: number) => {
+      if (!photos || photos.length === 0) return;
+      if (newDirection > 0) {
+        setCurrentIndex((prev) => (prev === photos.length - 1 ? 0 : prev + 1));
+      } else {
+        setCurrentIndex((prev) => (prev === 0 ? photos.length - 1 : prev - 1));
       }
-    };
+    },
+    [photos]
+  );
 
-    loadPhoto();
-
-    return () => {
-      if (file instanceof File && imageUrlRef.current) {
-        URL.revokeObjectURL(imageUrlRef.current);
-      }
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (!isOpen) return;
+      if (e.key === "ArrowRight") changeImage(1);
+      else if (e.key === "ArrowLeft") changeImage(-1);
+      else if (e.key === "Escape") onClose();
     };
-  }, [isOpen, photoId, file, isPathologyPhoto]);
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [isOpen, changeImage, onClose]);
+
+  if (!photos || photos.length === 0) {
+    return null;
+  }
+
+  const minSwipeDistance = 50;
+  const onTouchStart = (e: React.TouchEvent) => {
+    setTouchEnd(null);
+    setTouchStart(e.targetTouches[0].clientX);
+  };
+  const onTouchMove = (e: React.TouchEvent) =>
+    setTouchEnd(e.targetTouches[0].clientX);
+  const onTouchEnd = () => {
+    if (!touchStart || !touchEnd) return;
+    const distance = touchStart - touchEnd;
+    if (distance > minSwipeDistance) changeImage(1);
+    else if (distance < -minSwipeDistance) changeImage(-1);
+  };
+
+  const fadeVariants: Variants = {
+    initial: { opacity: 0 },
+    animate: { opacity: 1, transition: { duration: 0.3 } },
+    exit: { opacity: 0, transition: { duration: 0.3 } },
+  };
+
+  const currentPhoto = photos[currentIndex];
 
   return (
     <Transition appear show={isOpen} as={Fragment}>
       <Dialog as="div" className="relative z-50" onClose={onClose}>
-        <Transition.Child
-          as={Fragment}
-          enter="ease-out duration-300"
-          enterFrom="opacity-0"
-          enterTo="opacity-100"
-          leave="ease-in duration-200"
-          leaveFrom="opacity-100"
-          leaveTo="opacity-0"
-        >
-          <div className="fixed inset-0 bg-black/90" />
-        </Transition.Child>
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.3 }}
+          className="fixed inset-0 bg-black/90"
+        />
 
-        <div className="fixed inset-0 overflow-y-auto">
-          <div className="flex min-h-svh items-center justify-center py-8 text-center">
-            <Transition.Child
-              as={Fragment}
-              enter="ease-out duration-300"
-              enterFrom="opacity-0 scale-95"
-              enterTo="opacity-100 scale-100"
-              leave="ease-in duration-200"
-              leaveFrom="opacity-100 scale-100"
-              leaveTo="opacity-0 scale-95"
-            >
-              <Dialog.Panel className="relative w-full h-full max-w-4xl transform overflow-hidden rounded-2xl text-left align-middle shadow-xl transition-all">
-                {isLoading && (
-                  <div className="flex justify-center items-center min-h-svh">
-                    <Loader2Icon className="animate-spin h-12 w-12 text-primary" />
+        <div className="fixed inset-0 flex items-center justify-center p-4">
+          <Dialog.Panel
+            className="relative w-full h-full max-w-6xl max-h-[90vh] flex items-center justify-center focus:outline-none"
+            onTouchStart={onTouchStart}
+            onTouchMove={onTouchMove}
+            onTouchEnd={onTouchEnd}
+          >
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={currentIndex}
+                variants={fadeVariants}
+                initial="initial"
+                animate="animate"
+                exit="exit"
+                className="w-full h-full"
+              >
+                {currentPhoto?.signedUrl ? (
+                  <Image
+                    src={currentPhoto.signedUrl}
+                    alt={`Foto ${currentIndex + 1} de ${altText}`}
+                    fill
+                    className="object-contain "
+                    unoptimized={true}
+                    priority
+                  />
+                ) : (
+                  <div className="w-full h-full flex items-center justify-center text-white">
+                    <Loader2 className="animate-spin h-12 w-12" />
                   </div>
                 )}
-                <button
-                  title="Fechar modal"
-                  onClick={onClose}
-                  className="absolute right-4 top-4 z-10 rounded-full bg-black/50 p-2 text-white hover:bg-black/75"
-                >
-                  <XIcon className="h-6 w-6" />
-                </button>
+              </motion.div>
+            </AnimatePresence>
 
-                <div className="relative aspect-[4/4] w-full h-full">
-                  {imageUrl ? (
-                    <Image
-                      src={imageUrl}
-                      alt="Visualização da foto"
-                      fill
-                      className="object-contain"
-                      unoptimized={true}
-                      onError={(e) => {
-                        const target = e.target as HTMLImageElement;
-                        target.onerror = null;
-                        setImageUrl(null);
-                      }}
-                    />
-                  ) : (
-                    <div className="flex items-center justify-center h-full text-white">
-                      {isLoading
-                        ? "Carregando imagem..."
-                        : "Imagem não encontrada"}
-                    </div>
-                  )}
-                </div>
-              </Dialog.Panel>
-            </Transition.Child>
-          </div>
+            {/* Controles da UI */}
+            <button
+              title="Fechar modal"
+              onClick={onClose}
+              className="absolute right-0 -top-8 sm:right-4 sm:top-4 z-20 rounded-full bg-black/50 p-2 text-white hover:bg-black/75"
+            >
+              <XIcon className="h-6 w-6" />
+            </button>
+
+            {photos.length > 1 && (
+              <>
+                <button
+                  title="Foto anterior"
+                  onClick={() => changeImage(-1)}
+                  className="absolute left-2 top-1/2 -translate-y-1/2 z-20 rounded-full bg-black/50 p-2 text-white hover:bg-black/75"
+                >
+                  <ChevronLeft className="h-7 w-7" />
+                </button>
+                <button
+                  title="Próxima foto"
+                  onClick={() => changeImage(1)}
+                  className="absolute right-2 top-1/2 -translate-y-1/2 z-20 rounded-full bg-black/50 p-2 text-white hover:bg-black/75"
+                >
+                  <ChevronRight className="h-7 w-7" />
+                </button>
+              </>
+            )}
+
+            <div className="absolute bottom-0 left-1/2 -translate-x-1/2 z-20 bg-black/50 text-white text-sm font-semibold px-3 py-1.5 rounded-full flex items-center gap-2">
+              <ImageIcon size={16} />
+              <span>
+                {currentIndex + 1} / {photos.length}
+              </span>
+            </div>
+          </Dialog.Panel>
         </div>
       </Dialog>
     </Transition>

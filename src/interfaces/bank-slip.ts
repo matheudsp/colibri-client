@@ -12,6 +12,7 @@ export interface BankSlipResponse {
 export interface BankSlip {
   id: string;
   paymentOrderId: string;
+  transactionReceiptUrl?: string;
   asaasChargeId: string;
   bankSlipUrl: string;
   invoiceUrl: string;

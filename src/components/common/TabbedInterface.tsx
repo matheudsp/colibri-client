@@ -1,5 +1,3 @@
-// src/components/common/TabbedInterface.tsx
-
 "use client";
 
 import { useState, ReactNode } from "react";
@@ -27,15 +25,16 @@ export function TabbedInterface({
   initialTabId,
   level = 0,
 }: TabbedInterfaceProps) {
-  if (!tabs || tabs.length === 0) return null;
+  const [activeTabId, setActiveTabId] = useState(
+    initialTabId || (tabs && tabs.length > 0 ? tabs[0].id : "")
+  );
 
-  const [activeTabId, setActiveTabId] = useState(initialTabId || tabs[0].id);
+  if (!tabs || tabs.length === 0) return null;
 
   const activeTab = tabs.find((tab) => tab.id === activeTabId);
 
   const tabButtonClasses = (isActive: boolean) =>
     clsx(
-      // Estilo base para todos os botões de aba
       "flex items-center gap-2 px-4 py-2.5 outline-none transition-colors duration-200 border-r border-gray-300",
       {
         // Aba Ativa: Fundo branco para se conectar ao conteúdo, sem borda inferior
@@ -65,9 +64,7 @@ export function TabbedInterface({
         </h1>
       )}
 
-      {/* Container principal que define o "card" com bordas arredondadas */}
       <div className="border border-gray-300  rounded-lg shadow-sm overflow-hidden">
-        {/* A nav agora é o cabeçalho das abas, com os separadores */}
         <nav className="flex flex-wrap bg-gray-200/50 ">
           {tabs.map((tab) => (
             <button
@@ -85,7 +82,6 @@ export function TabbedInterface({
           ))}
         </nav>
 
-        {/* O painel de conteúdo com fundo branco */}
         <main className="p-6 bg-white">
           <AnimatePresence mode="wait">
             {activeTab && (

@@ -20,7 +20,7 @@ export const CustomInput = forwardRef<HTMLInputElement, CustomInputProps>(
       error,
       disabled,
       displayValue,
-      isFocused,
+      // isFocused,
       baseClasses,
       containerClasses,
       inputClasses: originalInputClasses,

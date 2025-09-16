@@ -6,4 +6,6 @@ export enum PaymentStatus {
   ISENTO = "ISENTO",
   CONFIRMADO = "CONFIRMADO",
   FALHOU = "FALHOU",
+  EM_REPASSE = "EM_REPASSE",
+  RECEBIDO = "RECEBIDO",
 }

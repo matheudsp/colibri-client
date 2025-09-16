@@ -153,18 +153,19 @@ export default function ContractManagementPage() {
     }
   };
   const handleResendNotification = async (
-    signerId: string,
-    method: "email" | "whatsapp"
+    signerId: string
+    // method: "email" | "whatsapp"
   ) => {
     if (!contract) return;
     setIsActionLoading(true);
     try {
       await ContractService.resendNotification(contract.id, {
         signerId,
-        method,
+        // method,
       });
       toast.success("Notificação reenviada com sucesso!", {
-        description: `Um lembrete foi enviado por ${method} para o signatário selecionado.`,
+        // description: `Um lembrete foi enviado por ${method} para o signatário selecionado.`,
+        description: `Um lembrete foi enviado para o signatário selecionado.`,
       });
       setShowResendModal(false);
     } catch (_error) {
@@ -239,7 +240,7 @@ export default function ContractManagementPage() {
               </p>
               <CustomButton
                 onClick={() =>
-                  router.push(`/contratos/${contract.id}/documentos`)
+                  router.push(`/contrato/${contract.id}/documentos`)
                 }
                 className="mt-4 w-full"
               >
@@ -267,7 +268,7 @@ export default function ContractManagementPage() {
                 </p>
                 <CustomButton
                   onClick={() =>
-                    router.push(`/contratos/${contract.id}/documentos`)
+                    router.push(`/contrato/${contract.id}/documentos`)
                   }
                   color="bg-red-600"
                   textColor="text-white"
@@ -367,7 +368,7 @@ export default function ContractManagementPage() {
               </p>
               <CustomButton
                 onClick={() =>
-                  router.push(`/contratos/${contract.id}/documentos`)
+                  router.push(`/contrato/${contract.id}/documentos`)
                 }
                 color="bg-blue-600"
                 textColor="text-white"
@@ -388,9 +389,7 @@ export default function ContractManagementPage() {
               enquanto isso, você pode verificar quais foram enviados.
             </p>
             <CustomButton
-              onClick={() =>
-                router.push(`/contratos/${contract.id}/documentos`)
-              }
+              onClick={() => router.push(`/contrato/${contract.id}/documentos`)}
               color="bg-orange-600"
               textColor="text-white"
               className="w-full mt-4"
@@ -484,7 +483,7 @@ export default function ContractManagementPage() {
                       className="w-full"
                     >
                       <BellRing className="mr-2" size={20} />
-                      Reenviar Notificação de Assinatura
+                      Enviar Lembrete de Assinatura
                     </CustomButton>
                   )}
                 {(sub === contract.landlordId || role === Roles.ADMIN) && (

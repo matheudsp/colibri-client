@@ -12,8 +12,11 @@ const baseContractSchema = z.object({
     .string({ required_error: "A data de início é obrigatória." })
     .min(1, "A data de início é obrigatória."),
   durationInMonths: z.coerce
-    .number({ required_error: "A duração é obrigatória." })
-    .int()
+    .number({
+      required_error: "A duração é obrigatória.",
+      invalid_type_error: "A duração é obrigatória.",
+    })
+    .int({ message: "A duração deve ser um número inteiro de meses." })
     .positive("A duração deve ser maior que zero."),
   guaranteeType: z.string({
     required_error: "O tipo de garantia é obrigatório.",

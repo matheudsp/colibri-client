@@ -148,7 +148,7 @@ export default function PropertyDetailsPage() {
 
             {/* Card de Detalhes do Imóvel */}
             <div className="bg-white border border-gray-200 rounded-xl p-6 space-y-6">
-              <div className="flex justify-between items-start gap-4">
+              <div className="flex flex-col md:flex-row justify-between items-center md:items-start gap-4">
                 <h1 className="text-2xl md:text-3xl font-bold text-gray-900">
                   {property.title}
                 </h1>

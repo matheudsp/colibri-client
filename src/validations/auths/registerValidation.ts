@@ -2,12 +2,22 @@ import { companyType } from "@/constants";
 import { dateSchema } from "@/utils/helpers/handleDateSchema";
 import { z } from "zod";
 
+const validNameRegex = /^[a-zA-Z\u00C0-\u017F´ ]+$/;
+
+const nameValidation = z
+  .string({ required_error: "Nome é obrigatório" })
+  .min(3, "Nome deve ter pelo menos 3 caracteres")
+  .max(60, "Nome muito longo")
+  .refine((name) => validNameRegex.test(name), {
+    message: "O nome deve conter apenas letras e espaços.",
+  })
+  .refine((name) => name.trim().split(" ").length >= 2, {
+    message: "Por favor, insira o nome e sobrenome.",
+  });
+
 export const tenantRegisterSchema = z
   .object({
-    name: z
-      .string({ required_error: "Nome é obrigatório" })
-      .min(3, "Nome deve ter pelo menos 3 caracteres")
-      .max(60, "Nome muito longo"),
+    name: nameValidation,
     email: z
       .string({ required_error: "Email é obrigatório" })
       .email("Email inválido")
@@ -37,7 +47,7 @@ export type TenantRegisterFormData = z.infer<typeof tenantRegisterSchema>;
 
 export const landlordRegisterSchema = z
   .object({
-    name: z.string().min(3, "O nome é obrigatório."),
+    name: nameValidation,
     email: z.string().email("O e-mail é inválido."),
     password: z
       .string({ required_error: "Senha é obrigatória" })

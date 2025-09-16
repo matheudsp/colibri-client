@@ -1,18 +1,22 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
+import { motion, AnimatePresence } from "framer-motion"; // Import do Framer Motion
 import {
   Bed,
   Bath,
   Maximize,
   FilePlus2,
-  Edit,
   Trash2,
   Home,
   Eye,
+  ChevronLeft,
+  ChevronRight,
+  ImageIcon,
+  MoveHorizontal, // Ícone para a dica de deslize
 } from "lucide-react";
 import { toast } from "sonner";
 import { PropertyService } from "@/services/domains/propertyService";
@@ -25,6 +29,7 @@ import { extractAxiosError } from "@/services/api";
 import { CustomSwitch } from "../forms/CustomSwitch";
 import { getPropertyTypeLabel } from "@/utils/helpers/getPropertyType";
 
+// O componente DashboardActions permanece o mesmo...
 function DashboardActions({
   property,
   onDelete,
@@ -47,12 +52,6 @@ function DashboardActions({
     e.stopPropagation();
     e.preventDefault();
     if (onDelete) onDelete(property.id);
-  };
-
-  const handleEdit = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    e.preventDefault();
-    router.push(`/properties/edit/${property.id}`);
   };
 
   const handleCreateContract = (e: React.MouseEvent) => {
@@ -121,15 +120,6 @@ function DashboardActions({
         Criar Contrato
       </CustomButton>
       <CustomButton
-        onClick={handleEdit}
-        icon={<Edit size={16} />}
-        color="bg-blue-100"
-        textColor="text-blue-800"
-        className="w-full text-sm"
-      >
-        Editar
-      </CustomButton>
-      <CustomButton
         onClick={handleDelete}
         icon={<Trash2 size={16} />}
         color="bg-red-100"
@@ -141,38 +131,87 @@ function DashboardActions({
     </div>
   );
 }
+
 export function PropertyCard({
   property,
   variant = "dashboard",
   onDelete,
-
   onAvailabilityChange,
 }: {
   property: PropertyProps;
-
   variant?: "dashboard" | "public";
   onDelete?: (id: string) => void;
   onAvailabilityChange?: (id: string, newStatus: boolean) => void;
 }) {
   const [currentImage, setCurrentImage] = useState(0);
+  const [touchStart, setTouchStart] = useState<number | null>(null);
+  const [touchEnd, setTouchEnd] = useState<number | null>(null);
+  const [showSwipeHint, setShowSwipeHint] = useState(false);
 
-  const handleNextImage = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    e.preventDefault();
-    setCurrentImage((prev) => (prev + 1) % property.photos.length);
+  const minSwipeDistance = 50;
+
+  // Lógica para mostrar a dica de deslize apenas uma vez por sessão
+  useEffect(() => {
+    const hintShownKey = `swipeHintShown_${property.id}`;
+    const hintHasBeenShown = sessionStorage.getItem(hintShownKey);
+
+    if (property.photos.length > 1 && !hintHasBeenShown) {
+      const timer = setTimeout(() => {
+        setShowSwipeHint(true);
+        sessionStorage.setItem(hintShownKey, "true");
+      }, 1500); // Mostra a dica após 1.5s
+      return () => clearTimeout(timer);
+    }
+  }, [property.id, property.photos.length]);
+
+  const handleNextImage = (e?: React.MouseEvent) => {
+    e?.stopPropagation();
+    e?.preventDefault();
+    if (property.photos.length > 1) {
+      setCurrentImage((prev) => (prev + 1) % property.photos.length);
+    }
   };
 
-  const handlePrevImage = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    e.preventDefault();
-    setCurrentImage(
-      (prev) => (prev - 1 + property.photos.length) % property.photos.length
-    );
+  const handlePrevImage = (e?: React.MouseEvent) => {
+    e?.stopPropagation();
+    e?.preventDefault();
+    if (property.photos.length > 1) {
+      setCurrentImage(
+        (prev) => (prev - 1 + property.photos.length) % property.photos.length
+      );
+    }
+  };
+
+  const onTouchStart = (e: React.TouchEvent) => {
+    setTouchEnd(null);
+    setTouchStart(e.targetTouches[0].clientX);
+  };
+
+  const onTouchMove = (e: React.TouchEvent) => {
+    setTouchEnd(e.targetTouches[0].clientX);
+  };
+
+  const onTouchEnd = () => {
+    if (!touchStart || !touchEnd) return;
+    const distance = touchStart - touchEnd;
+    const isLeftSwipe = distance > minSwipeDistance;
+    const isRightSwipe = distance < -minSwipeDistance;
+
+    if (isLeftSwipe) {
+      handleNextImage();
+    } else if (isRightSwipe) {
+      handlePrevImage();
+    }
   };
 
   const cardContent = (
-    <div className="bg-white border border-gray-200 rounded-md overflow-hidden transition-all duration-300 shadow-md flex flex-col h-full">
-      <div className="relative w-full aspect-[4/3]">
+    <div className="bg-white border border-gray-200 rounded-md overflow-hidden transition-all duration-300 shadow-md flex flex-col h-full group">
+      <div
+        className="relative w-full aspect-[4/3]"
+        onTouchStart={onTouchStart}
+        onTouchMove={onTouchMove}
+        onTouchEnd={onTouchEnd}
+      >
         {property.photos && property.photos.length > 0 ? (
           <Image
             src={property.photos[currentImage].signedUrl}
@@ -187,54 +226,57 @@ export function PropertyCard({
           </div>
         )}
 
+        <AnimatePresence>
+          {showSwipeHint && (
+            <motion.div
+              initial={{ opacity: 0, x: 40 }}
+              animate={{ opacity: [0, 1, 1, 0], x: -40 }}
+              exit={{ opacity: 0 }}
+              transition={{
+                duration: 2,
+                ease: "easeInOut",
+                times: [0, 0.2, 0.8, 1],
+              }}
+              onAnimationComplete={() => setShowSwipeHint(false)}
+              className="absolute inset-0 z-10 flex items-center justify-center pointer-events-none"
+            >
+              <div className="bg-black/60 backdrop-blur-sm p-3 rounded-full">
+                <MoveHorizontal className="text-white" size={24} />
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
         {property.photos && property.photos.length > 1 && (
           <>
             <button
               onClick={handlePrevImage}
-              className="absolute left-2 top-1/2 -translate-y-1/2 bg-white/80 p-1.5 rounded-full shadow cursor-pointer opacity-0 group-hover:opacity-100 transition-opacity focus:outline-none"
+              className="absolute left-2 top-1/2 -translate-y-1/2 bg-black/40 text-white p-1 rounded-full shadow-md transition-opacity opacity-70 hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-white z-20"
               aria-label="Imagem anterior"
             >
-              &larr;
+              <ChevronLeft size={20} />
             </button>
             <button
               onClick={handleNextImage}
-              className="absolute right-2 top-1/2 -translate-y-1/2 bg-white/80 p-1.5 rounded-full shadow cursor-pointer opacity-0 group-hover:opacity-100 transition-opacity focus:outline-none"
+              className="absolute right-2 top-1/2 -translate-y-1/2 bg-black/40 text-white p-1 rounded-full shadow-md transition-opacity opacity-70 hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-white z-20"
               aria-label="Próxima imagem"
             >
-              &rarr;
+              <ChevronRight size={20} />
             </button>
-            <div className="absolute bottom-2 left-1/2 -translate-x-1/2 flex space-x-1.5">
-              {property.photos.map((_, index) => (
-                <div
-                  key={index}
-                  className={`w-2 h-2 rounded-full transition-colors ${
-                    currentImage === index ? "bg-white" : "bg-white/50"
-                  }`}
-                />
-              ))}
+            <div className="absolute bottom-2 right-2 bg-black/50 text-white text-xs font-semibold px-2 py-1 rounded-full flex items-center gap-1 z-20">
+              <ImageIcon size={14} />
+              <span>
+                {currentImage + 1} / {property.photos.length}
+              </span>
             </div>
           </>
         )}
-        {/* {variant === "public" && (
-            <button
-              onClick={(e) => {
-                e.stopPropagation();
-                e.preventDefault();
-                alert("Funcionalidade a ser implementada!");
-              }}
-              className="absolute top-3 right-3 bg-white/80 p-2 rounded-full cursor-pointer hover:bg-white"
-              aria-label="Favoritar imóvel"
-            >
-              <Heart className="w-5 h-5 text-gray-700" />
-            </button>
-          )} */}
       </div>
 
       <div className="p-4 flex flex-col flex-grow">
         <p className="text-sm text-primary font-semibold">
           {getPropertyTypeLabel(property.propertyType)}
         </p>
-
         <h3 className="text-lg font-bold text-gray-800 truncate mt-1">
           {property.title}
         </h3>
@@ -244,34 +286,26 @@ export function PropertyCard({
         <p className="text-sm text-gray-500 truncate">
           {property.city} - {property.state}
         </p>
-
         <div className="flex-grow">
           {variant === "public" && (
-            <div className="flex flex-col px-4 items-start flex-wrap gap-y-1 text-sm text-gray-600 mt-3 border-b pb-3">
-              <span className="flex items-center gap-1">
-                <div className="bg-primary p-1.5 rounded-lg">
-                  <Maximize className="text-white" size={14} />
-                </div>
-                <strong>{property.areaInM2}</strong> m²
+            <div className="grid grid-cols-2 gap-x-4 gap-y-2 text-sm text-gray-600 mt-3 border-t pt-3">
+              <span className="flex items-center gap-2">
+                <Maximize className="text-primary" size={14} />
+                <strong>{property.areaInM2} m²</strong>
               </span>
-              <span className="flex items-center gap-1">
-                <div className="bg-primary p-1.5 rounded-lg">
-                  <Bed className="text-white" size={14} />
-                </div>
-                <strong> {property.numRooms}</strong>Quartos
+              <span className="flex items-center gap-2">
+                <Bed className="text-primary" size={14} />
+                <strong>{property.numRooms} Quarto(s)</strong>
               </span>
-              <span className="flex items-center gap-1">
-                <div className="bg-primary p-1.5 rounded-lg">
-                  <Bath className="text-white" size={14} />
-                </div>
-                <strong>{property.numBathrooms}</strong>
-                Banheiros
+              <span className="flex items-center gap-2">
+                <Bath className="text-primary" size={14} />
+                <strong>{property.numBathrooms} Banheiro(s)</strong>
               </span>
             </div>
           )}
           <div className="mt-3 flex justify-between items-center">
             <span className="text-gray-500 text-sm">Aluguel</span>
-            <span className="font-bold text-gray-800">
+            <span className="font-bold text-gray-800 text-lg">
               {formatCurrency(property.value)}
             </span>
           </div>
@@ -295,6 +329,5 @@ export function PropertyCard({
     );
   }
 
-  // Para a variante dashboard, ele não é um link, apenas um container
   return <div className="block h-full">{cardContent}</div>;
 }

@@ -43,7 +43,14 @@ export default function TenantRegisterPage() {
   const onSubmit = async (data: TenantRegisterFormData) => {
     setLoading(true);
     try {
-      await AuthService.registerTenant(data);
+      await AuthService.registerTenant({
+        name: data.name,
+        email: data.email,
+        cpfCnpj: data.cpfCnpj,
+        phone: data.phone,
+        birthDate: data.birthDate,
+        password: data.password,
+      });
       toast.success("Cadastro realizado com sucesso!", {
         description: "Você será redirecionado para a página de login.",
       });

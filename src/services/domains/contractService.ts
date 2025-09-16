@@ -20,7 +20,7 @@ export interface CreateContractData {
 
 export interface ResendNotificationData {
   signerId: string;
-  method: "email" | "whatsapp";
+  // method: "email" | "whatsapp";
 }
 
 export const ContractService = {

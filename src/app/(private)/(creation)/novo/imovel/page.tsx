@@ -70,6 +70,7 @@ export default function CreatePropertyPage() {
   });
 
   const stateValue = watch("state");
+  const propertyTitleValue = watch("title"); // Get the title for the alt text
   const formSteps = ["Cadastrar Imóvel", "Envio de Fotos"];
   const propertyTypeValue = watch("propertyType");
   const handleNextStep = () => setStep((prev) => prev + 1);
@@ -202,7 +203,7 @@ export default function CreatePropertyPage() {
 
   return (
     <>
-      <div className="min-h-svh pt-16 w-full flex flex-col items-center justify-center">
+      <div className="min-h-svh pt-24 w-full flex flex-col items-center justify-center">
         <div className="p-4 sm:p-6 md:p-8 w-full md:max-w-2xl">
           <Stepper
             steps={formSteps}
@@ -494,6 +495,8 @@ export default function CreatePropertyPage() {
                   <PhotoCard
                     key={photo.id}
                     photo={photo}
+                    allPhotos={allPhotos}
+                    propertyTitle={propertyTitleValue}
                     onDelete={handleDeletePhoto}
                   />
                 ))}

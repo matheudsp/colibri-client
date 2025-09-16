@@ -28,12 +28,12 @@ const COLORS = {
   pending: "#f59e0b", // amber-500
   overdue: "#dc2626", // red-600
 };
-
+/* eslint-disable  @typescript-eslint/no-explicit-any */
 const CustomTooltip = ({ active, payload, label }: any) => {
   if (active && payload && payload.length) {
     const data = payload[0].payload;
     return (
-      <div className="bg-white p-4 border z-0 border-gray-200 rounded-lg shadow-lg">
+      <div className="bg-white p-4 border z-20 border-gray-200 rounded-lg shadow-lg">
         <p className="font-bold text-gray-800">{label}</p>
         <ul className="mt-2 space-y-1 text-sm">
           {payload.map((p: any) => (

@@ -41,7 +41,7 @@ const SecuritySection = ({
 
 type OtpAction = "enable-2fa" | "disable-2fa";
 
-export function SecurityForm() {
+export function SecurityTab() {
   const { user, loading } = useCurrentUser();
   const [isActionLoading, setIsActionLoading] = useState(false);
   const [otpAction, setOtpAction] = useState<OtpAction | null>(null);

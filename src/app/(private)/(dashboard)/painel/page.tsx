@@ -12,10 +12,13 @@ import { PaymentsByPropertyChart } from "@/components/charts/PaymentsByPropertyC
 import { formatDateForDisplay } from "@/utils/formatters/formatDate";
 import { formatDecimalValue } from "@/utils/formatters/formatDecimal";
 import { EmptyCard } from "@/components/common/EmptyCard";
+import { Flag } from "@/components/common/Flag";
 
 export default function PainelPage() {
   const [payments, setPayments] = useState<PaymentResponse[]>([]);
   const [loading, setLoading] = useState(true);
+
+  const [isFlagVisible, setIsFlagVisible] = useState(true);
 
   useEffect(() => {
     const fetchPayments = async () => {
@@ -38,6 +41,12 @@ export default function PainelPage() {
 
   return (
     <div className="min-h-svh flex flex-col items-center pt-8 md:pt-14 px-4 pb-24 bg-gray-50">
+      <Flag
+        title="Este painel está em fase de desenvolvimento. Funcionalidades e dados exibidos podem sofrer alterações."
+        isVisible={isFlagVisible}
+        onClose={() => setIsFlagVisible(false)}
+      />
+
       <div className="w-full max-w-7xl mx-auto space-y-8">
         <header>
           <h1 className="text-3xl sm:text-4xl font-bold text-gray-800">
@@ -47,7 +56,6 @@ export default function PainelPage() {
             Resumo financeiro dos seus contratos.
           </p>
         </header>
-
         <div className="bg-white p-4 sm:p-6 rounded-xl shadow-md border">
           <h2 className="text-xl font-bold text-gray-800 mb-4">
             Receitas por Imóvel e Status
@@ -60,7 +68,6 @@ export default function PainelPage() {
             <PaymentsByPropertyChart data={aggregatedData} />
           )}
         </div>
-
         <div className="bg-white p-4 sm:p-6 rounded-xl shadow-md border">
           <h2 className="text-xl font-bold text-gray-800 mb-4">
             Detalhes de Todos os Pagamentos

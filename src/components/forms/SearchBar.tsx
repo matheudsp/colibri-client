@@ -6,7 +6,6 @@ import { ChevronDown } from "lucide-react";
 
 import { CustomButton } from "./CustomButton";
 import { propertyType as propertyTypeOptions } from "@/constants";
-import { slugify } from "@/utils/helpers/slugify";
 
 const transactionOptions = [
   { id: "LOCACAO", slug: "para-alugar", label: "Locação" },

@@ -53,6 +53,16 @@ export default {
         "spin-slow": "spin 3s linear infinite",
         wiggle: "wiggle 0.5s ease-in-out infinite",
         fadeIn: "fadeIn 0.5s ease-in-out",
+        "progress-stripes": "progress-stripes 1s linear infinite",
+        "pulse-shadow": "pulse-shadow 2s ease-in-out infinite",
+        "swipe-hint": "swipe-hint 1.5s ease-in-out 1s",
+      },
+      backgroundImage: {
+        "striped-gradient":
+          "linear-gradient(45deg, rgba(255, 255, 255, 0.15) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.15) 50%, rgba(255, 255, 255, 0.15) 75%, transparent 75%, transparent)",
+      },
+      backgroundSize: {
+        "striped-size": "40px 40px",
       },
 
       keyframes: {
@@ -63,6 +73,24 @@ export default {
         wiggle: {
           "0%, 100%": { transform: "rotate(-5deg)" },
           "50%": { transform: "rotate(5deg)" },
+        },
+        "progress-stripes": {
+          "0%": { backgroundPosition: "40px 0" },
+          "100%": { backgroundPosition: "0 0" },
+        },
+        "pulse-shadow": {
+          "0%, 100%": {
+            transform: "scale(1)",
+            boxShadow: "0 0 0 0 rgba(45, 43, 46, 0.3)",
+          },
+          "50%": {
+            transform: "scale(1.1)",
+            boxShadow: "0 0 0 10px rgba(45, 43, 46, 0)",
+          },
+        },
+        "swipe-hint": {
+          "0%, 100%": { transform: "translateX(0)" },
+          "50%": { transform: "translateX(-12px)" },
         },
       },
     },

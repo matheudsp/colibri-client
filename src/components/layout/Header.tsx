@@ -43,7 +43,7 @@ export function Header({
   onSearchChange,
 }: HeaderProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const { isAuthenticated, loading } = useCurrentUser();
+  const { isAuthenticated } = useCurrentUser();
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     onSearchChange?.(e.target.value);
   };
@@ -114,7 +114,7 @@ export function Header({
           </div>
 
           {/* Navegação (Desktop) */}
-          <nav className="hidden lg:flex items-center gap-6 flex-shrink-0">
+          <nav className="hidden  lg:flex items-center gap-6 flex-shrink-0">
             <Link
               key={"menu"}
               href={isAuthenticated ? "/imoveis" : "/entrar"}
@@ -163,9 +163,9 @@ export function Header({
               animate="visible"
               exit="hidden"
               transition={{ type: "tween", duration: 0.3 }}
-              className="fixed inset-0 top-[72px] bg-background z-40 lg:hidden"
+              className="fixed  inset-0 top-[72px]  z-40 lg:hidden"
             >
-              <div className="p-4">
+              <div className="p-4 bg-white/95  h-svh">
                 {/* {showSearchBar && (
                   <div className="relative mb-4">
                     <input
@@ -184,7 +184,7 @@ export function Header({
                     </button>
                   </div>
                 )} */}
-                <nav className="flex flex-col space-y-2">
+                <nav className="flex flex-col space-y-2 ">
                   <Link
                     key={"access"}
                     href={isAuthenticated ? "/imoveis" : "/entrar"}

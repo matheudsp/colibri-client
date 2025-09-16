@@ -37,21 +37,19 @@ export const BankAccountService = {
       throw new Error(extractAxiosError(error));
     }
   },
-
-  async findMyAccount(): Promise<ApiResponse<BankAccount>> {
-    try {
-      const response = await api.get(API_ROUTES.BANK_ACCOUNTS.MY_ACCOUNT);
-      return response.data;
-    } catch (error) {
-      throw new Error(extractAxiosError(error));
-    }
-  },
-
   async update(
     data: CreateBankAccountFormValues
   ): Promise<ApiResponse<BankAccount>> {
     try {
       const response = await api.patch(API_ROUTES.BANK_ACCOUNTS.UPDATE, data);
+      return response.data;
+    } catch (error) {
+      throw new Error(extractAxiosError(error));
+    }
+  },
+  async findMyAccount(): Promise<ApiResponse<BankAccount>> {
+    try {
+      const response = await api.get(API_ROUTES.BANK_ACCOUNTS.MY_ACCOUNT);
       return response.data;
     } catch (error) {
       throw new Error(extractAxiosError(error));

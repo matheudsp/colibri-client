@@ -2,7 +2,18 @@
 
 import { useEffect, useRef, useState } from "react";
 import * as htmlToImage from "html-to-image";
-import { Save, Share2, Copy, User, KeyRound, Globe } from "lucide-react";
+import {
+  Save,
+  Share2,
+  Copy,
+  User,
+  KeyRound,
+  Globe,
+  CalendarIcon,
+  FilePen,
+  ChevronLeft,
+  ChevronRight,
+} from "lucide-react";
 import { useParams, useRouter } from "next/navigation";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -21,14 +32,11 @@ import {
   User as UserIcon,
   FileText,
   Lock,
-  Calendar,
   Clock,
   DollarSign,
   Loader2,
   Building,
   CheckCircle,
-  ArrowLeft,
-  ArrowRight,
   PhoneIncoming,
 } from "lucide-react";
 
@@ -65,9 +73,9 @@ export default function CreateContractPage() {
 
   const credentialsCardRef = useRef<HTMLDivElement>(null);
   const steps = [
-    "Encontrar Inquilino",
-    "Detalhes do Contrato",
-    "Contrato Criado",
+    "Encontrar inquilino",
+    "Informações do contrato",
+    "Contrato criado",
   ];
 
   useEffect(() => {
@@ -203,6 +211,7 @@ export default function CreateContractPage() {
         delete payload.tenantPassword;
       }
       delete payload.tenantAction;
+      // console.log(payload);
       const response = await ContractService.create(payload);
 
       if (data.tenantAction === "create") {
@@ -259,7 +268,6 @@ export default function CreateContractPage() {
           toast.error("O compartilhamento foi cancelado ou falhou.");
         }
       } else {
-        // Fallback para copiar para a área de transferência
         navigator.clipboard.writeText(shareText);
         toast.success("Dados de acesso copiados para a área de transferência!");
       }
@@ -268,17 +276,21 @@ export default function CreateContractPage() {
 
   return (
     <div className=" w-full flex flex-col items-center justify-center">
-      <div className="bg-white min-h-svh py-20 px-4 md:px-8 grid place-items-center shadow-lg   w-full max-w-2xl">
+      <div className="min-h-svh py-24 px-4 md:px-8 grid place-items-center    w-full max-w-2xl">
         <div>
-          <h1 className="text-3xl  font-bold text-gray-800  text-center">
+          <h1 className="text-xl md:text-3xl  font-bold text-gray-800  text-center">
             Criar Novo Contrato de Locação
           </h1>
-          <p className="text-sm text-gray-500 text-center">
+          <p className="text-xs md:text-sm text-gray-500 text-center">
             Siga as etapas para gerar um novo contrato.
           </p>
         </div>
 
-        <Stepper steps={steps} currentStep={currentStep} className=" my-8" />
+        <Stepper
+          steps={steps}
+          currentStep={currentStep}
+          className="my-8  items-center justify-center flex-row"
+        />
 
         <form onSubmit={handleSubmit(onSubmit)} className="w-full  space-y-6">
           {currentStep === 1 && (
@@ -364,7 +376,7 @@ export default function CreateContractPage() {
                   {foundTenants.length > 0 && (
                     <div className="w-full space-y-3 border-t pt-4 animate-fadeIn">
                       <h3 className="font-semibold text-gray-700">
-                        Resultados da Busca:
+                        Usuários existentes:
                       </h3>
                       {foundTenants.map((user) => (
                         <div
@@ -379,10 +391,10 @@ export default function CreateContractPage() {
                               <p className="font-bold text-secondary">
                                 {user.name}
                               </p>
-                              <p className="text-sm text-gray-600">
+                              <p className="text-sm text-gray-600  break-all">
                                 {cpfCnpjMask(user.cpfCnpj!)}
                               </p>
-                              <p className="text-sm text-gray-500">
+                              <p className="text-sm text-gray-500 break-all">
                                 {user.email}
                               </p>
                             </div>
@@ -394,7 +406,7 @@ export default function CreateContractPage() {
                             textColor="text-white"
                             className="w-full sm:w-auto mt-2 sm:mt-0"
                           >
-                            <CheckCircle size={16} className="mr-2" />
+                            {/* <CheckCircle size={16} className="mr-2" /> */}
                             Selecionar
                           </CustomButton>
                         </div>
@@ -416,13 +428,13 @@ export default function CreateContractPage() {
                           <UserIcon className="w-8 h-8 text-primary" />
                         </div>
                         <div className="flex-grow">
-                          <p className="font-bold text-lg text-gray-800">
+                          <p className="font-bold text-lg text-gray-800 break-all">
                             {selectedTenant.name}
                           </p>
-                          <p className="text-sm text-gray-600">
+                          <p className="text-sm text-gray-600 break-all">
                             {cpfCnpjMask(selectedTenant.cpfCnpj!)}
                           </p>
-                          <p className="text-sm text-gray-600">
+                          <p className="text-sm text-gray-600 break-all">
                             {selectedTenant.email}
                           </p>
                         </div>
@@ -524,7 +536,7 @@ export default function CreateContractPage() {
           {currentStep === 2 && (
             <fieldset className="border p-4 rounded-lg">
               <legend className="px-2 font-bold text-lg text-gray-700">
-                2. Detalhes do Contrato
+                2. Informações do Contrato
               </legend>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-6 pt-2">
                 <div className="col-span-2">
@@ -621,7 +633,7 @@ export default function CreateContractPage() {
                   </div>
                 )}
                 <div className="col-span-2 md:col-span-1">
-                  <Controller
+                  {/* <Controller
                     name="startDate"
                     control={control}
                     render={({ field }) => (
@@ -631,6 +643,21 @@ export default function CreateContractPage() {
                         label="Data de Início*"
                         icon={<Calendar />}
                         mask="date"
+                        error={errors.startDate?.message}
+                        {...field}
+                      />
+                    )}
+                  /> */}
+                  <Controller
+                    name="startDate"
+                    control={control}
+                    render={({ field }) => (
+                      <CustomFormInput
+                        id="startDate"
+                        placeholder="08/08/2002"
+                        label="Data de Início*"
+                        type="date"
+                        icon={<CalendarIcon size={20} />}
                         error={errors.startDate?.message}
                         {...field}
                       />
@@ -763,27 +790,43 @@ export default function CreateContractPage() {
             </>
           )}
 
-          <div className="flex justify-between pt-4">
-            {currentStep > 1 && currentStep < 3 && (
-              <CustomButton onClick={prevStep} disabled={loading}>
-                <ArrowLeft className="w-4 h-4 mr-2" />
-                Anterior
-              </CustomButton>
-            )}
-            <div />
-            {currentStep < 2 && (
-              <CustomButton onClick={nextStep} disabled={loading}>
-                Próximo
-                <ArrowRight className="w-4 h-4 ml-2" />
-              </CustomButton>
-            )}
+          <div className="flex flex-col md:flex-row-reverse pt-4 gap-4">
             {currentStep === 2 && (
-              <CustomButton type="submit" disabled={loading} fontSize="text-lg">
+              <CustomButton
+                type="submit"
+                disabled={loading}
+                fontSize="text-lg"
+                className="w-full md:w-auto"
+              >
                 {loading ? (
                   <Loader2 className="animate-spin" />
                 ) : (
-                  "Gerar Contrato"
+                  <>
+                    Gerar Contrato <FilePen className="w-5 h-5 ml-2" />
+                  </>
                 )}
+              </CustomButton>
+            )}
+
+            {currentStep < 2 && (
+              <CustomButton
+                onClick={nextStep}
+                disabled={loading}
+                className="w-full md:w-auto"
+              >
+                Próximo
+                <ChevronRight className="w-5 h-5 ml-2" />
+              </CustomButton>
+            )}
+
+            {currentStep > 1 && currentStep < 3 && (
+              <CustomButton
+                onClick={prevStep}
+                disabled={loading}
+                className="w-full md:w-auto md:ml-auto"
+              >
+                <ChevronLeft className="w-5 h-5 mr-2" />
+                Anterior
               </CustomButton>
             )}
           </div>

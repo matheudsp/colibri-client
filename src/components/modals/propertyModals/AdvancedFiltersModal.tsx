@@ -2,18 +2,12 @@
 
 import { Modal } from "@/components/modals/Modal";
 import { CustomButton } from "@/components/forms/CustomButton";
-import { CustomInput } from "@/components/forms/CustomInput";
 import { CustomDropdownInput } from "@/components/forms/CustomDropdownInput";
 import { brazilianStates } from "@/constants/states";
 import { propertyType } from "@/constants";
-import {
-  Control,
-  Controller,
-  UseFormSetValue,
-  UseFormWatch,
-} from "react-hook-form";
+import { Control, UseFormSetValue, UseFormWatch } from "react-hook-form";
 import { PropertySearchFormValues } from "@/validations/properties/propertySearchValidation";
-import { Building2 } from "lucide-react";
+
 import { fetchCitiesByState } from "@/utils/ibge";
 import { useEffect, useState } from "react";
 interface AdvancedFiltersModalProps {
@@ -28,7 +22,7 @@ interface AdvancedFiltersModalProps {
 export function AdvancedFiltersModal({
   isOpen,
   onClose,
-  control,
+  // control
   watch,
   setValue,
   onApply,

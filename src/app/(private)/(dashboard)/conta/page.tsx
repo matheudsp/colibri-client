@@ -2,36 +2,49 @@
 
 import { Shield, Wallet, User, Loader2 } from "lucide-react";
 import { TabbedInterface, TabItem } from "@/components/common/TabbedInterface";
-import { AccountForm } from "@/components/forms/account/AccountForm";
-import { SecurityForm } from "@/components/forms/account/SecurityForm";
-import { PaymentAccountForm } from "@/components/forms/account/PaymentAccountForm";
+
 import { useCurrentUser } from "@/hooks/useCurrentUser";
 import { Roles } from "@/constants";
 import { useMemo } from "react";
+import { AccountTab } from "@/components/tabs/AccountTab";
+import { SecurityTab } from "@/components/tabs/SecurityTab";
+import { PaymentAccountTab } from "@/components/tabs/PaymentAccountTab";
+// import { TransfersTab } from "@/components/tabs/TransferTab";
 
 export default function AccountPage() {
   const { role, loading: isRoleLoading } = useCurrentUser();
-  const allAccountTabs: TabItem[] = [
-    {
-      id: "perfil",
-      title: "Perfil",
-      icon: <User size={18} />,
-      content: <AccountForm />,
-    },
-    {
-      id: "seguranca",
-      title: "Segurança",
-      icon: <Shield size={18} />,
-      content: <SecurityForm />,
-    },
 
-    {
-      id: "payment-account",
-      title: "Conta de Pagamento",
-      icon: <Wallet size={18} />,
-      content: <PaymentAccountForm />,
-    },
-  ];
+  const allAccountTabs: TabItem[] = useMemo(
+    () => [
+      {
+        id: "perfil",
+        title: "Perfil",
+        icon: <User size={18} />,
+        content: <AccountTab />,
+      },
+      {
+        id: "seguranca",
+        title: "Segurança",
+        icon: <Shield size={18} />,
+        content: <SecurityTab />,
+      },
+
+      {
+        id: "payment-account",
+        title: "Conta de Pagamento",
+        icon: <Wallet size={18} />,
+        content: <PaymentAccountTab />,
+      },
+      // {
+      //   id: "transfers",
+      //   title: "Transferências",
+      //   icon: <BanknoteArrowDown size={16} />,
+      //   content: <TransfersTab />,
+      // },
+    ],
+    []
+  );
+
   const accessibleTabs = useMemo(() => {
     if (isRoleLoading) {
       return [];
@@ -43,7 +56,7 @@ export default function AccountPage() {
       }
       return true;
     });
-  }, [role, isRoleLoading]);
+  }, [role, isRoleLoading, allAccountTabs]);
 
   if (isRoleLoading) {
     return (

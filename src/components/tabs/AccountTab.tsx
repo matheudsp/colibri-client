@@ -1,5 +1,3 @@
-// AccountForm.tsx
-
 "use client";
 
 import { useEffect, useState } from "react";
@@ -36,12 +34,12 @@ import { extractAxiosError } from "@/services/api";
 import { formatDateForDisplay } from "@/utils/formatters/formatDate";
 import { BrlCurrencyIcon } from "@/components/icons/BRLCurrencyIcon";
 import { getCompanyTypeLabel } from "@/constants/companyType";
-import { FormSection } from "../FormSection";
+import { FormSection } from "@/components/forms/FormSection";
 import { OtpVerificationModal } from "@/components/modals/verificationModals/OtpVerificationModal";
 import { VerificationService } from "@/services/domains/verificationService";
 import { VerificationContexts } from "@/constants/verificationContexts";
 
-export function AccountForm() {
+export function AccountTab() {
   const { sub } = useCurrentUser();
   const [loading, setLoading] = useState(false);
   const [initialLoading, setInitialLoading] = useState(true);
@@ -76,6 +74,7 @@ export function AccountForm() {
             userData[typedKey] !== null &&
             userData[typedKey] !== undefined
           ) {
+            /* eslint-disable  @typescript-eslint/no-explicit-any */
             setValue(typedKey as any, String(userData[typedKey]));
           }
         });
@@ -105,6 +104,7 @@ export function AccountForm() {
     const payload: UpdateUserData = {};
     (Object.keys(dirtyFields) as Array<keyof UserProfileFormValues>).forEach(
       (key) => {
+        /* eslint-disable  @typescript-eslint/no-explicit-any */
         (payload as any)[key] = data[key];
       }
     );

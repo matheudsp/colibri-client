@@ -5,6 +5,7 @@ export const pixKeySchema = z.object({
     required_error: "O tipo da chave PIX é obrigatório.",
   }),
   pixAddressKey: z.string().min(1, "A chave PIX é obrigatória."),
+  actionToken: z.string().optional(),
 });
 
 export type PixKeyFormValues = z.infer<typeof pixKeySchema>;

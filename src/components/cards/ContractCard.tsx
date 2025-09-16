@@ -27,7 +27,6 @@ const DetailItem = ({
 export function ContractCard({ contract }: { contract: Contract }) {
   const router = useRouter();
 
-  // Lógica original mantida para encontrar o status, usando sua estrutura de arquivo
   const defaultStatus = {
     value: "UNKNOWN",
     label: "Status Desconhecido",

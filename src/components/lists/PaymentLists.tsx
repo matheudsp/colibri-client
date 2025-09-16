@@ -52,6 +52,16 @@ const statusMap: Record<PaymentStatus, StatusInfo> = {
     label: "Falhou",
     color: "text-red-600",
   },
+  EM_REPASSE: {
+    icon: <Clock className="text-blue-600" />,
+    label: "Em Repasse",
+    color: "text-blue-600",
+  },
+  RECEBIDO: {
+    icon: <CheckCircle className="text-emerald-600" />,
+    label: "Recebido",
+    color: "text-emerald-600",
+  },
 };
 
 interface PaymentsListProps {

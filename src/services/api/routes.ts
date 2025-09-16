@@ -27,7 +27,10 @@ const API_ROUTES = {
     CONFIRM_ENABLE: "/2fa/confirm-enable",
     DISABLE: "/2fa/disable",
   },
-
+  SUBACCOUNTS: {
+    UPLOAD_DOCUMENT: "/subaccounts/documents/upload",
+    PENDING_DOCUMENTS: "/subaccounts/documents/pending",
+  },
   LOGS: {
     BASE: "/logs",
     SEARCH: "/logs/search",
@@ -86,7 +89,10 @@ const API_ROUTES = {
 
     UPDATE: ({ documentId }: Params) => `/documents/${documentId}`,
   },
-
+  TRANSFERS: {
+    MANUAL_PAYOUT: "/transfers/manual-payout",
+    MY_TRANSFERS: "/transfers/my-transfers",
+  },
   CONDOMINIUMS: {
     BASE: "/condominiums",
     SEARCH: "/condominiums/search",

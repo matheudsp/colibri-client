@@ -9,12 +9,15 @@ export function Footer() {
           reservados.
         </p>
         <div className="flex items-center gap-6 text-sm text-gray-500">
-          <Link href="/termos" className="hover:text-primary hover:underline">
+          <Link
+            href="/termos-de-uso"
+            className="hover:text-primary hover:underline"
+          >
             Termos de uso
           </Link>
           <span className="text-gray-300">·</span>
           <Link
-            href="/privacidade"
+            href="/politica-de-privacidade"
             className="hover:text-primary hover:underline"
           >
             Política de Privacidade

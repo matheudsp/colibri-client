@@ -89,7 +89,6 @@ export default function ContractsPage() {
           </div>
         ) : (
           <div>
-            {/* --- ALTERAÇÃO AQUI --- */}
             <div className="w-full grid grid-cols-1 lg:grid-cols-2 gap-6">
               {contracts.map((contract) => (
                 <ContractCard key={contract.id} contract={contract} />

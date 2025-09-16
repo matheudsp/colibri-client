@@ -3,14 +3,15 @@
 import { useState } from "react";
 import { Modal } from "@/components/modals/Modal";
 import { CustomButton } from "@/components/forms/CustomButton";
-import { Mail, Loader2 } from "lucide-react";
-import { FaWhatsapp } from "react-icons/fa";
+import { Loader2 } from "lucide-react";
+
 import { Contract } from "@/interfaces/contract";
 
 interface ResendNotificationModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onConfirm: (signerId: string, method: "email" | "whatsapp") => void;
+  // onConfirm: (signerId: string, method: "email" | "whatsapp") => void;'
+  onConfirm: (signerId: string) => void;
   isLoading: boolean;
   contract: Contract;
 }
@@ -25,12 +26,12 @@ export function ResendNotificationModal({
   const [selectedSignerId, setSelectedSignerId] = useState<string>(
     contract.landlord.id
   );
-  const [selectedMethod, setSelectedMethod] = useState<"email" | "whatsapp">(
-    "email"
-  );
+  // const [selectedMethod, setSelectedMethod] = useState<"email" | "whatsapp">(
+  //   "email"
+  // );
 
   const handleConfirm = () => {
-    onConfirm(selectedSignerId, selectedMethod);
+    onConfirm(selectedSignerId);
   };
 
   return (
@@ -54,7 +55,7 @@ export function ResendNotificationModal({
           </select>
         </div>
 
-        <div>
+        {/* <div>
           <label className="font-semibold text-gray-700">
             Selecione o Método
           </label>
@@ -74,7 +75,7 @@ export function ResendNotificationModal({
               <FaWhatsapp className="mr-2" /> WhatsApp
             </CustomButton>
           </div>
-        </div>
+        </div> */}
       </div>
 
       <div className="mt-6 flex justify-end gap-3">

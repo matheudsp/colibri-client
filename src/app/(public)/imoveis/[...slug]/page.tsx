@@ -32,6 +32,7 @@ const cleanupFilters = (
       const K = key as keyof PropertySearchFormValues;
       const value = filters[K];
       if (value !== "" && value !== null && value !== undefined) {
+        /* eslint-disable  @typescript-eslint/no-explicit-any */
         (cleanedFilters[K] as any) = value;
       }
     }
@@ -130,7 +131,7 @@ export default function SearchResultsPage() {
 
   const onSearch = (data: PropertySearchFormValues) => {
     const { transactionType, q, ...otherFilters } = data;
-    let cleanedFilters = cleanupFilters(otherFilters);
+    const cleanedFilters = cleanupFilters(otherFilters);
 
     if (cleanedFilters.city || cleanedFilters.state) {
       delete cleanedFilters.q;
@@ -179,7 +180,7 @@ export default function SearchResultsPage() {
           <div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 pb-10">
               {properties.length > 0 ? (
-                properties.map((property, index) => (
+                properties.map((property) => (
                   <PropertyCard
                     key={property.id}
                     property={property}

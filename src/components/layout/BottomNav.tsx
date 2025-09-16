@@ -53,8 +53,8 @@ const allNavItems = [
   },
 ];
 
-const mainNavItems = allNavItems.slice(0, 2);
-const menuNavItems = allNavItems.slice(2);
+// const mainNavItems = allNavItems.slice(0, 2);
+// const menuNavItems = allNavItems.slice(2);
 
 export default function BottomNav() {
   const pathname = usePathname();

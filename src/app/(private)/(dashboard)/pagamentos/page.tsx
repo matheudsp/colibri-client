@@ -36,7 +36,17 @@ const statusMap: Record<
     color: "border-yellow-500 bg-yellow-50 text-yellow-700",
     icon: <Clock size={14} />,
   },
+  RECEBIDO: {
+    label: "Pago",
+    color: "border-green-500 bg-green-50 text-green-700",
+    icon: <CheckCircle size={14} />,
+  },
   PAGO: {
+    label: "Pago",
+    color: "border-green-500 bg-green-50 text-green-700",
+    icon: <CheckCircle size={14} />,
+  },
+  EM_REPASSE: {
     label: "Pago",
     color: "border-green-500 bg-green-50 text-green-700",
     icon: <CheckCircle size={14} />,
@@ -96,7 +106,6 @@ export default function MyPaymentsPage() {
   }, [filters]);
 
   const handleApplyFilters = () => {
-    // Agora o valor da data já vem no formato 'yyyy-mm-dd', pronto para a API.
     setFilters(localFilters);
   };
 
@@ -310,67 +319,93 @@ export default function MyPaymentsPage() {
                   </tr>
                 </thead>
                 <tbody className="bg-white divide-y divide-gray-200 md:divide-y-0">
-                  {payments.map((payment) => (
-                    <tr
-                      key={payment.id}
-                      className="block md:table-row border-b md:border-none"
-                    >
-                      <td
-                        data-label="Imóvel"
-                        className="px-4 py-3 md:px-6 md:py-4 whitespace-nowrap block md:table-cell text-right md:text-left text-sm font-bold text-gray-900 before:content-[attr(data-label)] before:font-semibold before:text-gray-500 before:float-left md:before:content-none"
+                  {payments.map((payment) => {
+                    const isPaid = new Set([
+                      "PAGO",
+                      "RECEBIDO",
+                      "EM_REPASSE",
+                      "CONFIRMADO",
+                    ]).has(payment.status);
+                    const isPayable = new Set([
+                      "PENDENTE",
+                      "ATRASADO",
+                      "FALHOU",
+                    ]).has(payment.status);
+
+                    return (
+                      <tr
+                        key={payment.id}
+                        className="block md:table-row border-b md:border-none"
                       >
-                        {payment.contract.property?.title || "Sem título"}
-                      </td>
-                      <td
-                        data-label="Vencimento"
-                        className="px-4 py-3 md:px-6 md:py-4 whitespace-nowrap block md:table-cell text-right md:text-left text-sm text-gray-600 before:content-[attr(data-label)] before:font-semibold before:text-gray-500 before:float-left md:before:content-none"
-                      >
-                        {formatDateForDisplay(payment.dueDate)}
-                      </td>
-                      <td
-                        data-label="Valor"
-                        className="px-4 py-3 md:px-6 md:py-4 whitespace-nowrap block md:table-cell text-right md:text-left text-sm text-gray-600 before:content-[attr(data-label)] before:font-semibold before:text-gray-500 before:float-left md:before:content-none"
-                      >
-                        R$ {formatDecimalValue(payment.amountDue)}
-                      </td>
-                      <td
-                        data-label="Status"
-                        className="px-4 py-3 md:px-6 md:py-4 whitespace-nowrap block md:table-cell text-right md:text-left text-sm before:content-[attr(data-label)] before:font-semibold before:text-gray-500 before:float-left md:before:content-none"
-                      >
-                        <span
-                          className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium gap-1.5 border ${
-                            statusMap[payment.status]?.color
-                          }`}
+                        <td
+                          data-label="Imóvel"
+                          className="px-4 py-3 md:px-6 md:py-4 whitespace-nowrap block md:table-cell text-right md:text-left text-sm font-bold text-gray-900 before:content-[attr(data-label)] before:font-semibold before:text-gray-500 before:float-left md:before:content-none"
                         >
-                          {statusMap[payment.status]?.icon}
-                          {statusMap[payment.status]?.label || payment.status}
-                        </span>
-                      </td>
-                      <td
-                        data-label="Pagador"
-                        className="px-4 py-3 md:px-6 md:py-4 whitespace-nowrap block md:table-cell text-right md:text-left text-sm text-gray-600 before:content-[attr(data-label)] before:font-semibold before:text-gray-500 before:float-left md:before:content-none"
-                      >
-                        {payment.contract.tenant?.name || "N/A"}
-                      </td>
-                      <td className="px-4 py-3 md:px-6 md:py-4 whitespace-nowrap block md:table-cell text-right text-sm font-medium">
-                        <div className="flex items-center justify-end gap-2 mt-2 md:mt-0">
-                          {payment.bankSlip ? (
-                            <CustomButton
-                              onClick={() =>
-                                window.open(
-                                  payment.bankSlip.bankSlipUrl,
-                                  "_blank"
-                                )
-                              }
-                              color="bg-gray-200"
-                              textColor="text-black"
-                            >
-                              <Eye size={16} className="mr-1" /> Visualizar
-                              Boleto
-                            </CustomButton>
-                          ) : (
-                            (payment.status === "PENDENTE" ||
-                              payment.status === "ATRASADO") && (
+                          {payment.contract.property?.title || "Sem título"}
+                        </td>
+                        <td
+                          data-label="Vencimento"
+                          className="px-4 py-3 md:px-6 md:py-4 whitespace-nowrap block md:table-cell text-right md:text-left text-sm text-gray-600 before:content-[attr(data-label)] before:font-semibold before:text-gray-500 before:float-left md:before:content-none"
+                        >
+                          {formatDateForDisplay(payment.dueDate)}
+                        </td>
+                        <td
+                          data-label="Valor"
+                          className="px-4 py-3 md:px-6 md:py-4 whitespace-nowrap block md:table-cell text-right md:text-left text-sm text-gray-600 before:content-[attr(data-label)] before:font-semibold before:text-gray-500 before:float-left md:before:content-none"
+                        >
+                          R$ {formatDecimalValue(payment.amountDue)}
+                        </td>
+                        <td
+                          data-label="Status"
+                          className="px-4 py-3 md:px-6 md:py-4 whitespace-nowrap block md:table-cell text-right md:text-left text-sm before:content-[attr(data-label)] before:font-semibold before:text-gray-500 before:float-left md:before:content-none"
+                        >
+                          <span
+                            className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium gap-1.5 border ${
+                              statusMap[payment.status]?.color
+                            }`}
+                          >
+                            {statusMap[payment.status]?.icon}
+                            {statusMap[payment.status]?.label || payment.status}
+                          </span>
+                        </td>
+                        <td
+                          data-label="Pagador"
+                          className="px-4 py-3 md:px-6 md:py-4 whitespace-nowrap block md:table-cell text-right md:text-left text-sm text-gray-600 before:content-[attr(data-label)] before:font-semibold before:text-gray-500 before:float-left md:before:content-none"
+                        >
+                          {payment.contract.tenant?.name || "N/A"}
+                        </td>
+                        <td className="px-4 py-3 md:px-6 md:py-4 whitespace-nowrap block md:table-cell text-right text-sm font-medium">
+                          <div className="flex items-center justify-end gap-2 mt-2 md:mt-0">
+                            {isPaid &&
+                            payment.bankSlip?.transactionReceiptUrl ? (
+                              <CustomButton
+                                onClick={() =>
+                                  window.open(
+                                    payment.bankSlip.transactionReceiptUrl,
+                                    "_blank"
+                                  )
+                                }
+                                color="bg-blue-100"
+                                textColor="text-blue-800"
+                              >
+                                <Eye size={16} className="mr-1" /> Visualizar
+                                Comprovante
+                              </CustomButton>
+                            ) : payment.bankSlip ? (
+                              <CustomButton
+                                onClick={() =>
+                                  window.open(
+                                    payment.bankSlip.bankSlipUrl,
+                                    "_blank"
+                                  )
+                                }
+                                color="bg-gray-200"
+                                textColor="text-black"
+                              >
+                                <Eye size={16} className="mr-1" /> Visualizar
+                                Boleto
+                              </CustomButton>
+                            ) : isPayable ? (
                               <CustomButton
                                 onClick={() => handleGenerateSlip(payment.id)}
                                 color="bg-orange-500"
@@ -384,12 +419,12 @@ export default function MyPaymentsPage() {
                                 )}
                                 Gerar Boleto
                               </CustomButton>
-                            )
-                          )}
-                        </div>
-                      </td>
-                    </tr>
-                  ))}
+                            ) : null}
+                          </div>
+                        </td>
+                      </tr>
+                    );
+                  })}
                 </tbody>
               </table>
             </div>

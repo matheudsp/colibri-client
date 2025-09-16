@@ -10,10 +10,17 @@ import { toast } from "sonner";
 
 interface PhotoCardProps {
   photo: Photo;
+  allPhotos: Photo[];
+  propertyTitle: string;
   onDelete: (id: string) => Promise<void>;
 }
 
-export function PhotoCard({ photo, onDelete }: PhotoCardProps) {
+export function PhotoCard({
+  photo,
+  allPhotos,
+  propertyTitle,
+  onDelete,
+}: PhotoCardProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showViewModal, setShowViewModal] = useState(false);
@@ -33,18 +40,13 @@ export function PhotoCard({ photo, onDelete }: PhotoCardProps) {
     }
   };
 
-  const photoModalProps = {
-    isOpen: showViewModal,
-    onClose: () => setShowViewModal(false),
-    file: photo.file,
-    photoId: photo.id?.startsWith("temp-") ? undefined : photo.id,
-  };
+  const initialIndex = allPhotos.findIndex((p) => p.id === photo.id);
 
   return (
     <>
       <div className="relative aspect-square group block border-2 rounded-lg cursor-pointer overflow-hidden">
         <Image
-          src={photo.tempUrl || photo.filePath || "/placeholder.png"} // Usa a URL temporária ou um caminho final
+          src={photo.tempUrl || photo.filePath || "/placeholder.png"}
           alt="Preview do imóvel"
           fill
           sizes="(max-width: 768px) 50vw, (max-width: 1200px) 33vw, 25vw"
@@ -85,7 +87,13 @@ export function PhotoCard({ photo, onDelete }: PhotoCardProps) {
         isLoading={isLoading}
       />
 
-      <PhotoViewModal {...photoModalProps} />
+      <PhotoViewModal
+        isOpen={showViewModal}
+        onClose={() => setShowViewModal(false)}
+        photos={allPhotos}
+        altText={propertyTitle}
+        initialIndex={initialIndex}
+      />
     </>
   );
 }
