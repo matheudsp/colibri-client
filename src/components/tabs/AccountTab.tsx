@@ -37,7 +37,7 @@ import { getCompanyTypeLabel } from "@/constants/companyType";
 import { FormSection } from "@/components/forms/FormSection";
 import { OtpVerificationModal } from "@/components/modals/verificationModals/OtpVerificationModal";
 import { VerificationService } from "@/services/domains/verificationService";
-import { VerificationContexts } from "../../constants/verificationContexts";
+import { VerificationContexts } from "../../constants/verification-contexts";
 
 export function AccountTab() {
   const { sub } = useCurrentUser();
