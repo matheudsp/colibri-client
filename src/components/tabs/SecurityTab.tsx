@@ -12,7 +12,7 @@ import { StatusBadge } from "@/components/common/StatusBadge";
 import { OtpVerificationModal } from "@/components/modals/verificationModals/OtpVerificationModal";
 
 import { VerificationService } from "@/services/domains/verificationService";
-import { VerificationContexts } from "@/constants/verificationContexts";
+import { VerificationContexts } from "../../constants/verificationContexts";
 import { TwoFactorAuthService } from "@/services/domains/twoFactorAuthService";
 import { AuthService } from "@/services/domains/authService";
 import { useUserStore } from "@/stores/userStore";

@@ -11,7 +11,7 @@ import {
   PixKeyFormValues,
 } from "@/validations/bankAccounts/pixKeyValidation";
 import { VerificationService } from "@/services/domains/verificationService";
-import { VerificationContexts } from "@/constants/verificationContexts";
+import { VerificationContexts } from "../../constants/verificationContexts";
 import { BankAccountService } from "@/services/domains/bankAccountService";
 import { extractAxiosError } from "@/services/api";
 import { CustomDropdownInput } from "@/components/forms/CustomDropdownInput";
