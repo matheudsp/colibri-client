@@ -24,7 +24,7 @@ interface HeaderProps {
 }
 
 const navItems = [
-  { label: "Ajuda", href: "#" },
+  { label: "Ajuda", href: "/ajuda" },
   // { label: "Mais", href: "#" },
 ];
 

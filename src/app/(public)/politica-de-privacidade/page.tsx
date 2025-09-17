@@ -1,15 +1,15 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Política de Privacidade - Colibri",
+  title: "Política de Privacidade - Locaterra",
   description:
-    "Entenda como a Colibri coleta, usa, compartilha e protege os dados pessoais dos usuários, em conformidade com a LGPD.",
+    "Entenda como a Locaterra coleta, usa, compartilha e protege os dados pessoais dos usuários, em conformidade com a LGPD.",
   openGraph: {
-    title: "Política de Privacidade - Colibri",
+    title: "Política de Privacidade - Locaterra",
     description:
-      "Saiba como seus dados são tratados e protegidos no sistema Colibri.",
+      "Saiba como seus dados são tratados e protegidos no sistema Locaterra.",
     url: "https://seu-dominio.com/politica-de-privacidade",
-    siteName: "Colibri",
+    siteName: "Locaterra",
     locale: "pt_BR",
     type: "website",
   },
@@ -29,11 +29,11 @@ export default function PoliticaDePrivacidadePage() {
       </div>
 
       <p className="text-justify">
-        A Colibri preza pela privacidade e segurança dos dados pessoais de seus
-        usuários. Esta política descreve como coletamos, usamos, compartilhamos
-        e protegemos as informações no sistema Colibri. Estamos em conformidade
-        com a Lei Geral de Proteção de Dados Pessoais (LGPD, Lei nº
-        13.709/2018), que protege os direitos fundamentais de liberdade e
+        A Locaterra preza pela privacidade e segurança dos dados pessoais de
+        seus usuários. Esta política descreve como coletamos, usamos,
+        compartilhamos e protegemos as informações no sistema Locaterra. Estamos
+        em conformidade com a Lei Geral de Proteção de Dados Pessoais (LGPD, Lei
+        nº 13.709/2018), que protege os direitos fundamentais de liberdade e
         privacidade dos indivíduos. Atuamos exclusivamente no Brasil e seguimos
         as legislações locais de proteção de dados.
       </p>
