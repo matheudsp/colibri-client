@@ -1,3 +1,4 @@
+import { useUserStore } from "@/stores/userStore";
 import { ApiResponse, MessageResponse } from "../../types/api";
 import { api, extractAxiosError } from "../api";
 import API_ROUTES from "../api/routes";
@@ -123,9 +124,12 @@ export const AuthService = {
     try {
       await api.post(API_ROUTES.AUTH.LOGOUT);
     } catch (error) {
-      // Mesmo que falhe, tentamos limpar o estado do lado do cliente
-      console.error("Logout failed", error);
-      throw new Error(extractAxiosError(error));
+      console.error(
+        "API logout failed, proceeding with client-side cleanup.",
+        error
+      );
+    } finally {
+      useUserStore.getState().setUser(null);
     }
   },
 
