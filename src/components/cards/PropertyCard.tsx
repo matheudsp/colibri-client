@@ -16,7 +16,7 @@ import {
   ChevronLeft,
   ChevronRight,
   ImageIcon,
-  MoveHorizontal, // Ícone para a dica de deslize
+  MoveHorizontal,
 } from "lucide-react";
 import { toast } from "sonner";
 import { PropertyService } from "@/services/domains/propertyService";
@@ -29,7 +29,6 @@ import { extractAxiosError } from "@/services/api";
 import { CustomSwitch } from "../forms/CustomSwitch";
 import { getPropertyTypeLabel } from "@/utils/helpers/getPropertyType";
 
-// O componente DashboardActions permanece o mesmo...
 function DashboardActions({
   property,
   onDelete,
@@ -150,7 +149,6 @@ export function PropertyCard({
 
   const minSwipeDistance = 50;
 
-  // Lógica para mostrar a dica de deslize apenas uma vez por sessão
   useEffect(() => {
     const hintShownKey = `swipeHintShown_${property.id}`;
     const hintHasBeenShown = sessionStorage.getItem(hintShownKey);
@@ -207,14 +205,14 @@ export function PropertyCard({
   const cardContent = (
     <div className="bg-white border border-gray-200 rounded-md overflow-hidden transition-all duration-300 shadow-md flex flex-col h-full group">
       <div
-        className="relative w-full aspect-[4/3]"
+        className="relative w-full aspect-[3/2]"
         onTouchStart={onTouchStart}
         onTouchMove={onTouchMove}
         onTouchEnd={onTouchEnd}
       >
         {property.photos && property.photos.length > 0 ? (
           <Image
-            src={property.photos[currentImage].signedUrl}
+            src={property.photos[currentImage].url}
             alt={`Foto de ${property.title}`}
             fill
             className="object-cover"
@@ -288,18 +286,27 @@ export function PropertyCard({
         </p>
         <div className="flex-grow">
           {variant === "public" && (
-            <div className="grid grid-cols-2 gap-x-4 gap-y-2 text-sm text-gray-600 mt-3 border-t pt-3">
-              <span className="flex items-center gap-2">
-                <Maximize className="text-primary" size={14} />
+            <div className="grid grid-cols-2 sm:grid-cols-2 font-medium gap-x-4 gap-y-2 text-sm text-gray-600 my-3 border-t border-b py-3">
+              <span className="flex items-center gap-2 ">
+                <Maximize
+                  className="text-white bg-primary p-1 rotate-45 rounded-lg"
+                  size={20}
+                />
                 <strong>{property.areaInM2} m²</strong>
               </span>
               <span className="flex items-center gap-2">
-                <Bed className="text-primary" size={14} />
-                <strong>{property.numRooms} Quarto(s)</strong>
+                <Bed
+                  className="text-white bg-primary p-1 rounded-lg"
+                  size={20}
+                />
+                <strong>{property.numRooms} Quartos</strong>
               </span>
               <span className="flex items-center gap-2">
-                <Bath className="text-primary" size={14} />
-                <strong>{property.numBathrooms} Banheiro(s)</strong>
+                <Bath
+                  className="text-white bg-primary p-1 rounded-lg"
+                  size={20}
+                />
+                <strong>{property.numBathrooms} Banheiros</strong>
               </span>
             </div>
           )}

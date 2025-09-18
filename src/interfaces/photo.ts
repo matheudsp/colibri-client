@@ -5,10 +5,11 @@ export interface Photo {
   filePath: string;
   isCover?: boolean;
   file?: File;
-  signedUrl?: string;
+  // signedUrl?: string;
   tempUrl?: string;
   property?: {
     id: string;
     title: string;
   };
+  url?: string;
 }

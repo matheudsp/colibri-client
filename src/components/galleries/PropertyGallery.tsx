@@ -56,7 +56,6 @@ export function PropertyGallery({ photos, altText }: PropertyGalleryProps) {
     changeImage(newIndex, 1);
   };
 
-  // 2. Aplicar a tipagem 'Variants' aqui
   const slideVariants: Variants = {
     hidden: (direction: number) => ({
       x: direction > 0 ? "100%" : "-100%",
@@ -111,7 +110,7 @@ export function PropertyGallery({ photos, altText }: PropertyGalleryProps) {
             onClick={openModal}
           >
             <Image
-              src={photos[currentIndex].signedUrl!}
+              src={photos[currentIndex].url!}
               alt={`${altText} - Foto ${currentIndex + 1}`}
               fill
               className="object-cover"
@@ -168,7 +167,7 @@ export function PropertyGallery({ photos, altText }: PropertyGalleryProps) {
               onClick={() => changeImage(index, index > currentIndex ? 1 : -1)}
             >
               <Image
-                src={photo.signedUrl!}
+                src={photo.url!}
                 alt={`Miniatura ${index + 1}`}
                 width={100}
                 height={75}
@@ -184,7 +183,7 @@ export function PropertyGallery({ photos, altText }: PropertyGalleryProps) {
         onClose={closeModal}
         photos={photos}
         initialIndex={currentIndex}
-        altText={altText} // Garanta que esta prop está sendo passada
+        altText={altText}
       />
     </>
   );

@@ -114,9 +114,9 @@ export function PhotoViewModal({
                 exit="exit"
                 className="w-full h-full"
               >
-                {currentPhoto?.signedUrl ? (
+                {currentPhoto?.url ? (
                   <Image
-                    src={currentPhoto.signedUrl}
+                    src={currentPhoto.url}
                     alt={`Foto ${currentIndex + 1} de ${altText}`}
                     fill
                     className="object-contain "

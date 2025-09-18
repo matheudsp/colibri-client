@@ -126,7 +126,7 @@ export function Header({
               }`}
             >
               {/* Se estiver logado, exibir acessar painel, se nao estiver mostre botao de login e cadastro */}
-              {isAuthenticated ? "Acessar Sistema" : "Login | Cadastre-se"}
+              {isAuthenticated ? "Painel" : "Entrar"}
             </Link>
             {navItems.map((item) => (
               <Link

@@ -32,7 +32,7 @@ export interface PropertyProps {
     name?: string;
     filePath: string;
     isCover: boolean;
-    signedUrl: string;
+    url: string;
   }>;
   variant?: "dashboard" | "public";
 }

@@ -8,7 +8,7 @@ import { HelpSection } from "@/components/sections/home/HelpSection";
 
 export default function Home() {
   return (
-    <div className="bg-white flex-col justify-center items-center ">
+    <div className="bg-background flex-col justify-center items-center ">
       <section className="lg:min-h-[48svh] md:min-h-[54svh] sm:min-h-[72svh] min-h-[96svh] w-full bg-secondary flex flex-col items-center justify-center text-center text-white">
         <div className="w-full flex flex-col items-center justify-center">
           <div className=" px-4">
@@ -33,7 +33,7 @@ export default function Home() {
       <section className="max-w-7xl mx-auto">
         <RecentPropertiesList />
       </section>
-      <section className="bg-slate-50 py-16 sm:py-24">
+      <section className="py-12 sm:py-18">
         <BenefitsSection />
       </section>
       <section>

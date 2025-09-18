@@ -63,7 +63,6 @@ export default function SearchResultsPage() {
 
   const form = useForm<PropertySearchFormValues>({
     resolver: zodResolver(propertySearchSchema),
-    // CORREÇÃO: Usar 'sort' como valor padrão
     defaultValues: {
       q: "",
       transactionType: "LOCACAO",
@@ -108,7 +107,6 @@ export default function SearchResultsPage() {
     const stateFromQuery = searchParams.get("state");
     const propertyTypeFromQuery = searchParams.get("propertyType");
 
-    // CORREÇÃO: Lê o parâmetro 'sort' da URL
     const sortFromQuery = searchParams.get("sort") || "createdAt:desc";
 
     const displayLocation =
@@ -122,7 +120,7 @@ export default function SearchResultsPage() {
       city: cityFromQuery ?? undefined,
       state: stateFromQuery ?? undefined,
       propertyType: propertyTypeFromQuery ?? undefined,
-      sort: sortFromQuery, // CORREÇÃO: Usa o novo parâmetro 'sort'
+      sort: sortFromQuery,
     };
 
     reset(cleanupFilters(filtersFromUrl) as PropertySearchFormValues);

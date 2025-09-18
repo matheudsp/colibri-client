@@ -37,7 +37,7 @@ export interface PropertyResponse {
     name?: string;
     filePath: string;
     isCover: boolean;
-    signedUrl: string;
+    url: string;
   }>;
 }
 

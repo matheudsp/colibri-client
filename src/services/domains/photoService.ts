@@ -60,15 +60,12 @@ export const PhotoService = {
 
       const photosWithUrls = await Promise.all(
         photos.map(async (photo: Photo) => {
-          if (!photo.signedUrl) {
+          if (!photo.url) {
             try {
-              photo.signedUrl = await this.getSignedUrl(photo.id || "");
+              photo.url = await this.getSignedUrl(photo.id || "");
             } catch (error) {
-              console.error(
-                `Error getting signed URL for photo ${photo.id}:`,
-                error
-              );
-              photo.signedUrl = "/fallback-image.jpg";
+              console.error(`Error getting URL for photo ${photo.id}:`, error);
+              photo.url = "/fallback-image.jpg";
             }
           }
           return photo;
