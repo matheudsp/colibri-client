@@ -23,6 +23,7 @@
         "@tanstack/react-query": "^5.75.5",
         "autoprefixer": "^10.4.21",
         "axios": "^1.9.0",
+        "clsx": "^2.1.1",
         "colibri-client": "file:",
         "cookies-next": "^5.1.0",
         "critters": "^0.0.23",
