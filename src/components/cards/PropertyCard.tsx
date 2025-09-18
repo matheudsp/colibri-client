@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
-import { motion, AnimatePresence } from "framer-motion"; // Import do Framer Motion
+import { motion, AnimatePresence } from "framer-motion";
 import {
   Bed,
   Bath,

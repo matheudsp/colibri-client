@@ -21,7 +21,7 @@ export default function DashboardLayout({
     <SearchProvider value={{ searchValue, handleSearchChange }}>
       <div className="min-h-svh w-full flex flex-col md:flex-row overflow-x-hidden">
         <SidebarNav />
-        <main className="flex-1 md:ml-32">{children}</main>
+        <main className="flex-1 ml-0 md:ml-36">{children}</main>
         <BottomNav />
       </div>
     </SearchProvider>

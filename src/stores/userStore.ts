@@ -7,6 +7,7 @@ interface UserState {
   loading: boolean;
   setUser: (user: UserData | null) => void;
   setLoading: (loading: boolean) => void;
+  clearUser: () => void;
 }
 
 export const useUserStore = create<UserState>((set) => ({
@@ -14,4 +15,5 @@ export const useUserStore = create<UserState>((set) => ({
   loading: true,
   setUser: (user) => set({ user }),
   setLoading: (loading) => set({ loading }),
+  clearUser: () => set({ user: null }),
 }));

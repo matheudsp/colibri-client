@@ -62,7 +62,7 @@ export function Header({
         }`}
       >
         <div
-          className={` w-full max-w-7xl px-4 2xl:px-0 h-20 flex items-center justify-between gap-6 transition-all duration-300 ease-in-out `}
+          className={` w-full max-w-7xl px-4 2xl:px-0 h-16 flex items-center justify-between gap-6 transition-all duration-300 ease-in-out `}
         >
           {/* Logo */}
           <div className="flex-shrink-0">
@@ -193,9 +193,7 @@ export function Header({
                     className="text-lg p-3 rounded-md font-semibold text-secondary hover:bg-gray-200 border-secondary border-2 hover:text-white hover:bg-secondary"
                   >
                     {/* Se estiver logado, exibir acessar painel, se nao estiver mostre botao de login e cadastro */}
-                    {isAuthenticated
-                      ? "Acessar Sistema"
-                      : "Login | Cadastre-se"}
+                    {isAuthenticated ? "Painel" : "Entrar"}
                   </Link>
                   {navItems.map((item) => (
                     <Link
@@ -235,7 +233,7 @@ export function Header({
       className={` fixed z-50 top-0 w-full flex items-center justify-center bg-white/90 backdrop-blur-sm border-b`}
     >
       <div
-        className={` w-full max-w-7xl px-4 2xl:px-0 h-20 flex items-center justify-between gap-6 transition-all duration-300 ease-in-out `}
+        className={` w-full max-w-7xl px-4 2xl:px-0 h-16 flex items-center justify-between gap-6 transition-all duration-300 ease-in-out `}
       >
         {onBack && (
           <button

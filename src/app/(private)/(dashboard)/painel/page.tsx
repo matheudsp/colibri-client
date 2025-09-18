@@ -2,133 +2,157 @@
 
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
-import { Loader2, FileText } from "lucide-react";
+import { AnalyticsService } from "@/services/domains/analyticsService";
+import {
+  RentIncomeResponseDto,
+  TenantsStatusResponseDto,
+  PaymentsSummaryResponseDto,
+  PropertiesOccupancyResponseDto,
+} from "@/interfaces/analytics";
+import { RentIncomeChart } from "@/components/charts/RentIncomeChart";
+import { TenantsStatusChart } from "@/components/charts/TenantsStatusChart";
+import { PropertiesOccupancyChart } from "@/components/charts/PropertiesOccupancyChart";
+import { PaymentsSummary } from "@/components/cards/details/PaymentsSummary";
+import { PaymentsSummarySkeleton } from "@/components/skeletons/PaymentsSummarySkeleton";
+import { ChartSkeleton } from "@/components/skeletons/ChartSkeleton";
+import {
+  periodOptions,
+  PeriodSelector,
+  PeriodValue,
+} from "@/components/common/PeriodSelector";
+import { Tooltip } from "@/components/common/Tooltip";
+import { HelpCircle } from "lucide-react";
 
-import { PaymentService } from "@/services/domains/paymentService";
-import { PaymentResponse } from "@/interfaces/payment";
-import { extractAxiosError } from "@/services/api";
-import { aggregateByProperty } from "@/utils/formatters/paymentAggregator";
-import { PaymentsByPropertyChart } from "@/components/charts/PaymentsByPropertyChart";
-import { formatDateForDisplay } from "@/utils/formatters/formatDate";
-import { formatDecimalValue } from "@/utils/formatters/formatDecimal";
-import { EmptyCard } from "@/components/common/EmptyCard";
-import { Flag } from "@/components/common/Flag";
-
-export default function PainelPage() {
-  const [payments, setPayments] = useState<PaymentResponse[]>([]);
+export default function Painel() {
+  const [rentIncome, setRentIncome] = useState<RentIncomeResponseDto | null>(
+    null
+  );
+  const [tenantsStatus, setTenantsStatus] =
+    useState<TenantsStatusResponseDto | null>(null);
+  const [paymentsSummary, setPaymentsSummary] =
+    useState<PaymentsSummaryResponseDto | null>(null);
+  const [propertiesOccupancy, setPropertiesOccupancy] =
+    useState<PropertiesOccupancyResponseDto | null>(null);
   const [loading, setLoading] = useState(true);
-
-  const [isFlagVisible, setIsFlagVisible] = useState(true);
+  const [selectedPeriod, setSelectedPeriod] = useState<PeriodValue>(
+    periodOptions[0].value
+  );
 
   useEffect(() => {
-    const fetchPayments = async () => {
+    async function fetchData() {
+      setLoading(true);
       try {
-        const response = await PaymentService.findUserPayments();
-        setPayments(response.data);
+        const [
+          rentIncomeData,
+          tenantsStatusData,
+          paymentsSummaryData,
+          propertiesOccupancyData,
+        ] = await Promise.all([
+          AnalyticsService.getRentIncome(selectedPeriod),
+          AnalyticsService.getTenantsStatus(),
+          AnalyticsService.getPaymentsSummary(selectedPeriod),
+          AnalyticsService.getPropertiesOccupancy(),
+        ]);
+        setRentIncome(rentIncomeData);
+        setTenantsStatus(tenantsStatusData);
+        setPaymentsSummary(paymentsSummaryData);
+        setPropertiesOccupancy(propertiesOccupancyData);
       } catch (error) {
-        toast.error("Falha ao buscar os dados para o painel", {
-          description: extractAxiosError(error),
-        });
+        if (error instanceof Error) {
+          toast.error("Erro ao carregar dados do painel", {
+            description: error.message,
+          });
+        }
       } finally {
         setLoading(false);
       }
-    };
+    }
 
-    fetchPayments();
-  }, []);
-
-  const aggregatedData = aggregateByProperty(payments);
+    fetchData();
+  }, [selectedPeriod]);
+  const selectedPeriodLabel =
+    periodOptions.find((option) => option.value === selectedPeriod)?.label ||
+    "";
 
   return (
-    <div className="min-h-svh flex flex-col items-center pt-8 md:pt-14 px-4 pb-24 bg-gray-50">
-      <Flag
-        title="Este painel está em fase de desenvolvimento. Funcionalidades e dados exibidos podem sofrer alterações."
-        isVisible={isFlagVisible}
-        onClose={() => setIsFlagVisible(false)}
-      />
-
-      <div className="w-full max-w-7xl mx-auto space-y-8">
-        <header>
-          <h1 className="text-3xl sm:text-4xl font-bold text-gray-800">
-            Painel de Controle
+    <div className="min-h-svh flex flex-col items-center pt-8 md:pt-14 px-4 pb-24 ">
+      <div className="w-full max-w-7xl mx-auto space-y-4">
+        <div className="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
+          <h1 className="text-2xl font-semibold text-gray-900">
+            Painel de Analytics
           </h1>
-          <p className="text-gray-500 mt-1">
-            Resumo financeiro dos seus contratos.
-          </p>
-        </header>
-        <div className="bg-white p-4 sm:p-6 rounded-xl shadow-md border">
-          <h2 className="text-xl font-bold text-gray-800 mb-4">
-            Receitas por Imóvel e Status
-          </h2>
-          {loading ? (
-            <div className="flex justify-center items-center h-96">
-              <Loader2 className="animate-spin text-primary" size={48} />
-            </div>
-          ) : (
-            <PaymentsByPropertyChart data={aggregatedData} />
-          )}
+          <PeriodSelector
+            selectedPeriod={selectedPeriod}
+            onPeriodChange={setSelectedPeriod}
+          />
         </div>
-        <div className="bg-white p-4 sm:p-6 rounded-xl shadow-md border">
-          <h2 className="text-xl font-bold text-gray-800 mb-4">
-            Detalhes de Todos os Pagamentos
-          </h2>
-          {loading ? (
-            <div className="flex justify-center items-center h-64">
-              <Loader2 className="animate-spin text-primary" size={32} />
-            </div>
-          ) : payments.length === 0 ? (
-            <EmptyCard
-              icon={<FileText size={48} />}
-              title="Nenhum pagamento encontrado"
-              subtitle="Não há faturas para exibir no momento."
+        {loading ? (
+          <PaymentsSummarySkeleton />
+        ) : (
+          paymentsSummary && (
+            <PaymentsSummary
+              data={{ ...paymentsSummary, period: selectedPeriodLabel }}
             />
+          )
+        )}
+
+        <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
+          {loading ? (
+            <>
+              <ChartSkeleton />
+              <ChartSkeleton />
+            </>
           ) : (
-            <div className="overflow-x-auto">
-              <table className="min-w-full divide-y divide-gray-200">
-                <thead className="bg-gray-50">
-                  <tr>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
-                      Imóvel
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
-                      Inquilino
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
-                      Vencimento
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
-                      Valor
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
-                      Status
-                    </th>
-                  </tr>
-                </thead>
-                <tbody className="bg-white z-50 divide-y divide-gray-200">
-                  {payments.map((p) => (
-                    <tr key={p.id}>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                        {p.contract.property.title}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        {p.contract.tenant?.name || "N/A"}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        {formatDateForDisplay(p.dueDate)}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        R$ {formatDecimalValue(p.amountDue)}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        {p.status}
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
+            <>
+              {rentIncome && (
+                <div className="rounded-lg border p-6 shadow">
+                  <div className="flex gap-2 items-center">
+                    <h3 className="text-lg font-medium  leading-6 gap-1">
+                      Receita de Aluguel{" "}
+                      <strong className="text-base font-extralight text-zinc-700/90">
+                        ({rentIncome.year})
+                      </strong>
+                    </h3>
+                    <Tooltip
+                      content={
+                        "Este gráfico mostra o total de dinheiro que você recebeu com aluguéis a cada mês, ajudando a ver se sua receita está crescendo. A linha vermelha representa sua média de ganhos, mostrando quais meses foram melhores ou piores que o esperado. "
+                      }
+                      position="top"
+                    >
+                      <HelpCircle className="h-5 w-5 text-gray-400 cursor-help" />
+                    </Tooltip>
+                  </div>
+                  <RentIncomeChart data={rentIncome.monthlyIncome} />
+                </div>
+              )}
+
+              {tenantsStatus && (
+                <div className="rounded-lg border p-6 shadow">
+                  <h3 className="text-lg font-medium leading-6 ">
+                    Resumo dos seus locatários{" "}
+                    <em className="text-xs font-light text-gray-600/80">
+                      (Total: {tenantsStatus.totalTenants})
+                    </em>
+                  </h3>
+                  <TenantsStatusChart data={tenantsStatus.status} />
+                </div>
+              )}
+            </>
           )}
         </div>
+
+        {loading ? (
+          <ChartSkeleton />
+        ) : (
+          propertiesOccupancy && (
+            <div className="rounded-lg border p-6 shadow">
+              <h3 className="text-lg font-medium leading-6 ">
+                Ocupação de Imóveis
+              </h3>
+              <PropertiesOccupancyChart data={propertiesOccupancy.types} />
+            </div>
+          )
+        )}
       </div>
     </div>
   );

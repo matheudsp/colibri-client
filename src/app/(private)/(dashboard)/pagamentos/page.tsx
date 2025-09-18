@@ -157,7 +157,7 @@ export default function MyPaymentsPage() {
   }, [payments]);
 
   return (
-    <div className="min-h-svh flex flex-col items-center pt-8 md:pt-14 px-4 pb-24 bg-gray-50">
+    <div className="min-h-svh flex flex-col items-center pt-8 md:pt-14 px-4 pb-24 ">
       <div className="w-full max-w-7xl mx-auto">
         <header className="mb-6">
           <h1 className="text-3xl sm:text-4xl font-bold text-gray-800">
@@ -281,7 +281,7 @@ export default function MyPaymentsPage() {
           ) : (
             <div className="overflow-x-auto border border-gray-200 rounded-lg shadow-sm">
               <table className="min-w-full ">
-                <thead className="bg-gray-50 hidden md:table-header-group">
+                <thead className="border-b bg-background  hidden md:table-header-group">
                   <tr>
                     <th
                       scope="col"

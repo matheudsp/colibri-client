@@ -87,7 +87,7 @@ export default function SidebarNav() {
           </Link>
         </div>
 
-        <nav className="flex flex-col gap-4 w-full items-center">
+        <nav className="flex flex-col gap-2 w-full items-center">
           {accessibleNavItems.map((item) => {
             const Icon = item.icon;
             const isActive = pathname.startsWith(item.href);
@@ -104,8 +104,8 @@ export default function SidebarNav() {
                     : "text-white/90 hover:bg-secondary-hover hover:text-white hover:scale-105"
                 )}
               >
-                <Icon className="w-7 h-7" />
-                <span className="text-xs font-bold tracking-wide">
+                <Icon className="w-5 h-5" />
+                <span className="text-sm font-semibold tracking-wide">
                   {item.label}
                 </span>
               </Link>

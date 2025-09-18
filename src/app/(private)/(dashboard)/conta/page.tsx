@@ -67,7 +67,7 @@ export default function AccountPage() {
   }
 
   return (
-    <div className="min-h-svh flex flex-col items-center pt-8 md:pt-14 px-4 pb-24 bg-gray-50">
+    <div className="min-h-svh flex flex-col items-center pt-8 md:pt-14 px-4 pb-24 ">
       <div className="w-full max-w-5xl mx-auto">
         <TabbedInterface tabs={accessibleTabs} title="Minha Conta" />
       </div>

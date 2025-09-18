@@ -132,6 +132,13 @@ const API_ROUTES = {
     REQUEST: "/verification/request",
     CONFIRM: "/verification/confirm",
   },
+
+  ANALYTICS: {
+    RENT_INCOME: "/analytics/rent-income",
+    TENANTS_STATUS: "/analytics/tenants-status",
+    PAYMENTS_SUMMARY: "/analytics/payments-summary",
+    PROPERTIES_OCCUPANCY: "/analytics/properties-occupancy",
+  },
 };
 
 export default API_ROUTES;
