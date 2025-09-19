@@ -151,18 +151,18 @@ export function PdfCard({
             {pdfs.map((pdf) => (
                 <div
                     key={pdf.type}
-                    className={`border rounded-lg overflow-hidden transition-all bg-white shadow-sm hover:shadow-md duration-200 ${
+                    className={`border rounded-lg overflow-hidden transition-all bg-white shadow-xs hover:shadow-md duration-200 ${
                         pdf.generated || pdf.signed ? 'hover:shadow-md' : ''
                     }`}
                 >
                     <div className="flex items-center justify-between p-4">
                         <div className="flex items-center space-x-3 flex-1 min-w-0">
                             {pdf.signed ? (
-                                <FileSignatureIcon className="h-6 w-6 text-primary flex-shrink-0" />
+                                <FileSignatureIcon className="h-6 w-6 text-primary shrink-0" />
                             ) : pdf.generated ? (
-                                <BadgeCheckIcon className="h-6 w-6 text-green-600 flex-shrink-0" />
+                                <BadgeCheckIcon className="h-6 w-6 text-green-600 shrink-0" />
                             ) : (
-                                <BadgeIcon className="h-6 w-6 text-gray-400 rounded flex-shrink-0" />
+                                <BadgeIcon className="h-6 w-6 text-gray-400 rounded-sm shrink-0" />
                             )}
 
                             <div className="min-w-0">

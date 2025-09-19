@@ -63,7 +63,7 @@ export function FilterBar({ form, onSearch, loading }: FilterBarProps) {
             className={clsx(
               "px-4 py-1.5 text-sm font-semibold rounded-full transition-colors",
               {
-                "bg-secondary text-white shadow":
+                "bg-secondary text-white shadow-sm":
                   transactionType === "VENDA" || !transactionType,
                 "text-gray-600 hover:bg-gray-200": transactionType !== "VENDA",
               }
@@ -78,7 +78,7 @@ export function FilterBar({ form, onSearch, loading }: FilterBarProps) {
             className={clsx(
               "px-4 py-1.5 text-sm font-semibold rounded-full transition-colors",
               {
-                "bg-secondary text-white shadow":
+                "bg-secondary text-white shadow-sm":
                   transactionType === "LOCACAO" || !transactionType,
                 "text-gray-600 hover:bg-gray-200":
                   transactionType !== "LOCACAO",
@@ -89,7 +89,7 @@ export function FilterBar({ form, onSearch, loading }: FilterBarProps) {
           </button>
         </div>
 
-        <div className="flex-grow"></div>
+        <div className="grow"></div>
 
         <button
           type="button"
@@ -103,7 +103,7 @@ export function FilterBar({ form, onSearch, loading }: FilterBarProps) {
         <Menu as="div" className="relative inline-block text-left">
           <div>
             <Menu.Button
-              className="inline-flex justify-center items-center gap-2 rounded-full border border-gray-300 bg-white px-4 py-1.5 text-sm font-semibold text-gray-600 shadow-sm hover:bg-gray-100 disabled:opacity-50"
+              className="inline-flex justify-center items-center gap-2 rounded-full border border-gray-300 bg-white px-4 py-1.5 text-sm font-semibold text-gray-600 shadow-xs hover:bg-gray-100 disabled:opacity-50"
               disabled={loading}
             >
               {currentOption?.label || "Ordenar por"}
@@ -122,7 +122,7 @@ export function FilterBar({ form, onSearch, loading }: FilterBarProps) {
             leaveFrom="transform opacity-100 scale-100"
             leaveTo="transform opacity-0 scale-95"
           >
-            <Menu.Items className="absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+            <Menu.Items className="absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-hidden">
               <div className="py-1">
                 {options.map((option) => (
                   <Menu.Item key={option.value}>

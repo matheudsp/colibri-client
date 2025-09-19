@@ -38,7 +38,7 @@ export default function RootLayout({
         className={`${openSans.className} ${montserrat.className} ${poppins.className} font-poppins antialiased flex  `}
       >
         <div className="flex flex-col min-h-screen w-full">
-          <main className="flex-grow">{children}</main>
+          <main className="grow">{children}</main>
         </div>
         <Toaster richColors position="bottom-center" />
       </body>

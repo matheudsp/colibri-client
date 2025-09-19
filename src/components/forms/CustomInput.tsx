@@ -69,7 +69,7 @@ export const CustomInput = forwardRef<HTMLInputElement, CustomInputProps>(
             <button
               type="button"
               onClick={() => setShowPassword(!showPassword)}
-              className="flex items-center justify-center pl-2 pr-3 text-gray-500 hover:text-primary transition-colors focus:outline-none focus:ring-2 focus:ring-primary rounded-r-md"
+              className="flex items-center justify-center pl-2 pr-3 text-gray-500 hover:text-primary transition-colors focus:outline-hidden focus:ring-2 focus:ring-primary rounded-r-md"
               aria-label={showPassword ? "Ocultar senha" : "Mostrar senha"}
             >
               {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}

@@ -11,6 +11,7 @@ import Link from "next/link";
 import { useState, ReactNode, ChangeEvent } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useCurrentUser } from "@/hooks/useCurrentUser";
+import { UserMenu } from "../common/UserMenu";
 type HeaderType = "default" | "back" | "backMenu" | "search" | "logoOnly";
 
 interface HeaderProps {
@@ -57,7 +58,7 @@ export function Header({
       <header
         className={` fixed z-50 top-0 w-full flex items-center justify-center ${
           isScrolledOrSearch
-            ? "bg-white/90 backdrop-blur-sm border-b"
+            ? "bg-white/90 backdrop-blur-xs border-b"
             : "bg-secondary"
         }`}
       >
@@ -65,7 +66,7 @@ export function Header({
           className={` w-full max-w-7xl px-4 2xl:px-0 h-16 flex items-center justify-between gap-6 transition-all duration-300 ease-in-out `}
         >
           {/* Logo */}
-          <div className="flex-shrink-0">
+          <div className="shrink-0">
             <Link href="/">
               <Image
                 height={32}
@@ -115,32 +116,76 @@ export function Header({
           </div>
 
           {/* Navegação (Desktop) */}
-          <nav className="hidden  lg:flex items-center gap-6 flex-shrink-0">
-            <Link
-              key={"menu"}
-              href={isAuthenticated ? "/imoveis" : "/entrar"}
-              className={`text-sm font-semibold transition-colors whitespace-nowrap border py-2 px-8  rounded-lg ${
-                isScrolledOrSearch
-                  ? "text-secondary  border-secondary  hover:bg-secondary hover:text-white"
-                  : "text-white hover:text-secondary hover:bg-white border-white/50 border-b"
+          <nav className="hidden  lg:flex items-center gap-6 shrink-0">
+            {isAuthenticated ? (
+              <div className="flex items-center gap-x-4">
+                <Link
+                  href="/painel"
+                  className={`rounded-md px-4 py-1.5 text-sm font-semibold shadow-sm transition-all duration-300 ${
+                    isScrolled
+                      ? "bg-primary border-primary-hover border text-white hover:bg-primary/85"
+                      : "bg-white/10 text-white hover:bg-white/20 backdrop-blur-sm border border-white/20"
+                  }`}
+                >
+                  Painel
+                </Link>
+
+                <UserMenu orientation="horizontal" isScrolled={isScrolled} />
+              </div>
+            ) : (
+              <div className="flex items-center justify-evenly gap-x-4">
+                <Link
+                  href="/entrar"
+                  className={`font-light text-base  transition-all duration-300 ease-in-out  py-1.5 ${
+                    isScrolled
+                      ? "text-black hover:text-primary "
+                      : "text-white hover:text-gray-50/75 "
+                  }`}
+                >
+                  Já tenho acesso
+                </Link>
+                <em
+                  className={`font-light  text-sm   transition-colors text-center duration-300 ${
+                    isScrolled
+                      ? "text-black hover:text-primary"
+                      : "text-white hover:text-gray-200"
+                  }`}
+                >
+                  ou
+                </em>
+                <Link
+                  href="/registrar"
+                  className={`transform rounded-lg px-4  py-1 text-center font-medium text-white shadow-md transition-all duration-300 ease-in-out hover:-translate-y-0.5 active:translate-y-0 ${
+                    isScrolled
+                      ? "bg-secondary/75 border-b-4 border border-secondary-hover border-b-secondary-hover "
+                      : "bg-white/20 hover:bg-white/30 border border-white/30"
+                  }`}
+                >
+                  Criar conta grátis
+                </Link>
+              </div>
+            )}
+            <div
+              className={`h-6 w-px transition-colors duration-300 ${
+                isScrolled ? "bg-gray-200" : "bg-white/30"
               }`}
-            >
-              {/* Se estiver logado, exibir acessar painel, se nao estiver mostre botao de login e cadastro */}
-              {isAuthenticated ? "Painel" : "Entrar"}
-            </Link>
-            {navItems.map((item) => (
-              <Link
-                key={item.label}
-                href={item.href}
-                className={`text-sm font-semibold transition-colors whitespace-nowrap ${
-                  isScrolledOrSearch
-                    ? "text-secondary hover:text-accent"
-                    : "text-white hover:text-gray-200"
-                }`}
-              >
-                {item.label}
-              </Link>
-            ))}
+              aria-hidden="true"
+            />
+            <nav className="flex gap-x-6">
+              {navItems.map((item) => (
+                <Link
+                  key={item.label}
+                  href={item.href}
+                  className={`font-semibold transition-colors duration-300 ${
+                    isScrolled
+                      ? "text-gray-700 hover:text-primary"
+                      : "text-white hover:text-gray-200"
+                  }`}
+                >
+                  {item.label}
+                </Link>
+              ))}
+            </nav>
           </nav>
 
           {/* Menu (Mobile) */}
@@ -164,9 +209,9 @@ export function Header({
               animate="visible"
               exit="hidden"
               transition={{ type: "tween", duration: 0.3 }}
-              className="fixed  inset-0 top-[72px]  z-40 lg:hidden"
+              className="fixed  inset-0 top-[64px]  z-40 lg:hidden"
             >
-              <div className="p-4 bg-white/95  h-svh">
+              <div className="p-4 bg-white/95 h-svh">
                 {/* {showSearchBar && (
                   <div className="relative mb-4">
                     <input
@@ -185,22 +230,50 @@ export function Header({
                     </button>
                   </div>
                 )} */}
-                <nav className="flex flex-col space-y-2 ">
-                  <Link
-                    key={"access"}
-                    href={isAuthenticated ? "/imoveis" : "/entrar"}
-                    onClick={() => setIsMenuOpen(false)}
-                    className="text-lg p-3 rounded-md font-semibold text-secondary hover:bg-gray-200 border-secondary border-2 hover:text-white hover:bg-secondary"
-                  >
-                    {/* Se estiver logado, exibir acessar painel, se nao estiver mostre botao de login e cadastro */}
-                    {isAuthenticated ? "Painel" : "Entrar"}
-                  </Link>
+                <nav className="flex flex-col space-y-4 items-end">
+                  {isAuthenticated ? (
+                    <div className="w-full flex flex-col space-y-4">
+                      <UserMenu orientation="horizontal" fullWidth />
+
+                      <Link
+                        href="/painel"
+                        onClick={() => setIsMenuOpen(false)}
+                        className="rounded-md  p-2 bg-primary/85 border-b-4 border border-primary-hover border-b-primary-hover text-center text-lg font-semibold text-white hover:bg-primary-hover"
+                      >
+                        Painel
+                      </Link>
+                    </div>
+                  ) : (
+                    <>
+                      <div className="flex flex-col items-center gap-3 rounded-lg p-4">
+                        <div className="flex w-full items-center justify-center gap-3">
+                          <Link
+                            href="/entrar"
+                            onClick={() => setIsMenuOpen(false)}
+                            className="font-light text-base text-black hover:text-primary"
+                          >
+                            Já tenho acesso
+                          </Link>
+                        </div>
+                        <em className="text-base font-light text-black">ou</em>
+                        <Link
+                          href="/registrar"
+                          onClick={() => setIsMenuOpen(false)}
+                          className="w-full transform rounded-lg bg-secondary/75 border-b-4 border border-secondary-hover border-b-secondary-hover p-3 text-center font-medium text-white shadow-md transition-transform duration-150 ease-in-out hover:-translate-y-0.5 active:translate-y-0"
+                        >
+                          Criar conta grátis
+                        </Link>
+                      </div>
+                      <div className="my-2 border-t border-gray-200" />
+                    </>
+                  )}
+
                   {navItems.map((item) => (
                     <Link
                       key={item.label}
                       href={item.href}
                       onClick={() => setIsMenuOpen(false)}
-                      className="text-lg p-3 rounded-md font-semibold text-secondary hover:bg-gray-200"
+                      className="rounded-md p-3 text-lg font-semibold text-secondary hover:bg-gray-100"
                     >
                       {item.label}
                     </Link>
@@ -216,7 +289,7 @@ export function Header({
 
   if (type === "logoOnly") {
     return (
-      <header className="fixed z-40 top-0 w-full bg-white/90 backdrop-blur-sm px-4 py-2  flex items-center justify-center border-b">
+      <header className="fixed z-40 top-0 w-full bg-white/90 backdrop-blur-xs px-4 py-2  flex items-center justify-center border-b">
         <Image
           height={50}
           width={120}
@@ -230,7 +303,7 @@ export function Header({
   }
   return (
     <header
-      className={` fixed z-50 top-0 w-full flex items-center justify-center bg-white/90 backdrop-blur-sm border-b`}
+      className={` fixed z-50 top-0 w-full flex items-center justify-center bg-white/90 backdrop-blur-xs border-b`}
     >
       <div
         className={` w-full max-w-7xl px-4 2xl:px-0 h-16 flex items-center justify-between gap-6 transition-all duration-300 ease-in-out `}

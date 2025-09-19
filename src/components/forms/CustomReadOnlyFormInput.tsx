@@ -27,7 +27,7 @@ export function CustomReadOnlyFormInput({
                     <input
                         value={value}
                         readOnly
-                        className={`w-full bg-transparent p-0 border-none ${textColor} truncate focus:outline-none`}
+                        className={`w-full bg-transparent p-0 border-none ${textColor} truncate focus:outline-hidden`}
                         aria-label={label}
                     />
                 </div>

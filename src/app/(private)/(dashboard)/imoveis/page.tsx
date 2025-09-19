@@ -178,7 +178,7 @@ export default function DashboardPropertiesPage() {
               <PropertyCardSkeleton variant="dashboard" />
             </div>
           ) : properties.length === 0 ? (
-            <div className="flex flex-col items-center justify-center gap-3 text-center mt-10 p-6 bg-white rounded-lg shadow-sm">
+            <div className="flex flex-col items-center justify-center gap-3 text-center mt-10 p-6 bg-white rounded-lg shadow-xs">
               {pageContent.emptyIcon}
               <p className="text-gray-600 font-semibold">
                 {pageContent.emptyTitle}

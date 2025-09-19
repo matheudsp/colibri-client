@@ -128,7 +128,7 @@ export const CustomFormInput = forwardRef<HTMLInputElement, BasicInputProps>(
               props.onBlur?.(e);
             }}
             disabled={disabled}
-            className="w-full bg-transparent outline-none text-foreground placeholder:text-gray-400"
+            className="w-full bg-transparent outline-hidden text-foreground placeholder:text-gray-400"
             placeholder={props.placeholder}
             inputMode={
               mask === "currency" ||

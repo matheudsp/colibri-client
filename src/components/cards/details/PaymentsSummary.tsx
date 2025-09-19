@@ -10,7 +10,7 @@ interface PaymentsSummaryProps {
 
 export function PaymentsSummary({ data }: PaymentsSummaryProps) {
   return (
-    <div className="rounded-lg border p-6 shadow">
+    <div className="rounded-lg border p-6 shadow-sm">
       <h3 className="text-lg font-medium leading-6 text-gray-900">
         Resumo de Pagamentos{" "}
         <strong className="text-base font-extralight text-zinc-700/90">

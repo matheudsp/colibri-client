@@ -44,7 +44,7 @@ export function Modal({ isOpen, onClose, title, children }: ModalProps) {
       {isOpen && (
         <motion.div
           onClick={onClose}
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-xs"
           initial="hidden"
           animate="visible"
           exit="hidden"

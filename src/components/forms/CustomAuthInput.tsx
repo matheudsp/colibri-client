@@ -169,7 +169,7 @@ export function CustomAuthInput({
               registration?.onBlur?.(e);
               onBlur?.(e);
             }}
-            className={`w-full bg-transparent outline-none placeholder-transparent ${textColor}`}
+            className={`w-full bg-transparent outline-hidden placeholder-transparent ${textColor}`}
             placeholder={label}
           />
           <label
@@ -191,7 +191,7 @@ export function CustomAuthInput({
             title={showPassword ? "Esconder senha" : "Mostrar senha"}
             type="button"
             onClick={() => setShowPassword(!showPassword)}
-            className={`ml-2 focus:outline-none ${textColor}`}
+            className={`ml-2 focus:outline-hidden ${textColor}`}
           >
             {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
           </button>

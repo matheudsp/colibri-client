@@ -76,7 +76,7 @@ export default function FabButton() {
 
         <button
           onClick={() => setIsOpen(!isOpen)}
-          className="mb-16 md:mb-0 bg-primary text-white p-4 rounded-full shadow-lg hover:bg-primary-hover focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-transform duration-300 ease-in-out"
+          className="mb-16 md:mb-0 bg-primary text-white p-4 rounded-full shadow-lg hover:bg-primary-hover focus:outline-hidden focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-transform duration-300 ease-in-out"
           title={isOpen ? "Fechar" : "Adicionar novo"}
         >
           <PlusIcon

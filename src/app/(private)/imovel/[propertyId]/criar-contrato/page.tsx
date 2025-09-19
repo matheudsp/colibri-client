@@ -311,7 +311,7 @@ export default function CreateContractPage() {
                   onClick={() => handleActionChange("search")}
                   className={`w-full sm:w-1/2 py-2 rounded-md transition-all duration-200 text-sm font-bold ${
                     tenantAction === "search"
-                      ? "bg-primary text-white shadow"
+                      ? "bg-primary text-white shadow-sm"
                       : "bg-transparent text-gray-600"
                   }`}
                 >
@@ -322,7 +322,7 @@ export default function CreateContractPage() {
                   onClick={() => handleActionChange("create")}
                   className={`w-full sm:w-1/2 py-2 rounded-md transition-all duration-200 text-sm font-bold ${
                     tenantAction === "create"
-                      ? "bg-primary text-white shadow"
+                      ? "bg-primary text-white shadow-sm"
                       : "bg-transparent text-gray-600"
                   }`}
                 >
@@ -338,7 +338,7 @@ export default function CreateContractPage() {
                   </p>
 
                   <div className="flex flex-col sm:flex-row items-stretch gap-2">
-                    <div className="flex-grow">
+                    <div className="grow">
                       <Controller
                         name="tenantCpfCnpj"
                         control={control}
@@ -374,7 +374,7 @@ export default function CreateContractPage() {
                   </div>
 
                   {foundTenants.length > 0 && (
-                    <div className="w-full space-y-3 border-t pt-4 animate-fadeIn">
+                    <div className="w-full space-y-3 border-t pt-4 animate-fade-in">
                       <h3 className="font-semibold text-gray-700">
                         Usuários existentes:
                       </h3>
@@ -384,7 +384,7 @@ export default function CreateContractPage() {
                           className="w-full p-4 bg-gray-50 rounded-lg border flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3"
                         >
                           <div className="flex items-center gap-3">
-                            <div className="flex-shrink-0 bg-secondary text-white rounded-full h-10 w-10 flex items-center justify-center font-bold">
+                            <div className="shrink-0 bg-secondary text-white rounded-full h-10 w-10 flex items-center justify-center font-bold">
                               {user.name.charAt(0).toUpperCase()}
                             </div>
                             <div>
@@ -416,7 +416,7 @@ export default function CreateContractPage() {
 
                   {selectedTenant && (
                     <div
-                      className="w-full p-4 bg-primary/10 border-2 border-primary/20 rounded-lg animate-fadeIn"
+                      className="w-full p-4 bg-primary/10 border-2 border-primary/20 rounded-lg animate-fade-in"
                       role="group"
                       aria-label="Inquilino Selecionado"
                     >
@@ -424,10 +424,10 @@ export default function CreateContractPage() {
                         Inquilino Selecionado:
                       </p>
                       <div className="flex items-center gap-4">
-                        <div className="flex-shrink-0">
+                        <div className="shrink-0">
                           <UserIcon className="w-8 h-8 text-primary" />
                         </div>
-                        <div className="flex-grow">
+                        <div className="grow">
                           <p className="font-bold text-lg text-gray-800 break-all">
                             {selectedTenant.name}
                           </p>
@@ -688,7 +688,7 @@ export default function CreateContractPage() {
           {currentStep === 3 && (
             <>
               {tenantAction === "create" && newTenantCredentials ? (
-                <div className="text-center space-y-6 p-4 animate-fadeIn">
+                <div className="text-center space-y-6 p-4 animate-fade-in">
                   <CheckCircle className="w-16 h-16 text-green-500 mx-auto" />
                   <h2 className="text-2xl font-bold text-gray-800">
                     Contrato Criado e Inquilino Cadastrado!

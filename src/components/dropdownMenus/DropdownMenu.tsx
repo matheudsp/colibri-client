@@ -73,7 +73,7 @@ export function DropdownMenu({
                                     }
                                     disabled={item.disabled}
                                     className={`
-                                        flex items-center gap-2 px-2 py-1.5 rounded-md w-full cursor-pointer outline-none border-1 border-transparent hover:border-gray-300                                        ${
+                                        flex items-center gap-2 px-2 py-1.5 rounded-md w-full cursor-pointer outline-hidden border-1 border-transparent hover:border-gray-300                                        ${
                                             item.disabled
                                                 ? 'opacity-50 cursor-not-allowed'
                                                 : hoverBg
@@ -82,7 +82,7 @@ export function DropdownMenu({
                                     `}
                                 >
                                     {item.icon && (
-                                        <span className="flex-shrink-0">
+                                        <span className="shrink-0">
                                             {item.icon}
                                         </span>
                                     )}

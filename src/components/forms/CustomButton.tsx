@@ -34,7 +34,7 @@ export function CustomButton({
   title,
   isLoading = false,
 }: CustomButtonProps) {
-  // 1. Removi a prop 'rounded' das classes base para aplicá-la dinamicamente.
+  // 1. Removi a prop 'rounded-sm' das classes base para aplicá-la dinamicamente.
   const baseClasses = `
     px-4 py-2 
     ${fontSize}
@@ -44,7 +44,7 @@ export function CustomButton({
     gap-2
     items-center 
     flex justify-center
-    focus:outline-none focus:ring-2 focus:ring-offset-2
+    focus:outline-hidden focus:ring-2 focus:ring-offset-2
     relative overflow-hidden
   `;
 
@@ -66,7 +66,7 @@ export function CustomButton({
         baseClasses,
         variantClasses,
         disabledClasses,
-        rounded, // 2. Adicionei a prop 'rounded' diretamente aqui.
+        rounded, // 2. Adicionei a prop 'rounded-sm' diretamente aqui.
         className
       )}
       title={title}

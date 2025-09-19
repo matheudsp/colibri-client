@@ -21,7 +21,7 @@ const DetailItem = ({ icon, label, value }: DetailItemProps) => (
 
 export function ContractDetails({ contract }: { contract: Contract }) {
   return (
-    <div className="bg-white p-5 rounded-xl shadow-sm border">
+    <div className="bg-white p-5 rounded-xl shadow-xs border">
       <h2 className="font-bold text-xl mb-4 border-b pb-2">
         Detalhes do Contrato
       </h2>

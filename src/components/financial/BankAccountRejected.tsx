@@ -13,7 +13,7 @@ export function BankAccountRejected({ account }: BankAccountRejectedProps) {
 
   return (
     <div className="p-6 border-t md:border-t-0 border-gray-200 flex flex-col justify-center text-center">
-      <div className="w-12 h-12 mx-auto rounded-full flex items-center justify-center shadow-sm mb-3">
+      <div className="w-12 h-12 mx-auto rounded-full flex items-center justify-center shadow-xs mb-3">
         <AlertTriangle className="text-red-600" size={24} />
       </div>
       <h3 className="text-lg font-bold text-gray-800">

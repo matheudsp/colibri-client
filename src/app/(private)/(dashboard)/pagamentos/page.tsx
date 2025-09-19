@@ -168,7 +168,7 @@ export default function MyPaymentsPage() {
           </p>
         </header>
 
-        <div className="bg-white p-4 rounded-xl shadow-sm border mb-6">
+        <div className="bg-white p-4 rounded-xl shadow-xs border mb-6">
           <div className="flex items-center gap-2 mb-4">
             <Filter size={18} className="text-gray-600" />
             <h3 className="font-semibold text-gray-700">Filtros</h3>
@@ -183,7 +183,7 @@ export default function MyPaymentsPage() {
                     e.target.value === "all" ? undefined : e.target.value,
                 }))
               }
-              className="p-2 border rounded-md bg-white text-gray-700 shadow-sm focus:outline-none focus:ring-primary focus:border-primary w-full"
+              className="p-2 border rounded-md bg-white text-gray-700 shadow-xs focus:outline-hidden focus:ring-primary focus:border-primary w-full"
             >
               <option value="all">Todos os Imóveis</option>
               {uniqueProperties.map((prop) => (
@@ -201,7 +201,7 @@ export default function MyPaymentsPage() {
                     e.target.value === "all" ? undefined : e.target.value,
                 }))
               }
-              className="p-2 border rounded-md bg-white text-gray-700 shadow-sm focus:outline-none focus:ring-primary focus:border-primary w-full"
+              className="p-2 border rounded-md bg-white text-gray-700 shadow-xs focus:outline-hidden focus:ring-primary focus:border-primary w-full"
             >
               <option value="all">Todos os Inquilinos</option>
               {uniqueTenants.map((tenant) => (
@@ -221,7 +221,7 @@ export default function MyPaymentsPage() {
                       : (e.target.value as PaymentStatus),
                 }))
               }
-              className="p-2 border rounded-md bg-white text-gray-700 shadow-sm focus:outline-none focus:ring-primary focus:border-primary w-full"
+              className="p-2 border rounded-md bg-white text-gray-700 shadow-xs focus:outline-hidden focus:ring-primary focus:border-primary w-full"
             >
               <option value="all">Todos os Status</option>
               {Object.entries(statusMap).map(([status, { label }]) => (
@@ -279,7 +279,7 @@ export default function MyPaymentsPage() {
               subtitle="Tente ajustar os filtros ou verifique mais tarde."
             />
           ) : (
-            <div className="overflow-x-auto border border-gray-200 rounded-lg shadow-sm">
+            <div className="overflow-x-auto border border-gray-200 rounded-lg shadow-xs">
               <table className="min-w-full ">
                 <thead className="border-b bg-background  hidden md:table-header-group">
                   <tr>

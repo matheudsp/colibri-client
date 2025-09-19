@@ -84,7 +84,7 @@ export function Tooltip({
           {content}
           <div
             style={arrowStyle}
-            className="absolute bottom-[-4px] -translate-x-1/2 h-0 w-0 border-[4px] border-l-transparent border-r-transparent border-t-gray-800"
+            className="absolute bottom-[-4px] -translate-x-1/2 h-0 w-0 border-4 border-l-transparent border-r-transparent border-t-gray-800"
           />
         </motion.div>
       )}

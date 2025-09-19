@@ -80,7 +80,7 @@ export default function CondominiumsPage() {
 
         <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-4">
           {condominiums.length === 0 ? (
-            <div className="col-span-full flex flex-col items-center justify-center gap-3 text-center mt-10 p-6 bg-white rounded-lg shadow-sm">
+            <div className="col-span-full flex flex-col items-center justify-center gap-3 text-center mt-10 p-6 bg-white rounded-lg shadow-xs">
               <Building2 size={40} className="text-gray-400" />
               <p className="text-gray-600 font-semibold">
                 Nenhum condomínio encontrado.

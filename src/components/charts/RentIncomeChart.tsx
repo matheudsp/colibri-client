@@ -43,7 +43,7 @@ interface CustomTooltipProps {
 const CustomTooltip = ({ active, payload, label }: CustomTooltipProps) => {
   if (active && payload && payload.length) {
     return (
-      <div className="rounded-md border bg-white/80 p-3 shadow-lg backdrop-blur-sm">
+      <div className="rounded-md border bg-white/80 p-3 shadow-lg backdrop-blur-xs">
         <p className="font-bold text-gray-800">{label}</p>
         <p className="text-sm text-sky-600">
           Receita: {formatCurrency(payload[0].value as number)}

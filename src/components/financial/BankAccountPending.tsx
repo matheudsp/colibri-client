@@ -80,7 +80,7 @@ export function BankAccountPending({ account }: BankAccountPendingProps) {
   return (
     <div className="overflow-hidden">
       <div className="p-6 border-b border-gray-200 flex flex-col justify-center text-center">
-        <div className="w-12 h-12 mx-auto rounded-full flex items-center justify-center shadow-sm mb-3">
+        <div className="w-12 h-12 mx-auto rounded-full flex items-center justify-center shadow-xs mb-3">
           <FileBadge2 className="text-yellow-600" size={24} />
         </div>
         <h3 className="text-lg font-bold text-gray-800">
@@ -92,7 +92,7 @@ export function BankAccountPending({ account }: BankAccountPendingProps) {
         </p>
         {onboardingUrl && (
           <div className="mt-4 text-xs text-gray-600 bg-blue-50 p-3 rounded-lg flex items-center gap-2 border border-blue-200">
-            <AlertCircle size={28} className="text-blue-500 flex-shrink-0" />
+            <AlertCircle size={28} className="text-blue-500 shrink-0" />
             <span>
               Estaumos quase lá, agora é neccessário verificar sua identidade.
               Este é um procedimento padrão para garantir a legitimidade das

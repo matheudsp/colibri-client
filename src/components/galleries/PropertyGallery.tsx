@@ -128,14 +128,14 @@ export function PropertyGallery({ photos, altText }: PropertyGalleryProps) {
             <button
               onClick={goToPrevious}
               aria-label="Foto anterior"
-              className="absolute top-1/2 left-2 -translate-y-1/2 z-10 p-2 bg-black/40 rounded-full text-white hover:bg-black/60 focus:outline-none focus:ring-2 focus:ring-white transition-all"
+              className="absolute top-1/2 left-2 -translate-y-1/2 z-10 p-2 bg-black/40 rounded-full text-white hover:bg-black/60 focus:outline-hidden focus:ring-2 focus:ring-white transition-all"
             >
               <ChevronLeft size={24} aria-hidden="true" />
             </button>
             <button
               onClick={goToNext}
               aria-label="Próxima foto"
-              className="absolute top-1/2 right-2 -translate-y-1/2 z-10 p-2 bg-black/40 rounded-full text-white hover:bg-black/60 focus:outline-none focus:ring-2 focus:ring-white transition-all"
+              className="absolute top-1/2 right-2 -translate-y-1/2 z-10 p-2 bg-black/40 rounded-full text-white hover:bg-black/60 focus:outline-hidden focus:ring-2 focus:ring-white transition-all"
             >
               <ChevronRight size={24} aria-hidden="true" />
             </button>
@@ -159,7 +159,7 @@ export function PropertyGallery({ photos, altText }: PropertyGalleryProps) {
             <div
               key={photo.id}
               className={clsx(
-                "w-2/5 max-w-28 flex-shrink-0 cursor-pointer rounded-md overflow-hidden border-2 transition-all",
+                "w-2/5 max-w-28 shrink-0 cursor-pointer rounded-md overflow-hidden border-2 transition-all",
                 currentIndex === index
                   ? "border-primary"
                   : "border-transparent opacity-60 hover:opacity-100"

@@ -28,7 +28,7 @@ export function PeriodSelector({
           className={cn(
             "rounded-md px-3 py-1.5 text-sm font-medium transition-colors whitespace-nowrap",
             selectedPeriod === option.value
-              ? "bg-white text-gray-900 shadow-sm"
+              ? "bg-white text-gray-900 shadow-xs"
               : "bg-transparent text-gray-500 hover:bg-gray-200"
           )}
         >

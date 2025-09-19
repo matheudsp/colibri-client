@@ -67,7 +67,7 @@ export const CustomFormTextarea = forwardRef<
             onFocus={() => setIsFocused(true)}
             onBlur={() => setIsFocused(false)}
             disabled={disabled}
-            className="w-full bg-transparent outline-none text-foreground placeholder:text-gray-400 resize-y"
+            className="w-full bg-transparent outline-hidden text-foreground placeholder:text-gray-400 resize-y"
             rows={5}
             maxLength={maxLength}
           />

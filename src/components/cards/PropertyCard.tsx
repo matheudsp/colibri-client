@@ -205,7 +205,7 @@ export function PropertyCard({
   const cardContent = (
     <div className="bg-white border border-gray-200 rounded-md overflow-hidden transition-all duration-300 shadow-md flex flex-col h-full group">
       <div
-        className="relative w-full aspect-[3/2]"
+        className="relative w-full aspect-3/2"
         onTouchStart={onTouchStart}
         onTouchMove={onTouchMove}
         onTouchEnd={onTouchEnd}
@@ -238,7 +238,7 @@ export function PropertyCard({
               onAnimationComplete={() => setShowSwipeHint(false)}
               className="absolute inset-0 z-10 flex items-center justify-center pointer-events-none"
             >
-              <div className="bg-black/60 backdrop-blur-sm p-3 rounded-full">
+              <div className="bg-black/60 backdrop-blur-xs p-3 rounded-full">
                 <MoveHorizontal className="text-white" size={24} />
               </div>
             </motion.div>
@@ -249,14 +249,14 @@ export function PropertyCard({
           <>
             <button
               onClick={handlePrevImage}
-              className="absolute left-2 top-1/2 -translate-y-1/2 bg-black/40 text-white p-1 rounded-full shadow-md transition-opacity opacity-70 hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-white z-20"
+              className="absolute left-2 top-1/2 -translate-y-1/2 bg-black/40 text-white p-1 rounded-full shadow-md transition-opacity opacity-70 hover:opacity-100 focus:outline-hidden focus:ring-2 focus:ring-white z-20"
               aria-label="Imagem anterior"
             >
               <ChevronLeft size={20} />
             </button>
             <button
               onClick={handleNextImage}
-              className="absolute right-2 top-1/2 -translate-y-1/2 bg-black/40 text-white p-1 rounded-full shadow-md transition-opacity opacity-70 hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-white z-20"
+              className="absolute right-2 top-1/2 -translate-y-1/2 bg-black/40 text-white p-1 rounded-full shadow-md transition-opacity opacity-70 hover:opacity-100 focus:outline-hidden focus:ring-2 focus:ring-white z-20"
               aria-label="Próxima imagem"
             >
               <ChevronRight size={20} />
@@ -271,7 +271,7 @@ export function PropertyCard({
         )}
       </div>
 
-      <div className="p-4 flex flex-col flex-grow">
+      <div className="p-4 flex flex-col grow">
         <p className="text-sm text-primary font-semibold">
           {getPropertyTypeLabel(property.propertyType)}
         </p>
@@ -284,7 +284,7 @@ export function PropertyCard({
         <p className="text-sm text-gray-500 truncate">
           {property.city} - {property.state}
         </p>
-        <div className="flex-grow">
+        <div className="grow">
           {variant === "public" && (
             <div className="grid grid-cols-2 sm:grid-cols-2 font-medium gap-x-4 gap-y-2 text-sm text-gray-600 my-3 border-t border-b py-3">
               <span className="flex items-center gap-2 ">

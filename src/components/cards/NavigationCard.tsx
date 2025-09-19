@@ -50,7 +50,7 @@ export function NavigationCard({
             }}
         >
             <div
-                className={`bg-white w-full rounded-lg shadow-sm p-6 text-center cursor-pointer transition-all hover:shadow-md border hover:bg-gray-50 ${cardClassName}`}
+                className={`bg-white w-full rounded-lg shadow-xs p-6 text-center cursor-pointer transition-all hover:shadow-md border hover:bg-gray-50 ${cardClassName}`}
             >
                 {icon && <div className="mb-2">{icon}</div>}
                 <p className="text-foreground font-medium">{title}</p>

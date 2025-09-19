@@ -54,7 +54,7 @@ export function HelpSection() {
                 {item.icon}
               </div>
               <h3 className="text-xl font-bold text-gray-900">{item.title}</h3>
-              <p className="text-gray-600 mt-2 flex-grow">{item.description}</p>
+              <p className="text-gray-600 mt-2 grow">{item.description}</p>
               <Link
                 href={item.href}
                 className="text-secondary font-bold mt-4 inline-block group"

@@ -231,7 +231,7 @@ export default function ContractManagementPage() {
       case "EM_ANALISE":
         if (role === "LOCADOR") {
           return (
-            <div className="bg-yellow-50 border-yellow-200 border p-4 rounded-xl shadow-sm text-center">
+            <div className="bg-yellow-50 border-yellow-200 border p-4 rounded-xl shadow-xs text-center">
               <FileWarning className="mx-auto text-yellow-500" size={32} />
               <h3 className="font-bold text-lg mt-2">Documentos em Análise</h3>
               <p className="text-sm text-gray-600 mt-1">
@@ -257,7 +257,7 @@ export default function ContractManagementPage() {
 
           if (hasRejected) {
             return (
-              <div className="bg-red-50 border-red-200 border p-4 rounded-xl shadow-sm text-center">
+              <div className="bg-red-50 border-red-200 border p-4 rounded-xl shadow-xs text-center">
                 <FileWarning className="mx-auto text-red-500" size={32} />
                 <h3 className="font-bold text-lg mt-2">
                   Pendências na Documentação
@@ -281,7 +281,7 @@ export default function ContractManagementPage() {
           }
 
           return (
-            <div className="bg-blue-50 border-blue-200 border p-4 rounded-xl shadow-sm text-center">
+            <div className="bg-blue-50 border-blue-200 border p-4 rounded-xl shadow-xs text-center">
               <Loader2
                 className="mx-auto text-blue-500 animate-spin"
                 size={32}
@@ -302,7 +302,7 @@ export default function ContractManagementPage() {
         if (role === Roles.LOCADOR || role === Roles.ADMIN) {
           if (signatureProcessStarted) {
             return (
-              <div className="bg-green-50 border-green-200 border p-4 rounded-xl shadow-sm text-center">
+              <div className="bg-green-50 border-green-200 border p-4 rounded-xl shadow-xs text-center">
                 <MailCheck className="mx-auto text-green-500" size={32} />
                 <h3 className="font-bold text-lg mt-2">
                   Assinaturas Solicitadas
@@ -316,7 +316,7 @@ export default function ContractManagementPage() {
             );
           } else {
             return (
-              <div className="bg-red-50 border-red-200 border p-4 rounded-xl shadow-sm text-center">
+              <div className="bg-red-50 border-red-200 border p-4 rounded-xl shadow-xs text-center">
                 <FileWarning className="mx-auto text-red-500" size={32} />
                 <h3 className="font-bold text-lg mt-2">Ação Necessária</h3>
                 <p className="text-sm text-gray-600 mt-1">
@@ -343,7 +343,7 @@ export default function ContractManagementPage() {
         }
 
         return (
-          <div className="bg-indigo-50 border-indigo-200 border p-4 rounded-xl shadow-sm text-center">
+          <div className="bg-indigo-50 border-indigo-200 border p-4 rounded-xl shadow-xs text-center">
             <Loader2
               className="mx-auto text-indigo-500 animate-spin"
               size={32}
@@ -359,7 +359,7 @@ export default function ContractManagementPage() {
       case "PENDENTE_DOCUMENTACAO":
         if (role === "LOCATARIO" && sub === contract.tenantId) {
           return (
-            <div className="bg-blue-50 border-blue-200 border p-4 rounded-xl shadow-sm text-center">
+            <div className="bg-blue-50 border-blue-200 border p-4 rounded-xl shadow-xs text-center">
               <FileText className="mx-auto text-blue-500" size={32} />
               <h3 className="font-bold text-lg mt-2">Documentação Pendente</h3>
               <p className="text-sm text-gray-600 mt-1">
@@ -381,7 +381,7 @@ export default function ContractManagementPage() {
         }
 
         return (
-          <div className="bg-orange-50 border-orange-200 border p-4 rounded-xl shadow-sm text-center">
+          <div className="bg-orange-50 border-orange-200 border p-4 rounded-xl shadow-xs text-center">
             <h3 className="font-bold text-lg">Aguardando Documentos</h3>
             <p className="text-sm text-gray-600 mt-1">
               O locatário precisa enviar a documentação (CPF, IDENTIDADE FRENTE
@@ -417,7 +417,7 @@ export default function ContractManagementPage() {
               <ArrowLeft className="mr-2" />
               Voltar para Contratos
             </CustomButton>
-            <div className="mt-4 bg-white p-4 rounded-xl shadow-sm border flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+            <div className="mt-4 bg-white p-4 rounded-xl shadow-xs border flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
               <div>
                 <h1 className="text-2xl font-bold text-gray-800">
                   Gerenciar Contrato
@@ -453,7 +453,7 @@ export default function ContractManagementPage() {
               <ContractPartiesDetails contract={contract} />
 
               <ActionCard />
-              <div className="bg-white p-4 rounded-xl shadow-sm border space-y-3">
+              <div className="bg-white p-4 rounded-xl shadow-xs border space-y-3">
                 <h3 className="font-bold text-lg">Outras Ações</h3>
                 {(contract.status === "AGUARDANDO_ASSINATURAS" ||
                   contract.status === "ATIVO") && (

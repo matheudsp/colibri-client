@@ -17,7 +17,7 @@ const DetailItem = ({
   value: string | number;
 }) => (
   <div className="flex items-center gap-2 text-sm text-gray-600">
-    <div className="flex-shrink-0 text-gray-400">{icon}</div>
+    <div className="shrink-0 text-gray-400">{icon}</div>
     <div>
       <span className="font-medium">{label}:</span> {value}
     </div>
@@ -46,12 +46,12 @@ export function ContractCard({ contract }: { contract: Contract }) {
       onKeyDown={(e) => e.key === "Enter" && handleCardClick()}
       tabIndex={0}
       aria-label={`Ver detalhes do contrato do imóvel ${contract.property.title}`}
-      className="bg-white rounded-xl shadow-md overflow-hidden border border-gray-300 transition-all duration-300 hover:shadow-lg hover:border-primary focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 cursor-pointer group"
+      className="bg-white rounded-xl shadow-md overflow-hidden border border-gray-300 transition-all duration-300 hover:shadow-lg hover:border-primary focus:outline-hidden focus:ring-2 focus:ring-primary focus:ring-offset-2 cursor-pointer group"
     >
       {/* Cabeçalho */}
       <header className="p-4 border-b border-gray-200 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
         <div className="flex items-center gap-3 min-w-0">
-          <div className="bg-primary/10 p-3 rounded-lg text-primary flex-shrink-0">
+          <div className="bg-primary/10 p-3 rounded-lg text-primary shrink-0">
             <Building className="w-6 h-6" />
           </div>
           <div className="min-w-0">

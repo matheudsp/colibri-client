@@ -14,7 +14,7 @@ export default function Home() {
           <div className=" px-4">
             <h1 className="text-4xl md:text-6xl font-bold">
               Para{" "}
-              <span className="bg-primary text-secondary px-2 rounded">
+              <span className="bg-primary text-secondary px-2 rounded-sm">
                 você
               </span>{" "}
               morar bem

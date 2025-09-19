@@ -24,7 +24,7 @@ const StepCard = ({
   children: React.ReactNode;
 }) => (
   <div className="flex items-start space-x-4">
-    <div className="flex-shrink-0">
+    <div className="shrink-0">
       <div className="bg-primary/10 text-primary rounded-lg p-3">
         <Icon className="h-6 w-6" />
       </div>
@@ -76,7 +76,7 @@ export default function GuiaLocadorPage() {
             <h3 className="text-2xl font-bold text-zinc-800 mb-6 text-center">
               O Processo em 5 Passos Simples
             </h3>
-            <div className="space-y-8 p-6 bg-white border border-zinc-200 rounded-lg shadow-sm">
+            <div className="space-y-8 p-6 bg-white border border-zinc-200 rounded-lg shadow-xs">
               <StepCard icon={HomeIcon} title="1. Acesse seu Painel de Imóveis">
                 <p>
                   Após fazer login, encontre a seção{" "}

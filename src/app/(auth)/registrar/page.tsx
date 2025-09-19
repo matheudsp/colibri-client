@@ -3,7 +3,8 @@
 import { useRouter } from "next/navigation";
 // import Image from "next/image";
 
-import { KeyRound, Building, ArrowRight } from "lucide-react";
+import { KeyRound, ArrowRight } from "lucide-react";
+import { GrUserAdmin } from "react-icons/gr";
 import Link from "next/link";
 const ProfileSelectionCard = ({
   icon,
@@ -22,7 +23,9 @@ const ProfileSelectionCard = ({
   >
     <div className="flex items-center justify-between">
       <div className="flex items-center gap-4">
-        <div className="bg-primary/10 p-3 rounded-lg text-primary">{icon}</div>
+        <div className="bg-primary/10 p-3 rounded-lg text-primary border-primary/45 border flex items-center justify-center">
+          {icon}
+        </div>
         <div>
           <h3 className="font-bold text-lg text-secondary">{title}</h3>
           <p className="text-sm text-foreground/80">{description}</p>
@@ -63,7 +66,7 @@ export default function RegisterPage() {
 
         <ProfileSelectionCard
           onClick={() => router.push("/registrar/locador")}
-          icon={<Building size={28} />}
+          icon={<GrUserAdmin size={28} />}
           title="Sou Locador"
           description="Quero anunciar meus imóveis na plataforma."
         />

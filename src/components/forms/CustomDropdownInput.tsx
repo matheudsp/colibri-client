@@ -98,7 +98,7 @@ export function CustomDropdownInput({
         left: `${position.left}px`,
         width: `${position.width}px`,
       }}
-      className="z-50 bg-white shadow-lg rounded-md py-1 border border-black border-opacity-10 focus:outline-none max-h-60 overflow-y-auto"
+      className="z-50 bg-white shadow-lg rounded-md py-1 border border-black border-opacity-10 focus:outline-hidden max-h-60 overflow-y-auto"
     >
       {options.map((option) => (
         <div
@@ -132,7 +132,7 @@ export function CustomDropdownInput({
           id={id}
           type="button"
           onClick={toggleDropdown}
-          className={`w-full px-3 py-2 text-left border-2 rounded-lg shadow-sm bg-white focus:outline-none flex justify-between items-center transition-colors duration-200 hover:border-primary ${
+          className={`w-full px-3 py-2 text-left border-2 rounded-lg shadow-xs bg-white focus:outline-hidden flex justify-between items-center transition-colors duration-200 hover:border-primary ${
             isOpen ? "border-primary" : "border-gray-300"
           }`}
           disabled={disabled}

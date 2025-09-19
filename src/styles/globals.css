@@ -1,46 +1,65 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import 'tailwindcss';
+@source "safelist.txt";
+@config '../../tailwind.config.ts';
 
+/*
+  The default border color has changed to `currentcolor` in Tailwind CSS v4,
+  so we've added these compatibility styles to make sure everything still
+  looks the same as it did with Tailwind CSS v3.
 
-:root {
-  /* Base */
-  --background: #FFFFFF;      /* fundo principal suave */
-  --background-alt: #ECEDE9;  /* cartões, inputs, áreas elevadas */
-  --foreground: #2D2B2E;      /* texto principal */
-  --foreground-muted: #666468; /* texto secundário */
-
-  /* Paleta principal */
-  --primary: #97C52A;          /* verde principal (grama) */
-  --primary-hover: #7DA623;    /* verde escurecido para hover */
-  --primary-light: #C4E173;    /* destaque e bordas verdes suaves */
-
-  /* Paleta secundária */
-  --secondary: #6B5C86;        /* roxo sóbrio */
-  --secondary-hover: #5A4A73;  /* hover do roxo */
-  --secondary-light: #9C8EB5;  /* roxo suave para detalhes */
-
-  /* Acentos e feedback */
-  --accent: #7F2AC7;            /* cor de destaque opcional */
-  --success: #4CAF50;
-  --warning: #FFC107;
-  --error: #C62828;
-
-  /* Elementos */
-  --border: #D6D8D2;
-  --input-bg: #FFFFFF;
-  --input-border: #D6D8D2;
-  --card-bg: #FFFFFF;
-  --shadow: rgba(0, 0, 0, 0.05);
+  If we ever want to remove these styles, we need to add an explicit border
+  color utility to any element that depends on these defaults.
+*/
+@layer base {
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: var(--color-gray-200, currentcolor);
+  }
 }
 
-body {
+@layer utilities {
+  :root {
+    /* Base */
+    --background: #ffffff; /* fundo principal suave */
+    --background-alt: #ecede9; /* cartões, inputs, áreas elevadas */
+    --foreground: #2d2b2e; /* texto principal */
+    --foreground-muted: #666468; /* texto secundário */
+
+    /* Paleta principal */
+    --primary: #97c52a; /* verde principal (grama) */
+    --primary-hover: #7da623; /* verde escurecido para hover */
+    --primary-light: #c4e173; /* destaque e bordas verdes suaves */
+
+    /* Paleta secundária */
+    --secondary: #6b5c86; /* roxo sóbrio */
+    --secondary-hover: #5a4a73; /* hover do roxo */
+    --secondary-light: #9c8eb5; /* roxo suave para detalhes */
+
+    /* Acentos e feedback */
+    --accent: #7f2ac7; /* cor de destaque opcional */
+    --success: #4caf50;
+    --warning: #ffc107;
+    --error: #c62828;
+
+    /* Elementos */
+    --border: #d6d8d2;
+    --input-bg: #ffffff;
+    --input-border: #d6d8d2;
+    --card-bg: #ffffff;
+    --shadow: rgba(0, 0, 0, 0.05);
+  }
+
+  body {
     box-sizing: content-box;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     background: var(--background);
     color: var(--foreground);
     overflow-x: hidden;
+  }
 }
 
 @layer base {

@@ -21,7 +21,7 @@ export function CondominiumCard({ condominium }: CondominiumCardProps) {
       onClick={handleCardClick}
       onKeyDown={(e) => e.key === "Enter" && handleCardClick()}
       tabIndex={0}
-      className="bg-white rounded-xl shadow-md overflow-hidden border border-gray-200 transition-all duration-300 hover:shadow-lg hover:-translate-y-1 cursor-pointer focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
+      className="bg-white rounded-xl shadow-md overflow-hidden border border-gray-200 transition-all duration-300 hover:shadow-lg hover:-translate-y-1 cursor-pointer focus:outline-hidden focus:ring-2 focus:ring-primary focus:ring-offset-2"
     >
       <div className="p-5">
         <div className="flex items-center gap-3">

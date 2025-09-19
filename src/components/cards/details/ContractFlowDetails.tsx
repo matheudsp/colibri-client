@@ -48,7 +48,7 @@ export function ContractFlowDetails({ status }: { status: string }) {
   const currentStep = statusToStep[status as keyof typeof statusToStep] || 0;
 
   return (
-    <div className="bg-white p-4 sm:p-6 rounded-xl shadow-sm border">
+    <div className="bg-white p-4 sm:p-6 rounded-xl shadow-xs border">
       <h3 className="font-bold text-lg mb-6 text-center">Etapas do Contrato</h3>
 
       <div className="flex flex-col md:flex-row justify-center items-stretch md:items-start space-y-4 md:space-y-0 md:space-x-2">

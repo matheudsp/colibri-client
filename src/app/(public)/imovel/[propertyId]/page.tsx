@@ -153,12 +153,12 @@ export default function PropertyDetailsPage() {
                   {property.title}
                 </h1>
                 {property.isAvailable ? (
-                  <div className="flex-shrink-0 flex items-center text-green-600 bg-green-100 font-bold text-xs px-2.5 py-1 rounded-full">
+                  <div className="shrink-0 flex items-center text-green-600 bg-green-100 font-bold text-xs px-2.5 py-1 rounded-full">
                     <CheckCircle2 size={14} className="mr-1.5" /> Disponível
                     para Alugar
                   </div>
                 ) : (
-                  <div className="flex-shrink-0 flex items-center text-red-600 bg-red-100 font-bold text-xs px-2.5 py-1 rounded-full">
+                  <div className="shrink-0 flex items-center text-red-600 bg-red-100 font-bold text-xs px-2.5 py-1 rounded-full">
                     <XCircle size={14} className="mr-1.5" /> Já Alugado
                   </div>
                 )}

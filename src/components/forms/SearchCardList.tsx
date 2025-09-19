@@ -121,7 +121,7 @@ export function SearchCardList({ onSelectProperty }: SearchCardListProps) {
               return (
                 <li
                   key={property.id}
-                  className={`bg-background px-4 py-3 rounded-md cursor-pointer border shadow-sm transition-all duration-100 ${
+                  className={`bg-background px-4 py-3 rounded-md cursor-pointer border shadow-xs transition-all duration-100 ${
                     selectedPropertyId === property.id
                       ? "border-primary bg-orange-300/20"
                       : "border-transparent hover:border-primary hover:bg-gray-100/60"

@@ -159,7 +159,7 @@ export function useCustomInput(props: UseCustomInputProps) {
   const inputClasses = useMemo(
     () =>
       clsx(
-        "w-full bg-transparent outline-none text-foreground placeholder:text-gray-400",
+        "w-full bg-transparent outline-hidden text-foreground placeholder:text-gray-400",
         {
           "cursor-not-allowed text-gray-700": disabled,
         },

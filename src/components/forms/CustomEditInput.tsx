@@ -101,7 +101,7 @@ export function CustomEditInput({
                             onChange={handleChange}
                             onFocus={() => setIsFocused(true)}
                             onBlur={handleBlur}
-                            className={`w-full bg-transparent outline-none placeholder-transparent pb-2 ${textColor}`}
+                            className={`w-full bg-transparent outline-hidden placeholder-transparent pb-2 ${textColor}`}
                         />
                     ) : (
                         <input
@@ -119,7 +119,7 @@ export function CustomEditInput({
                                 registration?.onChange?.(e);
                                 props.onChange?.(e);
                             }}
-                            className={`w-full bg-transparent outline-none placeholder-transparent pb-2 ${textColor}`}
+                            className={`w-full bg-transparent outline-hidden placeholder-transparent pb-2 ${textColor}`}
                         />
                     )}
                     <label

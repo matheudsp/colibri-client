@@ -135,7 +135,7 @@ export function SecurityTab() {
           }
         >
           <div className="flex items-center gap-4">
-            <div className="w-full flex-grow">
+            <div className="w-full grow">
               <CustomInput
                 id="security-email"
                 label="Seu E-mail"

@@ -100,7 +100,7 @@ export function PhotoViewModal({
 
         <div className="fixed inset-0 flex items-center justify-center p-4">
           <Dialog.Panel
-            className="relative w-full h-full max-w-6xl max-h-[90vh] flex items-center justify-center focus:outline-none"
+            className="relative w-full h-full max-w-6xl max-h-[90vh] flex items-center justify-center focus:outline-hidden"
             onTouchStart={onTouchStart}
             onTouchMove={onTouchMove}
             onTouchEnd={onTouchEnd}

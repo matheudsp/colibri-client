@@ -83,11 +83,11 @@ const tutorials = [
 const FaqItem = ({ faq }: { faq: { question: string; answer: string } }) => (
   <Disclosure
     as="div"
-    className="bg-white border border-zinc-200 rounded-lg shadow-sm"
+    className="bg-white border border-zinc-200 rounded-lg shadow-xs"
   >
     {({ open }) => (
       <>
-        <Disclosure.Button className="flex w-full justify-between items-center rounded-lg px-4 py-3 text-left text-md font-medium text-zinc-800 hover:bg-zinc-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary">
+        <Disclosure.Button className="flex w-full justify-between items-center rounded-lg px-4 py-3 text-left text-md font-medium text-zinc-800 hover:bg-zinc-50 focus:outline-hidden focus-visible:ring-2 focus-visible:ring-primary">
           <span className="w-[90%]">{faq.question}</span>
           <ChevronDownIcon
             className={`${
@@ -124,7 +124,7 @@ const TutorialCard = ({
   <motion.div
     whileHover={{ scale: 1.02, y: -4 }}
     transition={{ type: "spring", stiffness: 400, damping: 15 }}
-    className="p-6 bg-white border border-zinc-200 rounded-xl cursor-pointer group shadow-sm hover:shadow-lg hover:border-primary/50"
+    className="p-6 bg-white border border-zinc-200 rounded-xl cursor-pointer group shadow-xs hover:shadow-lg hover:border-primary/50"
   >
     <tutorial.icon className="h-10 w-10 text-primary mb-4 transition-transform duration-300 group-hover:scale-110" />
     <h3 className="text-lg font-bold text-zinc-900">{tutorial.title}</h3>
@@ -146,7 +146,7 @@ export default function SupportPage() {
 
   const tabStyles = ({ selected }: { selected: boolean }) =>
     `w-full whitespace-nowrap py-3 px-5 text-sm font-bold leading-5 rounded-lg
-     focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-sky-300 focus-visible:ring-white 
+     focus:outline-hidden focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-sky-300 focus-visible:ring-white 
      transition-all duration-200
      ${
        selected
@@ -199,7 +199,7 @@ export default function SupportPage() {
                     placeholder="Buscar por uma pergunta..."
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
-                    className="w-full rounded-lg border border-zinc-300 bg-white py-3 pl-12 pr-4 shadow-sm placeholder:text-zinc-500 focus:border-primary focus:ring-2 focus:ring-primary/40"
+                    className="w-full rounded-lg border border-zinc-300 bg-white py-3 pl-12 pr-4 shadow-xs placeholder:text-zinc-500 focus:border-primary focus:ring-2 focus:ring-primary/40"
                   />
                 </div>
                 <div className="space-y-4 max-w-3xl mx-auto">
@@ -273,14 +273,14 @@ export default function SupportPage() {
 
                 <div className="mt-10 grid grid-cols-1 md:grid-cols-2 gap-8">
                   {/* Card de E-mail */}
-                  <div className="bg-white rounded-lg border border-zinc-200 shadow-sm hover:shadow-lg transition-shadow flex flex-col items-center text-center p-8">
+                  <div className="bg-white rounded-lg border border-zinc-200 shadow-xs hover:shadow-lg transition-shadow flex flex-col items-center text-center p-8">
                     <div className="bg-primary/10 rounded-full p-4">
                       <EnvelopeIcon className="h-10 w-10 text-primary" />
                     </div>
                     <h3 className="mt-4 text-xl font-bold text-zinc-800">
                       Fale por E-mail
                     </h3>
-                    <p className="mt-2 text-sm text-zinc-600 flex-grow">
+                    <p className="mt-2 text-sm text-zinc-600 grow">
                       Ideal para dúvidas detalhadas e envio de anexos.
                       Respondemos em até 24 horas úteis.
                     </p>
@@ -292,14 +292,14 @@ export default function SupportPage() {
                     </a>
                   </div>
 
-                  <div className="bg-white rounded-lg border border-zinc-200 shadow-sm hover:shadow-lg transition-shadow flex flex-col items-center text-center p-8">
+                  <div className="bg-white rounded-lg border border-zinc-200 shadow-xs hover:shadow-lg transition-shadow flex flex-col items-center text-center p-8">
                     <div className="bg-green-100 rounded-full p-4">
                       <ChatBubbleLeftRightIcon className="h-10 w-10 text-green-600" />
                     </div>
                     <h3 className="mt-4 text-xl font-bold text-zinc-800">
                       Converse no WhatsApp
                     </h3>
-                    <p className="mt-2 text-sm text-zinc-600 flex-grow">
+                    <p className="mt-2 text-sm text-zinc-600 grow">
                       Perfeito para questões rápidas. Atendimento de Seg-Sex,
                       das 9h às 18h.
                     </p>

@@ -17,9 +17,9 @@ function FeatureCard({
 }) {
   return (
     <div
-      className={`absolute bg-slate-50/80 backdrop-blur-sm p-4 rounded-xl shadow-lg flex items-center gap-4 w-11/12 sm:w-auto ${className}`}
+      className={`absolute bg-slate-50/80 backdrop-blur-xs p-4 rounded-xl shadow-lg flex items-center gap-4 w-11/12 sm:w-auto ${className}`}
     >
-      <div className="bg-primary flex-shrink-0 w-12 h-12 rounded-full flex items-center justify-center">
+      <div className="bg-primary shrink-0 w-12 h-12 rounded-full flex items-center justify-center">
         {icon}
       </div>
       <div>
@@ -37,7 +37,7 @@ export function BenefitsSection() {
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-2 gap-y-12 lg:gap-x-16 items-center">
-      <div className="relative w-full aspect-[4/5] max-w-md mx-auto">
+      <div className="relative w-full aspect-4/5 max-w-md mx-auto">
         <Image
           src="https://images.unsplash.com/photo-1580587771525-78b9dba3b914?q=80&w=1974&auto=format&fit=crop"
           alt="Casa moderna"
@@ -67,7 +67,7 @@ export function BenefitsSection() {
             onClick={() => setActiveTab("tenants")}
             className={`px-4 py-2 text-sm font-semibold rounded-md transition-colors ${
               activeTab === "tenants"
-                ? "bg-white text-primary shadow"
+                ? "bg-white text-primary shadow-sm"
                 : "text-gray-600"
             }`}
           >
@@ -77,7 +77,7 @@ export function BenefitsSection() {
             onClick={() => setActiveTab("landlords")}
             className={`px-4 py-2 text-sm font-semibold rounded-md transition-colors ${
               activeTab === "landlords"
-                ? "bg-white text-primary shadow"
+                ? "bg-white text-primary shadow-sm"
                 : "text-gray-600"
             }`}
           >

@@ -13,7 +13,7 @@ const PartyItem = ({
   <div>
     <p className="text-sm text-gray-500">{role}</p>
     <div className="flex items-center gap-3 mt-1">
-      <div className="bg-primary p-2 rounded-xl flex-shrink-0">
+      <div className="bg-primary p-2 rounded-xl shrink-0">
         <User className="w-6 h-6 text-white" />
       </div>
 
@@ -31,7 +31,7 @@ const PartyItem = ({
 
 export function ContractPartiesDetails({ contract }: { contract: Contract }) {
   return (
-    <div className="bg-white p-5 rounded-xl shadow-sm border">
+    <div className="bg-white p-5 rounded-xl shadow-xs border">
       <h2 className="font-bold text-xl mb-4 border-b pb-2">
         Partes Envolvidas
       </h2>
