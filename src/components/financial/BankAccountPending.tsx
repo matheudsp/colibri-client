@@ -79,7 +79,7 @@ export function BankAccountPending({ account }: BankAccountPendingProps) {
 
   return (
     <div className="overflow-hidden">
-      <div className="p-6 border-b border-gray-200 flex flex-col justify-center text-center">
+      <div className="p-6  border-gray-200 flex flex-col justify-center text-center">
         <div className="w-12 h-12 mx-auto rounded-full flex items-center justify-center shadow-xs mb-3">
           <FileBadge2 className="text-yellow-600" size={24} />
         </div>
@@ -87,16 +87,18 @@ export function BankAccountPending({ account }: BankAccountPendingProps) {
           Verificação Pendente
         </h3>
         <p className="text-sm text-gray-600 mt-1">
-          Sua conta está em processo de verificação. Conclua as etapas
-          necessárias para começar a receber.
+          Sua conta está em processo de verificação. Se houver algum documento
+          pendente, ele aparecerá abaixo. Caso contrário, apenas aguarde nossa
+          confirmação por e-mail.
         </p>
         {onboardingUrl && (
           <div className="mt-4 text-xs text-gray-600 bg-blue-50 p-3 rounded-lg flex items-center gap-2 border border-blue-200">
             <AlertCircle size={28} className="text-blue-500 shrink-0" />
             <span>
-              Estaumos quase lá, agora é neccessário verificar sua identidade.
+              Estamos quase lá, agora é neccessário verificar sua identidade.
               Este é um procedimento padrão para garantir a legitimidade das
-              transações.
+              transações. Se já realizou o processo de verificação, não há
+              necessidade de realiza-lo novamente, apenas aguarde.
             </span>
           </div>
         )}
@@ -110,49 +112,41 @@ export function BankAccountPending({ account }: BankAccountPendingProps) {
         )}
       </div>
 
-      <div className="border-t border-gray-200 py-6 md:px-6">
-        <h3 className="text-lg font-semibold text-gray-800">
-          Documentos Necessários para Verificação
-        </h3>
-        <p className="text-sm text-gray-500 mt-1 mb-4">
-          Para ativar sua conta de pagamentos e garantir a segurança de suas
-          transações, precisamos que você envie os seguintes documentos. Nossa
-          equipe irá analisá-los em breve.
-        </p>
-        {isLoadingDocs ? (
-          <div className="flex justify-center">
-            <Loader2 className="animate-spin text-primary" />
-          </div>
-        ) : pendingDocs.length > 0 ? (
-          <ul className="space-y-3">
-            {pendingDocs.map((doc) => (
-              <li
-                key={doc.type}
-                className="flex items-center justify-between p-3 rounded-lg bg-gray-50 border"
-              >
-                <span className="font-medium">{doc.title}</span>
-                <CustomButton
-                  onClick={() => handleUploadClick(doc.type)}
-                  disabled={!!isUploading}
-                  ghost
+      {!isLoadingDocs && pendingDocs.length > 0 && (
+        <div className="border-t border-gray-200 py-6 px-4 sm:px-6">
+          <h4 className="text-base font-semibold text-gray-800 text-center mb-4">
+            Ações Necessárias
+          </h4>
+          <div className="max-w-lg mx-auto">
+            <ul className="space-y-3">
+              {pendingDocs.map((doc) => (
+                <li
+                  key={doc.type}
+                  className="flex items-center justify-between p-3 rounded-lg bg-gray-50 border"
                 >
-                  {isUploading === doc.type ? (
-                    <Loader2 className="animate-spin" />
-                  ) : (
-                    <>
-                      <Upload size={16} className="mr-2" /> Enviar
-                    </>
-                  )}
-                </CustomButton>
-              </li>
-            ))}
-          </ul>
-        ) : (
-          <p className="text-sm text-gray-500">
-            Nenhum documento adicional é necessário no momento.
-          </p>
-        )}
-      </div>
+                  <span className="font-medium text-sm text-gray-800">
+                    {doc.title}
+                  </span>
+                  <CustomButton
+                    onClick={() => handleUploadClick(doc.type)}
+                    disabled={!!isUploading}
+                    ghost
+                  >
+                    {isUploading === doc.type ? (
+                      <Loader2 className="animate-spin" />
+                    ) : (
+                      <>
+                        <Upload size={16} className="mr-2" /> Enviar
+                      </>
+                    )}
+                  </CustomButton>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      )}
+
       <input
         type="file"
         ref={fileInputRef}

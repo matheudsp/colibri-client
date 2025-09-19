@@ -203,9 +203,9 @@ export function PropertyCard({
   };
 
   const cardContent = (
-    <div className=" overflow-hidden transition-all duration-300 flex flex-col h-full group">
+    <div className="overflow-hidden transition-all duration-300 flex flex-col h-full group">
       <div
-        className="relative w-full aspect-3/2"
+        className="relative w-full aspect-[3/2] overflow-hidden rounded-md"
         onTouchStart={onTouchStart}
         onTouchMove={onTouchMove}
         onTouchEnd={onTouchEnd}
@@ -215,7 +215,7 @@ export function PropertyCard({
             src={property.photos[currentImage].url}
             alt={`Foto de ${property.title}`}
             fill
-            className="object-cover rounded-md"
+            className="object-cover rounded-md transition-transform duration-300 transform group-hover:scale-105 filter group-hover:brightness-75"
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
           />
         ) : (

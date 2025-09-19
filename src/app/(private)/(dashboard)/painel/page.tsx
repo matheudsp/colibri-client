@@ -78,9 +78,14 @@ export default function Painel() {
     <div className="min-h-svh flex flex-col items-center pt-8 md:pt-14 px-4 pb-24 ">
       <div className="w-full max-w-7xl mx-auto space-y-4">
         <div className="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
-          <h1 className="text-2xl font-semibold text-gray-900">
-            Painel de Analytics
-          </h1>
+          <div className="text-start mb-8">
+            <h1 className="text-3xl sm:text-4xl font-bold text-black">
+              Painel de Análise
+            </h1>
+            <p className="text-gray-500 mt-1">
+              Visualize e acompanhe suas métricas por gráficos.
+            </p>
+          </div>
           <PeriodSelector
             selectedPeriod={selectedPeriod}
             onPeriodChange={setSelectedPeriod}

@@ -23,6 +23,7 @@ import { useUserStore } from "@/stores/userStore";
 import { VerificationService } from "@/services/domains/verificationService";
 import { OtpVerificationModal } from "@/components/modals/verificationModals/OtpVerificationModal";
 import { VerificationContexts } from "../../../../constants/verification-contexts";
+import { EmptyCard } from "@/components/common/EmptyCard";
 
 export default function DashboardPropertiesPage() {
   const { searchValue } = useSearch();
@@ -163,7 +164,7 @@ export default function DashboardPropertiesPage() {
     <div className="min-h-svh flex flex-col items-center pt-8 md:pt-14 px-4 pb-24 ">
       <div className="w-full max-w-7xl mx-auto">
         <div className="text-start mb-8">
-          <h1 className="text-3xl sm:text-4xl font-bold text-gray-800">
+          <h1 className="text-3xl sm:text-4xl font-bold text-black">
             {pageContent.title}
           </h1>
           <p className="text-gray-500 mt-1">{pageContent.subtitle}</p>
@@ -178,17 +179,12 @@ export default function DashboardPropertiesPage() {
               <PropertyCardSkeleton variant="dashboard" />
             </div>
           ) : properties.length === 0 ? (
-            <div className="flex flex-col items-center justify-center gap-3 text-center mt-10 p-6 bg-white rounded-lg shadow-xs">
-              {pageContent.emptyIcon}
-              <p className="text-gray-600 font-semibold">
-                {pageContent.emptyTitle}
-              </p>
-              {!searchValue && (
-                <p className="text-sm text-gray-500">
-                  {pageContent.emptySubtitle}
-                </p>
-              )}
-            </div>
+            <EmptyCard
+              icon={pageContent.emptyIcon}
+              title={pageContent.emptyTitle}
+              subtitle={pageContent.emptySubtitle}
+              className="border"
+            />
           ) : (
             <div>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 pb-10">
