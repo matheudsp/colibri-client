@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, ReactNode } from "react";
+import { ReactNode } from "react";
 import clsx from "clsx";
 import { motion, AnimatePresence, type Variants } from "framer-motion";
 
@@ -15,20 +15,18 @@ export interface TabItem {
 interface TabbedInterfaceProps {
   tabs: TabItem[];
   title?: string;
-  initialTabId?: string;
   level?: number;
+  activeTabId: string;
+  onTabChange: (id: string) => void;
 }
 
 export function TabbedInterface({
   tabs,
   title,
-  initialTabId,
   level = 0,
+  activeTabId,
+  onTabChange,
 }: TabbedInterfaceProps) {
-  const [activeTabId, setActiveTabId] = useState(
-    initialTabId || (tabs && tabs.length > 0 ? tabs[0].id : "")
-  );
-
   if (!tabs || tabs.length === 0) return null;
 
   const activeTab = tabs.find((tab) => tab.id === activeTabId);
@@ -69,7 +67,7 @@ export function TabbedInterface({
           {tabs.map((tab) => (
             <button
               key={tab.id}
-              onClick={() => setActiveTabId(tab.id)}
+              onClick={() => onTabChange(tab.id)}
               className={tabButtonClasses(activeTabId === tab.id)}
               aria-selected={activeTabId === tab.id}
               role="tab"
@@ -99,6 +97,8 @@ export function TabbedInterface({
                     <TabbedInterface
                       tabs={activeTab.subTabs}
                       level={level + 1}
+                      onTabChange={() => {}}
+                      activeTabId={activeTab.subTabs[0]?.id}
                     />
                   </div>
                 )}

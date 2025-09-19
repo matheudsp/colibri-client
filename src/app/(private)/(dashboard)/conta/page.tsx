@@ -5,15 +5,17 @@ import { TabbedInterface, TabItem } from "@/components/common/TabbedInterface";
 
 import { useCurrentUser } from "@/hooks/useCurrentUser";
 import { Roles } from "@/constants";
-import { useMemo } from "react";
+import { useCallback, useMemo } from "react";
 import { AccountTab } from "@/components/tabs/AccountTab";
 import { SecurityTab } from "@/components/tabs/SecurityTab";
 import { PaymentAccountTab } from "@/components/tabs/PaymentAccountTab";
-// import { TransfersTab } from "@/components/tabs/TransferTab";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 export default function AccountPage() {
   const { role, loading: isRoleLoading } = useCurrentUser();
-
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
   const allAccountTabs: TabItem[] = useMemo(
     () => [
       {
@@ -30,7 +32,7 @@ export default function AccountPage() {
       },
 
       {
-        id: "payment-account",
+        id: "conta-de-pagamento",
         title: "Conta de Pagamento",
         icon: <Wallet size={18} />,
         content: <PaymentAccountTab />,
@@ -51,12 +53,31 @@ export default function AccountPage() {
     }
 
     return allAccountTabs.filter((tab) => {
-      if (tab.id === "payment-account") {
+      if (tab.id === "conta-de-pagamento") {
         return role === Roles.LOCADOR || role === Roles.ADMIN;
       }
       return true;
     });
   }, [role, isRoleLoading, allAccountTabs]);
+
+  const activeTabId = useMemo(() => {
+    const tabParam = searchParams.get("aba");
+    const isTabAccessible = accessibleTabs.some((tab) => tab.id === tabParam);
+
+    if (isTabAccessible) {
+      return tabParam;
+    }
+    return accessibleTabs.length > 0 ? accessibleTabs[0].id : undefined;
+  }, [searchParams, accessibleTabs]);
+
+  const handleTabChange = useCallback(
+    (tabId: string) => {
+      const params = new URLSearchParams(searchParams.toString());
+      params.set("aba", tabId);
+      router.push(`${pathname}?${params.toString()}`);
+    },
+    [pathname, router, searchParams]
+  );
 
   if (isRoleLoading) {
     return (
@@ -69,7 +90,18 @@ export default function AccountPage() {
   return (
     <div className="min-h-svh flex flex-col items-center pt-8 md:pt-14 px-4 pb-24 ">
       <div className="w-full max-w-5xl mx-auto">
-        <TabbedInterface tabs={accessibleTabs} title="Minha Conta" />
+        {activeTabId ? (
+          <TabbedInterface
+            tabs={accessibleTabs}
+            activeTabId={activeTabId}
+            onTabChange={handleTabChange}
+            title="Minha Conta"
+          />
+        ) : (
+          <p className="text-center text-muted-foreground">
+            Nenhuma opção disponível para sua conta.
+          </p>
+        )}
       </div>
     </div>
   );
