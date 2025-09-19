@@ -59,7 +59,7 @@ export function Header({
         className={` fixed z-50 top-0 w-full flex items-center justify-center ${
           isScrolledOrSearch
             ? "bg-white/90 backdrop-blur-xs border-b"
-            : "bg-secondary"
+            : "bg-secondary-hover"
         }`}
       >
         <div
@@ -245,7 +245,7 @@ export function Header({
                     </div>
                   ) : (
                     <>
-                      <div className="flex flex-col items-center gap-3 rounded-lg p-4">
+                      <div className="flex flex-col w-full items-center gap-3 rounded-lg p-4">
                         <div className="flex w-full items-center justify-center gap-3">
                           <Link
                             href="/entrar"

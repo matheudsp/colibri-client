@@ -32,7 +32,7 @@ export default function AccountPage() {
       },
 
       {
-        id: "conta-de-pagamento",
+        id: "conta-de-pagamentos",
         title: "Conta de Pagamento",
         icon: <Wallet size={18} />,
         content: <PaymentAccountTab />,
@@ -53,7 +53,7 @@ export default function AccountPage() {
     }
 
     return allAccountTabs.filter((tab) => {
-      if (tab.id === "conta-de-pagamento") {
+      if (tab.id === "conta-de-pagamentos") {
         return role === Roles.LOCADOR || role === Roles.ADMIN;
       }
       return true;

@@ -49,8 +49,6 @@ export function PaymentAccountTab() {
   }
 
   const renderContent = () => {
-    // CORREÇÃO APLICADA AQUI:
-    // Verifica se a conta ou, mais importante, se a chave PIX (bankAccount) não existe.
     if (!account || !account.bankAccount) {
       return <BankAccountOnboarding onSuccess={fetchData} />;
     }

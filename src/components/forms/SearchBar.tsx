@@ -54,7 +54,7 @@ export function SearchBar() {
       <div className="relative w-full md:w-36 h-14 md:h-full ">
         <button
           onClick={() => setIsTransactionOpen(!isTransactionOpen)}
-          className={`${baseButtonClass} rounded-full md:rounded-l-full md:rounded-r-none`}
+          className={`${baseButtonClass} rounded-full md:rounded-l-full md:rounded-r-none cursor-pointer`}
         >
           <span className="font-medium mx-auto text-sm  text-gray-800">
             {transaction === "LOCACAO" ? "Locação" : "Venda"}
@@ -66,7 +66,7 @@ export function SearchBar() {
           />
         </button>
         {isTransactionOpen && (
-          <div className="absolute top-full mt-2 w-full bg-white py-1 divide-y rounded-md shadow-xs shadow-black/70 border z-10">
+          <div className="absolute top-full mt-2 w-full bg-white py-1 divide-y rounded-md shadow-xs shadow-black/70 border z-10 ">
             {transactionOptions.map((opt) => (
               <div
                 key={opt.id}
@@ -85,10 +85,10 @@ export function SearchBar() {
 
       <div className="h-full border-x border-gray-200 self-center hidden md:block "></div>
 
-      <div className="relative w-full md:w-40 h-14 md:h-full">
+      <div className="relative w-full md:w-40 h-14 md:h-full ">
         <button
           onClick={() => setIsPropertyTypeOpen(!isPropertyTypeOpen)}
-          className={`${baseButtonClass} rounded-full md:rounded-none`}
+          className={`${baseButtonClass} rounded-full md:rounded-none cursor-pointer`}
         >
           <span
             className={`${
@@ -106,7 +106,7 @@ export function SearchBar() {
           />
         </button>
         {isPropertyTypeOpen && (
-          <div className="absolute top-full mt-2 w-full bg-white py-1 divide-y rounded-md shadow-xs shadow-black/70 border z-10">
+          <div className="absolute top-full mt-2 w-full bg-white py-1 divide-y rounded-md shadow-xs shadow-black/70 border z-10 ">
             {propertyTypeOptions.map((opt) => (
               <div
                 key={opt.id}
@@ -140,8 +140,8 @@ export function SearchBar() {
           onClick={handleSearch}
           fontSize="text-sm xs:font-bold "
           rounded="rounded-full md:rounded-none md:rounded-r-full"
-          className="w-full md:w-auto md:py-0 py-4 h-full px-8 md:border-white md:border"
-          color="bg-primary hover:bg-secondary-hover md:bg-accent"
+          className="w-full md:w-auto md:py-0 py-4 h-full px-8 md:border-white md:border cursor-pointer"
+          color="bg-primary hover:bg-secondary-hover md:bg-black/25"
           textColor="text-secondary md:text-white "
         >
           Buscar

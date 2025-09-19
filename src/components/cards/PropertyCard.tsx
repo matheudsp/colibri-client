@@ -91,7 +91,7 @@ function DashboardActions({
   if (!showAdminButtons) return null;
 
   return (
-    <div className="mt-4 pt-4 border-t space-y-3">
+    <div className="mt-2 pt-2 border-t space-y-3">
       <CustomSwitch
         label="Disponível"
         tip="Ative para que o imóvel apareça nas buscas públicas. Desative para ocultá-lo."
@@ -203,7 +203,7 @@ export function PropertyCard({
   };
 
   const cardContent = (
-    <div className="bg-white border border-gray-200 rounded-md overflow-hidden transition-all duration-300 shadow-md flex flex-col h-full group">
+    <div className=" overflow-hidden transition-all duration-300 flex flex-col h-full group">
       <div
         className="relative w-full aspect-3/2"
         onTouchStart={onTouchStart}
@@ -215,11 +215,11 @@ export function PropertyCard({
             src={property.photos[currentImage].url}
             alt={`Foto de ${property.title}`}
             fill
-            className="object-cover"
+            className="object-cover rounded-md"
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
           />
         ) : (
-          <div className="w-full h-full bg-gray-200 flex items-center justify-center">
+          <div className="w-full h-full bg-gray-200 flex rounded-md items-center justify-center">
             <Home className="w-16 h-16 text-gray-400" />
           </div>
         )}
@@ -271,7 +271,7 @@ export function PropertyCard({
         )}
       </div>
 
-      <div className="p-4 flex flex-col grow">
+      <div className="p-2 flex flex-col grow">
         <p className="text-sm text-primary font-semibold">
           {getPropertyTypeLabel(property.propertyType)}
         </p>
@@ -286,7 +286,7 @@ export function PropertyCard({
         </p>
         <div className="grow">
           {variant === "public" && (
-            <div className="grid grid-cols-2 sm:grid-cols-2 font-medium gap-x-4 gap-y-2 text-sm text-gray-600 my-3 border-t border-b py-3">
+            <div className="grid grid-cols-2 sm:grid-cols-2 font-medium gap-x-4 gap-y-2 text-sm text-gray-600 my-1 border-t border-b py-3">
               <span className="flex items-center gap-2 ">
                 <Maximize
                   className="text-white bg-primary p-1 rotate-45 rounded-lg"
@@ -310,9 +310,9 @@ export function PropertyCard({
               </span>
             </div>
           )}
-          <div className="mt-3 flex justify-between items-center">
+          <div className="mt-1 flex justify-between items-center">
             <span className="text-gray-500 text-sm">Aluguel</span>
-            <span className="font-bold text-gray-800 text-lg">
+            <span className="font-bold text-gray-800 text-base">
               {formatCurrency(property.value)}
             </span>
           </div>

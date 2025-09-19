@@ -51,12 +51,12 @@ export function BankAccountOnboarding({
   const handleInitialSubmit = async (data: PixKeyFormValues) => {
     setLoading(true);
     try {
-      await VerificationService.request(
-        VerificationContexts.CREATE_BANK_ACCOUNT
-      );
+      // await VerificationService.request(
+      //   VerificationContexts.CREATE_BANK_ACCOUNT
+      // );
       setPendingData(data);
       setIsOtpModalOpen(true);
-      toast.info("Enviamos um código de verificação para o seu e-mail.");
+      // toast.info("Enviamos um código de verificação para o seu e-mail.");
     } catch (error) {
       toast.error("Falha ao solicitar código de verificação", {
         description: extractAxiosError(error),
