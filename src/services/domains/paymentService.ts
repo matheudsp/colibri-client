@@ -32,7 +32,7 @@ export const PaymentService = {
       const response = await api.get(API_ROUTES.PAYMENTS.USER_PAYMENTS, {
         params: filters,
       });
-      return response;
+      return response.data;
     } catch (error) {
       throw new Error(extractAxiosError(error));
     }

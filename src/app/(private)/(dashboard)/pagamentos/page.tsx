@@ -90,12 +90,19 @@ export default function MyPaymentsPage() {
     setLoading(true);
     try {
       const response = await PaymentService.findUserPayments(currentFilters);
-      setPayments(response.data);
-    } catch (error: unknown) {
+
+      const paymentsList = Array.isArray(response?.data) ? response.data : [];
+
+      setPayments(paymentsList);
+
+      // Se quiser usar meta/page em outras partes:
+      //const totalFromResponse = response?.meta?.resource?.total;
+    } catch (error) {
       const errorMessage = extractAxiosError(error);
       toast.error("Falha ao buscar pagamentos", {
         description: errorMessage,
       });
+      setPayments([]); // garante consistência no state
     } finally {
       setLoading(false);
     }
@@ -238,6 +245,7 @@ export default function MyPaymentsPage() {
               type="date"
               icon={<CalendarIcon size={20} />}
               value={localFilters.startDate || ""}
+              placeholder="mm/dd/yyyy"
               onChange={(value) =>
                 setLocalFilters((prev) => ({ ...prev, startDate: value }))
               }
@@ -247,6 +255,7 @@ export default function MyPaymentsPage() {
               label="Vencimento Até"
               type="date"
               icon={<CalendarIcon size={20} />}
+              placeholder="mm/dd/yyyy"
               value={localFilters.endDate || ""}
               onChange={(value) =>
                 setLocalFilters((prev) => ({ ...prev, endDate: value }))

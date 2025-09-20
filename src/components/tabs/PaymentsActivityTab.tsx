@@ -142,7 +142,9 @@ export function PaymentsActivityTab() {
       setLoading(true);
       try {
         const today = new Date().toISOString();
-
+        // const futureDate = new Date();
+        // futureDate.setMonth(futureDate.getMonth() + 6);
+        // const endDate = futureDate.toISOString();
         const response = await PaymentService.findUserPayments({
           endDate: today,
           limit: limitFromUrl,

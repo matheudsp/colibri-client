@@ -164,8 +164,8 @@ export default function SidebarNav() {
                     ? "justify-center px-0 py-2"
                     : "justify-start px-3 py-2",
                   isActive
-                    ? "bg-primary text-secondary/90 scale-105 shadow-md"
-                    : "text-white/90 hover:bg-secondary-hover hover:text-white hover:scale-105"
+                    ? "bg-primary-hover text-white scale-105 shadow-md"
+                    : "text-gray-200/90 hover:bg-black/20 hover:scale-105"
                 )}
               >
                 <div
@@ -179,7 +179,11 @@ export default function SidebarNav() {
 
                 {/* render label only when expanded to avoid layout shifts and reserved space */}
                 {!collapsed && (
-                  <span className="ml-2 text-sm font-semibold tracking-wide truncate">
+                  <span
+                    className={`ml-2 text-sm tracking-wide truncate font-medium ${
+                      isActive && "font-semibold"
+                    }`}
+                  >
                     {item.label}
                   </span>
                 )}
@@ -202,17 +206,15 @@ export default function SidebarNav() {
             "flex items-center transition-all duration-200 ease-in-out rounded-lg w-full",
             collapsed ? "justify-center px-0 py-2" : "justify-start px-3 py-2",
             myAccountIsActive
-              ? "bg-primary text-secondary/90 scale-105 shadow-md"
-              : "text-white/90 hover:bg-secondary-hover hover:text-white hover:scale-105"
+              ? "bg-primary-hover text-secondary/90 scale-105 shadow-md"
+              : "text-white/90 hover:bg-black/20 hover:text-white hover:scale-105"
           )}
         >
           <div
             className={clsx(
               "flex items-center justify-center rounded-full",
-              "w-10 h-10",
-              myAccountIsActive
-                ? "bg-secondary text-primary"
-                : "bg-primary text-white"
+              "w-8 h-8 text-white",
+              myAccountIsActive ? "bg-secondary" : "bg-primary-hover "
             )}
           >
             <span
@@ -226,7 +228,7 @@ export default function SidebarNav() {
           </div>
 
           {!collapsed && (
-            <span className="ml-2 text-sm font-semibold tracking-wide truncate">
+            <span className="ml-2 text-sm font-normal text-white tracking-wide truncate">
               Minha Conta
             </span>
           )}

@@ -1,8 +1,6 @@
-// src/components/forms/CustomInput.tsx
-
 "use client";
 
-import { forwardRef, useState } from "react";
+import React, { forwardRef, useState } from "react";
 import { useCustomInput, UseCustomInputProps } from "@/hooks/useCustomInput";
 import { Loader2, Eye, EyeOff } from "lucide-react";
 import clsx from "clsx";
@@ -20,7 +18,6 @@ export const CustomInput = forwardRef<HTMLInputElement, CustomInputProps>(
       error,
       disabled,
       displayValue,
-      // isFocused,
       baseClasses,
       containerClasses,
       inputClasses: originalInputClasses,
@@ -32,15 +29,26 @@ export const CustomInput = forwardRef<HTMLInputElement, CustomInputProps>(
       ...restProps
     } = useCustomInput(props);
 
+    /* eslint-disable @typescript-eslint/no-unused-vars */ /* eslint-disable  @typescript-eslint/no-explicit-any */
+
+    const { isFocused: _isFocused, ...inputProps } = restProps as Record<
+      string,
+      any
+    >;
+
     const [showPassword, setShowPassword] = useState(false);
     const isPassword = props.type === "password";
-    const inputType = isPassword
-      ? showPassword
-        ? "text"
-        : "password"
-      : props.type;
+    const inputType =
+      isPassword && !showPassword ? "password" : props.type ?? "text";
 
-    const inputClasses = clsx(originalInputClasses);
+    const inputClasses = clsx(
+      originalInputClasses,
+
+      "transition duration-150 ease-in-out",
+      "focus:outline-none focus-visible:ring-2 focus-visible:ring-primary",
+      disabled || isLoading ? "opacity-60 cursor-not-allowed" : "cursor-text"
+    );
+
     return (
       <div className={baseClasses}>
         {label && (
@@ -48,36 +56,58 @@ export const CustomInput = forwardRef<HTMLInputElement, CustomInputProps>(
             {label}
           </label>
         )}
+
         <div className={containerClasses}>
           {icon && <div className={iconContainerClasses}>{icon}</div>}
+
           <input
-            {...restProps}
+            {...(inputProps as React.InputHTMLAttributes<HTMLInputElement>)}
             id={id}
             ref={ref}
             value={displayValue}
             onFocus={handleFocus}
-            type={inputType}
             onBlur={handleBlur}
             onChange={handleChange}
             disabled={disabled || isLoading}
+            aria-disabled={disabled || isLoading ? true : undefined}
+            type={inputType}
             className={inputClasses}
             placeholder={props.placeholder}
-            aria-invalid={!!error}
+            aria-invalid={!!error || undefined}
             aria-describedby={error ? `${id}-error` : undefined}
           />
+
           {isPassword && (
             <button
               type="button"
-              onClick={() => setShowPassword(!showPassword)}
-              className="flex items-center justify-center pl-2 pr-3 text-gray-500 hover:text-primary transition-colors focus:outline-hidden focus:ring-2 focus:ring-primary rounded-r-md"
+              onClick={() => setShowPassword((s) => !s)}
+              aria-pressed={showPassword}
               aria-label={showPassword ? "Ocultar senha" : "Mostrar senha"}
+              title={showPassword ? "Ocultar senha" : "Mostrar senha"}
+              className={clsx(
+                "flex items-center justify-center px-2 py-1 ml-2 rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-primary",
+                disabled || isLoading
+                  ? "opacity-50 pointer-events-none"
+                  : "hover:text-primary"
+              )}
             >
-              {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+              {showPassword ? (
+                <EyeOff size={18} aria-hidden />
+              ) : (
+                <Eye size={18} aria-hidden />
+              )}
             </button>
           )}
 
-          {isLoading && <Loader2 className="animate-spin text-primary ml-2" />}
+          {isLoading && (
+            <Loader2
+              className="animate-spin ml-2"
+              size={18}
+              aria-hidden="true"
+            />
+          )}
         </div>
+
         {error && (
           <p
             id={`${id}-error`}
