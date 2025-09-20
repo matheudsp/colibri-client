@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-
 import BottomNav from "../../../components/layout/BottomNav";
 import SidebarNav from "../../../components/layout/SidebarNav";
 import { SearchProvider } from "../../../contexts/SearchContext";
@@ -19,9 +18,18 @@ export default function DashboardLayout({
 
   return (
     <SearchProvider value={{ searchValue, handleSearchChange }}>
-      <div className="min-h-svh w-full flex flex-col md:flex-row overflow-x-hidden">
+      <div className="min-h-screen w-full flex flex-col md:flex-row">
         <SidebarNav />
-        <main className="flex-1 ml-0 md:ml-36">{children}</main>
+
+        {/* md:ml-48 */}
+        <main
+          className="flex-1 
+        
+         transition-all duration-300"
+        >
+          {children}
+        </main>
+
         <BottomNav />
       </div>
     </SearchProvider>
