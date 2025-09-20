@@ -1,6 +1,6 @@
 "use client";
 
-import { Shield, Wallet, User, Loader2 } from "lucide-react";
+import { Shield, Wallet, User, Loader2, BanknoteArrowDown } from "lucide-react";
 import { TabbedInterface, TabItem } from "@/components/common/TabbedInterface";
 
 import { useCurrentUser } from "@/hooks/useCurrentUser";
@@ -10,6 +10,7 @@ import { AccountTab } from "@/components/tabs/AccountTab";
 import { SecurityTab } from "@/components/tabs/SecurityTab";
 import { PaymentAccountTab } from "@/components/tabs/PaymentAccountTab";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { PaymentsActivityTab } from "@/components/tabs/PaymentsActivityTab";
 
 export default function AccountPage() {
   const { role, loading: isRoleLoading } = useCurrentUser();
@@ -37,12 +38,12 @@ export default function AccountPage() {
         icon: <Wallet size={18} />,
         content: <PaymentAccountTab />,
       },
-      // {
-      //   id: "transfers",
-      //   title: "Transferências",
-      //   icon: <BanknoteArrowDown size={16} />,
-      //   content: <TransfersTab />,
-      // },
+      {
+        id: "atividade-de-pagamentos",
+        title: "Atividades de Pagamento",
+        icon: <BanknoteArrowDown size={16} />,
+        content: <PaymentsActivityTab />,
+      },
     ],
     []
   );

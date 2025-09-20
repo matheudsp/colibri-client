@@ -8,7 +8,7 @@ export interface RegisterPaymentData {
   amountPaid?: number;
   paidAt?: string;
 }
-export interface PaymentFilters {
+export interface PaymentFilters extends ListPaymentParams {
   propertyId?: string;
   status?: PaymentStatus;
   tenantId?: string;
@@ -16,6 +16,10 @@ export interface PaymentFilters {
   endDate?: string;
 }
 
+export interface ListPaymentParams {
+  page?: number;
+  limit?: number;
+}
 export const PaymentService = {
   /**
    * Busca todos os pagamentos relacionados ao utilizador logado, com filtros opcionais.
@@ -28,7 +32,7 @@ export const PaymentService = {
       const response = await api.get(API_ROUTES.PAYMENTS.USER_PAYMENTS, {
         params: filters,
       });
-      return response.data;
+      return response;
     } catch (error) {
       throw new Error(extractAxiosError(error));
     }

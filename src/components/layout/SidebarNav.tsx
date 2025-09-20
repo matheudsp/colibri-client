@@ -61,7 +61,7 @@ export default function SidebarNav() {
     try {
       const raw = localStorage.getItem(LOCALSTORAGE_KEY);
       setCollapsed(raw === "true");
-    } catch (e) {
+    } catch {
       // ignore (e.g. SSR or privacy mode)
     }
   }, []);
@@ -69,7 +69,7 @@ export default function SidebarNav() {
   useEffect(() => {
     try {
       localStorage.setItem(LOCALSTORAGE_KEY, String(collapsed));
-    } catch (e) {
+    } catch {
       // ignore
     }
   }, [collapsed]);
