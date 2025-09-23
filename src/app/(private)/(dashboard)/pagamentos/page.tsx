@@ -19,6 +19,7 @@ import {
   DownloadCloud,
   XCircle,
   Calendar as CalendarIcon,
+  CalendarArrowDown,
 } from "lucide-react";
 import { CustomButton } from "@/components/forms/CustomButton";
 import { formatDateForDisplay } from "@/utils/formatters/formatDate";
@@ -26,6 +27,7 @@ import { formatDecimalValue } from "@/utils/formatters/formatDecimal";
 import { extractAxiosError } from "@/services/api";
 import { EmptyCard } from "@/components/common/EmptyCard";
 import { CustomInput } from "@/components/forms/CustomInput";
+import PageHeader from "@/components/common/PageHeader";
 
 const statusMap: Record<
   PaymentStatus,
@@ -166,16 +168,13 @@ export default function MyPaymentsPage() {
   return (
     <div className="min-h-svh flex flex-col items-center pt-8 md:pt-14 px-4 pb-24 ">
       <div className="w-full max-w-7xl mx-auto">
-        <header className="mb-6">
-          <h1 className="text-3xl sm:text-4xl font-bold text-gray-800">
-            Meus Pagamentos
-          </h1>
-          <p className="text-gray-500 mt-1">
-            Consulte o seu histórico de faturas e gere os seus boletos.
-          </p>
-        </header>
-
-        <div className="bg-white p-4 rounded-xl shadow-xs border mb-6">
+        <PageHeader
+          className="mb-8"
+          title="Meus Pagamentos"
+          subtitle="Consulte o seu histórico de faturas e gere os seus boletos."
+          icon={CalendarArrowDown}
+        />
+        <div className="bg-background p-4 rounded-xl shadow-xs border border-border  mb-6">
           <div className="flex items-center gap-2 mb-4">
             <Filter size={18} className="text-gray-600" />
             <h3 className="font-semibold text-gray-700">Filtros</h3>
@@ -190,7 +189,7 @@ export default function MyPaymentsPage() {
                     e.target.value === "all" ? undefined : e.target.value,
                 }))
               }
-              className="p-2 border rounded-md bg-white text-gray-700 shadow-xs focus:outline-hidden focus:ring-primary focus:border-primary w-full"
+              className="p-2 border border-border  rounded-md bg-background text-gray-700 shadow-xs focus:outline-hidden focus:ring-primary focus:border-primary w-full"
             >
               <option value="all">Todos os Imóveis</option>
               {uniqueProperties.map((prop) => (
@@ -208,7 +207,7 @@ export default function MyPaymentsPage() {
                     e.target.value === "all" ? undefined : e.target.value,
                 }))
               }
-              className="p-2 border rounded-md bg-white text-gray-700 shadow-xs focus:outline-hidden focus:ring-primary focus:border-primary w-full"
+              className="p-2 border border-border  rounded-md bg-background text-gray-700 shadow-xs focus:outline-hidden focus:ring-primary focus:border-primary w-full"
             >
               <option value="all">Todos os Inquilinos</option>
               {uniqueTenants.map((tenant) => (
@@ -228,7 +227,7 @@ export default function MyPaymentsPage() {
                       : (e.target.value as PaymentStatus),
                 }))
               }
-              className="p-2 border rounded-md bg-white text-gray-700 shadow-xs focus:outline-hidden focus:ring-primary focus:border-primary w-full"
+              className="p-2 border border-border  rounded-md bg-background text-gray-700 shadow-xs focus:outline-hidden focus:ring-primary focus:border-primary w-full"
             >
               <option value="all">Todos os Status</option>
               {Object.entries(statusMap).map(([status, { label }]) => (
@@ -290,7 +289,7 @@ export default function MyPaymentsPage() {
           ) : (
             <div className="overflow-x-auto border border-gray-200 rounded-lg shadow-xs">
               <table className="min-w-full ">
-                <thead className="border-b bg-background  hidden md:table-header-group">
+                <thead className="border-b border-border  bg-background  hidden md:table-header-group">
                   <tr>
                     <th
                       scope="col"
@@ -344,7 +343,7 @@ export default function MyPaymentsPage() {
                     return (
                       <tr
                         key={payment.id}
-                        className="block md:table-row border-b md:border-none"
+                        className="block md:table-row border-b border-border  md:border-none"
                       >
                         <td
                           data-label="Imóvel"
@@ -369,7 +368,7 @@ export default function MyPaymentsPage() {
                           className="px-4 py-3 md:px-6 md:py-4 whitespace-nowrap block md:table-cell text-right md:text-left text-sm before:content-[attr(data-label)] before:font-semibold before:text-gray-500 before:float-left md:before:content-none"
                         >
                           <span
-                            className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium gap-1.5 border ${
+                            className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium gap-1.5 border border-border ${
                               statusMap[payment.status]?.color
                             }`}
                           >

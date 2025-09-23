@@ -58,7 +58,7 @@ export function Header({
       <header
         className={` fixed z-50 top-0 w-full flex items-center justify-center ${
           isScrolledOrSearch
-            ? "bg-white/90 backdrop-blur-xs border-b"
+            ? "bg-background/90 backdrop-blur-xs border-b border-border"
             : "bg-secondary-hover"
         }`}
       >
@@ -100,7 +100,7 @@ export function Header({
                       placeholder="Digite sua busca"
                       value={searchValue}
                       onChange={handleChange}
-                      className="w-full h-12 pl-5 pr-14 rounded-full border-2 border-gray-200"
+                      className="w-full h-12 pl-5 pr-14 rounded-full border-2 border-border "
                     />
                     <button
                       type="button"
@@ -124,7 +124,7 @@ export function Header({
                   className={`rounded-md px-4 py-1.5 text-sm font-semibold shadow-sm transition-all duration-300 ${
                     isScrolled
                       ? "bg-primary border-primary-hover border text-white hover:bg-primary/85"
-                      : "bg-white/10 text-white hover:bg-white/20 backdrop-blur-sm border border-white/20"
+                      : "bg-background/10 text-white hover:bg-background/20 backdrop-blur-sm border border-white/20"
                   }`}
                 >
                   Painel
@@ -158,7 +158,7 @@ export function Header({
                   className={`transform rounded-lg px-4  py-1 text-center font-medium text-white shadow-md transition-all duration-300 ease-in-out hover:-translate-y-0.5 active:translate-y-0 ${
                     isScrolled
                       ? "bg-secondary/75 border-b-4 border border-secondary-hover border-b-secondary-hover "
-                      : "bg-white/20 hover:bg-white/30 border border-white/30"
+                      : "bg-background/20 hover:bg-background/30 border border-white/30"
                   }`}
                 >
                   Criar conta grátis
@@ -167,7 +167,7 @@ export function Header({
             )}
             <div
               className={`h-6 w-px transition-colors duration-300 ${
-                isScrolled ? "bg-gray-200" : "bg-white/30"
+                isScrolled ? "bg-gray-200" : "bg-background/30"
               }`}
               aria-hidden="true"
             />
@@ -211,7 +211,7 @@ export function Header({
               transition={{ type: "tween", duration: 0.3 }}
               className="fixed  inset-0 top-[64px]  z-40 lg:hidden"
             >
-              <div className="p-4 bg-white/95 h-svh">
+              <div className="p-4 bg-background/95 h-svh">
                 {/* {showSearchBar && (
                   <div className="relative mb-4">
                     <input
@@ -289,7 +289,7 @@ export function Header({
 
   if (type === "logoOnly") {
     return (
-      <header className="fixed z-40 top-0 w-full bg-white/90 backdrop-blur-xs px-4 py-2  flex items-center justify-center border-b">
+      <header className="fixed z-40 top-0 w-full bg-background/90 backdrop-blur-xs px-4 py-2  flex items-center justify-center border-b">
         <Image
           height={50}
           width={120}
@@ -303,7 +303,7 @@ export function Header({
   }
   return (
     <header
-      className={` fixed z-50 top-0 w-full flex items-center justify-center bg-white/90 backdrop-blur-xs border-b`}
+      className={` fixed z-50 top-0 w-full flex items-center justify-center bg-background/90 backdrop-blur-xs border-b border-border`}
     >
       <div
         className={` w-full max-w-7xl px-4 2xl:px-0 h-16 flex items-center justify-between gap-6 transition-all duration-300 ease-in-out `}
@@ -313,7 +313,7 @@ export function Header({
             title="Botão de voltar"
             aria-label="Botão de voltar"
             onClick={onBack}
-            className="hover:bg-gray-500/10 p-2 rounded-full transition-all"
+            className="hover:bg-slate-600/10 p-2 rounded-full transition-all"
           >
             <ArrowLeftIcon className="w-7 h-7" />
           </button>

@@ -47,7 +47,7 @@ const CustomTooltip = ({ active, payload }: CustomTooltipProps) => {
     const percentage =
       totalTenants > 0 ? ((value as number) / totalTenants) * 100 : 0;
     return (
-      <div className="rounded-md border bg-white/80 p-3 shadow-lg backdrop-blur-xs">
+      <div className="rounded-md border border-border bg-white/80 p-3 shadow-lg backdrop-blur-xs">
         <p className="font-bold" style={{ color: payload[0].fill }}>
           {name}
         </p>

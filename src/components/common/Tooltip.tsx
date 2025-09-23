@@ -77,14 +77,14 @@ export function Tooltip({
           exit="hidden"
           transition={{ duration: 0.2, ease: "easeInOut" }}
           className={clsx(
-            "z-50 w-max max-w-xs rounded-md bg-gray-800 px-3 py-2 text-sm font-normal text-white shadow-lg",
+            "z-50 w-max max-w-xs rounded-md bg-background px-3 py-2 text-sm font-normal text-slate-900/90 border-border border",
             className
           )}
         >
           {content}
           <div
             style={arrowStyle}
-            className="absolute bottom-[-4px] -translate-x-1/2 h-0 w-0 border-4 border-l-transparent border-r-transparent border-t-gray-800"
+            className="absolute bottom-[-4px] -translate-x-1/2 h-0 w-0  border border-border"
           />
         </motion.div>
       )}

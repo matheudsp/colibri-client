@@ -21,7 +21,8 @@ import {
   PeriodValue,
 } from "@/components/common/PeriodSelector";
 import { Tooltip } from "@/components/common/Tooltip";
-import { HelpCircle } from "lucide-react";
+import { HelpCircle, LayoutDashboard } from "lucide-react";
+import PageHeader from "@/components/common/PageHeader";
 
 export default function Painel() {
   const [rentIncome, setRentIncome] = useState<RentIncomeResponseDto | null>(
@@ -78,14 +79,12 @@ export default function Painel() {
     <div className="min-h-svh flex flex-col items-center pt-8 md:pt-14 px-4 pb-24 ">
       <div className="w-full max-w-7xl mx-auto space-y-4">
         <div className="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
-          <div className="text-start mb-8">
-            <h1 className="text-3xl sm:text-4xl font-bold text-black">
-              Painel de Análise
-            </h1>
-            <p className="text-gray-500 mt-1">
-              Visualize e acompanhe suas métricas por gráficos.
-            </p>
-          </div>
+          <PageHeader
+            className="mb-8"
+            title="Painel de Análise"
+            subtitle="Visualize e acompanhe suas métricas por gráficos."
+            icon={LayoutDashboard}
+          />
           <PeriodSelector
             selectedPeriod={selectedPeriod}
             onPeriodChange={setSelectedPeriod}
@@ -110,7 +109,7 @@ export default function Painel() {
           ) : (
             <>
               {rentIncome && (
-                <div className="rounded-lg border p-6 shadow-sm">
+                <div className="rounded-lg border border-border p-6 ">
                   <div className="flex gap-2 items-center">
                     <h3 className="text-lg font-medium  leading-6 gap-1">
                       Receita de Aluguel{" "}
@@ -132,7 +131,7 @@ export default function Painel() {
               )}
 
               {tenantsStatus && (
-                <div className="rounded-lg border p-6 shadow-sm">
+                <div className="rounded-lg border border-border p-6">
                   <h3 className="text-lg font-medium leading-6 ">
                     Resumo dos seus locatários{" "}
                     <em className="text-xs font-light text-gray-600/80">
@@ -150,7 +149,7 @@ export default function Painel() {
           <ChartSkeleton />
         ) : (
           propertiesOccupancy && (
-            <div className="rounded-lg border p-6 shadow-sm">
+            <div className="rounded-lg border border-border p-6">
               <h3 className="text-lg font-medium leading-6 ">
                 Ocupação de Imóveis
               </h3>

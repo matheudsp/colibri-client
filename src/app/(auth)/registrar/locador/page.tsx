@@ -190,13 +190,38 @@ export default function LandlordRegisterPage() {
         <FormSection title="Dados Pessoais e de Acesso">
           <div className="md:col-span-2">
             <Controller
+              name="cpfCnpj"
+              control={control}
+              render={({ field }) => (
+                <CustomInput
+                  label="CPF/CNPJ*"
+                  id="cpfCnpj"
+                  placeholder="ex: 243.432.234-33"
+                  mask="cpfCnpj"
+                  icon={<FileTextIcon size={20} />}
+                  error={errors.cpfCnpj?.message}
+                  {...field}
+                />
+              )}
+            />
+          </div>
+          <div className="md:col-span-2">
+            <Controller
               name="name"
               control={control}
               render={({ field }) => (
                 <CustomInput
-                  label="Nome Completo*"
+                  label={`${
+                    cpfCnpjValue.length > 11
+                      ? "Razão Social*"
+                      : "Nome Completo*"
+                  }  `}
                   id="name"
-                  placeholder="ex: John Doe"
+                  placeholder={`${
+                    cpfCnpjValue.length > 11
+                      ? "ex: Locaterra LTDA"
+                      : "ex: John Doe"
+                  }`}
                   icon={<UserIcon size={20} />}
                   error={errors.name?.message}
                   autoComplete="name"
@@ -235,22 +260,6 @@ export default function LandlordRegisterPage() {
                 icon={<PhoneIcon size={20} />}
                 error={errors.phone?.message}
                 autoComplete="tel"
-                {...field}
-              />
-            )}
-          />
-
-          <Controller
-            name="cpfCnpj"
-            control={control}
-            render={({ field }) => (
-              <CustomInput
-                label="CPF/CNPJ*"
-                id="cpfCnpj"
-                placeholder="ex: 243.432.234-33"
-                mask="cpfCnpj"
-                icon={<FileTextIcon size={20} />}
-                error={errors.cpfCnpj?.message}
                 {...field}
               />
             )}

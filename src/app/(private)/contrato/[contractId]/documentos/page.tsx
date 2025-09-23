@@ -88,7 +88,7 @@ function DocumentUploadRow({
   };
 
   return (
-    <li className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-3 rounded-lg bg-gray-50 border">
+    <li className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-3 rounded-lg bg-background border border-border">
       <div className="flex items-center gap-2">
         {getStatusChip()}
         <span className="font-semibold">{documentTypeLabels[docType]}</span>
@@ -213,7 +213,7 @@ export default function DocumentPage() {
         {documents.map((doc) => (
           <li
             key={doc.id}
-            className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-3 rounded-lg bg-gray-50 border"
+            className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-3 rounded-lg bg-background border border-border"
           >
             <div>
               <p className="font-semibold">{documentTypeLabels[doc.type]}</p>
@@ -290,8 +290,8 @@ export default function DocumentPage() {
           Voltar ao Contrato
         </CustomButton>
 
-        <div className="bg-white p-6 rounded-xl shadow-md border">
-          <div className="flex items-center gap-3 mb-4 border-b pb-4">
+        <div className="bg-background p-6 rounded-xl shadow-md border border-border">
+          <div className="flex items-center gap-3 mb-4 border-b border-border pb-4">
             <FileText className="w-8 h-8 text-primary" />
             <div>
               <h1 className="text-2xl font-bold text-gray-800">

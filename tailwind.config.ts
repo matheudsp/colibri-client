@@ -1,6 +1,6 @@
 import type { Config } from "tailwindcss";
-
-export default {
+import { withUIKit } from "tailwindcss-uikit-colors";
+export default withUIKit({
   content: [
     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
@@ -26,14 +26,25 @@ export default {
       },
       colors: {
         background: "var(--background)",
+        "background-alt": "var(--background-alt)",
         foreground: "var(--foreground)",
+        "foreground-muted": "var(--foreground-muted)",
         primary: "var(--primary)",
-        secondary: "var(--secondary)",
-        accent: "var(--accent)",
         "primary-hover": "var(--primary-hover)",
+        "primary-light": "var(--primary-light)",
+        secondary: "var(--secondary)",
         "secondary-hover": "var(--secondary-hover)",
+        "secondary-light": "var(--secondary-light)",
+        accent: "var(--accent)",
+        success: "var(--success)",
+        warning: "var(--warning)",
         error: "var(--error)",
+        border: "var(--border)",
+        "input-bg": "var(--input-bg)",
+        "input-border": "var(--input-border)",
+        "card-bg": "var(--card-bg)",
       },
+
       fontFamily: {
         sans: ["Open Sans", "sans-serif"],
         montserrat: ["Montserrat", "sans-serif"],
@@ -97,4 +108,4 @@ export default {
   },
 
   plugins: [],
-} satisfies Config;
+} satisfies Config);

@@ -10,7 +10,7 @@ export interface PropertyResponse {
   title: string;
   description: string;
   transactionType: string;
-  value: string;
+  value: number;
   cep: string;
   street: string;
   district: string;
@@ -29,7 +29,7 @@ export interface PropertyResponse {
   landlord: {
     name: string;
     email: string;
-    phone: string;
+    phone?: string;
   };
   photos: Array<{
     id: string;
@@ -39,6 +39,9 @@ export interface PropertyResponse {
     isCover: boolean;
     url: string;
   }>;
+  createdAt: string;
+  updatedAt: string;
+  acceptOnlineProposals?: boolean;
 }
 
 interface PropertyCreateData {

@@ -83,7 +83,7 @@ function DashboardActions({
   };
 
   if (roleLoading) {
-    return <div className="mt-4 pt-4 border-t h-[230px]"></div>;
+    return <div className="mt-4 pt-4 border-t border-border h-[230px]"></div>;
   }
 
   const showAdminButtons = role === Roles.ADMIN || role === Roles.LOCADOR;
@@ -91,7 +91,7 @@ function DashboardActions({
   if (!showAdminButtons) return null;
 
   return (
-    <div className="mt-2 pt-2 border-t space-y-3">
+    <div className="mt-2 pt-2 border-t border-border space-y-3">
       <CustomSwitch
         label="Disponível"
         tip="Ative para que o imóvel apareça nas buscas públicas. Desative para ocultá-lo."
@@ -105,7 +105,7 @@ function DashboardActions({
         icon={<Eye size={16} />}
         color="bg-gray-200"
         textColor="text-gray-800"
-        className="w-full text-sm"
+        className="w-full text-sm "
       >
         Ver Detalhes
       </CustomButton>
@@ -286,7 +286,7 @@ export function PropertyCard({
         </p>
         <div className="grow">
           {variant === "public" && (
-            <div className="grid grid-cols-2 sm:grid-cols-2 font-medium gap-x-4 gap-y-2 text-sm text-gray-600 my-1 border-t border-b py-3">
+            <div className="grid grid-cols-2 sm:grid-cols-2 font-medium gap-x-4 gap-y-2 text-sm text-gray-600 my-1 border-t border-b border-border py-3">
               <span className="flex items-center gap-2 ">
                 <Maximize
                   className="text-white bg-primary p-1 rotate-45 rounded-lg"

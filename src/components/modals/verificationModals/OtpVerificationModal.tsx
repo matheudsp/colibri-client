@@ -149,7 +149,7 @@ export function OtpVerificationModal({
             onKeyDown={(e) => handleKeyDown(e, index)}
             disabled={isLoading || isInitialSend}
             className={clsx(
-              "aspect-square w-full max-w-14 h-auto text-center text-xl sm:text-2xl font-semibold border-2 rounded-lg focus:border-primary focus:ring-1 focus:ring-primary transition",
+              "aspect-square w-full max-w-14 h-auto text-center text-xl sm:text-2xl font-semibold border-2 border-border rounded-lg focus:border-primary focus:ring-1 focus:ring-primary transition",
               {
                 "bg-gray-100 cursor-not-allowed": isInitialSend,
               }

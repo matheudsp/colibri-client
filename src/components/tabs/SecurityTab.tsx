@@ -29,7 +29,7 @@ const SecuritySection = ({
   statusBadge?: React.ReactNode;
   children: React.ReactNode;
 }) => (
-  <div className="px-0 md:px-6 border-b border-gray-200 pb-12">
+  <div className="px-0 md:px-6 border-b border-border pb-12">
     <div className="flex items-center justify-between mb-1">
       <h3 className="text-lg font-semibold text-gray-800">{title}</h3>
       {statusBadge}

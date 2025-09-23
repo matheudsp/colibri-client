@@ -44,7 +44,7 @@ export function PhotoCard({
 
   return (
     <>
-      <div className="relative aspect-square group block border-2 rounded-lg cursor-pointer overflow-hidden">
+      <div className="relative aspect-square group block border-2 border-border rounded-lg cursor-pointer overflow-hidden">
         <Image
           src={photo.tempUrl || photo.filePath || "/placeholder.png"}
           alt="Preview do imóvel"

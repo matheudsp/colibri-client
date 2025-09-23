@@ -1,7 +1,7 @@
 import React from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { clsx } from "clsx";
-import { Loader2 } from "lucide-react"; // Importar o ícone
+import { Loader2 } from "lucide-react";
 
 interface CustomButtonProps {
   type?: "button" | "submit" | "reset";
@@ -26,7 +26,7 @@ export function CustomButton({
   fontSize = "text-base",
   color = "bg-secondary",
   textColor = "text-white",
-  rounded = "rounded-md", // O default continua aqui
+  rounded = "rounded-md",
   disabled = false,
   ghost = false,
   icon,
@@ -34,7 +34,6 @@ export function CustomButton({
   title,
   isLoading = false,
 }: CustomButtonProps) {
-  // 1. Removi a prop 'rounded-sm' das classes base para aplicá-la dinamicamente.
   const baseClasses = `
     px-4 py-2 
     ${fontSize}
@@ -46,6 +45,7 @@ export function CustomButton({
     flex justify-center
     focus:outline-hidden focus:ring-2 focus:ring-offset-2
     relative overflow-hidden
+    cursor-pointer
   `;
 
   const finalTextColor =
@@ -66,7 +66,7 @@ export function CustomButton({
         baseClasses,
         variantClasses,
         disabledClasses,
-        rounded, // 2. Adicionei a prop 'rounded-sm' diretamente aqui.
+        rounded,
         className
       )}
       title={title}

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import BottomNav from "../../../components/layout/BottomNav";
+import { MobileHeader } from "../../../components/layout/MobileHeader";
 import SidebarNav from "../../../components/layout/SidebarNav";
 import { SearchProvider } from "../../../contexts/SearchContext";
 
@@ -20,7 +20,7 @@ export default function DashboardLayout({
     <SearchProvider value={{ searchValue, handleSearchChange }}>
       <div className="min-h-screen w-full flex flex-col md:flex-row">
         <SidebarNav />
-
+        <MobileHeader />
         {/* md:ml-48 */}
         <main
           className="flex-1 
@@ -29,8 +29,6 @@ export default function DashboardLayout({
         >
           {children}
         </main>
-
-        <BottomNav />
       </div>
     </SearchProvider>
   );

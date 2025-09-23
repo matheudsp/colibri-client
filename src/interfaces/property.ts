@@ -3,7 +3,7 @@ export interface PropertyProps {
   title: string;
   description: string;
   transactionType: string;
-  value: string;
+  value: number;
   cep: string;
   street: string;
   district: string;
@@ -22,8 +22,11 @@ export interface PropertyProps {
   landlord: {
     name: string;
     email: string;
-    phone: string;
+    phone?: string;
   };
+  createdAt: string;
+  updatedAt: string;
+  acceptOnlineProposals?: boolean;
   showPropertyInformation?: boolean;
   onDelete?: (id: string) => void;
   photos: Array<{

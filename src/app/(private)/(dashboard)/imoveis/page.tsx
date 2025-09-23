@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useCallback } from "react";
 import { useSearchParams } from "next/navigation";
-import { Loader2Icon, Building2, Search } from "lucide-react";
+import { Loader2Icon, Building2, Search, HomeIcon } from "lucide-react";
 
 import { PropertyCard } from "@/components/cards/PropertyCard";
 import FabButton from "@/components/layout/FabButton";
@@ -24,6 +24,7 @@ import { VerificationService } from "@/services/domains/verificationService";
 import { OtpVerificationModal } from "@/components/modals/verificationModals/OtpVerificationModal";
 import { VerificationContexts } from "../../../../constants/verification-contexts";
 import { EmptyCard } from "@/components/common/EmptyCard";
+import PageHeader from "@/components/common/PageHeader";
 
 export default function DashboardPropertiesPage() {
   const { searchValue } = useSearch();
@@ -163,13 +164,12 @@ export default function DashboardPropertiesPage() {
   return (
     <div className="min-h-svh flex flex-col items-center pt-8 md:pt-14 px-4 pb-24 ">
       <div className="w-full max-w-7xl mx-auto">
-        <div className="text-start mb-8">
-          <h1 className="text-3xl sm:text-4xl font-bold text-black">
-            {pageContent.title}
-          </h1>
-          <p className="text-gray-500 mt-1">{pageContent.subtitle}</p>
-        </div>
-
+        <PageHeader
+          className="mb-8"
+          title={pageContent.title}
+          subtitle={pageContent.subtitle}
+          icon={HomeIcon}
+        />
         <div className="w-full grid gap-4 pb-10">
           {loading ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 pb-10">

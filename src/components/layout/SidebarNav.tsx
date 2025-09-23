@@ -97,8 +97,8 @@ export default function SidebarNav() {
     <aside
       aria-label="Barra lateral"
       className={clsx(
-        "hidden md:flex sticky top-0 left-0 z-20 h-screen  flex-col justify-between bg-gradient-to-r from-secondary-hover to-secondary py-6 px-2 shadow-xl transition-all duration-300",
-        collapsed ? "w-20" : "w-48"
+        "hidden md:flex sticky top-0 left-0 z-20 h-screen  flex-col justify-between bg-background border-r border-border py-6 px-2 transition-all duration-300",
+        collapsed ? "w-24" : "w-60"
       )}
     >
       {/* Top: logo + toggle */}
@@ -132,19 +132,19 @@ export default function SidebarNav() {
               collapsed ? "Expandir barra lateral" : "Colapsar barra lateral"
             }
             onClick={() => setCollapsed((s) => !s)}
-            className="p-4 border border-gray-50/20 rounded-md hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary"
+            className="p-4 border border-gray-50/20 rounded-md hover:bg-black/10 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary"
             title={collapsed ? "Expandir" : "Colapsar"}
           >
             {collapsed ? (
-              <ChevronRight className="w-5 h-5 text-white/80" />
+              <ChevronRight className="w-5 h-5 text-black/80" />
             ) : (
-              <ChevronLeft className="w-5 h-5 text-white/80" />
+              <ChevronLeft className="w-5 h-5 text-black/80" />
             )}
           </button>
         </div>
 
         <nav
-          className="flex flex-col gap-2 px-1"
+          className="flex flex-col gap-2 p-2"
           role="navigation"
           aria-label="Navegação principal"
         >
@@ -158,30 +158,32 @@ export default function SidebarNav() {
                 href={item.href}
                 title={item.label}
                 className={clsx(
-                  "flex items-center transition-all duration-200 ease-in-out rounded-lg w-full",
-                  // center icons when collapsed, keep label + icon layout when expanded
+                  "flex items-center transition-all duration-200 ease-in-out rounded-xl w-full",
+
                   collapsed
-                    ? "justify-center px-0 py-2"
-                    : "justify-start px-3 py-2",
+                    ? "justify-center px-0 py-2 "
+                    : "justify-start px-4 py-2 ",
                   isActive
-                    ? "bg-primary-hover text-white scale-105 shadow-md"
-                    : "text-gray-200/90 hover:bg-black/20 hover:scale-105"
+                    ? "bg-primary-light text-black "
+                    : "text-slate-800/90 hover:bg-gray-400/40 hover:scale-105",
+                  collapsed &&
+                    isActive &&
+                    "outline-2 outline-offset-2 outline-border"
                 )}
               >
                 <div
                   className={clsx(
                     "flex items-center justify-center",
-                    collapsed ? "w-10 h-10" : "w-8 h-8"
+                    collapsed ? "w-8 h-8" : "w-4 h-4"
                   )}
                 >
-                  <Icon className="w-5 h-5" />
+                  <Icon className="w-4 h-4" strokeWidth={1.5} />
                 </div>
 
-                {/* render label only when expanded to avoid layout shifts and reserved space */}
                 {!collapsed && (
                   <span
-                    className={`ml-2 text-sm tracking-wide truncate font-medium ${
-                      isActive && "font-semibold"
+                    className={`ml-2 text-sm  tracking-wide truncate font-normal ${
+                      isActive && ""
                     }`}
                   >
                     {item.label}
@@ -203,18 +205,18 @@ export default function SidebarNav() {
         <Link
           href={"/conta"}
           className={clsx(
-            "flex items-center transition-all duration-200 ease-in-out rounded-lg w-full",
-            collapsed ? "justify-center px-0 py-2" : "justify-start px-3 py-2",
+            "flex items-center transition-all duration-200 ease-in-out rounded-lg w-full p-2",
+            collapsed ? "justify-center " : "justify-start",
             myAccountIsActive
-              ? "bg-primary-hover text-secondary/90 scale-105 shadow-md"
-              : "text-white/90 hover:bg-black/20 hover:text-white hover:scale-105"
+              ? "bg-primary-light scale-105 text-black"
+              : "text-slate-800/90 hover:bg-gray-400/40  hover:scale-105"
           )}
         >
           <div
             className={clsx(
               "flex items-center justify-center rounded-full",
-              "w-8 h-8 text-white",
-              myAccountIsActive ? "bg-secondary" : "bg-primary-hover "
+              "w-6 h-6 text-white",
+              myAccountIsActive ? "bg-secondary " : "bg-primary "
             )}
           >
             <span
@@ -228,7 +230,7 @@ export default function SidebarNav() {
           </div>
 
           {!collapsed && (
-            <span className="ml-2 text-sm font-normal text-white tracking-wide truncate">
+            <span className="ml-2 text-sm font-normal  tracking-wide truncate">
               Minha Conta
             </span>
           )}
@@ -238,7 +240,7 @@ export default function SidebarNav() {
           onClick={handleLogout}
           title="Sair do sistema"
           className={clsx(
-            "flex items-center transition-all duration-200 ease-in-out rounded-lg w-full text-white/90 hover:bg-red-500/80 hover:text-white hover:scale-105",
+            "flex items-center transition-all duration-200 ease-in-out rounded-lg w-full text-black/90 hover:bg-red-500/80 hover:text-white hover:scale-105",
             collapsed ? "justify-center px-0 py-2" : "justify-start px-3 py-2"
           )}
         >

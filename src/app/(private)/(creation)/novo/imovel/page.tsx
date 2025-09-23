@@ -217,7 +217,7 @@ export default function CreatePropertyPage() {
               className="w-full space-y-6 md:space-y-8"
             >
               <div>
-                <h2 className="text-lg sm:text-xl font-semibold mb-4 text-gray-700 border-b pb-2">
+                <h2 className="text-lg sm:text-xl font-semibold mb-4 text-gray-700 border-b border-border pb-2">
                   Informações Principais
                 </h2>
                 <div className="grid grid-cols-1 gap-y-4">
@@ -283,7 +283,7 @@ export default function CreatePropertyPage() {
               </div>
 
               <div>
-                <h2 className="text-lg sm:text-xl font-semibold mb-4 text-gray-700 border-b pb-2">
+                <h2 className="text-lg sm:text-xl font-semibold mb-4 text-gray-700 border-b border-border  pb-2">
                   Endereço
                 </h2>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-4">
@@ -398,7 +398,7 @@ export default function CreatePropertyPage() {
               </div>
 
               <div>
-                <h2 className="text-lg sm:text-xl font-semibold mb-4 text-gray-700 border-b pb-2">
+                <h2 className="text-lg sm:text-xl font-semibold mb-4 text-gray-700 border-b  border-border pb-2">
                   Características do Imóvel
                 </h2>
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-x-4 gap-y-4">
@@ -503,7 +503,7 @@ export default function CreatePropertyPage() {
                 <button
                   type="button"
                   onClick={() => setIsAddPhotoModalOpen(true)}
-                  className="flex flex-col items-center justify-center aspect-square border-2 border-dashed rounded-lg border-gray-300 text-gray-400 hover:bg-gray-100 hover:text-gray-600 transition-colors"
+                  className="flex flex-col items-center justify-center aspect-square border-2 border-dashed rounded-lg border-border  text-gray-400 hover:bg-gray-100 hover:text-gray-600 transition-colors"
                   title="Adicionar nova foto"
                 >
                   <PlusIcon className="w-8 h-8 sm:w-10 sm:h-10" />

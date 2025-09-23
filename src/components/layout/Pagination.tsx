@@ -49,7 +49,7 @@ export function Pagination({
       <div className="flex items-center justify-center gap-2">
         <button
           title="Página anterior"
-          className={`flex items-center justify-center p-2 h-9 w-9 rounded-md border ${
+          className={`flex items-center justify-center p-2 h-9 w-9 rounded-md border border-border ${
             currentPage === 1
               ? "opacity-50 cursor-not-allowed"
               : "hover:bg-gray-100"
@@ -64,7 +64,7 @@ export function Pagination({
           <>
             <button
               title={`Ir para página 1`}
-              className={`flex items-center justify-center p-2 h-9 w-9 rounded-md border ${
+              className={`flex items-center justify-center p-2 h-9 w-9 rounded-md border border-border ${
                 currentPage === 1
                   ? "bg-primary text-white"
                   : "hover:bg-gray-100"
@@ -81,7 +81,7 @@ export function Pagination({
           <button
             key={page}
             title={`Ir para página ${page}`}
-            className={`flex items-center justify-center p-2 h-9 w-9 rounded-md border ${
+            className={`flex items-center justify-center p-2 h-9 w-9 rounded-md border border-border ${
               currentPage === page
                 ? "bg-primary text-white"
                 : "hover:bg-gray-100"
@@ -97,7 +97,7 @@ export function Pagination({
             {endPage < totalPages - 1 && <span className="px-2">...</span>}
             <button
               title={`Ir para página ${totalPages} (última página)`}
-              className={`flex items-center justify-center p-2 h-9 w-9 rounded-md border ${
+              className={`flex items-center justify-center p-2 h-9 w-9 rounded-md border  border-border ${
                 currentPage === totalPages
                   ? "bg-primary text-white"
                   : "hover:bg-gray-100"
@@ -111,7 +111,7 @@ export function Pagination({
 
         <button
           title="Próxima página"
-          className={`flex items-center justify-center p-2 h-9 w-9 rounded-md border ${
+          className={`flex items-center justify-center p-2 h-9 w-9 rounded-md border border-border ${
             currentPage === totalPages
               ? "opacity-50 cursor-not-allowed"
               : "hover:bg-gray-100"

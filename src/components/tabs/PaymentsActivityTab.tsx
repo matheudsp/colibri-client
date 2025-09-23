@@ -245,7 +245,7 @@ export function PaymentsActivityTab() {
           <select
             value={String(limitFromUrl)}
             onChange={(e) => handleChangeLimit(Number(e.target.value))}
-            className="border rounded px-3 py-2 bg-white text-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+            className="border border-border rounded px-3 py-2 bg-white text-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-primary"
           >
             <option value={5}>5</option>
             <option value={10}>10</option>
@@ -329,7 +329,7 @@ export function PaymentsActivityTab() {
             ))}
           </div>
         ) : filtered.length === 0 ? (
-          <div className="p-6 bg-white rounded-lg border text-center text-gray-500">
+          <div className="p-6 bg-background rounded-lg border border-border text-center text-gray-500">
             <div className="mb-2">Nenhuma ação encontrada.</div>
             <div className="text-sm">
               Tente ajustar os filtros ou aumentar o período de busca.
@@ -357,7 +357,7 @@ export function PaymentsActivityTab() {
                     return (
                       <div
                         key={ev.id}
-                        className="flex flex-col sm:flex-row bg-white border rounded-lg shadow-sm hover:shadow-md transition overflow-hidden"
+                        className="flex flex-col sm:flex-row bg-background border border-border rounded-lg shadow-sm hover:shadow-md transition overflow-hidden"
                       >
                         {/* accent bar */}
                         <div

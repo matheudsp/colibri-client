@@ -219,7 +219,7 @@ export function TransfersTab() {
 
   return (
     <section className="space-y-6">
-      <div className="border rounded-xl p-4 ">
+      <div className="border border-border rounded-xl p-4 ">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div>
             <h3 className="text-sm text-gray-500">Saldo disponível</h3>
@@ -276,7 +276,10 @@ export function TransfersTab() {
         {loading ? (
           <div className="grid gap-3">
             {[1, 2, 3].map((i) => (
-              <div key={i} className="animate-pulse  border  p-4 h-24" />
+              <div
+                key={i}
+                className="animate-pulse  border  border-border p-4 h-24"
+              />
             ))}
           </div>
         ) : (

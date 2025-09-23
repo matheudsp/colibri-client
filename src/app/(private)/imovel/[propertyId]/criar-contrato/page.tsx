@@ -294,7 +294,7 @@ export default function CreateContractPage() {
 
         <form onSubmit={handleSubmit(onSubmit)} className="w-full  space-y-6">
           {currentStep === 1 && (
-            <fieldset className="border p-4 rounded-lg space-y-4">
+            <fieldset className="border border-border p-4 rounded-lg space-y-4">
               <legend className="px-2 font-bold text-lg text-gray-700">
                 1. Dados do Inquilino
               </legend>
@@ -305,7 +305,7 @@ export default function CreateContractPage() {
                 }
               </p>
 
-              <div className="flex flex-col sm:flex-row w-full bg-gray-100 border border-gray-200 rounded-lg p-1 gap-1 sm:gap-0">
+              <div className="flex flex-col sm:flex-row w-full bg-gray-200 border border-border rounded-lg p-1 gap-1 sm:gap-0">
                 <button
                   type="button"
                   onClick={() => handleActionChange("search")}
@@ -374,14 +374,14 @@ export default function CreateContractPage() {
                   </div>
 
                   {foundTenants.length > 0 && (
-                    <div className="w-full space-y-3 border-t pt-4 animate-fade-in">
+                    <div className="w-full space-y-3 border-t border-border pt-4 animate-fade-in">
                       <h3 className="font-semibold text-gray-700">
                         Usuários existentes:
                       </h3>
                       {foundTenants.map((user) => (
                         <div
                           key={user.id}
-                          className="w-full p-4 bg-gray-50 rounded-lg border flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3"
+                          className="w-full p-4 bg-gray-50 rounded-lg border border-border flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3"
                         >
                           <div className="flex items-center gap-3">
                             <div className="shrink-0 bg-secondary text-white rounded-full h-10 w-10 flex items-center justify-center font-bold">
@@ -534,7 +534,7 @@ export default function CreateContractPage() {
           )}
 
           {currentStep === 2 && (
-            <fieldset className="border p-4 rounded-lg">
+            <fieldset className="border border-border p-4 rounded-lg">
               <legend className="px-2 font-bold text-lg text-gray-700">
                 2. Informações do Contrato
               </legend>
@@ -689,7 +689,7 @@ export default function CreateContractPage() {
             <>
               {tenantAction === "create" && newTenantCredentials ? (
                 <div className="text-center space-y-6 p-4 animate-fade-in">
-                  <CheckCircle className="w-16 h-16 text-green-500 mx-auto" />
+                  <CheckCircle className="w-16 h-16 text-primary mx-auto" />
                   <h2 className="text-2xl font-bold text-gray-800">
                     Contrato Criado e Inquilino Cadastrado!
                   </h2>
@@ -700,7 +700,7 @@ export default function CreateContractPage() {
 
                   <div
                     ref={credentialsCardRef}
-                    className="bg-gray-50 border border-gray-200 rounded-lg p-6 text-left space-y-4"
+                    className="bg-gray-50 border border-border rounded-lg p-6 text-left space-y-4"
                   >
                     <h3 className="font-bold text-lg text-gray-700 text-center mb-4">
                       Dados de Acesso do Inquilino
@@ -723,7 +723,7 @@ export default function CreateContractPage() {
                         </p>
                       </div>
                     </div>
-                    <div className="flex items-center gap-4 border-t pt-4 mt-4">
+                    <div className="flex items-center gap-4 border-t border-border pt-4 mt-4">
                       <Globe className="w-5 h-5 text-gray-500" />
                       <div>
                         <p className="text-xs text-gray-500">Acessar em</p>
@@ -761,7 +761,7 @@ export default function CreateContractPage() {
                   <CustomButton
                     onClick={() => router.push(`/imoveis`)}
                     fontSize="text-lg"
-                    className="mt-4 border mx-auto"
+                    className="mt-4 border border-border mx-auto"
                     ghost
                   >
                     Voltar ao menu
@@ -780,7 +780,7 @@ export default function CreateContractPage() {
                   <CustomButton
                     onClick={() => router.push(`/imoveis`)}
                     fontSize="text-lg"
-                    className="mt-4 border mx-auto"
+                    className="mt-4 border border-border mx-auto"
                     ghost
                   >
                     Voltar ao menu

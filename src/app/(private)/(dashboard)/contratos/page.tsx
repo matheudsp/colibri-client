@@ -14,6 +14,7 @@ import { ContractCard } from "@/components/cards/ContractCard";
 import type { Contract } from "@/interfaces/contract";
 import { extractAxiosError } from "@/services/api";
 import { EmptyCard } from "@/components/common/EmptyCard";
+import PageHeader from "@/components/common/PageHeader";
 
 export default function ContractsPage() {
   const [contracts, setContracts] = useState<Contract[]>([]);
@@ -70,15 +71,12 @@ export default function ContractsPage() {
   return (
     <div className="min-h-svh flex flex-col items-center pt-8 md:pt-14 px-4 pb-24 ">
       <div className="w-full max-w-7xl mx-auto">
-        <div className="text-start mb-8">
-          <h1 className="text-3xl sm:text-4xl font-bold text-gray-800">
-            Meus Contratos
-          </h1>
-          <p className="text-gray-500 mt-1">
-            Gerencie e visualize todos os seus contratos de aluguel.
-          </p>
-        </div>
-
+        <PageHeader
+          className="mb-8"
+          title="Meus Contratos"
+          subtitle="Gerencie e visualize todos os seus contratos de aluguel."
+          icon={FileText}
+        />
         {contracts.length === 0 ? (
           <div className="w-full">
             <EmptyCard

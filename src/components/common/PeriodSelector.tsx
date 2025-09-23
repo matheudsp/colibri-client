@@ -38,7 +38,7 @@ export function PeriodSelector({
           {selectedPeriod === option.value && (
             <motion.div
               layoutId="selected-background"
-              className="absolute inset-0 bg-white rounded-md shadow-sm"
+              className="absolute inset-0 bg-white rounded-md "
               transition={{ type: "spring", stiffness: 350, damping: 30 }}
             />
           )}
