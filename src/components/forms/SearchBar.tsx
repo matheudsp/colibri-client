@@ -66,7 +66,7 @@ export function SearchBar() {
           />
         </button>
         {isTransactionOpen && (
-          <div className="absolute top-full mt-2 w-full bg-white py-1 divide-y rounded-md shadow-xs shadow-black/70 border z-10 ">
+          <div className="absolute top-full mt-2 w-full bg-white py-1 divide-y rounded-md shadow-xs shadow-black/70 border border-border z-10 ">
             {transactionOptions.map((opt) => (
               <div
                 key={opt.id}
@@ -83,7 +83,7 @@ export function SearchBar() {
         )}
       </div>
 
-      <div className="h-full border-x border-gray-200 self-center hidden md:block "></div>
+      <div className="h-full border-x border-border self-center hidden md:block "></div>
 
       <div className="relative w-full md:w-40 h-14 md:h-full ">
         <button
@@ -106,7 +106,7 @@ export function SearchBar() {
           />
         </button>
         {isPropertyTypeOpen && (
-          <div className="absolute top-full mt-2 w-full bg-white py-1 divide-y rounded-md shadow-xs shadow-black/70 border z-10 ">
+          <div className="absolute top-full mt-2 w-full bg-white py-1 divide-y rounded-md shadow-xs shadow-black/70 border border-border z-10 ">
             {propertyTypeOptions.map((opt) => (
               <div
                 key={opt.id}
@@ -123,7 +123,7 @@ export function SearchBar() {
         )}
       </div>
 
-      <div className="h-full border-x border-gray-200 self-center hidden md:block "></div>
+      <div className="h-full border-x border-border self-center hidden md:block "></div>
 
       <div className="grow flex items-center h-14 md:h-full bg-white rounded-full md:rounded-none shadow-xs md:shadow-none">
         <input
@@ -134,7 +134,7 @@ export function SearchBar() {
           className="w-full h-full px-4 border-none focus:ring-0 md:focus:outline-primary md:focus:-outline-offset-2 focus:outline-hidden focus:-outline-offset-0 md:placeholder:text-start text-center md:text-start placeholder:text-center bg-transparent text-gray-800 placeholder-gray-500 text-sm"
         />
       </div>
-      <div className="h-full border-x border-gray-200 self-center hidden md:block "></div>
+      <div className="h-full border-x border-border self-center hidden md:block "></div>
       <div className="w-full md:w-auto h-full md:h-full">
         <CustomButton
           onClick={handleSearch}

@@ -141,7 +141,7 @@ export function CustomAuthInput({
     <div className="relative w-full pt-2">
       <div
         className={`flex items-center border-b-2 px-2 py-2 rounded transition-all duration-200 ${colorBg} ${
-          error ? "border-error" : "border-background"
+          error ? "border-error" : "border-border"
         }`}
       >
         <div className="w-full flex">

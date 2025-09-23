@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
-import { Loader2Icon, FileText } from "lucide-react";
+import { FileText } from "lucide-react";
 
 import { ContractService } from "@/services/domains/contractService";
 
@@ -15,6 +15,7 @@ import type { Contract } from "@/interfaces/contract";
 import { extractAxiosError } from "@/services/api";
 import { EmptyCard } from "@/components/common/EmptyCard";
 import PageHeader from "@/components/common/PageHeader";
+import { ContractCardSkeleton } from "@/components/skeletons/ContractCardSkeleton";
 
 export default function ContractsPage() {
   const [contracts, setContracts] = useState<Contract[]>([]);
@@ -62,12 +63,24 @@ export default function ContractsPage() {
 
   if (loading) {
     return (
-      <div className="flex justify-center items-center h-svh w-screen">
-        <Loader2Icon className="animate-spin w-12 h-12 text-primary" />
+      <div className="min-h-svh flex flex-col items-center pt-8 md:pt-14 px-4 pb-24 ">
+        <div className="w-full max-w-7xl mx-auto">
+          <PageHeader
+            className="mb-8"
+            title="Meus Contratos"
+            subtitle="Gerencie e visualize todos os seus contratos de aluguel."
+            icon={FileText}
+          />
+          <div className="w-full grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <ContractCardSkeleton />
+            <ContractCardSkeleton />
+            <ContractCardSkeleton />
+            <ContractCardSkeleton />
+          </div>
+        </div>
       </div>
     );
   }
-
   return (
     <div className="min-h-svh flex flex-col items-center pt-8 md:pt-14 px-4 pb-24 ">
       <div className="w-full max-w-7xl mx-auto">

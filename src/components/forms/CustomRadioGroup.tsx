@@ -39,7 +39,7 @@ export function CustomRadioGroup({
   gridCols = 1,
   error,
   textColor = "text-foreground",
-  borderColor = "border-foreground",
+  borderColor = "border-border",
   checkedBorderColor = "border-white",
   checkedBgColor = "bg-white",
   dotColor = "bg-primary",

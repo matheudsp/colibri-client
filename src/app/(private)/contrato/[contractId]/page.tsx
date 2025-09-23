@@ -13,6 +13,7 @@ import {
   Shredder,
 } from "lucide-react";
 import { toast } from "sonner";
+import { IoDocumentsOutline } from "react-icons/io5";
 import { type ContractWithDocuments } from "@/interfaces/contract";
 import { ContractService } from "@/services/domains/contractService";
 
@@ -33,6 +34,8 @@ import { CancelContractModal } from "@/components/modals/contractModals/CancelCo
 import { PaymentService } from "@/services/domains/paymentService";
 import { RegisterPaymentModal } from "@/components/modals/paymentModals/RegisterPaymentModal";
 import { extractAxiosError } from "@/services/api";
+import { LottieAnimation } from "@/components/common/LottieAnimation";
+import signatureAnimation from "../../../../../public/lottie/signature-animation.json";
 
 export default function ContractManagementPage() {
   const [contract, setContract] = useState<ContractWithDocuments | null>(null);
@@ -231,7 +234,7 @@ export default function ContractManagementPage() {
       case "EM_ANALISE":
         if (role === "LOCADOR") {
           return (
-            <div className="bg-yellow-50 border-yellow-200 border p-4 rounded-xl shadow-xs text-center">
+            <div className="bg-yellow-50 border-yellow-200 border p-4 rounded-xl  text-center">
               <FileWarning className="mx-auto text-yellow-500" size={32} />
               <h3 className="font-bold text-lg mt-2">Documentos em Análise</h3>
               <p className="text-sm text-gray-600 mt-1">
@@ -257,7 +260,7 @@ export default function ContractManagementPage() {
 
           if (hasRejected) {
             return (
-              <div className="bg-red-50 border-red-200 border p-4 rounded-xl shadow-xs text-center">
+              <div className="bg-red-50 border-red-200 border p-4 rounded-xl  text-center">
                 <FileWarning className="mx-auto text-red-500" size={32} />
                 <h3 className="font-bold text-lg mt-2">
                   Pendências na Documentação
@@ -281,7 +284,7 @@ export default function ContractManagementPage() {
           }
 
           return (
-            <div className="bg-blue-50 border-blue-200 border p-4 rounded-xl shadow-xs text-center">
+            <div className="bg-blue-50 border-blue-200 border p-4 rounded-xl  text-center">
               <Loader2
                 className="mx-auto text-blue-500 animate-spin"
                 size={32}
@@ -302,7 +305,7 @@ export default function ContractManagementPage() {
         if (role === Roles.LOCADOR || role === Roles.ADMIN) {
           if (signatureProcessStarted) {
             return (
-              <div className="bg-green-50 border-green-200 border p-4 rounded-xl shadow-xs text-center">
+              <div className="bg-green-50 border-green-200 border p-4 rounded-xl  text-center">
                 <MailCheck className="mx-auto text-green-500" size={32} />
                 <h3 className="font-bold text-lg mt-2">
                   Assinaturas Solicitadas
@@ -316,7 +319,7 @@ export default function ContractManagementPage() {
             );
           } else {
             return (
-              <div className="bg-red-50 border-red-200 border p-4 rounded-xl shadow-xs text-center">
+              <div className="bg-red-50 border-red-200 border p-4 rounded-xl text-center">
                 <FileWarning className="mx-auto text-red-500" size={32} />
                 <h3 className="font-bold text-lg mt-2">Ação Necessária</h3>
                 <p className="text-sm text-gray-600 mt-1">
@@ -343,12 +346,12 @@ export default function ContractManagementPage() {
         }
 
         return (
-          <div className="bg-indigo-50 border-indigo-200 border p-4 rounded-xl shadow-xs text-center">
-            <Loader2
-              className="mx-auto text-indigo-500 animate-spin"
-              size={32}
+          <div className="bg-indigo-50 border-indigo-200 border p-4 rounded-xl text-center">
+            <LottieAnimation
+              animationData={signatureAnimation}
+              className="w-20 h-20 mx-auto"
             />
-            <h3 className="font-bold text-lg mt-2">Aguardando Assinaturas</h3>
+            <h3 className="font-bold text-lg -mt-2">Aguardando Assinaturas</h3>
             <p className="text-sm text-gray-600 mt-1">
               O contrato foi enviado para assinatura digital. Por favor,
               verifique o seu e-mail e WhatsApp para assinar o documento.
@@ -359,7 +362,7 @@ export default function ContractManagementPage() {
       case "PENDENTE_DOCUMENTACAO":
         if (role === "LOCATARIO" && sub === contract.tenantId) {
           return (
-            <div className="bg-blue-50 border-blue-200 border p-4 rounded-xl shadow-xs text-center">
+            <div className="bg-blue-50 border-blue-200 border p-4 rounded-xl  text-center">
               <FileText className="mx-auto text-blue-500" size={32} />
               <h3 className="font-bold text-lg mt-2">Documentação Pendente</h3>
               <p className="text-sm text-gray-600 mt-1">
@@ -381,7 +384,7 @@ export default function ContractManagementPage() {
         }
 
         return (
-          <div className="bg-orange-50 border-orange-200 border p-4 rounded-xl shadow-xs text-center">
+          <div className="bg-orange-50 border-orange-200 border p-4 rounded-xl text-center">
             <h3 className="font-bold text-lg">Aguardando Documentos</h3>
             <p className="text-sm text-gray-600 mt-1">
               O locatário precisa enviar a documentação (CPF, IDENTIDADE FRENTE
@@ -417,7 +420,7 @@ export default function ContractManagementPage() {
               <ArrowLeft className="mr-2" />
               Voltar para Contratos
             </CustomButton>
-            <div className="mt-4 bg-background p-4 rounded-xl shadow-xs border border-border flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+            <div className="mt-4 bg-background p-4 rounded-xl  border border-border flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
               <div>
                 <h1 className="text-2xl font-bold text-gray-800">
                   Gerenciar Contrato
@@ -439,6 +442,7 @@ export default function ContractManagementPage() {
           <main className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             <div className="lg:col-span-2 space-y-6 ">
               <ContractFlowDetails status={contract.status} />
+
               <ContractDetails contract={contract} />
               {contract.paymentsOrders &&
                 contract.paymentsOrders.length > 0 && (
@@ -453,7 +457,7 @@ export default function ContractManagementPage() {
               <ContractPartiesDetails contract={contract} />
 
               <ActionCard />
-              <div className="bg-background p-4 rounded-xl shadow-xs border border-border space-y-3">
+              <div className="bg-background p-4 rounded-xl  border border-border space-y-3">
                 <h3 className="font-bold text-lg">Outras Ações</h3>
                 {(contract.status === "AGUARDANDO_ASSINATURAS" ||
                   contract.status === "ATIVO") && (
@@ -461,7 +465,7 @@ export default function ContractManagementPage() {
                     onClick={handleViewContract}
                     disabled={isActionLoading}
                     color="bg-green-100"
-                    textColor="text-green-800"
+                    textColor="text-green-900"
                     className="w-full"
                   >
                     {isActionLoading ? (
@@ -473,13 +477,35 @@ export default function ContractManagementPage() {
                     )}
                   </CustomButton>
                 )}
+                {(contract.status === "PENDENTE_DOCUMENTACAO" ||
+                  contract.status === "EM_ANALISE" ||
+                  contract.status === "AGUARDANDO_ASSINATURAS") && (
+                  <CustomButton
+                    onClick={() => {
+                      router.push(`/contrato/${contract.id}/documentos`);
+                    }}
+                    disabled={isActionLoading}
+                    color="bg-indigo-100"
+                    textColor="text-indigo-900"
+                    className="w-full"
+                  >
+                    {isActionLoading ? (
+                      <Loader2 className="animate-spin" />
+                    ) : (
+                      <>
+                        <IoDocumentsOutline className="mr-2" />
+                        Visualizar Documentos
+                      </>
+                    )}
+                  </CustomButton>
+                )}
                 {contract.status === "AGUARDANDO_ASSINATURAS" &&
                   (sub === contract.landlordId || role === Roles.ADMIN) && (
                     <CustomButton
                       onClick={() => setShowResendModal(true)}
                       disabled={isActionLoading}
-                      color="bg-blue-100"
-                      textColor="text-blue-800"
+                      color="bg-sky-100"
+                      textColor="text-sky-900"
                       className="w-full"
                     >
                       <BellRing className="mr-2" size={20} />
@@ -495,8 +521,8 @@ export default function ContractManagementPage() {
                       <CustomButton
                         onClick={() => setShowActivateModal(true)}
                         disabled={isActionLoading}
-                        color="bg-amber-500"
-                        textColor="text-white"
+                        color="bg-amber-200"
+                        textColor="text-amber-900"
                         className="w-full"
                       >
                         {isActionLoading ? (
@@ -515,7 +541,7 @@ export default function ContractManagementPage() {
                           onClick={() => setShowCancelModal(true)}
                           disabled={isActionLoading}
                           color="bg-red-100"
-                          textColor="text-red-800"
+                          textColor="text-red-900"
                           className="w-full"
                         >
                           <Shredder className="mr-2" size={20} />
@@ -528,7 +554,7 @@ export default function ContractManagementPage() {
                         onClick={() => setShowDeleteModal(true)}
                         disabled={isActionLoading}
                         color="bg-red-100"
-                        textColor="text-red-800"
+                        textColor="text-red-900"
                         className="w-full"
                       >
                         {/* <Trash2 className="mr-2" size={20} /> */}

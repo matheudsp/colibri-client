@@ -30,7 +30,7 @@ export function ForceActivateContractModal({
           leaveFrom="opacity-100"
           leaveTo="opacity-0"
         >
-          <div className="fixed inset-0 bg-black bg-opacity-30" />
+          <div className="fixed inset-0 bg-black/40 backdrop-blur-xs" />
         </Transition.Child>
 
         <div className="fixed inset-0 overflow-y-auto">
@@ -91,7 +91,7 @@ export function ForceActivateContractModal({
                         Ativando...
                       </>
                     ) : (
-                      "Sim, ativar"
+                      "Confirmar"
                     )}
                   </CustomButton>
                 </div>

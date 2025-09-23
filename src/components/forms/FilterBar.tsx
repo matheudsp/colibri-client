@@ -53,7 +53,7 @@ export function FilterBar({ form, onSearch, loading }: FilterBarProps) {
 
   return (
     <>
-      <div className="w-full bg-white p-3 rounded-xl shadow-md border flex flex-wrap items-center gap-2">
+      <div className="w-full bg-white p-3 rounded-xl shadow-md border border-border flex flex-wrap items-center gap-2">
         {/* Toggle Venda / Locação */}
         <div className="flex bg-gray-100 rounded-full p-1">
           <button

@@ -11,7 +11,7 @@ interface BankAccountApprovedProps {
 export function BankAccountApproved({ account }: BankAccountApprovedProps) {
   return (
     <div className="overflow-hidden">
-      <div className="p-6 border-b border-gray-200 flex flex-col justify-center text-center">
+      <div className="p-6 border-b border-border flex flex-col justify-center text-center">
         <div className="w-12 h-12 mx-auto rounded-full flex items-center justify-center shadow-xs mb-3">
           <UserRoundCheck className="text-green-600" size={40} />
         </div>

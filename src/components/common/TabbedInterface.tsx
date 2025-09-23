@@ -33,13 +33,13 @@ export function TabbedInterface({
 
   const tabButtonClasses = (isActive: boolean) =>
     clsx(
-      "flex items-center gap-2 px-4 py-2.5 outline-hidden transition-colors duration-200 border-r border-gray-300",
+      "flex items-center gap-2 px-4 py-2.5 outline-hidden transition-colors duration-200 border-r border-border",
       {
         // Aba Ativa: Fundo branco para se conectar ao conteúdo, sem borda inferior
         "bg-white text-secondary font-semibold": isActive,
 
         // Aba Inativa: Fundo sutil, texto cinza e uma borda inferior para se separar do conteúdo
-        "bg-gray-100/50 text-gray-500 hover:bg-gray-200/60 hover:text-secondary border-b border-gray-300":
+        "bg-gray-100/50 text-gray-500 hover:bg-gray-200/60 hover:text-secondary border-b border-border":
           !isActive,
       }
     );
@@ -62,7 +62,7 @@ export function TabbedInterface({
         </h1>
       )}
 
-      <div className="border border-gray-300  rounded-lg shadow-xs overflow-hidden">
+      <div className="border border-border  rounded-lg shadow-xs overflow-hidden">
         <nav className="flex flex-wrap bg-gray-200/50 ">
           {tabs.map((tab) => (
             <button

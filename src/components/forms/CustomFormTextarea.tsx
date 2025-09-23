@@ -28,7 +28,7 @@ export const CustomFormTextarea = forwardRef<
       {
         "border-primary ring-2 ring-primary/20": isFocused && !error,
         "border-error ring-2 ring-error/20": !!error,
-        "border-gray-300": !isFocused && !error,
+        "border-border": !isFocused && !error,
         "hover:border-gray-400": !disabled && !error && !isFocused,
         "bg-gray-100 text-gray-400 border-gray-200 cursor-not-allowed":
           disabled,

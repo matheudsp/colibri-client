@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useCallback } from "react";
 import { useSearchParams } from "next/navigation";
-import { Loader2Icon, Building2, Search, HomeIcon } from "lucide-react";
+import { Building2, Search, HomeIcon } from "lucide-react";
 
 import { PropertyCard } from "@/components/cards/PropertyCard";
 import FabButton from "@/components/layout/FabButton";
@@ -146,10 +146,23 @@ export default function DashboardPropertiesPage() {
         : "Clique no botão '+' para adicionar seu primeiro imóvel.",
   };
 
-  if (roleLoading) {
+  if (roleLoading || loading) {
     return (
-      <div className="flex justify-center items-center h-svh w-screen">
-        <Loader2Icon className="animate-spin w-12 h-12 text-primary" />
+      <div className="min-h-svh flex flex-col items-center pt-8 md:pt-14 px-4 pb-24 ">
+        <div className="w-full max-w-7xl mx-auto">
+          <PageHeader
+            className="mb-8"
+            title={pageContent.title}
+            subtitle={pageContent.subtitle}
+            icon={HomeIcon}
+          />
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 pb-10">
+            <PropertyCardSkeleton variant="dashboard" />
+            <PropertyCardSkeleton variant="dashboard" />
+            <PropertyCardSkeleton variant="dashboard" />
+            <PropertyCardSkeleton variant="dashboard" />
+          </div>
+        </div>
       </div>
     );
   }
@@ -171,14 +184,7 @@ export default function DashboardPropertiesPage() {
           icon={HomeIcon}
         />
         <div className="w-full grid gap-4 pb-10">
-          {loading ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 pb-10">
-              <PropertyCardSkeleton variant="dashboard" />
-              <PropertyCardSkeleton variant="dashboard" />
-              <PropertyCardSkeleton variant="dashboard" />
-              <PropertyCardSkeleton variant="dashboard" />
-            </div>
-          ) : properties.length === 0 ? (
+          {properties.length === 0 ? (
             <EmptyCard
               icon={pageContent.emptyIcon}
               title={pageContent.emptyTitle}

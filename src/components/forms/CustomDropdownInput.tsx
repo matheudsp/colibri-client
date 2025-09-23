@@ -98,7 +98,7 @@ export function CustomDropdownInput({
         left: `${position.left}px`,
         width: `${position.width}px`,
       }}
-      className="z-50 bg-white shadow-lg rounded-md py-1 border border-black border-opacity-10 focus:outline-hidden max-h-60 overflow-y-auto"
+      className="z-50 bg-background shadow-lg rounded-md py-1 border border-border border-opacity-10 focus:outline-hidden max-h-60 overflow-y-auto"
     >
       {options.map((option) => (
         <div

@@ -122,7 +122,7 @@ export function BankAccountPending({ account }: BankAccountPendingProps) {
               {pendingDocs.map((doc) => (
                 <li
                   key={doc.type}
-                  className="flex items-center justify-between p-3 rounded-lg bg-gray-50 border"
+                  className="flex items-center justify-between p-3 rounded-lg bg-background border border-border"
                 >
                   <span className="font-medium text-sm text-gray-800">
                     {doc.title}

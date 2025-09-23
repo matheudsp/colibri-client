@@ -37,7 +37,7 @@ const PriceAndContactCard = ({ property }: { property: PropertyResponse }) => {
       )}" (Cód: ${property.id.substring(0, 8)})`
     : null;
   return (
-    <div className="bg-white border border-gray-200 rounded-xl p-5 space-y-5">
+    <div className="border border-border rounded-xl p-5 space-y-5">
       <div>
         <p className="text-gray-500 text-sm">Valor do Aluguel (mensal)</p>
         <p className="text-3xl font-bold text-primary">
@@ -45,7 +45,7 @@ const PriceAndContactCard = ({ property }: { property: PropertyResponse }) => {
         </p>
       </div>
 
-      <div className="border-t pt-5">
+      <div className="border-t border-border pt-5">
         <p className="font-bold text-gray-800 mb-3">
           Gostou? Fale com o locador!
         </p>
@@ -147,7 +147,7 @@ export default function PropertyDetailsPage() {
             </div>
 
             {/* Card de Detalhes do Imóvel */}
-            <div className="bg-white border border-gray-200 rounded-xl p-6 space-y-6">
+            <div className=" border border-border rounded-xl p-6 space-y-6">
               <div className="flex flex-col md:flex-row justify-between items-center md:items-start gap-4">
                 <h1 className="text-2xl md:text-3xl font-bold text-gray-900">
                   {property.title}
@@ -165,7 +165,7 @@ export default function PropertyDetailsPage() {
               </div>
 
               {/* Detalhes Principais */}
-              <div className="border-t pt-6">
+              <div className="border-t border-border pt-4">
                 <h2 className="font-bold text-lg text-gray-800 mb-4">
                   Características
                 </h2>
@@ -206,7 +206,7 @@ export default function PropertyDetailsPage() {
               </div>
 
               {/* Localização */}
-              <div className="border-t pt-6">
+              <div className="border-t border-border pt-4">
                 <h2 className="font-bold text-lg text-gray-800 mb-4">
                   Localização
                 </h2>
@@ -231,7 +231,7 @@ export default function PropertyDetailsPage() {
 
               {/* Descrição */}
               {property.description && (
-                <div className="border-t pt-6">
+                <div className="border-t border-border pt-4">
                   <h2 className="font-bold text-lg text-gray-800">Descrição</h2>
                   <p className="mt-3 text-gray-600 leading-relaxed whitespace-pre-wrap">
                     {property.description}

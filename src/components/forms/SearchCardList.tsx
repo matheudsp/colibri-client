@@ -98,7 +98,7 @@ export function SearchCardList({ onSelectProperty }: SearchCardListProps) {
   };
 
   return (
-    <div className="w-full mx-auto font-sans px-4 py-2 border-2 rounded-md">
+    <div className="w-full mx-auto font-sans px-4 py-2 border-2 border-border rounded-md">
       <div className="relative mb-4">
         <CustomFormInput
           icon={<SearchIcon className="w-6 h-6" />}

@@ -2,20 +2,19 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { PlusIcon, HomeIcon, Building2 } from "lucide-react";
+import { PlusIcon, HomeIcon } from "lucide-react";
 
-// Definindo as ações que o botão irá conter
 const actions = [
   {
     label: "Adicionar Imóvel",
     icon: <HomeIcon size={20} className="text-primary" />,
     href: "/novo/imovel",
   },
-  {
-    label: "Adicionar Condomínio",
-    icon: <Building2 size={20} className="text-primary" />,
-    href: "/novo/condominio",
-  },
+  // {
+  //   label: "Adicionar Condomínio",
+  //   icon: <Building2 size={20} className="text-primary" />,
+  //   href: "/novo/condominio",
+  // },
 ];
 
 export default function FabButton() {
@@ -76,9 +75,10 @@ export default function FabButton() {
 
         <button
           onClick={() => setIsOpen(!isOpen)}
-          className="mb-16 md:mb-0 bg-primary text-white p-4 rounded-full shadow-lg hover:bg-primary-hover focus:outline-hidden focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-transform duration-300 ease-in-out"
+          className=" bg-primary flex-row flex items-center gap-1 text-white py-2 px-4 rounded-full shadow-lg hover:bg-primary-hover focus:outline-hidden focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-transform duration-300 ease-in-out"
           title={isOpen ? "Fechar" : "Adicionar novo"}
         >
+          Adicionar
           <PlusIcon
             className={`h-8 w-8 transition-transform duration-300 ${
               isOpen ? "rotate-45" : "rotate-0"

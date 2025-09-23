@@ -2,7 +2,7 @@
 
 import React, { useState, useRef } from "react";
 import Image from "next/image";
-import { motion, AnimatePresence, Variants } from "framer-motion"; // 1. Importar o tipo 'Variants'
+import { motion, AnimatePresence, Variants } from "framer-motion";
 import {
   Home,
   Expand,

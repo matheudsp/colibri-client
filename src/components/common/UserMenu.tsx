@@ -92,7 +92,7 @@ export function UserMenu({
         leaveFrom="transform opacity-100 scale-100"
         leaveTo="transform opacity-0 scale-95"
       >
-        <Menu.Items className="absolute right-0 z-10 mt-2 w-64 origin-top-right rounded-md bg-white shadow-lg border focus:outline-none">
+        <Menu.Items className="absolute right-0 z-10 mt-2 w-64 origin-top-right rounded-md bg-background shadow-lg border border-border focus:outline-none">
           <div className="p-1">
             <div className="px-3 py-2">
               <p className="truncate text-sm font-semibold text-gray-900">
@@ -100,13 +100,15 @@ export function UserMenu({
               </p>
               <p className="truncate text-sm text-gray-500">{user.email}</p>
             </div>
-            <div className="my-1 border-t border-gray-100" />
+            <div className="my-1 border-t border-border" />
             <Menu.Item>
               {({ active }) => (
                 <Link
                   href="/conta"
                   className={`${
-                    active ? "bg-gray-100 text-gray-900" : "text-gray-700"
+                    active
+                      ? "bg-background/80 backdrop-blur-md text-gray-900"
+                      : "text-gray-700"
                   } group flex w-full items-center rounded-md px-3 py-2 text-sm`}
                 >
                   <UserCircleIcon

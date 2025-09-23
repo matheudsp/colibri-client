@@ -36,7 +36,6 @@ import {
   DollarSign,
   Loader2,
   Building,
-  CheckCircle,
   PhoneIncoming,
 } from "lucide-react";
 
@@ -52,13 +51,15 @@ import { unmaskNumeric } from "@/utils/masks/maskNumeric";
 import type { ApiResponse } from "@/types/api";
 import { cpfCnpjMask } from "@/utils/masks/cpfCnpjMask";
 import { extractAxiosError } from "@/services/api";
+import { LottieAnimation } from "@/components/common/LottieAnimation";
+import successAnimation from "../../../../../../public/lottie/success-animation.json";
 
 export default function CreateContractPage() {
   const router = useRouter();
   const params = useParams();
   const propertyId = params.propertyId as string;
   const [canShare, setCanShare] = useState(false);
-  const [currentStep, setCurrentStep] = useState(1);
+  const [currentStep, setCurrentStep] = useState(3);
   const [tenantAction, setTenantAction] = useState<"search" | "create">(
     "search"
   );
@@ -689,7 +690,10 @@ export default function CreateContractPage() {
             <>
               {tenantAction === "create" && newTenantCredentials ? (
                 <div className="text-center space-y-6 p-4 animate-fade-in">
-                  <CheckCircle className="w-16 h-16 text-primary mx-auto" />
+                  <LottieAnimation
+                    animationData={successAnimation}
+                    className="w-32 h-32 mx-auto"
+                  />
                   <h2 className="text-2xl font-bold text-gray-800">
                     Contrato Criado e Inquilino Cadastrado!
                   </h2>
@@ -769,7 +773,10 @@ export default function CreateContractPage() {
                 </div>
               ) : (
                 <div className="text-center space-y-4 p-8">
-                  <CheckCircle className="w-16 h-16 text-green-500 mx-auto" />
+                  <LottieAnimation
+                    animationData={successAnimation}
+                    className="w-32 h-32 mx-auto"
+                  />
                   <h2 className="text-2xl font-bold text-gray-800">
                     Contrato Criado com Sucesso!
                   </h2>

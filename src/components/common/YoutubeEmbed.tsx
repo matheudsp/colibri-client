@@ -5,7 +5,7 @@ interface YouTubeEmbedProps {
 
 export default function YouTubeEmbed({ videoId, title }: YouTubeEmbedProps) {
   return (
-    <div className="w-full aspect-video overflow-hidden rounded-lg shadow-lg border border-zinc-200">
+    <div className="w-full aspect-video overflow-hidden rounded-lg shadow-lg border border-border">
       <iframe
         width="100%"
         height="100%"

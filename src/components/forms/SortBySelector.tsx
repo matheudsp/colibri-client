@@ -49,7 +49,7 @@ export function SortBySelector({
     <Menu as="div" className="relative inline-block text-left">
       <div>
         <Menu.Button
-          className="inline-flex justify-center items-center gap-2 rounded-full border border-gray-300 bg-white px-4 py-1.5 text-sm font-semibold text-gray-600 shadow-xs hover:bg-gray-100 disabled:opacity-50"
+          className="inline-flex justify-center items-center gap-2 rounded-full border border-border bg-white px-4 py-1.5 text-sm font-semibold text-gray-600 shadow-xs hover:bg-gray-100 disabled:opacity-50"
           disabled={loading}
         >
           {currentOption?.label || "Ordenar por"}
