@@ -51,7 +51,7 @@ export function CustomButton({
   const finalTextColor =
     ghost && textColor === "text-white" ? "text-gray-700" : textColor;
   const variantClasses = ghost
-    ? `bg-transparent ${finalTextColor} border border-gray-200 hover:bg-gray-200 hover:border-gray-400`
+    ? `bg-transparent ${finalTextColor} border border-border hover:bg-gray-200 hover:border-gray-400`
     : `${color} ${textColor} hover:brightness-95`;
 
   const disabledClasses =

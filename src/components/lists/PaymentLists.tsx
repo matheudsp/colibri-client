@@ -77,8 +77,8 @@ export function PaymentsList({
   const canManagePayments = role === Roles.LOCADOR || role === Roles.ADMIN;
 
   return (
-    <div className=" p-5 rounded-xl shadow-xs border">
-      <h2 className="font-bold text-xl mb-4 border-b pb-2">
+    <div className=" p-5 rounded-xl shadow-xs border border-border">
+      <h2 className="font-bold text-xl mb-4 border-b border-border pb-2">
         Histórico de Pagamentos
       </h2>
       <ul className="divide-y p-2">

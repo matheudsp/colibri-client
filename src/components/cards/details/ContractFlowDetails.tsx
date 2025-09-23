@@ -48,7 +48,7 @@ export function ContractFlowDetails({ status }: { status: string }) {
   const currentStep = statusToStep[status as keyof typeof statusToStep] || 0;
 
   return (
-    <div className="bg-white p-4 sm:p-6 rounded-xl shadow-xs border">
+    <div className="bg-background p-4 sm:p-6 rounded-xl shadow-xs border border-border">
       <h3 className="font-bold text-lg mb-6 text-center">Etapas do Contrato</h3>
 
       <div className="flex flex-col md:flex-row justify-center items-stretch md:items-start space-y-4 md:space-y-0 md:space-x-2">
@@ -102,7 +102,7 @@ export function ContractFlowDetails({ status }: { status: string }) {
               </div>
 
               {index < steps.length - 1 && (
-                <div className="md:hidden h-6 w-1 -translate-y-6 translate-x-[2.4rem] border-l-2 border-dashed border-gray-300" />
+                <div className="md:hidden h-6 w-1 -translate-y-6 translate-x-[2.4rem] border-l-2 border-dashed border-border" />
               )}
             </div>
           );

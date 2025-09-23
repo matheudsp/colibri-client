@@ -289,7 +289,7 @@ export function Header({
 
   if (type === "logoOnly") {
     return (
-      <header className="fixed z-40 top-0 w-full bg-background/90 backdrop-blur-xs px-4 py-2  flex items-center justify-center border-b">
+      <header className="fixed z-40 top-0 w-full bg-background/90 backdrop-blur-xs px-4 py-2  flex items-center justify-center border-b border-border">
         <Image
           height={50}
           width={120}

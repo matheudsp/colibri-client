@@ -44,7 +44,7 @@ export function ResendNotificationModal({
           <select
             value={selectedSignerId}
             onChange={(e) => setSelectedSignerId(e.target.value)}
-            className="w-full mt-1 p-2 border rounded-md"
+            className="w-full mt-1 p-2 border border-border rounded-md"
           >
             <option value={contract.landlord.id}>
               Locador: {contract.landlord.name}
