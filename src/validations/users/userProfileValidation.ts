@@ -23,7 +23,7 @@ export const userProfileSchema = z.object({
   complement: z.string().optional().nullable(),
   province: z.string().min(1, "O bairro é obrigatório.").optional(), // Bairro
   city: z.string().min(1, "A cidade é obrigatória.").optional(),
-  state: z.string().min(2, "O estado é obrigatório.").optional(),
+  state: z.string().min(4, "O estado é obrigatório.").optional(),
 
   // Campo Financeiro
   incomeValue: z.string().optional(),

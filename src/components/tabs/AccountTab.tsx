@@ -38,7 +38,7 @@ import { FormSection } from "@/components/forms/FormSection";
 import { OtpVerificationModal } from "@/components/modals/verificationModals/OtpVerificationModal";
 import { VerificationService } from "@/services/domains/verificationService";
 import { VerificationContexts } from "../../constants/verification-contexts";
-
+import { unmaskNumeric } from "@/utils/masks/maskNumeric";
 export function AccountTab() {
   const { sub } = useCurrentUser();
   const [loading, setLoading] = useState(false);
@@ -70,6 +70,11 @@ export function AccountTab() {
           const typedKey = key as keyof UserComplete;
           if (typedKey === "birthDate" && userData.birthDate) {
             setValue("birthDate", formatDateForDisplay(userData.birthDate));
+          } else if (typedKey === "incomeValue" && userData.incomeValue) {
+            const valueInCents = Math.round(
+              parseFloat(userData.incomeValue) * 100
+            );
+            setValue("incomeValue", String(valueInCents));
           } else if (
             userData[typedKey] !== null &&
             userData[typedKey] !== undefined
@@ -104,8 +109,13 @@ export function AccountTab() {
     const payload: UpdateUserData = {};
     (Object.keys(dirtyFields) as Array<keyof UserProfileFormValues>).forEach(
       (key) => {
-        /* eslint-disable  @typescript-eslint/no-explicit-any */
-        (payload as any)[key] = data[key];
+        if (key === "incomeValue" && data.incomeValue) {
+          /* eslint-disable  @typescript-eslint/no-explicit-any */
+          (payload as any)[key] = unmaskNumeric(data.incomeValue);
+        } else {
+          /* eslint-disable  @typescript-eslint/no-explicit-any */
+          (payload as any)[key] = data[key];
+        }
       }
     );
 
@@ -116,6 +126,9 @@ export function AccountTab() {
 
     setLoading(true);
     try {
+      // await VerificationService.request(
+      //   VerificationContexts.UPDATE_USER_PROFILE
+      // );
       setPendingUpdateData(payload);
       setIsOtpModalOpen(true);
     } catch (error) {
@@ -262,7 +275,7 @@ export function AccountTab() {
                   mask="phone"
                   error={errors.phone?.message}
                   {...field}
-                  maxLength={11}
+                  maxLength={15}
                   placeholder="Digite para alterar"
                 />
               )}
@@ -361,10 +374,9 @@ export function AccountTab() {
             render={({ field }) => (
               <CustomInput
                 id="state"
-                label="Estado (UF)"
+                label="Estado"
                 icon={<MapPin size={18} />}
                 error={errors.state?.message}
-                maxLength={2}
                 {...field}
               />
             )}
@@ -414,7 +426,7 @@ export function AccountTab() {
         }
         isLoading={loading}
         title="Verificação de Segurança"
-        description="Para proteger sua conta, insira o código de 6 dígitos que enviamos para o seu e-mail."
+        description="Para proteger sua conta, clique em 'Enviar Código' para receber o código de 6 dígitos no seu e-mail."
         actionText="Confirmar e Salvar"
       />
     </>

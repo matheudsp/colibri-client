@@ -101,7 +101,7 @@ export default function MyPaymentsPage() {
       //const totalFromResponse = response?.meta?.resource?.total;
     } catch (error) {
       const errorMessage = extractAxiosError(error);
-      toast.error("Falha ao buscar pagamentos", {
+      toast.error("Falha ao buscar faturas", {
         description: errorMessage,
       });
       setPayments([]); // garante consistência no state
@@ -128,7 +128,7 @@ export default function MyPaymentsPage() {
     try {
       await BankSlipService.generate(paymentOrderId);
       toast.success("Boleto gerado com sucesso!", {
-        description: "A sua lista de pagamentos foi atualizada.",
+        description: "A sua lista de faturas foi atualizada.",
       });
       await fetchPayments(filters);
     } catch (error: unknown) {
@@ -170,8 +170,8 @@ export default function MyPaymentsPage() {
       <div className="w-full max-w-7xl mx-auto">
         <PageHeader
           className="mb-8"
-          title="Meus Pagamentos"
-          subtitle="Consulte o seu histórico de faturas e gere os seus boletos."
+          title="Minhas Faturas"
+          subtitle="Consulte o seu histórico de faturas e acompanhe seus boletos."
           icon={CalendarArrowDown}
         />
         <div className="bg-background p-4 rounded-xl shadow-xs border border-border  mb-6">
@@ -283,7 +283,7 @@ export default function MyPaymentsPage() {
           ) : payments.length === 0 ? (
             <EmptyCard
               icon={<FileText size={48} />}
-              title="Nenhum pagamento encontrado"
+              title="Nenhuma fatura encontrada"
               subtitle="Tente ajustar os filtros ou verifique mais tarde."
             />
           ) : (

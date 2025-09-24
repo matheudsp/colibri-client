@@ -42,8 +42,8 @@ const allNavItems = [
     roles: [Roles.ADMIN, Roles.LOCADOR, Roles.LOCATARIO],
   },
   {
-    label: "Pagamentos",
-    href: "/pagamentos",
+    label: "Faturas",
+    href: "/faturas",
     icon: CalendarArrowDown,
     roles: [Roles.ADMIN, Roles.LOCADOR, Roles.LOCATARIO],
   },
