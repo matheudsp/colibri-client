@@ -148,9 +148,9 @@ export function useCustomInput(props: UseCustomInputProps) {
         {
           "border-primary ring-2 ring-primary/20": isFocused && !error,
           "border-error ring-2 ring-error/20": !!error,
-          "border-gray-300 bg-white": !isFocused && !error && !disabled,
-          "hover:border-gray-400": !disabled && !error && !isFocused,
-          "bg-gray-100 border-gray-50 cursor-not-allowed ": disabled,
+          "border-border bg-background": !isFocused && !error && !disabled,
+          "hover:border-border": !disabled && !error && !isFocused,
+          "bg-gray-100 border-border cursor-not-allowed ": disabled,
         }
       ),
     [isFocused, error, disabled]
@@ -161,7 +161,7 @@ export function useCustomInput(props: UseCustomInputProps) {
       clsx(
         "w-full bg-transparent outline-hidden text-foreground placeholder:text-gray-400",
         {
-          "cursor-not-allowed text-gray-700": disabled,
+          "cursor-not-allowed text-gray-500": disabled,
         },
         inputClassName
       ),
