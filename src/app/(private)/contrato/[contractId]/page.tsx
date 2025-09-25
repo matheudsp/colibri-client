@@ -121,16 +121,28 @@ export default function ContractManagementPage() {
 
   const handleViewContract = async () => {
     if (!contract) return;
+
+    const newTab = window.open("/loading-pdf.html", "_blank");
+
+    if (!newTab) {
+      toast.error(
+        "Não foi possível abrir uma nova aba. Verifique se seu navegador está bloqueando pop-ups."
+      );
+      return;
+    }
+
     setIsActionLoading(true);
     try {
       const response = await ContractService.getViewPdfUrl(contract.id);
 
-      window.open(response.data.url, "_blank");
+      newTab.location.href = response.data.url;
     } catch (_error) {
       const errorMessage = extractAxiosError(_error);
-      toast.error("Falha ao obter URL do contrato ", {
+      toast.error("Falha ao obter URL do contrato", {
         description: errorMessage,
       });
+
+      newTab.close();
     } finally {
       setIsActionLoading(false);
     }
