@@ -210,6 +210,15 @@ export function PropertyCard({
         onTouchMove={onTouchMove}
         onTouchEnd={onTouchEnd}
       >
+        {property.interestCount && property.interestCount > 0 && (
+          <div className="absolute top-2 left-2 z-10 flex items-center gap-1.5 bg-black/50 text-white text-xs font-semibold px-2 py-1 rounded-full backdrop-blur-sm">
+            <Eye size={14} />
+            <span>
+              {property.interestCount}{" "}
+              {property.interestCount > 1 ? "interessados" : "interessado"}
+            </span>
+          </div>
+        )}
         {property.photos && property.photos.length > 0 ? (
           <Image
             src={property.photos[currentImage].url}
@@ -223,7 +232,6 @@ export function PropertyCard({
             <Home className="w-16 h-16 text-gray-400" />
           </div>
         )}
-
         <AnimatePresence>
           {showSwipeHint && (
             <motion.div
@@ -244,7 +252,6 @@ export function PropertyCard({
             </motion.div>
           )}
         </AnimatePresence>
-
         {property.photos && property.photos.length > 1 && (
           <>
             <button

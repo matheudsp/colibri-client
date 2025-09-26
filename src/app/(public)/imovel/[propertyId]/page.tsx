@@ -9,7 +9,9 @@ import {
   Bed,
   Building,
   Car,
+  CheckCircle,
   CheckCircle2,
+  HelpCircle,
   Loader2,
   Maximize,
   User,
@@ -27,9 +29,11 @@ import { CustomButton } from "@/components/forms/CustomButton";
 import { PropertyGallery } from "@/components/galleries/PropertyGallery";
 import { extractAxiosError } from "@/services/api";
 import { InterestService } from "@/services/domains/interestService";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { useCurrentUser } from "@/hooks/useCurrentUser";
 import { LoginModal } from "@/components/modals/authModals/LoginModal";
+import { Tooltip } from "@/components/common/Tooltip";
+import { InterestIndicator } from "@/components/layout/InterestIndicator";
 
 const PriceAndContactCard = ({
   property,
@@ -40,6 +44,21 @@ const PriceAndContactCard = ({
 }) => {
   const { user } = useCurrentUser();
   const [interestSent, setInterestSent] = useState(false);
+
+  const { data: interestStatus, isLoading: isLoadingInterestStatus } = useQuery(
+    {
+      queryKey: ["interestStatus", property.id, user?.id],
+      queryFn: () => InterestService.checkInterest(property.id),
+      enabled: !!user,
+    }
+  );
+
+  // Efeito para sincronizar o estado local com o resultado da query
+  useEffect(() => {
+    if (interestStatus?.data?.hasInterested) {
+      setInterestSent(true);
+    }
+  }, [interestStatus]);
 
   const isOwner = user?.id === property.landlordId;
 
@@ -69,24 +88,73 @@ const PriceAndContactCard = ({
 
   const handleShowInterest = () => {
     if (!user) {
+      window.sessionStorage.setItem("loginIntent", "showInterest");
       onLoginRequired();
       return;
     }
     demonstrateInterest(property.id);
   };
 
-  useEffect(() => {
-    if (
-      user &&
-      window.sessionStorage.getItem("loginIntent") === "showInterest"
-    ) {
-      demonstrateInterest(property.id);
-      window.sessionStorage.removeItem("loginIntent");
+  const renderActionButtons = () => {
+    if (isOwner) {
+      return (
+        <div className="text-center text-sm text-foreground-muted py-3 bg-background-alt border border-border rounded-lg">
+          Você é o proprietário deste imóvel.
+        </div>
+      );
     }
-  }, [user, demonstrateInterest, property.id]);
+
+    if (property.acceptOnlineProposals) {
+      if (interestSent) {
+        return (
+          <CustomButton className="w-full" disabled={true}>
+            <CheckCircle className="h-5 w-5 mr-2" />
+            Interesse Já Enviado
+          </CustomButton>
+        );
+      }
+      return (
+        <div className="flex items-center gap-2">
+          <CustomButton
+            onClick={handleShowInterest}
+            className="w-full bg-secondary hover:bg-secondary-hover"
+            disabled={isPending || isLoadingInterestStatus}
+            isLoading={isPending || isLoadingInterestStatus}
+          >
+            Demonstrar Interesse
+          </CustomButton>
+          <Tooltip
+            content="Ao clicar, o locador será notificado do seu interesse e poderá iniciar o processo de locação pela plataforma."
+            position="top"
+          >
+            <HelpCircle className="h-5 w-5 text-gray-400 cursor-help" />
+          </Tooltip>
+        </div>
+      );
+    }
+
+    if (whatsappLink) {
+      return (
+        <a
+          href={whatsappLink}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="block"
+        >
+          <CustomButton className="w-full bg-green-500 hover:bg-green-600">
+            <FaWhatsapp size={18} className="mr-2" />
+            Conversar no WhatsApp
+          </CustomButton>
+        </a>
+      );
+    }
+
+    return null;
+  };
 
   return (
-    <div className="border border-border rounded-xl p-5 space-y-5">
+    <div className="border border-border rounded-xl p-5 space-y-5 bg-background shadow-sm">
+      {/* Seção de Preço */}
       <div>
         <p className="text-gray-500 text-sm">Valor do Aluguel (mensal)</p>
         <p className="text-3xl font-bold text-primary">
@@ -94,43 +162,25 @@ const PriceAndContactCard = ({
         </p>
       </div>
 
+      {/* Seção de Contato */}
       <div className="border-t border-border pt-5">
         <p className="font-bold text-gray-800 mb-3">Gostou do imóvel?</p>
-        <div className="flex items-center space-x-3">
-          <div className="w-10 h-10 bg-primary rounded-2xl flex items-center justify-center">
-            <User className="text-white" />
+
+        {/* Informações do Locador */}
+        <div className="flex items-center space-x-3 mb-4">
+          <div className="w-10 h-10 bg-primary/10 border border-primary/20 rounded-full flex items-center justify-center">
+            <User className="text-primary" />
           </div>
           <div>
+            <p className="text-sm text-gray-500">Locador(a)</p>
             <p className="font-semibold text-gray-800">
               {property.landlord.name}
             </p>
           </div>
         </div>
-        <div className="mt-4 space-y-2">
-          {isOwner ? (
-            <div className="text-center text-sm text-foreground-muted py-3 bg-background-alt border border-border rounded-lg">
-              Você é o proprietário deste imóvel.
-            </div>
-          ) : property.acceptOnlineProposals ? (
-            <CustomButton
-              onClick={handleShowInterest}
-              className="w-full bg-secondary hover:bg-secondary-hover"
-              disabled={isPending || interestSent}
-            >
-              {isPending && <Loader2 size={18} className="mr-2 animate-spin" />}
-              {interestSent ? "Interesse Enviado" : "Demonstrar Interesse"}
-            </CustomButton>
-          ) : (
-            whatsappLink && (
-              <a href={whatsappLink} target="_blank" rel="noopener noreferrer">
-                <CustomButton className="w-full bg-green-500 hover:bg-green-600">
-                  <FaWhatsapp size={18} className="mr-2" /> Conversar no
-                  WhatsApp
-                </CustomButton>
-              </a>
-            )
-          )}
-        </div>
+
+        {/* Botões de Ação */}
+        <div className="mt-4 space-y-2">{renderActionButtons()}</div>
       </div>
     </div>
   );
@@ -220,16 +270,19 @@ export default function PropertyDetailsPage() {
                   <h1 className="text-2xl md:text-3xl font-bold text-gray-900">
                     {property.title}
                   </h1>
-                  {property.isAvailable ? (
-                    <div className="shrink-0 flex items-center text-green-600 bg-green-100 font-bold text-xs px-2.5 py-1 rounded-full">
-                      <CheckCircle2 size={14} className="mr-1.5" /> Disponível
-                      para Alugar
-                    </div>
-                  ) : (
-                    <div className="shrink-0 flex items-center text-red-600 bg-red-100 font-bold text-xs px-2.5 py-1 rounded-full">
-                      <XCircle size={14} className="mr-1.5" /> Já Alugado
-                    </div>
-                  )}
+                  <div className="flex items-center gap-2 flex-wrap">
+                    {property.isAvailable ? (
+                      <div className="shrink-0 flex items-center text-green-600 bg-green-100 font-bold text-xs px-2.5 py-1 rounded-full">
+                        <CheckCircle2 size={14} className="mr-1.5" /> Disponível
+                        para Alugar
+                      </div>
+                    ) : (
+                      <div className="shrink-0 flex items-center text-red-600 bg-red-100 font-bold text-xs px-2.5 py-1 rounded-full">
+                        <XCircle size={14} className="mr-1.5" /> Já Alugado
+                      </div>
+                    )}
+                    <InterestIndicator count={property.interestCount || 0} />
+                  </div>
                 </div>
 
                 <div className="border-t border-border pt-4">

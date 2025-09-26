@@ -77,11 +77,21 @@ export function PaymentsList({
   const canManagePayments = role === Roles.LOCADOR || role === Roles.ADMIN;
 
   return (
-    <div className=" p-5 rounded-xl border border-border">
-      <h2 className="font-bold text-xl mb-4 border-b border-border pb-2">
-        Histórico de Pagamentos
-      </h2>
-      <ul className="divide-y divide-border">
+    <div className="p-5 rounded-xl border border-border max-h-[450px] flex flex-col">
+      <h2 className="font-bold text-xl mb-3">Histórico de Pagamentos</h2>
+
+      {/* Lista scrollável ocupa o espaço restante do container */}
+      <ul
+        className="divide-y divide-border overflow-auto flex-1"
+        role="list"
+        aria-label="Histórico de pagamentos"
+      >
+        {payments.length === 0 && (
+          <li className="p-4 text-sm text-gray-500">
+            Nenhum pagamento encontrado.
+          </li>
+        )}
+
         {payments.map((payment) => {
           const status = statusMap[payment.status] || statusMap.PENDENTE;
           const isPayable =
@@ -92,35 +102,38 @@ export function PaymentsList({
           return (
             <li
               key={payment.id}
-              className="p-3 transition-all hover:bg-gray-100/50"
+              className="p-3 transition-all hover:bg-foreground/20 outline-none"
+              tabIndex={0}
             >
               <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3">
                 {/* -- Informações do Pagamento -- */}
-                <div className="flex items-center gap-4">
-                  {status.icon}
-                  <div className="flex-1">
-                    <p className={`font-semibold ${status.color}`}>
+                <div className="flex items-center gap-4 min-w-0">
+                  <div className="flex-shrink-0">{status.icon}</div>
+
+                  <div className="flex-1 min-w-0">
+                    <p className={`font-semibold ${status.color} truncate`}>
                       {status.label}
                     </p>
-                    <p className="text-sm text-gray-500">
+                    <p className="text-sm text-gray-500 truncate">
                       Vencimento: {formatDateForDisplay(payment.dueDate)}
                     </p>
                   </div>
                 </div>
 
                 {/* -- Valor e Ação -- */}
-                <div className="flex items-center justify-between sm:justify-end sm:gap-4 w-full sm:w-auto">
-                  <p className="font-bold text-gray-800 text-base sm:text-lg">
+                <div className="flex items-center justify-between sm:justify-end sm:gap-4 w-full sm:w-auto mt-2 sm:mt-0">
+                  <p className="font-bold text-gray-800 text-base sm:text-lg truncate">
                     {payment.amountDue
                       ? `R$ ${formatDecimalValue(payment.amountDue.toString())}`
                       : "N/A"}
                   </p>
+
                   {canManagePayments && isPayable && (
                     <CustomButton
                       onClick={() => onRegisterPaymentClick(payment.id)}
                       color="bg-green-100"
                       textColor="text-green-800"
-                      className="shrink-0 text-xs sm:text-sm px-2 sm:px-3"
+                      className="shrink-0 text-xs sm:text-sm px-2 sm:px-3 ml-3"
                     >
                       <DollarSign size={16} className="mr-1 sm:mr-2" />
                       Dar Baixa

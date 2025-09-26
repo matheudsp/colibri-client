@@ -27,7 +27,9 @@ export interface PropertyProps {
   createdAt: string;
   updatedAt: string;
   acceptOnlineProposals?: boolean;
+  interestCount?: number;
   showPropertyInformation?: boolean;
+
   onDelete?: (id: string) => void;
   photos: Array<{
     id: string;

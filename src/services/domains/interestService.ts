@@ -28,6 +28,31 @@ export interface Interest {
 
 export const InterestService = {
   /**
+   * Verifica se o usuário logado já demonstrou interesse em um imóvel.
+   */
+  async checkInterest(
+    propertyId: string
+  ): Promise<ApiResponse<{ hasInterested: boolean }>> {
+    try {
+      const response = await api.get(
+        API_ROUTES.INTERESTS.CHECK({ propertyId })
+      );
+      return response.data;
+    } catch (error) {
+      // Retorna false em caso de erro para não bloquear a UI,
+      // a validação final sempre será do backend.
+      console.error("Failed to check interest status:", error);
+      return {
+        success: false,
+        statusCode: 500,
+        message: "Não foi possível identificar interesse",
+        data: { hasInterested: false },
+        timestamp: new Date().toISOString(),
+      };
+    }
+  },
+
+  /**
    * Locatário: Envia uma manifestação de interesse em um imóvel.
    */
   async create(data: CreateInterestData): Promise<ApiResponse<Interest>> {

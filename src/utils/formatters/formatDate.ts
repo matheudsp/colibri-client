@@ -1,6 +1,27 @@
-export const formatDate = (date: Date | string, locale = "pt-BR") => {
+export const formatDate = (
+  date: Date | string,
+  locale = "pt-BR",
+  withTime = false
+): string => {
   if (!date) return "";
-  return new Date(date).toLocaleDateString(locale);
+
+  const parsedDate = new Date(date);
+
+  if (isNaN(parsedDate.getTime())) return "";
+
+  if (!withTime) {
+    return parsedDate.toLocaleDateString(locale);
+  }
+
+  const datePart = parsedDate.toLocaleDateString(locale);
+  const timePart = parsedDate
+    .toLocaleTimeString(locale, {
+      hour: "2-digit",
+      minute: "2-digit",
+    })
+    .replace(":", "h");
+
+  return `${datePart} às ${timePart}`;
 };
 
 export const toISODate = (dateString: string): string => {

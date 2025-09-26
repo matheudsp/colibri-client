@@ -1,6 +1,6 @@
 "use client";
-
-import { useCallback, useEffect, useState } from "react";
+import Image from "next/image";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import {
   ArrowLeft,
@@ -36,6 +36,7 @@ import { RegisterPaymentModal } from "@/components/modals/paymentModals/Register
 import { extractAxiosError } from "@/services/api";
 import { LottieAnimation } from "@/components/common/LottieAnimation";
 import signatureAnimation from "../../../../../public/lottie/signature-animation.json";
+import { JudicialReportCard } from "@/components/cards/JudicialReportCard";
 
 export default function ContractManagementPage() {
   const [contract, setContract] = useState<ContractWithDocuments | null>(null);
@@ -76,6 +77,16 @@ export default function ContractManagementPage() {
   useEffect(() => {
     fetchContract();
   }, [fetchContract]);
+
+  const coverPhoto = useMemo(() => {
+    if (!contract?.property?.photos || contract.property.photos.length === 0) {
+      return null;
+    }
+    return (
+      contract.property.photos.find((p) => p.isCover) ||
+      contract.property.photos[0]
+    );
+  }, [contract?.property?.photos]);
 
   const handleActivate = async () => {
     if (!contract) return;
@@ -167,6 +178,7 @@ export default function ContractManagementPage() {
       setIsSigningLoading(false);
     }
   };
+
   const handleResendNotification = async (
     signerId: string
     // method: "email" | "whatsapp"
@@ -433,13 +445,30 @@ export default function ContractManagementPage() {
               Voltar para Contratos
             </CustomButton>
             <div className="mt-4 bg-background p-4 rounded-xl  border border-border flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-              <div>
-                <h1 className="text-2xl font-bold text-gray-800">
-                  Gerenciar Contrato
-                </h1>
-                <p className="text-gray-500 mt-1">
-                  Imóvel: {contract.property.title}
-                </p>
+              <div className="flex flex-col md:flex-row items-center justify-center gap-2">
+                <div className="relative w-16 h-16 rounded-lg bg-zinc-100 shrink-0 overflow-hidden border border-border">
+                  {coverPhoto ? (
+                    <Image
+                      src={coverPhoto.url}
+                      alt={`Foto de ${contract.property.title}`}
+                      fill
+                      sizes="64px"
+                      className="object-cover"
+                    />
+                  ) : (
+                    <div className="w-full h-full flex items-center justify-center text-zinc-400">
+                      <FileText size={24} />
+                    </div>
+                  )}
+                </div>
+                <div className="flex flex-col">
+                  <h1 className="text-2xl font-bold text-gray-800">
+                    Gerenciar Contrato
+                  </h1>
+                  <p className="text-gray-500 mt-1">
+                    Imóvel: {contract.property.title}
+                  </p>
+                </div>
               </div>
               {statusInfo && (
                 <div
@@ -461,6 +490,13 @@ export default function ContractManagementPage() {
                   <PaymentsList
                     payments={contract.paymentsOrders}
                     onRegisterPaymentClick={handleOpenRegisterModal}
+                  />
+                )}
+              {contract.status === "ATIVO" &&
+                (role === Roles.LOCADOR || role === Roles.ADMIN) && (
+                  <JudicialReportCard
+                    contract={contract}
+                    onReportGenerated={fetchContract}
                   />
                 )}
             </div>
@@ -489,9 +525,30 @@ export default function ContractManagementPage() {
                     )}
                   </CustomButton>
                 )}
+                {/* {(role === Roles.LOCADOR || role === Roles.ADMIN) && (
+                  <CustomButton
+                    onClick={handleGenerateJudicialReport}
+                    disabled={isActionLoading}
+                    color="bg-gray-100"
+                    textColor="text-gray-900"
+                    className="w-full"
+                  >
+                    {isActionLoading ? (
+                      <Loader2 className="animate-spin mr-2" />
+                    ) : (
+                      <>
+                        <FileInput className="mr-2" size={20} />
+                        Gerar Relatório
+                      </>
+                    )}
+                  </CustomButton>
+                )} */}
                 {(contract.status === "PENDENTE_DOCUMENTACAO" ||
                   contract.status === "EM_ANALISE" ||
-                  contract.status === "AGUARDANDO_ASSINATURAS") && (
+                  contract.status === "AGUARDANDO_ASSINATURAS" ||
+                  contract.status === "ATIVO" ||
+                  contract.status === "CANCELADO" ||
+                  contract.status === "FINALIZADO") && (
                   <CustomButton
                     onClick={() => {
                       router.push(`/contrato/${contract.id}/documentos`);

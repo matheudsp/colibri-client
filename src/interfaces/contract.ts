@@ -1,4 +1,5 @@
 import type { PaymentResponse } from "./payment";
+import type { Pdf } from "./pdf";
 import { PropertyProps as Property } from "./property";
 
 export interface Contract {
@@ -46,10 +47,5 @@ export interface ContractWithDocuments extends Contract {
     status: string;
     type: string;
   }[];
-  GeneratedPdf: { signatureRequests: SignatureRequest[] }[];
-}
-export interface SignatureRequest {
-  id: string;
-  requestSignatureKey: string;
-  signerId: string;
+  GeneratedPdf: Pdf[];
 }

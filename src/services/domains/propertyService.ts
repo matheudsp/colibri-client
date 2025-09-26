@@ -42,6 +42,7 @@ export interface PropertyResponse {
   createdAt: string;
   updatedAt: string;
   acceptOnlineProposals?: boolean;
+  interestCount?: number;
 }
 
 interface PropertyCreateData {

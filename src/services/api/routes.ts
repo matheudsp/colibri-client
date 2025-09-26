@@ -148,6 +148,7 @@ const API_ROUTES = {
     LIST_RECEIVED: "/interests/received",
     LIST_SENT: "/interests/sent",
     UPDATE_STATUS: ({ id }: Params) => `/interests/${id}/status`,
+    CHECK: ({ propertyId }: Params) => `/interests/check/${propertyId}`,
   },
 };
 
