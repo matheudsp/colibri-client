@@ -141,6 +141,14 @@ const API_ROUTES = {
     PAYMENTS_SUMMARY: "/analytics/payments-summary",
     PROPERTIES_OCCUPANCY: "/analytics/properties-occupancy",
   },
+
+  INTERESTS: {
+    BASE: "/interests",
+    CREATE: "/interests",
+    LIST_RECEIVED: "/interests/received",
+    LIST_SENT: "/interests/sent",
+    UPDATE_STATUS: ({ id }: Params) => `/interests/${id}/status`,
+  },
 };
 
 export default API_ROUTES;
