@@ -47,7 +47,40 @@ export type UpdateUserData = Partial<UserProfileFormValues> & {
   actionToken?: string;
 };
 
+export interface UserPreferences {
+  notifications?: {
+    acceptOnlineProposals?: boolean;
+  };
+}
+
 export const UserService = {
+  /**
+   * Busca as preferências do usuário logado.
+   */
+  async getPreferences(): Promise<ApiResponse<UserPreferences>> {
+    try {
+      const response = await api.get(API_ROUTES.USERS.GET_PREFERENCES);
+      return response.data;
+    } catch (error) {
+      throw new Error(extractAxiosError(error));
+    }
+  },
+
+  /**
+   * Atualiza as preferências do usuário logado.
+   */
+  async updatePreferences(data: UserPreferences): Promise<{ message: string }> {
+    try {
+      const response = await api.patch(
+        API_ROUTES.USERS.UPDATE_PREFERENCES,
+        data
+      );
+      return response.data;
+    } catch (error) {
+      throw new Error(extractAxiosError(error));
+    }
+  },
+
   async listAll(params?: ListUserParams): Promise<User[]> {
     try {
       const response = await api.get(API_ROUTES.USERS.BASE, {

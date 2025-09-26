@@ -52,6 +52,8 @@ const API_ROUTES = {
     BY_ID: ({ id }: Params) => `/users/${id}`,
     UPDATE: ({ id }: Params) => `/users/${id}`,
     DELETE: ({ id }: Params) => `/users/${id}`,
+    GET_PREFERENCES: "/users/preferences",
+    UPDATE_PREFERENCES: "/users/preferences",
   },
 
   PDFS: {

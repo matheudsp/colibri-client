@@ -1,6 +1,13 @@
 "use client";
 
-import { Shield, Wallet, User, Loader2, BanknoteArrowDown } from "lucide-react";
+import {
+  Shield,
+  Wallet,
+  User,
+  Loader2,
+  BanknoteArrowDown,
+  Settings,
+} from "lucide-react";
 import { TabbedInterface, TabItem } from "@/components/common/TabbedInterface";
 
 import { useCurrentUser } from "@/hooks/useCurrentUser";
@@ -11,6 +18,7 @@ import { SecurityTab } from "@/components/tabs/SecurityTab";
 import { PaymentAccountTab } from "@/components/tabs/PaymentAccountTab";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { PaymentsActivityTab } from "@/components/tabs/PaymentsActivityTab";
+import { PreferencesTab } from "@/components/tabs/PreferencesTab";
 
 export default function AccountPage() {
   const { role, loading: isRoleLoading } = useCurrentUser();
@@ -24,6 +32,12 @@ export default function AccountPage() {
         title: "Perfil",
         icon: <User size={18} />,
         content: <AccountTab />,
+      },
+      {
+        id: "preferencias",
+        title: "Preferências",
+        icon: <Settings size={18} />,
+        content: <PreferencesTab />,
       },
       {
         id: "seguranca",

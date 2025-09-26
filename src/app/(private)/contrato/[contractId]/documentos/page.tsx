@@ -325,7 +325,7 @@ export default function DocumentPage() {
             <div className="space-y-6">
               {docsAwaitingReview.length > 0 && (
                 <section>
-                  <h2 className="text-lg font-semibold text-zinc-800 mb-3 border-b  pb-2">
+                  <h2 className="text-lg font-semibold text-zinc-800 mb-3 border-b border-border  pb-2">
                     Aguardando Análise ({docsAwaitingReview.length})
                   </h2>
                   <ul className="space-y-3">

@@ -19,7 +19,7 @@ export default function Home() {
             morar bem
           </h1>
           <p className="mt-4 text-sm md:text-base text-center text-gray-200 italic">
-            Busque seu imóvel na Locaterra.
+            Busque seu imóvel no Locaterra.
           </p>
 
           <div className="mt-6 w-full px-4 flex items-center justify-center">

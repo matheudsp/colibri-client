@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Open_Sans, Montserrat, Poppins } from "next/font/google";
 import "../styles/globals.css";
 import { Toaster } from "sonner";
+import { ReactQueryProvider } from "@/providers/ReactQueryProvider";
 
 const openSans = Open_Sans({
   weight: ["400", "500", "700"],
@@ -37,10 +38,12 @@ export default function RootLayout({
       <body
         className={`${openSans.className} ${montserrat.className} ${poppins.className} font-poppins antialiased flex  `}
       >
-        <div className="flex flex-col min-h-screen w-full">
-          <main className="grow">{children}</main>
-        </div>
-        <Toaster richColors position="bottom-center" />
+        <ReactQueryProvider>
+          <div className="flex flex-col min-h-screen w-full">
+            <main className="grow">{children}</main>
+          </div>
+          <Toaster richColors position="bottom-center" />
+        </ReactQueryProvider>
       </body>
     </html>
   );
