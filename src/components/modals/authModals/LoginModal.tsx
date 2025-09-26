@@ -1,4 +1,3 @@
-// src/components/modals/authModals/LoginModal.tsx
 "use client";
 
 import { useState } from "react";
@@ -7,7 +6,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, Controller } from "react-hook-form";
 import Link from "next/link";
 import { toast } from "sonner";
-import { LockIcon, MailIcon, Loader2 } from "lucide-react";
+import { LockIcon, MailIcon } from "lucide-react";
 import Image from "next/image";
 
 import { Modal } from "@/components/modals/Modal";

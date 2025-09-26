@@ -14,7 +14,6 @@ import {
   Maximize,
   User,
   XCircle,
-  Handshake,
 } from "lucide-react";
 import { FaWhatsapp } from "react-icons/fa";
 
