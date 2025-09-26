@@ -43,7 +43,7 @@ export function RegisterPaymentModal({
           color="bg-green-600"
           textColor="text-white"
         >
-          {isLoading ? <Loader2 className="animate-spin" /> : "Sim, confirmar"}
+          {isLoading ? <Loader2 className="animate-spin" /> : "Confirmar"}
         </CustomButton>
       </div>
     </Modal>

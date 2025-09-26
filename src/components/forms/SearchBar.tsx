@@ -66,7 +66,7 @@ export function SearchBar() {
           />
         </button>
         {isTransactionOpen && (
-          <div className="absolute top-full mt-2 w-full bg-white py-1 divide-y rounded-md shadow-xs shadow-black/70 border border-border z-10 ">
+          <div className="absolute top-full mt-2 w-full bg-white py-1 divide-y divide-border rounded-md shadow-xs shadow-black/70 border border-border z-10 ">
             {transactionOptions.map((opt) => (
               <div
                 key={opt.id}
@@ -106,7 +106,7 @@ export function SearchBar() {
           />
         </button>
         {isPropertyTypeOpen && (
-          <div className="absolute top-full mt-2 w-full bg-white py-1 divide-y rounded-md shadow-xs shadow-black/70 border border-border z-10 ">
+          <div className="absolute top-full mt-2 w-full bg-white py-1 divide-y divide-border rounded-md shadow-xs shadow-black/70 border border-border z-10 ">
             {propertyTypeOptions.map((opt) => (
               <div
                 key={opt.id}

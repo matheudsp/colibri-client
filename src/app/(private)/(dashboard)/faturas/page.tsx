@@ -28,8 +28,9 @@ import { extractAxiosError } from "@/services/api";
 import { EmptyCard } from "@/components/common/EmptyCard";
 import { CustomInput } from "@/components/forms/CustomInput";
 import PageHeader from "@/components/common/PageHeader";
-import { PaymentCard, statusMap } from "@/components/cards/PaymentCard";
+import { PaymentCard } from "@/components/cards/PaymentCard";
 import { CustomDropdownInput } from "@/components/forms/CustomDropdownInput";
+import { statusMap } from "@/constants/paymentStatusMap";
 
 export default function MyPaymentsPage() {
   const [payments, setPayments] = useState<PaymentResponse[]>([]);

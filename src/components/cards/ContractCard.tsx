@@ -36,7 +36,7 @@ const DetailItem = ({
 
 export function ContractCard({ contract }: { contract: Contract }) {
   const router = useRouter();
-
+  // console.log(contract, "OIASODAID");
   const statusInfo = useMemo(() => {
     return (
       contractStatus.find((s) => s.value === contract.status) || {
@@ -100,7 +100,7 @@ export function ContractCard({ contract }: { contract: Contract }) {
     >
       <div className="p-4">
         <header className="flex flex-col sm:flex-row items-start justify-between gap-4">
-          <div className="flex items-center gap-4 min-w-0">
+          <div className="flex items-center gap-4 min-w-0 w-full">
             <div className="relative w-16 h-16 rounded-lg bg-zinc-100 shrink-0 overflow-hidden border border-border">
               {coverPhoto ? (
                 <Image
@@ -116,7 +116,7 @@ export function ContractCard({ contract }: { contract: Contract }) {
                 </div>
               )}
             </div>
-            <div className="min-w-0">
+            <div className="min-w-0 flex-1">
               <h3
                 className="text-base font-bold text-zinc-900 truncate"
                 title={contract.property.title}
@@ -129,7 +129,7 @@ export function ContractCard({ contract }: { contract: Contract }) {
             </div>
           </div>
           <div
-            className={`px-3 py-1 text-xs font-semibold rounded-full whitespace-nowrap flex items-center gap-1.5 ${statusInfo.class}`}
+            className={`px-3 py-1 text-xs font-semibold rounded-full whitespace-nowrap flex items-center gap-1.5 self-end sm:self-auto ${statusInfo.class}`}
             aria-label={`Status: ${statusInfo.label}`}
           >
             {statusInfo.label}

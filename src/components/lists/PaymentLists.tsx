@@ -81,7 +81,7 @@ export function PaymentsList({
       <h2 className="font-bold text-xl mb-4 border-b border-border pb-2">
         Histórico de Pagamentos
       </h2>
-      <ul className="divide-y divide-border p-2">
+      <ul className="divide-y divide-border">
         {payments.map((payment) => {
           const status = statusMap[payment.status] || statusMap.PENDENTE;
           const isPayable =
@@ -92,35 +92,41 @@ export function PaymentsList({
           return (
             <li
               key={payment.id}
-              className="flex flex-row justify-between items-center p-3 transition-all hover:bg-gray-100"
+              className="p-3 transition-all hover:bg-gray-100/50"
             >
-              <div className="flex items-center gap-4">
-                {status.icon}
-                <div className="flex-1">
-                  <p className={`font-semibold ${status.color}`}>
-                    {status.label}
-                  </p>
-                  <p className="text-sm text-gray-500">
-                    Vencimento: {formatDateForDisplay(payment.dueDate)}
-                  </p>
+              <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3">
+                {/* -- Informações do Pagamento -- */}
+                <div className="flex items-center gap-4">
+                  {status.icon}
+                  <div className="flex-1">
+                    <p className={`font-semibold ${status.color}`}>
+                      {status.label}
+                    </p>
+                    <p className="text-sm text-gray-500">
+                      Vencimento: {formatDateForDisplay(payment.dueDate)}
+                    </p>
+                  </div>
                 </div>
-              </div>
-              <div className="flex items-center gap-4 mt-2 sm:mt-0">
-                <p className="font-bold text-gray-800">
-                  {payment.amountDue
-                    ? `R$ ${formatDecimalValue(payment.amountDue.toString())}`
-                    : "N/A"}
-                </p>
-                {canManagePayments && isPayable && (
-                  <CustomButton
-                    onClick={() => onRegisterPaymentClick(payment.id)}
-                    color="bg-green-100"
-                    textColor="text-green-800"
-                  >
-                    <DollarSign size={16} className="mr-2" />
-                    Dar Baixa
-                  </CustomButton>
-                )}
+
+                {/* -- Valor e Ação -- */}
+                <div className="flex items-center justify-between sm:justify-end sm:gap-4 w-full sm:w-auto">
+                  <p className="font-bold text-gray-800 text-base sm:text-lg">
+                    {payment.amountDue
+                      ? `R$ ${formatDecimalValue(payment.amountDue.toString())}`
+                      : "N/A"}
+                  </p>
+                  {canManagePayments && isPayable && (
+                    <CustomButton
+                      onClick={() => onRegisterPaymentClick(payment.id)}
+                      color="bg-green-100"
+                      textColor="text-green-800"
+                      className="shrink-0 text-xs sm:text-sm px-2 sm:px-3"
+                    >
+                      <DollarSign size={16} className="mr-1 sm:mr-2" />
+                      Dar Baixa
+                    </CustomButton>
+                  )}
+                </div>
               </div>
             </li>
           );
