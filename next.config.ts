@@ -1,11 +1,13 @@
 import type { NextConfig } from "next";
 import withPWA from "next-pwa";
+import path from "path";
 
 const pwaConfig = withPWA({
   dest: "public",
   disable: process.env.NODE_ENV === "development",
   register: true,
   skipWaiting: true,
+  dynamicStartUrl: true,
   sw: "custom-worker.js",
   buildExcludes: [
     /middleware-manifest\.json$/,
@@ -14,33 +16,8 @@ const pwaConfig = withPWA({
     /app-build-manifest\.json$/,
   ],
   runtimeCaching: [
-    // Estratégia para fontes do Google Fonts
     {
-      urlPattern: /^https://fonts\.googleapis\.com\/.*/i,
-      handler: "CacheFirst",
-      options: {
-        cacheName: "google-fonts-stylesheets",
-        expiration: {
-          maxEntries: 10,
-          maxAgeSeconds: 60 * 60 * 24 * 365, // 1 ano
-        },
-      },
-    },
-    // Estratégia para arquivos de fontes (locais ou do Google)
-    {
-      urlPattern: /\.(?:eot|otf|ttc|ttf|woff|woff2|font.css)$/i,
-      handler: "CacheFirst",
-      options: {
-        cacheName: "static-font-assets",
-        expiration: {
-          maxEntries: 10,
-          maxAgeSeconds: 60 * 60 * 24 * 365, // 1 ano
-        },
-      },
-    },
-    // Estratégia para imagens
-    {
-      urlPattern: /\.(?:png|jpg|jpeg|svg|webp|avif|ico|bmp|gif)$/i,
+      urlPattern: /\.(?:png|jpg|jpeg|svg|webp)$/,
       handler: "CacheFirst",
       options: {
         cacheName: "images",
@@ -50,50 +27,45 @@ const pwaConfig = withPWA({
         },
       },
     },
-    // Estratégia para JS e CSS
-    {
-      urlPattern: /\.(?:js|css)$/i,
-      handler: "StaleWhileRevalidate",
-      options: {
-        cacheName: "static-style-assets",
-        expiration: {
-          maxEntries: 20,
-          maxAgeSeconds: 60 * 60 * 24 * 30, // 30 dias
-        },
-      },
-    },
-    // Estratégia para chamadas de API
-    {
-      urlPattern: ({ url }) => url.pathname.startsWith("/api/"),
-      handler: "StaleWhileRevalidate",
-      options: {
-        cacheName: "api-cache",
-        expiration: {
-          maxEntries: 50,
-          maxAgeSeconds: 10 * 60, // 10 minutos
-        },
-      },
-    },
   ],
 });
 
 const nextConfig: NextConfig = {
+  // webpack: (config) => {
+  //   config.resolve.alias = {
+  //     ...config.resolve.alias,
+  //     "@/components": path.resolve(__dirname, "src/components"),
+  //     "@/services": path.resolve(__dirname, "src/services"),
+  //     "@/validations": path.resolve(__dirname, "src/validations"),
+  //     "@/modals": path.resolve(__dirname, "src/components/modals"),
+  //     "@/constants": path.resolve(__dirname, "src/components/constants"),
+  //   };
+  //   return config;
+  // },
+
   images: {
     remotePatterns: [
       {
         protocol: "https",
         hostname: "fnsvdwcrmltzgwztidoa.supabase.co",
-        pathname: "/storage/v1/object/**",
+        port: "",
+        pathname: "/storage/v1/object/sign/**",
       },
       {
         protocol: "https",
         hostname: "images.unsplash.com",
       },
+      {
+        protocol: "https",
+        hostname: "fnsvdwcrmltzgwztidoa.supabase.co",
+        port: "",
+        pathname: "/storage/v1/object/public/**",
+      },
     ],
   },
 
-  reactStrictMode: true,
-  productionBrowserSourceMaps: false,
+  reactStrictMode: false,
+  productionBrowserSourceMaps: true,
 
   experimental: {
     optimizeCss: true,
