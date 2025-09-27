@@ -56,7 +56,7 @@ export default function Home() {
           </svg>
         </div>
       </section>
-      {(isPopularLoading || popularProperties.length > 0) && (
+      {popularProperties.length > 0 && (
         <section className="max-w-7xl mx-auto">
           <PropertiesList
             title="Imóveis mais populares"
