@@ -2,11 +2,26 @@
 
 import { SearchBar } from "@/components/forms/SearchBar";
 
-import { RecentPropertiesList } from "@/components/lists/RecentPropertiesList";
+import { PropertiesList } from "@/components/lists/PropertiesList";
 import { BenefitsSection } from "@/components/sections/home/BenefitsSectiont";
 import { HelpSection } from "@/components/sections/home/HelpSection";
+import { PropertyService } from "@/services/domains/propertyService";
+import { useQuery } from "@tanstack/react-query";
 
 export default function Home() {
+  const { data: popularData, isLoading: isPopularLoading } = useQuery({
+    queryKey: ["properties", "most-interested", { limit: 8 }],
+    queryFn: () => PropertyService.listMostInterested({ page: 1, limit: 8 }),
+  });
+
+  const { data: recentData, isLoading: isRecentLoading } = useQuery({
+    queryKey: ["properties", "available", { limit: 8 }],
+    queryFn: () => PropertyService.listAvailable({ page: 1, limit: 8 }),
+  });
+
+  const popularProperties = popularData?.properties || [];
+  const recentProperties = recentData?.properties || [];
+
   return (
     <div className="bg-background flex-col justify-center items-center ">
       <section className="relative lg:min-h-[48svh] md:min-h-[54svh] min-h-[72svh] w-full bg-gradient-to-b from-secondary-hover to-secondary mt-16 flex flex-col items-center justify-center text-center text-white">
@@ -41,9 +56,23 @@ export default function Home() {
           </svg>
         </div>
       </section>
-
+      {(isPopularLoading || popularProperties.length > 0) && (
+        <section className="max-w-7xl mx-auto">
+          <PropertiesList
+            title="Imóveis mais populares"
+            properties={popularProperties}
+            isLoading={isPopularLoading}
+            viewAllLink="/imoveis"
+          />
+        </section>
+      )}
       <section className="max-w-7xl mx-auto">
-        <RecentPropertiesList />
+        <PropertiesList
+          title="Imóveis recentes para alugar"
+          properties={recentProperties}
+          isLoading={isRecentLoading}
+          viewAllLink="/imoveis/para-alugar"
+        />
       </section>
       <section className="py-12 sm:py-18">
         <BenefitsSection />

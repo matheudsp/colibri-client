@@ -15,7 +15,7 @@ export function EmptyCard({
 }: EmptyCardProps) {
   return (
     <div
-      className={`flex flex-col items-center justify-center gap-3 text-center p-6 border border-border bg-gray-200/10 rounded-lg ${className}`}
+      className={`flex flex-col items-center justify-center gap-3 text-center p-4 min-h-[30svh] border-2 border-dashed border-border bg-background-alt/40 rounded-lg ${className}`}
     >
       <div className="text-gray-400">{icon}</div>
       <p className="text-gray-600 font-semibold">{title}</p>

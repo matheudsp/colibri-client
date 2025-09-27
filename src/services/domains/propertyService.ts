@@ -120,13 +120,28 @@ export const PropertyService = {
 
       return response.data.data;
     } catch (error) {
-      console.error("Failed to fetch available properties:", error);
-      return {
-        properties: [],
-        meta: { resource: { total: 0, page: 1, limit: 10, totalPages: 1 } },
-      };
+      throw new Error(extractAxiosError(error));
     }
   },
+
+  async listMostInterested(
+    params?: ListPropertiesParams
+  ): Promise<PropertiesApiResponse> {
+    try {
+      const response = await api.get<ApiResponse<PropertiesApiResponse>>(
+        API_ROUTES.PROPERTIES.LIST_MOST_INTERESTED,
+        {
+          params: params,
+        }
+      );
+
+      return response.data.data;
+    } catch (error) {
+      console.error("Failed to fetch most interested properties:", error);
+      throw new Error(extractAxiosError(error));
+    }
+  },
+
   async search(
     params: SearchPropertiesParams
   ): Promise<ApiResponse<PropertiesApiResponse>> {

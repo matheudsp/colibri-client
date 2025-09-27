@@ -21,7 +21,7 @@ export interface Interest {
   status: "PENDING" | "CONTACTED" | "DISMISSED";
   dismissalReason?: string;
   createdAt: string;
-  property: Pick<PropertyResponse, "id" | "title">;
+  property: Pick<PropertyResponse, "id" | "title" | "photos">;
   tenant: Pick<User, "id" | "name" | "email" | "cpfCnpj" | "phone">;
   landlord: Pick<User, "id" | "name">;
 }
@@ -96,6 +96,7 @@ export const InterestService = {
     data: UpdateInterestStatusData
   ): Promise<ApiResponse<Interest>> {
     try {
+      console.log(data);
       const response = await api.patch(
         API_ROUTES.INTERESTS.UPDATE_STATUS({ id }),
         data

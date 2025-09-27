@@ -74,13 +74,16 @@ export function PreferencesTab() {
       onSubmit={handleSubmit(onSubmit)}
       className="p-0 md:p-4 rounded-b-xl rounded-tr-xl space-y-8"
     >
-      <div className="flex items-center justify-between rounded-lg border border-border p-4">
-        <div className="space-y-0.5">
+      <div className="flex items-center justify-between rounded-lg border border-border p-4 gap-2">
+        <div className="space-y-0.5 ">
           <CustomLabel htmlFor="accept-proposals">
             Receber propostas online
           </CustomLabel>
           <p className="text-sm text-foreground-muted">
-            Permitir que interessados enviem propostas através da plataforma.
+            Essa opção oculta seu telefone da página do imóvel e coleta
+            interessados no seu imóvel, você pode consulta-los na página de
+            interessados para contatar, rejeitar ou iniciar contrato
+            rapidamente.
           </p>
         </div>
         <Controller

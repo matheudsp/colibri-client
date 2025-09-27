@@ -70,6 +70,7 @@ const API_ROUTES = {
   PROPERTIES: {
     BASE: "/properties",
     LIST_AVAILABLE_PUBLIC: "/properties/public",
+    LIST_MOST_INTERESTED: "/properties/public/most-interested",
     SEARCH: "/properties/search",
     PUBLIC_SEARCH: "/properties/public/search",
     CREATE: "/properties",

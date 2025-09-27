@@ -2,7 +2,7 @@
 import { useState } from "react";
 import Image from "next/image";
 import { CustomButton } from "@/components/forms/CustomButton";
-import { ArrowRight, Search, Video } from "lucide-react";
+import { ChevronRight, Search, Video } from "lucide-react";
 
 function FeatureCard({
   icon,
@@ -17,9 +17,9 @@ function FeatureCard({
 }) {
   return (
     <div
-      className={`absolute bg-slate-50/80 backdrop-blur-xs p-4 rounded-xl shadow-lg flex items-center gap-4 w-11/12 sm:w-auto ${className}`}
+      className={`absolute bg-background/80 border-border border backdrop-blur-xs p-4 rounded-xl shadow-lg flex items-center gap-4 w-11/12 sm:w-auto ${className}`}
     >
-      <div className="bg-primary shrink-0 w-12 h-12 rounded-full flex items-center justify-center">
+      <div className="bg-primary shrink-0 w-12 h-12 rounded-xl flex items-center justify-center">
         {icon}
       </div>
       <div>
@@ -48,13 +48,13 @@ export function BenefitsSection() {
         />
 
         <FeatureCard
-          icon={<Video className="w-6 h-6 text-secondary" />}
+          icon={<Video className="w-6 h-6 text-white" />}
           title="Tour Virtual"
           subtitle="Conheça o imóvel sem sair de casa"
           className="top-4 left-4 lg:top-8 lg:-left-8"
         />
         <FeatureCard
-          icon={<Search className="w-6 h-6 text-secondary" />}
+          icon={<Search className="w-6 h-6 text-white" />}
           title="Encontre a melhor oferta"
           subtitle="Navegue por milhares de imóveis"
           className="bottom-4 right-4 lg:bottom-8 lg:-right-8"
@@ -62,7 +62,7 @@ export function BenefitsSection() {
       </div>
 
       <div className="text-center lg:text-left">
-        <div className="inline-flex p-1 bg-slate-200 rounded-lg space-x-1 mb-6">
+        <div className="inline-flex p-1 bg-background-alt rounded-lg space-x-1 mb-6 cursor-pointer">
           <button
             onClick={() => setActiveTab("tenants")}
             className={`px-4 py-2 text-sm font-semibold rounded-md transition-colors ${
@@ -75,7 +75,7 @@ export function BenefitsSection() {
           </button>
           <button
             onClick={() => setActiveTab("landlords")}
-            className={`px-4 py-2 text-sm font-semibold rounded-md transition-colors ${
+            className={`px-4 py-2 text-sm font-semibold rounded-md transition-colors  cursor-pointer ${
               activeTab === "landlords"
                 ? "bg-white text-primary shadow-sm"
                 : "text-gray-600"
@@ -95,16 +95,16 @@ export function BenefitsSection() {
             : "Desde anunciar seu imóvel até receber o aluguel com segurança, nossa plataforma automatiza o processo. Conte com contratos digitais e gestão completa para valorizar seu tempo e seu patrimônio."}
         </p>
 
-        <div className="mt-8">
+        <div className="mt-8 flex items-center justify-center lg:justify-start">
           <CustomButton
             color="bg-primary hover:bg-primary-hover"
-            textColor="text-secondary"
+            textColor="text-white"
             rounded="rounded-lg"
             fontSize="font-bold"
             type="button"
-            className="px-6 py-3 font-sans font-bold"
+            className="p-3 border border-primary-hover border-b-4"
           >
-            Veja mais <ArrowRight className="w-4 h-4 ml-2" />
+            Veja mais <ChevronRight className="w-5 h-5 ml-1" />
           </CustomButton>
         </div>
       </div>

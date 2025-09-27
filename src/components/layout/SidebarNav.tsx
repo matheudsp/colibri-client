@@ -19,7 +19,7 @@ import { useUserStore } from "@/stores/userStore";
 import { AuthService } from "@/services/domains/authService";
 import { Roles } from "@/constants";
 import { useCurrentUser } from "@/hooks/useCurrentUser";
-
+import { GrGroup } from "react-icons/gr";
 const navItems = [
   {
     label: "Painel",
@@ -43,6 +43,12 @@ const navItems = [
     label: "Faturas",
     href: "/faturas",
     icon: CalendarArrowDown,
+    roles: [Roles.ADMIN, Roles.LOCADOR, Roles.LOCATARIO],
+  },
+  {
+    label: "Interessados",
+    href: "/interesses",
+    icon: GrGroup,
     roles: [Roles.ADMIN, Roles.LOCADOR, Roles.LOCATARIO],
   },
 ];

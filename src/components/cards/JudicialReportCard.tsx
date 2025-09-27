@@ -110,7 +110,7 @@ export function JudicialReportCard({
           ))}
         </ul>
       ) : (
-        <div className="text-center py-6 px-4 bg-gray-50 rounded-lg border-dashed border-2">
+        <div className="text-center py-6 px-4 bg-background rounded-lg border-dashed border-border border-2">
           <TbReportAnalytics className="mx-auto text-gray-400" size={32} />
           <p className="mt-2 font-semibold">Nenhum relatório gerado</p>
           <p className="text-sm text-gray-500 mt-1">

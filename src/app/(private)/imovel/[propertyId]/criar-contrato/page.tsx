@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useCallback } from "react";
 import * as htmlToImage from "html-to-image";
 import {
   Save,
@@ -14,7 +14,7 @@ import {
   ChevronLeft,
   ChevronRight,
 } from "lucide-react";
-import { useParams, useRouter } from "next/navigation";
+
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
@@ -45,7 +45,7 @@ import { CustomDropdownInput } from "@/components/forms/CustomDropdownInput";
 
 import { Stepper } from "@/components/layout/Stepper";
 import { guaranteeTypes } from "@/constants";
-
+import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { toISODate } from "@/utils/formatters/formatDate";
 import { unmaskNumeric } from "@/utils/masks/maskNumeric";
 import type { ApiResponse } from "@/types/api";
@@ -55,6 +55,7 @@ import { LottieAnimation } from "@/components/common/LottieAnimation";
 import successAnimation from "../../../../../../public/lottie/success-animation.json";
 
 export default function CreateContractPage() {
+  const searchParams = useSearchParams();
   const router = useRouter();
   const params = useParams();
   const propertyId = params.propertyId as string;
@@ -71,7 +72,7 @@ export default function CreateContractPage() {
     email: string;
     password?: string;
   } | null>(null);
-
+  const [isEasyContractFlow, setIsEasyContractFlow] = useState(false);
   const credentialsCardRef = useRef<HTMLDivElement>(null);
   const steps = [
     "Encontrar inquilino",
@@ -151,13 +152,14 @@ export default function CreateContractPage() {
       setSearchingTenant(false);
     }
   };
-  const handleSelectTenant = (tenant: userProps) => {
-    setSelectedTenant(tenant);
-    setValue("tenantEmail", tenant.email, { shouldValidate: true });
-    setValue("tenantCpfCnpj", tenant.cpfCnpj!, { shouldValidate: true });
-    setFoundTenants([]);
-  };
-
+  const handleSelectTenant = useCallback(
+    (tenant: userProps) => {
+      setSelectedTenant(tenant);
+      setValue("tenantCpfCnpj", tenant.cpfCnpj!, { shouldValidate: true });
+      setFoundTenants([]);
+    },
+    [setValue]
+  );
   const nextStep = async () => {
     const fieldsToValidate: (keyof CreateContractFormValues)[] =
       tenantAction === "create"
@@ -256,7 +258,7 @@ export default function CreateContractPage() {
   };
   const handleShareCredentials = async () => {
     if (newTenantCredentials) {
-      const shareText = `Olá! Aqui estão seus dados de acesso ao Portal do Inquilino:\n\nLogin (E-mail): ${newTenantCredentials.email}\nSenha: ${newTenantCredentials.password}\n\nAcesse em: https://www.colibri.com`;
+      const shareText = `Olá! Aqui estão seus dados de acesso ao Portal do Inquilino:\n\nLogin (E-mail): ${newTenantCredentials.email}\nSenha: ${newTenantCredentials.password}\n\nAcesse em: https://www.locaterra.com.br`;
 
       if (navigator.share) {
         try {
@@ -274,6 +276,54 @@ export default function CreateContractPage() {
       }
     }
   };
+  useEffect(() => {
+    const tenantCpfCnpj = searchParams.get("tenantCpfCnpj");
+
+    const startEasyFlow = async () => {
+      if (tenantCpfCnpj && !selectedTenant) {
+        // Executa apenas se tiver CPF e nenhum inquilino foi selecionado ainda
+        setIsEasyContractFlow(true);
+        setTenantAction("search"); // A ação correta é 'search'
+        setValue("tenantAction", "search");
+        setValue("tenantCpfCnpj", tenantCpfCnpj);
+
+        toast.info("Iniciando Contrato Fácil...", {
+          description: "Buscando dados do inquilino pré-selecionado.",
+        });
+
+        setSearchingTenant(true);
+        try {
+          const response: ApiResponse<userProps[]> = await UserService.search({
+            cpfCnpj: tenantCpfCnpj,
+            role: "LOCATARIO",
+          });
+          const userList = response.data || [];
+
+          if (userList.length > 0) {
+            handleSelectTenant(userList[0]); // Seleciona automaticamente o usuário encontrado
+            setCurrentStep(2); // Pula para a próxima etapa
+            toast.success("Inquilino selecionado com sucesso!", {
+              description: "Agora, preencha os detalhes do contrato.",
+            });
+          } else {
+            toast.error("Inquilino do 'Contrato Fácil' não foi encontrado", {
+              description: "Pode ser necessário cadastrá-lo manualmente.",
+            });
+            setIsEasyContractFlow(false); // Desbloqueia o formulário se o inquilino não for encontrado
+          }
+        } catch (error) {
+          toast.error("Erro ao buscar o inquilino", {
+            description: extractAxiosError(error),
+          });
+          setIsEasyContractFlow(false);
+        } finally {
+          setSearchingTenant(false);
+        }
+      }
+    };
+
+    startEasyFlow();
+  }, [searchParams, setValue, handleSelectTenant, selectedTenant]);
 
   return (
     <div className=" w-full flex flex-col items-center justify-center">
@@ -310,21 +360,30 @@ export default function CreateContractPage() {
                 <button
                   type="button"
                   onClick={() => handleActionChange("search")}
-                  className={`w-full sm:w-1/2 py-2 rounded-md transition-all duration-200 text-sm font-bold ${
-                    tenantAction === "search"
-                      ? "bg-primary text-white shadow-sm"
-                      : "bg-transparent text-gray-600"
-                  }`}
+                  disabled={isEasyContractFlow}
+                  className={`w-full sm:w-1/2 py-2 rounded-md transition-all duration-200 text-sm font-bold ]
+                    ${
+                      tenantAction === "search"
+                        ? "bg-primary text-white shadow-sm"
+                        : "bg-transparent text-gray-600"
+                    }
+                   ${
+                     isEasyContractFlow ? "cursor-not-allowed opacity-50" : ""
+                   }`}
                 >
                   Buscar Existente
                 </button>
                 <button
                   type="button"
                   onClick={() => handleActionChange("create")}
-                  className={`w-full sm:w-1/2 py-2 rounded-md transition-all duration-200 text-sm font-bold ${
-                    tenantAction === "create"
-                      ? "bg-primary text-white shadow-sm"
-                      : "bg-transparent text-gray-600"
+                  disabled={isEasyContractFlow}
+                  className={`w-full sm:w-1/2 py-2 rounded-md transition-all duration-200 text-sm font-bold 
+                    ${
+                      tenantAction === "create"
+                        ? "bg-primary text-white shadow-sm"
+                        : "bg-transparent text-gray-600"
+                    } ${
+                    isEasyContractFlow ? "cursor-not-allowed opacity-50" : ""
                   }`}
                 >
                   Cadastrar Novo
@@ -612,7 +671,7 @@ export default function CreateContractPage() {
                 </div>
 
                 {guaranteeTypeValue === "DEPOSITO_CAUCAO" && (
-                  <div className="col-span-2 md:col-span-1">
+                  <div className="col-span-2">
                     <Controller
                       name="securityDeposit"
                       control={control}
@@ -732,12 +791,12 @@ export default function CreateContractPage() {
                       <div>
                         <p className="text-xs text-gray-500">Acessar em</p>
                         <a
-                          href="https://www.colibri.com"
+                          href="https://www.locaterra.com.br"
                           target="_blank"
                           rel="noopener noreferrer"
                           className="font-mono text-primary hover:underline"
                         >
-                          www.colibri.com
+                          www.locaterra.com.br
                         </a>
                       </div>
                     </div>

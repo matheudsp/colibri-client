@@ -21,6 +21,7 @@ import { AuthService } from "@/services/domains/authService";
 import { useCurrentUser } from "@/hooks/useCurrentUser";
 import { Roles } from "@/constants";
 import Image from "next/image";
+import { GrGroup } from "react-icons/gr";
 
 const allNavItems = [
   {
@@ -45,6 +46,12 @@ const allNavItems = [
     label: "Faturas",
     href: "/faturas",
     icon: CalendarArrowDown,
+    roles: [Roles.ADMIN, Roles.LOCADOR, Roles.LOCATARIO],
+  },
+  {
+    label: "Interessados",
+    href: "/interesses",
+    icon: GrGroup,
     roles: [Roles.ADMIN, Roles.LOCADOR, Roles.LOCATARIO],
   },
   {
