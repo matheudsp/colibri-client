@@ -9,6 +9,7 @@ import { CheckCircle, Clock, XCircle, DollarSign } from "lucide-react";
 import { Roles, type PaymentStatus } from "@/constants";
 import { CustomButton } from "../forms/CustomButton";
 import { JSX } from "react";
+import { BrlCurrencyIcon } from "../icons/BRLCurrencyIcon";
 
 type StatusInfo = {
   icon: JSX.Element;
@@ -133,9 +134,8 @@ export function PaymentsList({
                       onClick={() => onRegisterPaymentClick(payment.id)}
                       color="bg-green-100"
                       textColor="text-green-800"
-                      className="shrink-0 text-xs sm:text-sm px-2 sm:px-3 ml-3"
+                      className="shrink-0 text-xs sm:text-sm px-2 sm:px-3 ml-3 border border-green-600"
                     >
-                      <DollarSign size={16} className="mr-1 sm:mr-2" />
                       Dar Baixa
                     </CustomButton>
                   )}

@@ -54,13 +54,13 @@ export const PaymentService = {
   /**
    * Regista um pagamento manualmente (dá baixa numa fatura).
    */
-  async register(
+  async confirmCashPayment(
     paymentOrderId: string,
     data: RegisterPaymentData
   ): Promise<ApiResponse<PaymentResponse>> {
     try {
-      const response = await api.patch(
-        API_ROUTES.PAYMENTS.REGISTER({ id: paymentOrderId }),
+      const response = await api.post(
+        API_ROUTES.PAYMENTS.CONFIRM_CASH_PAYMENT({ id: paymentOrderId }),
         data
       );
       return response.data;

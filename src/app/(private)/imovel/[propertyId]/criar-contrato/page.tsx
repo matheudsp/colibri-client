@@ -714,7 +714,7 @@ export default function CreateContractPage() {
                     render={({ field }) => (
                       <CustomFormInput
                         id="startDate"
-                        placeholder="08/08/2002"
+                        placeholder="DD/MM/YYYY"
                         label="Data de Início*"
                         type="date"
                         icon={<CalendarIcon size={20} />}

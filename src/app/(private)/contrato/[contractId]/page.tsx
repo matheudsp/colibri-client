@@ -115,7 +115,7 @@ export default function ContractManagementPage() {
 
     setIsActionLoading(true);
     try {
-      await PaymentService.register(selectedPaymentId, {});
+      await PaymentService.confirmCashPayment(selectedPaymentId, {});
       toast.success("Pagamento registado com sucesso!");
       setShowRegisterPaymentModal(false);
       await fetchContract(); // Recarrega os dados do contrato para atualizar a lista

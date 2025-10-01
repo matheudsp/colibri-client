@@ -137,7 +137,7 @@ export default function TenantRegisterPage() {
             <CustomInput
               label="Data de Nascimento*"
               id="birthDate"
-              placeholder="08/08/2002"
+              placeholder="DD/MM/YYYY"
               mask="date"
               icon={<CalendarIcon />}
               error={errors.birthDate?.message}

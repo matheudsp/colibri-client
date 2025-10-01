@@ -2,7 +2,9 @@
 
 import { Roles } from "@/constants";
 import { Interest } from "@/services/domains/interestService";
-import { User, Home, ChevronDown, ChevronUp, Building } from "lucide-react";
+import { PiWarehouseFill } from "react-icons/pi";
+import { User, Home, ChevronDown, ChevronUp } from "lucide-react";
+import { TbKey } from "react-icons/tb";
 import Image from "next/image";
 interface InterestListItemProps {
   interest: Interest;
@@ -12,7 +14,7 @@ interface InterestListItemProps {
 }
 
 const interestStatusMap: Record<Interest["status"], string> = {
-  PENDING: "Pendente",
+  PENDING: "Aguardando",
   CONTACTED: "Contatado",
   DISMISSED: "Dispensado",
 };
@@ -20,11 +22,11 @@ const interestStatusMap: Record<Interest["status"], string> = {
 const getStatusClasses = (status: Interest["status"]) => {
   switch (status) {
     case "CONTACTED":
-      return "border-l-4 border-primary";
+      return "border-l-4 border-green-600";
     case "DISMISSED":
-      return "border-l-4 border-gray-400 opacity-70";
+      return "border-l-4 border-gray-800 opacity-70";
     default:
-      return "border-l-4 border-yellow-500";
+      return "border-l-4 border-yellow-400";
   }
 };
 
@@ -56,15 +58,12 @@ export function InterestListItem({
                 <p className="font-semibold text-primary">
                   {interest.tenant.name}
                 </p>
-                <p className="text-xs text-gray-500">
-                  {interest.tenant.cpfCnpj}
-                </p>
               </div>
             </div>
           ) : (
             <div className="flex items-center gap-3">
               <div className="flex-shrink-0 h-12 w-12 bg-primary rounded-full flex items-center justify-center">
-                <Building className="text-white" size={24} />
+                <TbKey className="text-white" size={24} />
               </div>
               <div>
                 <p className="font-semibold text-primary">
@@ -87,7 +86,7 @@ export function InterestListItem({
                 />
               ) : (
                 <div className="h-full w-full bg-primary rounded-md flex items-center justify-center">
-                  <Home className="text-white" size={20} />
+                  <PiWarehouseFill className="text-white" size={20} />
                 </div>
               )}
             </div>

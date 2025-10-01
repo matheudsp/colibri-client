@@ -122,7 +122,8 @@ const API_ROUTES = {
     USER_PAYMENTS: "/payments-orders/user-payments",
     BY_ID: ({ id }: Params) => `/payments-orders/${id}`,
     BY_CONTRACT: ({ id }: Params) => `/payments-orders/contracts/${id}`,
-    REGISTER: ({ id }: Params) => `/payments-orders/${id}`,
+    CONFIRM_CASH_PAYMENT: ({ id }: Params) =>
+      `/payments-orders/${id}/confirm-cash`,
   },
 
   BANK_ACCOUNTS: {

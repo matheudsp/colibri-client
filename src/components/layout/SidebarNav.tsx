@@ -46,7 +46,7 @@ const navItems = [
     roles: [Roles.ADMIN, Roles.LOCADOR, Roles.LOCATARIO],
   },
   {
-    label: "Interessados",
+    label: "Interesses",
     href: "/interesses",
     icon: GrGroup,
     roles: [Roles.ADMIN, Roles.LOCADOR, Roles.LOCATARIO],

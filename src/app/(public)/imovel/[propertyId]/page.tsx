@@ -121,7 +121,7 @@ const PriceAndContactCard = ({
             disabled={isPending || isLoadingInterestStatus}
             isLoading={isPending || isLoadingInterestStatus}
           >
-            Demonstrar Interesse
+            Estou interessado
           </CustomButton>
           <Tooltip
             content="Ao clicar, o locador será notificado do seu interesse e poderá iniciar o processo de locação pela plataforma."

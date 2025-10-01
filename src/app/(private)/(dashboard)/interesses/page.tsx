@@ -101,6 +101,7 @@ export default function InterestsPage() {
   return (
     <div className="max-w-7xl mx-auto pt-8 md:pt-14 px-4 pb-24">
       <PageHeader
+        icon={Send}
         title={isLessor ? "Interesses Recebidos" : "Meus Interesses Enviados"}
         subtitle={
           isLessor

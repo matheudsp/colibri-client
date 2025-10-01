@@ -10,7 +10,6 @@ import {
   Phone,
   ThumbsDown,
   User,
-  Building,
 } from "lucide-react";
 import { toast } from "sonner";
 import { useState } from "react";
@@ -20,6 +19,7 @@ import { extractAxiosError } from "@/services/api";
 import { CustomButton } from "../forms/CustomButton";
 import { DismissInterestModal } from "../modals/interestModals/DismissInterestModal";
 import { Roles } from "@/constants/userRole";
+import { TbKey } from "react-icons/tb";
 
 interface InterestCardProps {
   interest: Interest;
@@ -83,7 +83,7 @@ export function InterestCard({ interest, userRole }: InterestCardProps) {
           ) : (
             <>
               <p className="flex items-center gap-2 text-sm font-semibold">
-                <Building size={16} /> Locador
+                <TbKey size={16} /> Locador
               </p>
               <div className="text-sm text-gray-700 space-y-1 pl-2 border-l-2 border-border">
                 <p className="font-medium">{interest.landlord.name}</p>
@@ -104,40 +104,44 @@ export function InterestCard({ interest, userRole }: InterestCardProps) {
         </div>
       </div>
 
-      {isLessor ||
-        (interest.status !== "DISMISSED" && (
-          <div className="mt-4 pt-4 border-t border-border flex flex-col gap-2">
-            <p className="text-sm font-semibold text-center mb-1">
-              Ações Rápidas
-            </p>
-            {interest.status === "PENDING" && (
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                <CustomButton
-                  onClick={() => setIsDismissModalOpen(true)}
-                  disabled={isPending}
-                  color="bg-gray-200"
-                  textColor="text-gray-800"
-                >
-                  <ThumbsDown size={16} className="mr-2" /> Dispensar
-                </CustomButton>
-                <CustomButton
-                  onClick={() => updateStatus({ status: "CONTACTED" })}
-                  disabled={isPending}
-                >
-                  <Check size={16} className="mr-2" /> Marcar como Contatado
-                </CustomButton>
-              </div>
-            )}
+      {isLessor && (
+        <div className="mt-4 pt-4 border-t border-border flex flex-col gap-2">
+          <p className="text-sm font-semibold text-center mb-1">
+            Ações Rápidas
+          </p>
 
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
             <CustomButton
-              onClick={handleStartContract}
-              disabled={isPending}
-              className="bg-secondary hover:bg-secondary-hover"
+              onClick={() => setIsDismissModalOpen(true)}
+              disabled={isPending || interest.status !== "PENDING"}
+              color="bg-red-700"
+              textColor="text-red-50"
+              className="hover:bg-red-800"
             >
-              <FilePlus2 size={16} className="mr-2" /> Iniciar Contrato
+              <ThumbsDown size={16} className="mr-2" /> Dispensar
+            </CustomButton>
+            <CustomButton
+              color="bg-green-600"
+              textColor="text-green-50"
+              className="hover:bg-green-700 "
+              onClick={() => updateStatus({ status: "CONTACTED" })}
+              disabled={isPending || interest.status !== "PENDING"}
+            >
+              <Check size={16} className="mr-2" /> Marcar como Contatado
             </CustomButton>
           </div>
-        ))}
+
+          <CustomButton
+            onClick={handleStartContract}
+            disabled={isPending || interest.status !== "PENDING"}
+            className="hover:bg-secondary-hover"
+            color="bg-secondary"
+            icon={<FilePlus2 size={16} />}
+          >
+            Iniciar Contrato Fácil
+          </CustomButton>
+        </div>
+      )}
 
       <DismissInterestModal
         isOpen={isDismissModalOpen}

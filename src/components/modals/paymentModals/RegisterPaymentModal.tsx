@@ -18,11 +18,7 @@ export function RegisterPaymentModal({
   isLoading,
 }: RegisterPaymentModalProps) {
   return (
-    <Modal
-      isOpen={isOpen}
-      onClose={onClose}
-      title="Confirmar Baixa de Pagamento"
-    >
+    <Modal isOpen={isOpen} onClose={onClose} title="Confirmar Recebimento">
       <p className="text-gray-600">
         Tem a certeza de que deseja dar baixa nesta fatura? Esta ação marcará a
         ordem de pagamento como{" "}

@@ -84,7 +84,7 @@ export default function PageHeader({
           className={clsx(
             "flex items-center justify-center rounded-xl",
             "w-14 h-14",
-            "outline-2 outline-border outline-offset-2",
+            "outline-2 outline-primary-light outline-offset-2",
             "bg-primary/10 text-primary"
           )}
         >

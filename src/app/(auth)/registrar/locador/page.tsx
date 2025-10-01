@@ -289,7 +289,7 @@ export default function LandlordRegisterPage() {
                     <CustomInput
                       label="Data de Nascimento*"
                       id="birthDate"
-                      placeholder="08/08/2002"
+                      placeholder="DD/MM/YYYY"
                       mask="date"
                       icon={<CalendarIcon size={20} />}
                       error={errors.birthDate?.message}
