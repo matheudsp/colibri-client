@@ -1,46 +1,87 @@
 "use client";
 
 import Image from "next/image";
-import { Suspense, useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { useState } from "react";
+import { motion } from "framer-motion";
 import {
-  ArrowLeft,
-  ArrowRight,
   Bell,
   CheckCircle,
   FileText,
   BarChart2,
+  Users,
+  Percent,
 } from "lucide-react";
-import { UserGroupIcon } from "@heroicons/react/24/outline";
+
+import {
+  ResponsiveContainer,
+  AreaChart,
+  Area,
+  XAxis,
+  YAxis,
+  Tooltip,
+  CartesianGrid,
+  ReferenceLine,
+} from "recharts";
 
 const features = [
   {
-    icon: <FileText className="h-8 w-8 md:h-10 md:w-10 text-cyan-500" />,
-    title: "Contratos 100% digitais",
+    icon: <FileText className="h-7 w-7 text-primary" />,
+    title: "Contratos digitais",
     description:
-      "Crie, envie e assine contratos de aluguel sem papelada e sem sair de casa. Agilidade e segurança na palma da sua mão.",
+      "Geração e assinatura eletrônica para reduzir burocracia e acelerar fechamento.",
   },
   {
-    icon: <BarChart2 className="h-8 w-8 md:h-10 md:w-10 text-cyan-500" />,
-    title: "Gestão financeira simplificada",
+    icon: <BarChart2 className="h-7 w-7 text-primary" />,
+    title: "Controle financeiro",
     description:
-      "Acompanhe faturas, registre pagamentos e tenha uma visão clara da sua rentabilidade com painel financeiro.",
+      "Painel simples para acompanhar recebíveis e histórico de pagamentos.",
   },
   {
-    icon: <CheckCircle className="h-8 w-8 md:h-10 md:w-10 text-cyan-500" />,
-    title: "Plataforma completa",
+    icon: <Users className="h-7 w-7 text-primary" />,
+    title: "Comunicação centralizada",
     description:
-      "Uma solução integrada para locadores e locatários, desde a busca do imóvel até a gestão do dia a dia da locação.",
-  },
-  {
-    icon: <UserGroupIcon className="h-8 w-8 md:h-10 md:w-10 text-cyan-500" />,
-    title: "Desenvolvimento baseado no feedback",
-    description:
-      "Nós entendemos o valor do feedback do usuário, o desenvolvimento de novas funcionalidades irá escutar o público para melhorias do sistema!",
+      "Mensagens e notificações automáticas para inquilinos e proprietários.",
   },
 ];
 
-const LaunchDate = () => {
+const chartData = [
+  { name: "01", value: 1800 },
+  { name: "02", value: 2400 },
+  { name: "03", value: 3200 },
+  { name: "04", value: 3900 },
+  { name: "05", value: 4600 },
+  { name: "06", value: 4100 },
+  { name: "07", value: 5400 },
+  { name: "08", value: 6000 },
+  { name: "09", value: 7200 },
+  { name: "10", value: 6800 },
+  { name: "11", value: 7500 },
+  { name: "12", value: 8200 },
+  { name: "13", value: 7900 },
+  { name: "14", value: 8600 },
+];
+/* eslint-disable  @typescript-eslint/no-explicit-any */
+function CustomTooltip({ active, payload, label }: any) {
+  if (!active || !payload || !payload.length) return null;
+  const value = payload[0].value;
+  return (
+    <div
+      className="p-3 rounded-lg shadow-lg"
+      style={{
+        background: "var(--card-bg)",
+        border: "1px solid var(--border)",
+      }}
+    >
+      <div className="text-xs text-foreground-muted">Dia {label}</div>
+      <div className="font-semibold text-foreground">
+        R$ {value.toLocaleString()}
+      </div>
+      <div className="text-xs text-foreground-muted">Exemplo ilustrativo</div>
+    </div>
+  );
+}
+
+function LaunchDateBadge() {
   const today = new Date();
   const launchDate = new Date(today.getFullYear(), today.getMonth() + 1, 10);
   const monthName = launchDate.toLocaleString("pt-BR", { month: "long" });
@@ -48,188 +89,273 @@ const LaunchDate = () => {
   const formattedDate = `10 de ${monthName} de ${year}`;
 
   return (
-    <div className="text-center">
-      <p className="text-sm text-gray-400 uppercase tracking-wider">
-        Lançamento previsto em
-      </p>
-      <p className="text-xl md:text-2xl font-bold text-gray-200">
-        {formattedDate}
-      </p>
+    <div className="inline-flex items-center gap-3 px-4 py-2 rounded-full bg-background-alt border border-border text-sm">
+      <strong className="text-foreground">Lançamento:</strong>
+      <span className="text-foreground-muted">{formattedDate}</span>
     </div>
   );
-};
+}
 
 export default function LancamentoPage() {
-  const [currentFeature, setCurrentFeature] = useState(0);
+  const [email, setEmail] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
 
-  const setFeature = (index: number) => {
-    setCurrentFeature(index);
-  };
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setCurrentFeature((prev) =>
-        prev === features.length - 1 ? 0 : prev + 1
-      );
-    }, 5000);
-    return () => clearTimeout(timer);
-  }, [currentFeature]);
-
-  const handleNotifySubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
+  function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    if (!email) return;
     setIsSubmitting(true);
     setTimeout(() => {
       setIsSubmitting(false);
       setSubmitted(true);
-    }, 1500);
-  };
+    }, 900);
+  }
 
   return (
-    <main className="relative flex flex-col items-center justify-center min-h-screen bg-gray-900 text-white p-4 overflow-hidden">
-      <div className="absolute inset-0 z-0">
-        <div className="absolute bottom-0 left-[-20%] right-0 top-[-10%] h-[500px] w-[500px] rounded-full bg-[radial-gradient(circle_farthest-side,rgba(10,178,206,0.15),rgba(255,255,255,0))]"></div>
-        <div className="absolute bottom-[-40%] right-[-20%] h-[500px] w-[500px] rounded-full bg-[radial-gradient(circle_farthest-side,rgba(10,178,206,0.1),rgba(255,255,255,0))]"></div>
-      </div>
-
-      <div className="relative z-10 flex flex-col items-center max-w-4xl w-full">
-        <div className="mb-6">
-          <Image
-            src="/logo/paisagem/paisagem-svg/5.svg"
-            alt="Logo Locaterra"
-            width={240}
-            height={80}
-            className="mx-auto"
-          />
-        </div>
-
-        <h1 className="text-3xl md:text-5xl font-bold text-center mb-4 bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-400">
-          Uma nova era na gestão de aluguéis está começando.
-        </h1>
-
-        <p className="text-base md:text-lg text-gray-300 mb-10 text-center max-w-2xl">
-          Deixe a burocracia para trás. O Locaterra automatiza seus processos
-          para que você foque no que realmente importa.
-        </p>
-
-        <div className="w-full max-w-lg relative">
-          <div className="h-48 md:h-44 mb-4 flex items-center justify-center">
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={currentFeature}
-                initial={{ opacity: 0, x: 50 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: -50 }}
-                transition={{ duration: 0.5 }}
-                className="absolute w-full h-full flex flex-col items-center justify-center text-center p-6 bg-gray-800/50 rounded-xl border border-gray-700"
-              >
-                {features[currentFeature].icon}
-                <h3 className="font-semibold text-lg md:text-xl mt-3 mb-1 text-cyan-400">
-                  {features[currentFeature].title}
-                </h3>
-                <p className="text-gray-300 text-sm">
-                  {features[currentFeature].description}
-                </p>
-              </motion.div>
-            </AnimatePresence>
-          </div>
-          <button
-            onClick={() =>
-              setFeature(
-                currentFeature === 0 ? features.length - 1 : currentFeature - 1
-              )
-            }
-            className="absolute top-1/2 -translate-y-1/2 -left-12 text-gray-500 hover:text-white transition-colors hidden md:block"
-          >
-            <ArrowLeft size={24} />
-          </button>
-          <button
-            onClick={() =>
-              setFeature(
-                currentFeature === features.length - 1 ? 0 : currentFeature + 1
-              )
-            }
-            className="absolute top-1/2 -translate-y-1/2 -right-12 text-gray-500 hover:text-white transition-colors hidden md:block"
-          >
-            <ArrowRight size={24} />
-          </button>
-
-          <div className="flex justify-center gap-2 mb-10">
-            {features.map((_, index) => (
-              <button
-                key={index}
-                onClick={() => setFeature(index)}
-                className={`h-2 rounded-full transition-all duration-300 ${
-                  currentFeature === index
-                    ? "w-6 bg-cyan-500"
-                    : "w-2 bg-gray-600"
-                }`}
-              />
-            ))}
-          </div>
-        </div>
-
-        <div className="w-full max-w-md text-center">
-          <h2 className="text-2xl font-bold text-white mb-2">
-            Seja o primeiro a saber!
-          </h2>
-          <p className="text-gray-400 mb-4">
-            Deixe seu e-mail abaixo e nós enviaremos uma notificação exclusiva
-            assim que a plataforma for lançada.
-          </p>
-
-          {submitted ? (
-            <div className="flex flex-col items-center justify-center text-center bg-green-900/50 border border-green-700 p-4 rounded-lg">
-              <CheckCircle className="text-green-400 mb-2" size={32} />
-              <h3 className="font-bold text-lg">Tudo certo!</h3>
-              <p className="text-green-200">
-                Avisaremos você assim que o Locaterra estiver no ar.
-              </p>
+    <main className="min-h-screen bg-background text-foreground antialiased flex items-center">
+      <div className="w-full max-w-6xl mx-auto px-6 py-16">
+        {/* HERO */}
+        <section className="grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
+          <div className="md:col-span-7 space-y-6">
+            <div className="flex items-center gap-3">
+              <div className="px-3 py-1 rounded-full bg-primary-light text-sm font-medium text-emerald-700">
+                Pré-lançamento
+              </div>
+              <div className="px-3 py-1 rounded-full bg-accent/10 text-xs font-medium text-accent flex items-center gap-1">
+                <Percent className="w-3 h-3" /> Taxa:{" "}
+                <span className="font-semibold ml-1">8% por aluguel</span>
+              </div>
             </div>
-          ) : (
-            <form
-              onSubmit={handleNotifySubmit}
-              className="flex flex-col sm:flex-row gap-2"
+
+            <motion.h1
+              initial={{ opacity: 0, y: 6 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.45 }}
+              className="text-3xl md:text-5xl font-extrabold leading-tight"
             >
+              Locaterra — a forma mais simples de gerenciar seus aluguéis.
+            </motion.h1>
+
+            <motion.p
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.12 }}
+              className="text-lg text-foreground-muted max-w-2xl"
+            >
+              Automação de contratos, cobrança e acompanhamento financeiro. Sem
+              mensalidade fixa: cobramos 8% de cada aluguel processado pela
+              plataforma — transparência e custo alinhado ao seu resultado.
+            </motion.p>
+
+            <div className="flex items-center gap-3">
+              <LaunchDateBadge />
+            </div>
+
+            <form
+              onSubmit={handleSubmit}
+              className="flex flex-col sm:flex-row gap-3 sm:items-center max-w-xl"
+            >
+              <label htmlFor="email" className="sr-only">
+                Seu melhor e-mail
+              </label>
               <input
+                id="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
                 type="email"
+                placeholder="Digite seu melhor e‑mail"
                 required
-                placeholder="Digite seu melhor e-mail"
-                className="flex-grow bg-gray-800 border border-gray-600 rounded-md px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-cyan-500"
+                className="flex-1 rounded-lg px-4 py-3 border border-input-border bg-input-bg text-foreground placeholder:text-foreground-muted focus:outline-none focus:ring-2 focus:ring-primary"
               />
+
               <button
                 type="submit"
-                disabled={isSubmitting}
-                className="flex items-center justify-center bg-cyan-600 hover:bg-cyan-700 text-white font-bold px-6 py-3 rounded-md transition-all duration-300 disabled:bg-gray-500"
+                disabled={isSubmitting || submitted}
+                className="flex items-center gap-2 justify-center rounded-lg px-5 py-3 bg-primary text-white font-semibold shadow hover:bg-primary-hover transition w-full sm:w-auto"
               >
                 {isSubmitting ? (
                   "Enviando..."
+                ) : submitted ? (
+                  "Recebido ✅"
                 ) : (
                   <>
-                    <Bell className="mr-2" size={18} /> Avise-me
+                    <Bell size={16} /> Avise‑me
                   </>
                 )}
               </button>
             </form>
-          )}
-        </div>
 
-        <footer className="mt-12 md:mt-16 w-full max-w-4xl flex flex-col md:flex-row items-center justify-between gap-6 md:gap-12 border-t border-gray-800 pt-6">
-          <Suspense
-            fallback={
-              <div className="h-12 w-48 bg-gray-700 animate-pulse rounded-lg" />
-            }
-          >
-            <LaunchDate />
-          </Suspense>
-          <Image
-            src="/logo/valedosol/logo-cropped.png"
-            alt="Logo Locaterra"
-            width={150}
-            height={50}
-            className="invert-75"
-          />
+            <div className="flex items-center gap-6 text-sm text-foreground-muted mt-2">
+              <div className="flex items-center gap-2">
+                <CheckCircle className="w-4 h-4 text-success" /> Sem mensalidade
+                fixa
+              </div>
+              <div className="hidden sm:flex items-center gap-2">
+                <CheckCircle className="w-4 h-4 text-success" /> Segurança
+                jurídica nas assinaturas
+              </div>
+            </div>
+          </div>
+
+          {/* RIGHT VISUAL (chart real, improved) */}
+          <div className="md:col-span-5">
+            <div className="rounded-2xl p-6 bg-card border border-border shadow-xl">
+              <div className="flex items-center justify-between mb-3">
+                <div>
+                  <p className="text-sm text-foreground-muted">
+                    Recebíveis processados (últimos 14 dias)
+                  </p>
+                  <p className="text-2xl font-bold text-foreground">R$ 8.240</p>
+                </div>
+              </div>
+
+              <div className="h-44">
+                <ResponsiveContainer width="100%" height="100%">
+                  <AreaChart
+                    data={chartData}
+                    margin={{ top: 8, right: 16, left: -16, bottom: 0 }}
+                  >
+                    <defs>
+                      <linearGradient
+                        id="gradPrimary"
+                        x1="0"
+                        y1="0"
+                        x2="0"
+                        y2="1"
+                      >
+                        <stop
+                          offset="0%"
+                          stopColor="var(--primary)"
+                          stopOpacity={0.22}
+                        />
+                        <stop
+                          offset="45%"
+                          stopColor="var(--primary)"
+                          stopOpacity={0.12}
+                        />
+                        <stop
+                          offset="100%"
+                          stopColor="var(--primary)"
+                          stopOpacity={0}
+                        />
+                      </linearGradient>
+                    </defs>
+
+                    <CartesianGrid
+                      vertical={false}
+                      stroke="var(--border)"
+                      strokeDasharray="3 6"
+                    />
+                    <XAxis
+                      dataKey="name"
+                      tick={{ fill: "var(--foreground-muted)", fontSize: 12 }}
+                      axisLine={false}
+                    />
+                    <YAxis
+                      tickFormatter={(v) => `R$ ${Math.round(v / 1000)}k`}
+                      tick={{ fill: "var(--foreground-muted)", fontSize: 12 }}
+                      axisLine={false}
+                    />
+
+                    <Tooltip content={<CustomTooltip />} />
+
+                    {/* subtle reference line showing average */}
+                    <ReferenceLine
+                      y={
+                        chartData.reduce((s, d) => s + d.value, 0) /
+                        chartData.length
+                      }
+                      strokeOpacity={0.12}
+                      stroke="var(--foreground-muted)"
+                    />
+
+                    <Area
+                      type="monotone"
+                      dataKey="value"
+                      stroke="var(--primary)"
+                      fill="url(#gradPrimary)"
+                      strokeWidth={3}
+                      dot={{
+                        r: 4,
+                        stroke: "var(--background)",
+                        strokeWidth: 2,
+                      }}
+                      activeDot={{ r: 6 }}
+                      isAnimationActive={true}
+                      animationDuration={900}
+                    />
+                  </AreaChart>
+                </ResponsiveContainer>
+              </div>
+
+              <div className="mt-4 grid grid-cols-2 gap-3 text-sm text-foreground-muted">
+                <div>
+                  Inquilinos <strong className="text-foreground">18</strong>
+                </div>
+                <div>
+                  Contratos <strong className="text-foreground">14</strong>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* FEATURES */}
+        <section className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-6">
+          {features.map((f, i) => (
+            <motion.div
+              key={i}
+              initial={{ opacity: 0, y: 6 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: i * 0.06 }}
+              className="p-5 rounded-xl bg-card border border-border shadow-sm"
+            >
+              <div className="flex items-start gap-4">
+                <div className="p-3 rounded-lg bg-primary-light flex items-center justify-center">
+                  {f.icon}
+                </div>
+                <div>
+                  <h4 className="font-semibold text-foreground">{f.title}</h4>
+                  <p className="text-sm text-foreground-muted mt-1">
+                    {f.description}
+                  </p>
+                </div>
+              </div>
+            </motion.div>
+          ))}
+        </section>
+
+        {/* SIMPLE FOOTER (improved) */}
+        <footer className="mt-16 border-t border-border pt-6">
+          <div className="max-w-6xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-4">
+            <div className="flex items-center gap-3">
+              <Image
+                src="/logo/paisagem/paisagem-svg/5.svg"
+                alt="Locaterra"
+                width={140}
+                height={44}
+              />
+            </div>
+
+            <div className="flex flex-col items-center">
+              <div className="text-xs text-foreground-muted mt-2">
+                Dados e valores apresentados são ilustrativos para fins de
+                divulgação.
+              </div>
+            </div>
+
+            <div className="flex items-center gap-4">
+              <a
+                href="/politica-de-privacidade"
+                className="text-sm text-foreground-muted hover:text-foreground transition"
+              >
+                Política de Privacidade
+              </a>
+              <div className="text-sm text-foreground-muted">
+                © {new Date().getFullYear()} Locaterra
+              </div>
+            </div>
+          </div>
         </footer>
       </div>
     </main>
