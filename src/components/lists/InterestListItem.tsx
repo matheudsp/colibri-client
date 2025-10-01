@@ -3,7 +3,7 @@
 import { Roles } from "@/constants";
 import { Interest } from "@/services/domains/interestService";
 import { PiWarehouseFill } from "react-icons/pi";
-import { User, Home, ChevronDown, ChevronUp } from "lucide-react";
+import { User, ChevronDown, ChevronUp } from "lucide-react";
 import { TbKey } from "react-icons/tb";
 import Image from "next/image";
 interface InterestListItemProps {

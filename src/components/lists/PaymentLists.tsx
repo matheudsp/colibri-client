@@ -5,11 +5,10 @@ import { useCurrentUser } from "@/hooks/useCurrentUser";
 import { PaymentResponse } from "@/interfaces/payment";
 import { formatDateForDisplay } from "@/utils/formatters/formatDate";
 import { formatDecimalValue } from "@/utils/formatters/formatDecimal";
-import { CheckCircle, Clock, XCircle, DollarSign } from "lucide-react";
+import { CheckCircle, Clock, XCircle } from "lucide-react";
 import { Roles, type PaymentStatus } from "@/constants";
 import { CustomButton } from "../forms/CustomButton";
 import { JSX } from "react";
-import { BrlCurrencyIcon } from "../icons/BRLCurrencyIcon";
 
 type StatusInfo = {
   icon: JSX.Element;
