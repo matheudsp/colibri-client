@@ -59,8 +59,8 @@ export function AdvancedFiltersModal({
     loadCities();
   }, [stateValue, setValue]);
   return (
-    <Modal isOpen={isOpen} onClose={onClose} title="Mais Filtros">
-      <div className="space-y-4">
+    <Modal isOpen={isOpen} onClose={onClose} title="Filtrar imóveis">
+      <div className="space-y-4 ">
         {/* <Controller
           name="q"
           control={control}
@@ -110,7 +110,7 @@ export function AdvancedFiltersModal({
         >
           Cancelar
         </CustomButton>
-        <CustomButton onClick={onApply}>Aplicar Filtros</CustomButton>
+        <CustomButton onClick={onApply}>Filtrar</CustomButton>
       </div>
     </Modal>
   );

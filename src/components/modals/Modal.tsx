@@ -53,7 +53,7 @@ export function Modal({ isOpen, onClose, title, children }: ModalProps) {
         >
           <motion.div
             onClick={(e) => e.stopPropagation()}
-            className="bg-white rounded-xl shadow-2xl w-full max-w-md m-4 p-6 relative"
+            className="bg-background rounded-xl shadow-2xl w-full max-w-md m-4 p-6 relative"
             variants={modalVariants}
             initial="hidden"
             animate="visible"
@@ -63,10 +63,10 @@ export function Modal({ isOpen, onClose, title, children }: ModalProps) {
               <h2 className="text-xl font-bold text-gray-800">{title}</h2>
               <button
                 onClick={onClose}
-                className="p-1 rounded-full text-gray-400 hover:bg-gray-100 hover:text-gray-600 transition-colors"
+                className="p-1 rounded-full text-gray-500 hover:bg-input-border transition-colors"
                 aria-label="Fechar modal"
               >
-                <X size={20} />
+                <X size={24} />
               </button>
             </div>
 

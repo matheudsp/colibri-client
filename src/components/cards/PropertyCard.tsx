@@ -131,7 +131,7 @@ function DashboardActions({
   );
 }
 
-export function PropertyCard({
+export function PropertyCardComponent({
   property,
   variant = "dashboard",
   onDelete,
@@ -345,3 +345,5 @@ export function PropertyCard({
 
   return <div className="block h-full">{cardContent}</div>;
 }
+
+export const PropertyCard = React.memo(PropertyCardComponent);

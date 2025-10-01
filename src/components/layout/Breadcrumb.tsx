@@ -45,11 +45,10 @@ export function Breadcrumb({
         <span className="whitespace-nowrap">{transactionText}</span>
       </nav>
       <h1 className="text-2xl font-bold text-gray-800">{titleText}</h1>
-      {totalResults > 0 && (
-        <p className="text-sm text-gray-600 mt-1">{`${totalResults} imóvel${
-          totalResults > 1 ? "s" : ""
-        } encontrado${totalResults > 1 ? "s" : ""}`}</p>
-      )}
+
+      <p className="text-sm text-gray-600 mt-1">{`${totalResults} imóvel${
+        totalResults > 1 ? "s" : ""
+      } encontrado${totalResults > 1 ? "s" : ""}`}</p>
     </div>
   );
 }
