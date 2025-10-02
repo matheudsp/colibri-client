@@ -141,8 +141,8 @@ export function SearchBar() {
           fontSize="text-sm xs:font-bold "
           rounded="rounded-full md:rounded-none md:rounded-r-full"
           className="w-full md:w-auto md:py-0 py-4 h-full px-8 md:border-white md:border cursor-pointer"
-          color="bg-primary hover:bg-secondary-hover md:bg-black/25"
-          textColor="text-secondary md:text-white "
+          color="bg-primary hover:bg-secondary-hover "
+          textColor="text-white  "
         >
           Buscar
         </CustomButton>

@@ -71,15 +71,15 @@ const nextConfig: NextConfig = {
     optimizeCss: true,
   },
 
-  async redirects() {
-    return [
-      {
-        source: "/", // Quando alguém acessar a rota raiz (homepage)
-        destination: "/lancamento", // Será redirecionado para a página de lançamento
-        permanent: false, // `false` indica que o redirecionamento é temporário
-      },
-    ];
-  },
+  // async redirects() {
+  //   return [
+  //     {
+  //       source: "/", // Quando alguém acessar a rota raiz (homepage)
+  //       destination: "/lancamento", // Será redirecionado para a página de lançamento
+  //       permanent: false, // `false` indica que o redirecionamento é temporário
+  //     },
+  //   ];
+  // },
 };
 
 export default pwaConfig(nextConfig);

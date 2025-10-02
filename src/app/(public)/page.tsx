@@ -35,13 +35,13 @@ export default function Home() {
               src="/images/home-mansion.avif"
               alt=""
               fill
-              className="object-cover object-center w-full h-full opacity-90 blur-[3px]"
+              className="object-cover object-center w-full h-full opacity-80 blur-[3px]"
               priority={false}
               aria-hidden="true"
             />
 
             <div
-              className="absolute inset-0 bg-gradient-to-b from-secondary-hover to-secondary/70"
+              className="absolute inset-0 bg-gradient-to-b from-secondary-hover to-secondary/85"
               aria-hidden="true"
             />
           </div>
@@ -60,7 +60,7 @@ export default function Home() {
             Busque seu imóvel no Locaterra.
           </p>
 
-          <div className="mt-6 w-full px-4 flex items-center justify-center">
+          <div className="mt-6 w-full flex items-center justify-center">
             <SearchBar />
           </div>
         </div>

@@ -21,7 +21,7 @@ const LottieAnimation = dynamic(
 interface PropertiesListProps {
   title: string;
   properties: PropertyResponse[];
-  isLoading: boolean;
+  isLoading?: boolean;
   viewAllLink?: string;
 }
 

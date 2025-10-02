@@ -1,224 +1,64 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { toast } from "sonner";
+import { useQuery } from "@tanstack/react-query";
 import {
   ArrowLeft,
   Bath,
   Bed,
   Building,
   Car,
-  CheckCircle,
   CheckCircle2,
-  HelpCircle,
   Loader2,
   Maximize,
-  User,
   XCircle,
 } from "lucide-react";
-import { FaWhatsapp } from "react-icons/fa";
 
-import { formatCurrency } from "@/utils/masks/maskCurrency";
-import {
-  PropertyResponse,
-  PropertyService,
-} from "@/services/domains/propertyService";
-
+import { PropertyService } from "@/services/domains/propertyService";
 import { CustomButton } from "@/components/forms/CustomButton";
 import { PropertyGallery } from "@/components/galleries/PropertyGallery";
 import { extractAxiosError } from "@/services/api";
-import { InterestService } from "@/services/domains/interestService";
-import { useMutation, useQuery } from "@tanstack/react-query";
-import { useCurrentUser } from "@/hooks/useCurrentUser";
 import { LoginModal } from "@/components/modals/authModals/LoginModal";
-import { Tooltip } from "@/components/common/Tooltip";
 import { InterestIndicator } from "@/components/layout/InterestIndicator";
-
-const PriceAndContactCard = ({
-  property,
-  onLoginRequired,
-}: {
-  property: PropertyResponse;
-  onLoginRequired: () => void;
-}) => {
-  const { user } = useCurrentUser();
-  const [interestSent, setInterestSent] = useState(false);
-
-  const { data: interestStatus, isLoading: isLoadingInterestStatus } = useQuery(
-    {
-      queryKey: ["interestStatus", property.id, user?.id],
-      queryFn: () => InterestService.checkInterest(property.id),
-      enabled: !!user,
-    }
-  );
-
-  // Efeito para sincronizar o estado local com o resultado da query
-  useEffect(() => {
-    if (interestStatus?.data?.hasInterested) {
-      setInterestSent(true);
-    }
-  }, [interestStatus]);
-
-  const isOwner = user?.id === property.landlordId;
-
-  const whatsappLink = property.landlord?.phone
-    ? `https://wa.me/${property.landlord.phone.replace(
-        /\D/g,
-        ""
-      )}?text=Olá, tenho interesse no imóvel "${encodeURIComponent(
-        property.title
-      )}" (Cód: ${property.id.substring(0, 8)})`
-    : null;
-
-  const { mutate: demonstrateInterest, isPending } = useMutation({
-    mutationFn: (propertyId: string) => InterestService.create({ propertyId }),
-    onSuccess: () => {
-      toast.success("Interesse enviado com sucesso!", {
-        description: "O locador foi notificado e poderá entrar em contato.",
-      });
-      setInterestSent(true);
-    },
-    onError: (error) => {
-      toast.error("Erro ao enviar interesse.", {
-        description: error.message,
-      });
-    },
-  });
-
-  const handleShowInterest = () => {
-    if (!user) {
-      window.sessionStorage.setItem("loginIntent", "showInterest");
-      onLoginRequired();
-      return;
-    }
-    demonstrateInterest(property.id);
-  };
-
-  const renderActionButtons = () => {
-    if (isOwner) {
-      return (
-        <div className="text-center text-sm text-foreground-muted py-3 bg-background-alt border border-border rounded-lg">
-          Você é o proprietário deste imóvel.
-        </div>
-      );
-    }
-
-    if (property.acceptOnlineProposals) {
-      if (interestSent) {
-        return (
-          <CustomButton className="w-full" disabled={true}>
-            <CheckCircle className="h-5 w-5 mr-2" />
-            Interesse Já Enviado
-          </CustomButton>
-        );
-      }
-      return (
-        <div className="flex items-center gap-2">
-          <CustomButton
-            onClick={handleShowInterest}
-            className="w-full bg-secondary hover:bg-secondary-hover"
-            disabled={isPending || isLoadingInterestStatus}
-            isLoading={isPending || isLoadingInterestStatus}
-          >
-            Estou interessado
-          </CustomButton>
-          <Tooltip
-            content="Ao clicar, o locador será notificado do seu interesse e poderá iniciar o processo de locação pela plataforma."
-            position="top"
-          >
-            <HelpCircle className="h-5 w-5 text-gray-400 cursor-help" />
-          </Tooltip>
-        </div>
-      );
-    }
-
-    if (whatsappLink) {
-      return (
-        <a
-          href={whatsappLink}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="block"
-        >
-          <CustomButton className="w-full bg-green-500 hover:bg-green-600">
-            <FaWhatsapp size={18} className="mr-2" />
-            Conversar no WhatsApp
-          </CustomButton>
-        </a>
-      );
-    }
-
-    return null;
-  };
-
-  return (
-    <div className="border border-border rounded-xl p-5 space-y-5 bg-background shadow-sm">
-      {/* Seção de Preço */}
-      <div>
-        <p className="text-gray-500 text-sm">Valor do Aluguel (mensal)</p>
-        <p className="text-3xl font-bold text-primary">
-          {formatCurrency(property.value)}
-        </p>
-      </div>
-
-      {/* Seção de Contato */}
-      <div className="border-t border-border pt-5">
-        <p className="font-bold text-gray-800 mb-3">Gostou do imóvel?</p>
-
-        {/* Informações do Locador */}
-        <div className="flex items-center space-x-3 mb-4">
-          <div className="w-10 h-10 bg-primary/10 border border-primary/20 rounded-full flex items-center justify-center">
-            <User className="text-primary" />
-          </div>
-          <div>
-            <p className="text-sm text-gray-500">Locador(a)</p>
-            <p className="font-semibold text-gray-800">
-              {property.landlord.name}
-            </p>
-          </div>
-        </div>
-
-        {/* Botões de Ação */}
-        <div className="mt-4 space-y-2">{renderActionButtons()}</div>
-      </div>
-    </div>
-  );
-};
+import { PropertyPriceAndContact } from "@/components/cards/details/PropertyPriceAndContact";
 
 export default function PropertyDetailsPage() {
-  const [property, setProperty] = useState<PropertyResponse | null>(null);
-  const [loading, setLoading] = useState(true);
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const params = useParams();
   const router = useRouter();
   const propertyId = params.propertyId as string;
 
-  useEffect(() => {
-    if (!propertyId) return;
-    const fetchProperty = async () => {
-      setLoading(true);
-      try {
-        const response = await PropertyService.getById(propertyId);
-        setProperty(response.data);
-      } catch (_error) {
-        const errorMessage = extractAxiosError(_error);
-        toast.error("Ocorreu um erro ao carregar detalhes do imóvel", {
-          description: errorMessage,
-        });
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchProperty();
-  }, [propertyId]);
+  const {
+    data: property,
+    isLoading,
+    isError,
+    error,
+  } = useQuery({
+    queryKey: ["property", propertyId],
+    queryFn: async () => {
+      const response = await PropertyService.getById(propertyId);
+      return response.data;
+    },
+    enabled: !!propertyId,
+    staleTime: 1000 * 60 * 5, // 5 minutos de cache
+    retry: 1, // Tenta novamente 1 vez em caso de erro
+  });
+
+  if (isError) {
+    const errorMessage = extractAxiosError(error);
+    toast.error("Ocorreu um erro ao carregar detalhes do imóvel", {
+      description: errorMessage,
+    });
+  }
 
   const handleLoginRequired = () => {
     window.sessionStorage.setItem("loginIntent", "showInterest");
     setIsLoginModalOpen(true);
   };
 
-  if (loading) {
+  if (isLoading) {
     return (
       <div className="flex justify-center items-center h-screen ">
         <Loader2 className="animate-spin text-primary" size={48} />
@@ -259,7 +99,7 @@ export default function PropertyDetailsPage() {
               />
 
               <div className="lg:hidden">
-                <PriceAndContactCard
+                <PropertyPriceAndContact
                   property={property}
                   onLoginRequired={handleLoginRequired}
                 />
@@ -363,7 +203,7 @@ export default function PropertyDetailsPage() {
 
             <aside className="hidden lg:block lg:col-span-4">
               <div className="sticky top-6">
-                <PriceAndContactCard
+                <PropertyPriceAndContact
                   property={property}
                   onLoginRequired={handleLoginRequired}
                 />

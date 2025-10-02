@@ -23,9 +23,48 @@ const poppins = Poppins({
 });
 
 export const metadata: Metadata = {
-  title: "Sistema Locaterra",
-  description: "Gestão de imóveis e locações",
+  title: {
+    default: "Locaterra - Gestão de Aluguéis Simplificada",
+    template: "%s | Locaterra",
+  },
+  description:
+    "Encontre imóveis para alugar ou anuncie o seu com facilidade. A Locaterra oferece um fluxo 100% digital para contratos, pagamentos e gestão de aluguéis.",
   icons: "/logo/icon/favicon.ico",
+  openGraph: {
+    title: "Locaterra - Gestão de Aluguéis Simplificada",
+    description: "Aluguel de imóveis de forma rápida, digital e segura.",
+    url: "https://www.locaterra.com.br",
+    siteName: "Locaterra",
+    images: [
+      {
+        url: "images/og-image.png",
+        width: 1200,
+        height: 630,
+      },
+    ],
+    locale: "pt_BR",
+    type: "website",
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
+  },
+
+  keywords: [
+    "aluguel de imóveis",
+    "gestão de aluguel",
+    "contrato digital",
+    "anunciar imóvel",
+    "procurar apartamento",
+  ],
+  authors: [{ name: "Locaterra" }],
 };
 
 export default function RootLayout({
