@@ -283,13 +283,13 @@ export default function CreateContractPage() {
       if (tenantCpfCnpj && !selectedTenant) {
         // Executa apenas se tiver CPF e nenhum inquilino foi selecionado ainda
         setIsEasyContractFlow(true);
-        setTenantAction("search"); // A ação correta é 'search'
+        setTenantAction("search");
         setValue("tenantAction", "search");
         setValue("tenantCpfCnpj", tenantCpfCnpj);
 
-        toast.info("Iniciando Contrato Fácil...", {
-          description: "Buscando dados do inquilino pré-selecionado.",
-        });
+        // toast.info("Iniciando Contrato Fácil", {
+        //   description: "Buscando dados do inquilino pré-selecionado.",
+        // });
 
         setSearchingTenant(true);
         try {
@@ -302,11 +302,11 @@ export default function CreateContractPage() {
           if (userList.length > 0) {
             handleSelectTenant(userList[0]); // Seleciona automaticamente o usuário encontrado
             setCurrentStep(2); // Pula para a próxima etapa
-            toast.success("Inquilino selecionado com sucesso!", {
+            toast.success("Inquilino selecionado!", {
               description: "Agora, preencha os detalhes do contrato.",
             });
           } else {
-            toast.error("Inquilino do 'Contrato Fácil' não foi encontrado", {
+            toast.error("Inquilino não encontrado", {
               description: "Pode ser necessário cadastrá-lo manualmente.",
             });
             setIsEasyContractFlow(false); // Desbloqueia o formulário se o inquilino não for encontrado

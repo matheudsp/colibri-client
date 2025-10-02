@@ -51,7 +51,19 @@ export function InterestCard({ interest, userRole }: InterestCardProps) {
   });
 
   const handleStartContract = () => {
-    router.push(`/imovel/${interest.property.id}/criar-contrato`);
+    const tenantCpfCnpj = interest.tenant.cpfCnpj;
+
+    if (!tenantCpfCnpj) {
+      toast.error("Não foi possível iniciar o contrato.", {
+        description: "Dados do interessado não encontrados.",
+      });
+      return;
+    }
+
+    const url = `/imovel/${
+      interest.property.id
+    }/criar-contrato?tenantCpfCnpj=${encodeURIComponent(tenantCpfCnpj)}`;
+    router.push(url);
   };
 
   const handleConfirmDismiss = (reason: string) => {
@@ -133,7 +145,7 @@ export function InterestCard({ interest, userRole }: InterestCardProps) {
 
           <CustomButton
             onClick={handleStartContract}
-            disabled={isPending || interest.status !== "PENDING"}
+            disabled={isPending}
             className="hover:bg-secondary-hover"
             color="bg-secondary"
             icon={<FilePlus2 size={16} />}

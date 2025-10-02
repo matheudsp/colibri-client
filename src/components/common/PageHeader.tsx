@@ -46,7 +46,7 @@ export default function PageHeader({
         // "border",
         // "border-border",
         "flex",
-        "items-center",
+        "items-start",
         "gap-4",
         className
       )}

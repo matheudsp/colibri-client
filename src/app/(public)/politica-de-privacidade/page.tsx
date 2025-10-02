@@ -8,7 +8,7 @@ export const metadata: Metadata = {
     title: "Política de Privacidade - Locaterra",
     description:
       "Saiba como seus dados são tratados e protegidos no sistema Locaterra.",
-    url: "https://seu-dominio.com/politica-de-privacidade",
+    url: "https://www.locaterra.com.br/politica-de-privacidade",
     siteName: "Locaterra",
     locale: "pt_BR",
     type: "website",
@@ -191,10 +191,10 @@ export default function PoliticaDePrivacidadePage() {
           Se sentir dificuldades para exercer seus direitos, entre em contato
           conosco pelo e-mail:{" "}
           <a
-            href="mailto:atendimentoaocliente.valedosol@gmail.com"
+            href="mailto:atendimentoaocliente.locaterra@gmail.com"
             className="text-primary-hover underline break-all"
           >
-            atendimentoaocliente.valedosol@gmail.com
+            atendimentoaocliente.locaterra@gmail.com
           </a>
         </p>
       </section>
@@ -220,10 +220,10 @@ export default function PoliticaDePrivacidadePage() {
           proteção de dados, entre em contato com nosso suporte através do
           e-mail:{" "}
           <a
-            href="mailto:atendimentoaocliente.valedosol@gmail.com"
+            href="mailto:atendimentoaocliente.locaterra@gmail.com"
             className="break-all text-primary-hover underline"
           >
-            atendimentoaocliente.valedosol@gmail.com
+            atendimentoaocliente.locaterra@gmail.com
           </a>
           .
         </p>

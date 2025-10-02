@@ -8,7 +8,7 @@ export const metadata: Metadata = {
     title: "Termos de Uso - Locaterra",
     description:
       "Termos e condições de uso da plataforma Locaterra para locadores e locatários.",
-    url: "https://colibri.app/termos-de-uso",
+    url: "https://www.locaterra.com.br/termos-de-uso",
     siteName: "Locaterra",
     locale: "pt_BR",
     type: "website",
@@ -287,10 +287,10 @@ export default function TermosDeUsoPage() {
           Em caso de dúvidas, solicitações ou comunicações relacionadas a estes
           Termos, entre em contato conosco pelo e-mail:{" "}
           <a
-            href="mailto:atendimentoaocliente.valedosol@gmail.com"
+            href="mailto:atendimentoaocliente.locaterra@gmail.com"
             className="break-all text-primary-hover underline"
           >
-            atendimentoaocliente.valedosol@gmail.com
+            atendimentoaocliente.locaterra@gmail.com
           </a>
           .
         </p>
