@@ -7,6 +7,7 @@ import { BenefitsSection } from "@/components/sections/home/BenefitsSectiont";
 import { HelpSection } from "@/components/sections/home/HelpSection";
 import { PropertyService } from "@/services/domains/propertyService";
 import { useQuery } from "@tanstack/react-query";
+import Image from "next/image";
 
 export default function Home() {
   const { data: popularData, isLoading: isPopularLoading } = useQuery({
@@ -24,15 +25,37 @@ export default function Home() {
 
   return (
     <div className="bg-background flex-col justify-center items-center ">
-      <section className="relative lg:min-h-[48svh] md:min-h-[54svh] min-h-[72svh] w-full bg-gradient-to-b from-secondary-hover to-secondary mt-16 flex flex-col items-center justify-center text-center text-white">
-        <div className="w-full lg:max-w-7xl flex flex-col items-center justify-center lg:py-10 ">
+      <section
+        className="relative lg:min-h-[48svh] md:min-h-[54svh] min-h-[72svh] w-full mt-16 flex flex-col items-center justify-center text-center text-white"
+        aria-label="Hero Locaterra"
+      >
+        <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
+          <div className="absolute inset-0 transform scale-110">
+            <Image
+              src="/images/home-mansion.avif"
+              alt=""
+              fill
+              className="object-cover object-center w-full h-full opacity-90 blur-[3px]"
+              priority={false}
+              aria-hidden="true"
+            />
+
+            <div
+              className="absolute inset-0 bg-gradient-to-b from-secondary-hover to-secondary/70"
+              aria-hidden="true"
+            />
+          </div>
+        </div>
+
+        <div className="w-full lg:max-w-7xl relative z-10 flex flex-col items-center justify-center lg:py-10 px-4">
           <h1 className="text-4xl md:text-5xl font-medium tracking-normal flex items-center gap-x-2 flex-wrap justify-center">
             Para{" "}
-            <span className="bg-primary text-3xl  uppercase font-black text-secondary px-2.5 py-1 rounded-md">
+            <span className="bg-primary/90 text-2xl uppercase font-black text-white px-2.5 py-1.5 rounded-md">
               você
             </span>{" "}
             morar bem!
           </h1>
+
           <p className="mt-4 text-sm md:text-base text-center text-gray-200 italic">
             Busque seu imóvel no Locaterra.
           </p>
@@ -41,21 +64,8 @@ export default function Home() {
             <SearchBar />
           </div>
         </div>
-        <div className="absolute bottom-0 left-0 w-full overflow-hidden leading-[0] transform -scale-y-100">
-          <svg
-            data-name="Layer 1"
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 1200 120"
-            preserveAspectRatio="none"
-            className="relative block w-full h-[75px]"
-          >
-            <path
-              d="M0,0V46.29c47.79,22.2,103.59,32.17,158,28,70.36-5.37,136.33-33.31,206.3-37.5C438.64,32.43,512.34,53.67,583,72.05c69.27,18,138.3,24.88,209.4,13.08,36.15-6,69.85-17.84,104.45-29.34C989.49,25,1113-14.29,1200,52.47V0Z"
-              className="fill-background"
-            ></path>
-          </svg>
-        </div>
       </section>
+
       {popularProperties.length > 0 && (
         <section className="max-w-7xl mx-auto">
           <PropertiesList
