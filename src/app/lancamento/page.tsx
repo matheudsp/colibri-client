@@ -53,7 +53,7 @@ export default function LancamentoPage() {
               </div>
               <div className="px-3 py-1 rounded-full bg-accent/10 text-xs font-medium text-accent flex items-center gap-1">
                 <Percent className="w-3 h-3" /> Taxa:{" "}
-                <span className="font-semibold ml-1">8% por aluguel</span>
+                <span className="font-semibold ml-1">5% por aluguel</span>
               </div>
             </div>
 
@@ -63,7 +63,7 @@ export default function LancamentoPage() {
 
             <p className="text-lg text-foreground-muted max-w-2xl">
               Automação de contratos, cobrança e acompanhamento financeiro. Sem
-              mensalidade fixa: cobramos 8% de cada aluguel processado pela
+              mensalidade fixa: cobramos 5% de cada aluguel processado pela
               plataforma — transparência e custo alinhado ao seu resultado.
             </p>
 

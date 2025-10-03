@@ -33,7 +33,7 @@ const helpItems = [
     icon: <ShieldCheck className="w-6 h-6 text-primary" />,
     title: "Segurança e Controle para Locadores",
     description:
-      "Tenha contratos digitais, gestão centralizada e recebimentos garantidos. Aproveite a taxa promocional de 8% — por tempo limitado.",
+      "Tenha contratos digitais, gestão centralizada e recebimentos garantidos. Aproveite a taxa promocional de 5% — por tempo limitado.",
     linkText: "Entenda",
     href: "/saiba-mais",
   },
