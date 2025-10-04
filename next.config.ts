@@ -14,6 +14,7 @@ const pwaConfig = withPWA({
     /_buildManifest\.js$/,
     /_ssgManifest\.js$/,
     /app-build-manifest\.json$/,
+    /\.map$/,
   ],
   runtimeCaching: [
     {

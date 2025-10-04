@@ -1,6 +1,7 @@
 "use client";
 
 import { AuthGuard } from "@/components/layout/AuthGuard";
+import { NotificationsProvider } from "@/contexts/NotificationContext";
 
 export default function PrivateLayout({
   children,
@@ -8,6 +9,8 @@ export default function PrivateLayout({
   children: React.ReactNode;
 }) {
   return (
-    <AuthGuard redirectToIfUnauthenticated="/entrar">{children}</AuthGuard>
+    <AuthGuard redirectToIfUnauthenticated="/entrar">
+      <NotificationsProvider>{children}</NotificationsProvider>
+    </AuthGuard>
   );
 }

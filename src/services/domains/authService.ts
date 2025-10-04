@@ -2,6 +2,7 @@ import { useUserStore } from "@/stores/userStore";
 import { ApiResponse, MessageResponse } from "../../types/api";
 import { api, extractAxiosError } from "../api";
 import API_ROUTES from "../api/routes";
+import { socketService } from "./socketService";
 
 interface TenantRegisterData {
   name: string;
@@ -130,6 +131,7 @@ export const AuthService = {
       );
     } finally {
       useUserStore.getState().setUser(null);
+      socketService.disconnect();
     }
   },
 

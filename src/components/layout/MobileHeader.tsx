@@ -22,6 +22,7 @@ import { useCurrentUser } from "@/hooks/useCurrentUser";
 import { Roles } from "@/constants";
 import Image from "next/image";
 import { GrGroup } from "react-icons/gr";
+import { NotificationIcon } from "../notifications/NotificationIcon";
 
 const allNavItems = [
   {
@@ -108,14 +109,24 @@ export function MobileHeader() {
           </div>
 
           <div>
-            <p className="text-sm font-semibold text-gray-800">
-              {currentSection ? currentSection.label : "Aplicativo"}
+            <p className="text-sm font-semibold text-gray-800 capitalize">
+              {/* {currentSection
+                ? currentSection.label
+                : `Área do ${role?.toLowerCase()}`} */}
+              {`Painel do ${role?.toLowerCase()}`}
             </p>
             <p className="text-xs text-gray-500">{pathname}</p>
           </div>
         </div>
 
         <div className="flex items-center gap-2">
+          <Link
+            href="/notificacoes"
+            aria-label="Ver notificações"
+            className="p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-primary/40"
+          >
+            <NotificationIcon />
+          </Link>
           <button
             onClick={() => setIsMenuOpen(true)}
             aria-label="Abrir menu"

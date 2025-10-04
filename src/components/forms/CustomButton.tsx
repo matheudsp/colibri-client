@@ -63,11 +63,11 @@ export function CustomButton({
       onClick={onClick}
       disabled={disabled || isLoading}
       className={clsx(
+        className,
         baseClasses,
         variantClasses,
         disabledClasses,
-        rounded,
-        className
+        rounded
       )}
       title={title}
     >

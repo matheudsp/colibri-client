@@ -152,6 +152,12 @@ const API_ROUTES = {
     UPDATE_STATUS: ({ id }: Params) => `/interests/${id}/status`,
     CHECK: ({ propertyId }: Params) => `/interests/check/${propertyId}`,
   },
+
+  NOTIFICATIONS: {
+    ME: "/notifications/me",
+    MARK_AS_READ: ({ id }: Params) => `/notifications/${id}/read`,
+    MARK_ALL_AS_READ: "/notifications/me/mark-all-as-read",
+  },
 };
 
 export default API_ROUTES;

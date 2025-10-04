@@ -20,6 +20,7 @@ import { AuthService } from "@/services/domains/authService";
 import { Roles } from "@/constants";
 import { useCurrentUser } from "@/hooks/useCurrentUser";
 import { GrGroup } from "react-icons/gr";
+import { NotificationBell } from "../notifications/NotificationBell";
 const navItems = [
   {
     label: "Painel",
@@ -208,6 +209,7 @@ export default function SidebarNav() {
           collapsed ? "items-center" : "items-stretch"
         )}
       >
+        <NotificationBell collapsed={collapsed} />
         <Link
           href={"/conta"}
           className={clsx(
@@ -246,14 +248,14 @@ export default function SidebarNav() {
           onClick={handleLogout}
           title="Sair do sistema"
           className={clsx(
-            "flex items-center transition-all duration-200 ease-in-out rounded-lg w-full text-black/90 hover:bg-red-500/80 hover:text-white hover:scale-105",
+            "flex items-center cursor-pointer transition-all duration-200 ease-in-out rounded-lg w-full text-black/90 hover:bg-red-500/80 hover:text-white hover:scale-105",
             collapsed ? "justify-center px-0 py-2" : "justify-start px-3 py-2"
           )}
         >
           <LogOut className="w-5 h-5" />
           {!collapsed && (
             <span className="ml-2 text-sm font-semibold tracking-wide truncate">
-              Sair
+              Sair do sistema
             </span>
           )}
         </button>

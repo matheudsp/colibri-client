@@ -3,12 +3,9 @@
 import { useEffect } from "react";
 import { useUserStore } from "@/stores/userStore";
 import { AuthService } from "@/services/domains/authService";
+import { socketService } from "@/services/domains/socketService";
 
-/**
- * Verifica a existência do cookie de status de sessão não-httpOnly.
- */
 const hasSessionCookie = (): boolean => {
-  // Usa a API padrão do navegador para ler os cookies
   return document.cookie.includes("session-status=active");
 };
 
@@ -20,8 +17,10 @@ export function useCurrentUser() {
       try {
         const me = await AuthService.getMe();
         setUser(me.data);
+        socketService.connect();
       } catch {
         setUser(null);
+        socketService.disconnect();
       } finally {
         setLoading(false);
       }
@@ -29,11 +28,8 @@ export function useCurrentUser() {
 
     if (loading) {
       if (hasSessionCookie()) {
-        // Só faz a chamada à API se o cookie de sessão existir.
         fetchUser();
       } else {
-        // Se o cookie não existe, sabemos que não há sessão.
-        // Não fazemos chamada à API e encerramos o carregamento.
         setUser(null);
         setLoading(false);
       }
