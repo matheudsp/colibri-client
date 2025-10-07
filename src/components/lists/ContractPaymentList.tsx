@@ -103,7 +103,7 @@ export function ContractPaymentList({
   }
 
   return (
-    <div className="w-full max-h-[600px] overflow-y-auto border border-border rounded-lg bg-background  shadow-sm">
+    <div className="w-full max-h-[400px] overflow-y-auto border border-border rounded-lg bg-background  shadow-sm">
       <div className="md:hidden divide-y divide-border">
         {payments.map((payment) => (
           <div

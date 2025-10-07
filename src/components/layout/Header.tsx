@@ -58,8 +58,8 @@ export function Header({
     return (
       <header
         className={`${
-          occultInPrivate && "hidden"
-        } md:fixed z-50 top-0 w-full flex items-center justify-center ${
+          occultInPrivate ? "hidden" : "flex"
+        } fixed z-50 top-0 w-full items-center justify-center ${
           isScrolledOrSearch
             ? "bg-background/90 backdrop-blur-xs border-b border-border"
             : "bg-secondary-hover"
@@ -67,8 +67,8 @@ export function Header({
       >
         <div
           className={` ${
-            occultInPrivate && "hidden"
-          } w-full max-w-7xl px-4 2xl:px-0 h-16 md:flex items-center justify-between gap-6 transition-all duration-300 ease-in-out `}
+            occultInPrivate ? "hidden" : "flex"
+          } w-full max-w-7xl px-4 2xl:px-0 h-16  items-center justify-between gap-6 transition-all duration-300 ease-in-out `}
         >
           {/* Logo */}
           <div className="shrink-0">

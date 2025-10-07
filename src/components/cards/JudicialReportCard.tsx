@@ -45,15 +45,24 @@ export function JudicialReportCard({
     }
   };
 
-  const handleDownloadReport = async (pdfId: string) => {
-    const toastId = toast.loading("Recuperando relatório...");
+  const handleViewReport = async (pdfId: string) => {
+    const loadingTost = toast.loading("Recuperando relatório...");
     try {
       const response = await PdfService.getSignedUrl(pdfId);
-      window.open(response.data.url, "_blank");
-      toast.success("Relatório encontrado!", { id: toastId });
+
+      const link = document.createElement("a");
+      link.href = response.data.url;
+      link.target = "_blank";
+      link.rel = "noopener noreferrer";
+
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+
+      toast.dismiss(loadingTost);
     } catch (error) {
       toast.error("Falha ao baixar o relatório", {
-        id: toastId,
+        id: loadingTost,
         description: extractAxiosError(error),
       });
     }
@@ -100,7 +109,7 @@ export function JudicialReportCard({
                 </p>
               </div>
               <CustomButton
-                onClick={() => handleDownloadReport(report.id)}
+                onClick={() => handleViewReport(report.id)}
                 ghost
                 className="w-full sm:w-auto"
               >
