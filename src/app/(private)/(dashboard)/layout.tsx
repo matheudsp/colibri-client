@@ -21,14 +21,7 @@ export default function DashboardLayout({
       <div className="min-h-screen w-full flex flex-col md:flex-row">
         <SidebarNav />
         <MobileHeader />
-        {/* md:ml-48 */}
-        <main
-          className="flex-1 
-        
-         transition-all duration-300"
-        >
-          {children}
-        </main>
+        <main className="flex-1 transition-all duration-300">{children}</main>
       </div>
     </SearchProvider>
   );

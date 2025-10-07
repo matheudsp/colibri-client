@@ -97,8 +97,7 @@ export default function SidebarNav() {
     item.roles.includes(role || "")
   );
   const userInitial = user?.name ? user?.name[0].toUpperCase() : "?";
-  const myAccountIsActive =
-    pathname.startsWith("/account") || pathname.startsWith("/conta");
+  const myAccountIsActive = pathname.startsWith("/conta");
 
   return (
     <aside

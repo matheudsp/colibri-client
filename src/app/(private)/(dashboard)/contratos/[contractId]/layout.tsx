@@ -12,7 +12,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 
   return (
     <div className="w-full">
-      <Header type="logoOnly" onBack={handleBack} />
+      <Header type="logoOnly" occultInPrivate onBack={handleBack} />
       {children}
     </div>
   );

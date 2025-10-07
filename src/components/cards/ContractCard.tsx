@@ -1,5 +1,5 @@
 "use client";
-
+import { MdOutlineRealEstateAgent } from "react-icons/md";
 import { useMemo } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
@@ -7,14 +7,9 @@ import { Contract } from "@/interfaces/contract";
 import { contractStatus } from "@/constants/contractStatus";
 import { formatDateForDisplay } from "@/utils/formatters/formatDate";
 import { formatDecimalValue } from "@/utils/formatters/formatDecimal";
-import {
-  User,
-  Calendar,
-  DollarSign,
-  ArrowRight,
-  FileText,
-  AlertCircle,
-} from "lucide-react";
+import { User, Calendar, DollarSign, ArrowRight, FileText } from "lucide-react";
+import { Roles } from "@/constants";
+import { useCurrentUser } from "@/hooks/useCurrentUser";
 
 const DetailItem = ({
   icon: Icon,
@@ -36,7 +31,8 @@ const DetailItem = ({
 
 export function ContractCard({ contract }: { contract: Contract }) {
   const router = useRouter();
-  // console.log(contract, "OIASODAID");
+  const { role } = useCurrentUser();
+
   const statusInfo = useMemo(() => {
     return (
       contractStatus.find((s) => s.value === contract.status) || {
@@ -57,26 +53,26 @@ export function ContractCard({ contract }: { contract: Contract }) {
     );
   }, [contract.property?.photos]);
 
-  // Lógica para encontrar o próximo pagamento pendente
-  const nextPayment = useMemo(() => {
-    if (!contract.paymentsOrders || contract.paymentsOrders.length === 0) {
-      return null;
-    }
-    const now = new Date();
-    now.setHours(0, 0, 0, 0); // Zera a hora para comparar apenas a data
+  // // Lógica para encontrar o próximo pagamento pendente
+  // const nextPayment = useMemo(() => {
+  //   if (!contract.paymentsOrders || contract.paymentsOrders.length === 0) {
+  //     return null;
+  //   }
+  //   const now = new Date();
+  //   now.setHours(0, 0, 0, 0); // Zera a hora para comparar apenas a data
 
-    const pendingPayments = contract.paymentsOrders
-      .filter(
-        (p) =>
-          (p.status === "PENDENTE" || p.status === "ATRASADO") &&
-          new Date(p.dueDate) >= now
-      )
-      .sort(
-        (a, b) => new Date(a.dueDate).getTime() - new Date(b.dueDate).getTime()
-      );
+  //   const pendingPayments = contract.paymentsOrders
+  //     .filter(
+  //       (p) =>
+  //         (p.status === "PENDENTE" || p.status === "ATRASADO") &&
+  //         new Date(p.dueDate) >= now
+  //     )
+  //     .sort(
+  //       (a, b) => new Date(a.dueDate).getTime() - new Date(b.dueDate).getTime()
+  //     );
 
-    return pendingPayments[0] || null;
-  }, [contract.paymentsOrders]);
+  //   return pendingPayments[0] || null;
+  // }, [contract.paymentsOrders]);
 
   const totalMonthlyCost = useMemo(() => {
     const rent = parseFloat(contract.rentAmount) || 0;
@@ -86,7 +82,7 @@ export function ContractCard({ contract }: { contract: Contract }) {
   }, [contract.rentAmount, contract.condoFee, contract.iptuFee]);
 
   const handleCardClick = () => {
-    router.push(`/contrato/${contract.id}`);
+    router.push(`/contratos/${contract.id}`);
   };
 
   return (
@@ -137,11 +133,20 @@ export function ContractCard({ contract }: { contract: Contract }) {
         </header>
 
         <div className="mt-4 grid grid-cols-2 md:grid-cols-4 gap-4 pt-4 border-t border-border">
-          <DetailItem
-            icon={User}
-            label="Inquilino"
-            value={contract.tenant.name}
-          />
+          {role === Roles.LOCATARIO && (
+            <DetailItem
+              icon={User}
+              label="Inquilino"
+              value={contract.tenant.name}
+            />
+          )}
+          {role === Roles.LOCADOR && (
+            <DetailItem
+              icon={MdOutlineRealEstateAgent}
+              label="Locador"
+              value={contract.landlord.name}
+            />
+          )}
           <DetailItem
             icon={Calendar}
             label="Início"
@@ -159,7 +164,7 @@ export function ContractCard({ contract }: { contract: Contract }) {
           />
         </div>
 
-        {nextPayment ? (
+        {/* {nextPayment ? (
           <div className="mt-4 p-3 rounded-lg bg-primary/10 border border-primary/20 flex flex-col xs:flex-row items-start xs:items-center justify-between gap-2">
             <div>
               <p className="text-xs font-semibold text-primary">
@@ -183,7 +188,7 @@ export function ContractCard({ contract }: { contract: Contract }) {
             <AlertCircle size={16} />
             <span>Não há pagamentos pendentes.</span>
           </div>
-        )}
+        )} */}
       </div>
 
       <footer className="px-4 py-3 bg-zinc-50/70 border-t border-border rounded-b-2xl flex flex-col xs:flex-row items-start xs:items-center justify-between gap-2">

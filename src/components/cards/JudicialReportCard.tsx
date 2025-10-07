@@ -8,6 +8,7 @@ import { PdfService } from "@/services/domains/pdfService";
 import { extractAxiosError } from "@/services/api";
 import { CustomButton } from "@/components/forms/CustomButton";
 import { formatDate } from "@/utils/formatters/formatDate";
+import { EmptyCard } from "../common/EmptyCard";
 
 interface JudicialReportCardProps {
   contract: ContractWithDocuments;
@@ -110,13 +111,11 @@ export function JudicialReportCard({
           ))}
         </ul>
       ) : (
-        <div className="text-center py-6 px-4 bg-background rounded-lg border-dashed border-border border-2">
-          <TbReportAnalytics className="mx-auto text-gray-400" size={32} />
-          <p className="mt-2 font-semibold">Nenhum relatório gerado</p>
-          <p className="text-sm text-gray-500 mt-1">
-            Clique no botão acima para criar o primeiro dossiê deste contrato.
-          </p>
-        </div>
+        <EmptyCard
+          icon={<TbReportAnalytics size={32} />}
+          title="Nenhum relatório gerado"
+          subtitle="Clique no botão acima para criar o primeiro dossiê deste contrato."
+        />
       )}
       <p className="text-xs text-gray-400 mt-4">
         Nota: Os relatórios são automaticamente excluídos após 7 dias por

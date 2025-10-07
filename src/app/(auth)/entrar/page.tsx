@@ -15,6 +15,7 @@ import { CustomInput } from "@/components/forms/CustomInput";
 import { OtpVerificationModal } from "@/components/modals/verificationModals/OtpVerificationModal";
 import { extractAxiosError } from "@/services/api";
 import { useUserStore } from "@/stores/userStore";
+import { SecuritySeal } from "@/components/common/SecuritySeal";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -79,9 +80,9 @@ export default function LoginPage() {
 
   const handleResendOtp = async () => {
     const loginData = getValues();
-    const response = await AuthService.login(loginData); // Envia um novo código
+    const response = await AuthService.login(loginData);
     if ("twoFactorRequired" in response && response.twoFactorRequired) {
-      setPartialToken(response.partialToken); // Atualiza para o novo token parcial
+      setPartialToken(response.partialToken);
     }
     return { data: { message: "Código reenviado com sucesso!" } };
   };
@@ -95,13 +96,12 @@ export default function LoginPage() {
   return (
     <>
       <div className="min-h-[90svh] w-full bg-background flex flex-col items-center justify-center p-4">
-        {/* O JSX da sua página de login continua o mesmo */}
         <div className="w-full max-w-md">
           <div className=" ">
             <div className="text-center mb-8 mt-20">
               <h1 className="text-3xl font-bold text-secondary">Entrar</h1>
               <p className="text-foreground/70 mt-2">Bem-vindo de volta!</p>
-            </div>
+            </div>{" "}
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
               <Controller
                 name="email"
@@ -145,6 +145,8 @@ export default function LoginPage() {
                   </Link>
                 </div>
               </div>
+
+              <SecuritySeal className="mb-6" />
 
               <div className="pt-4 space-y-4">
                 <CustomButton

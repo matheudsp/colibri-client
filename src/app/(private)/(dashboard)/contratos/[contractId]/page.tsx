@@ -19,7 +19,6 @@ import { ContractService } from "@/services/domains/contractService";
 
 import { CustomButton } from "@/components/forms/CustomButton";
 
-import { PaymentsList } from "@/components/lists/PaymentLists";
 import { DeleteContractModal } from "@/components/modals/contractModals/DeleteContractModal";
 import { contractStatus } from "@/constants/contractStatus";
 import { useCurrentUser } from "@/hooks/useCurrentUser";
@@ -31,12 +30,12 @@ import { ContractDetails } from "@/components/cards/details/ContractDetails";
 import { ContractPartiesDetails } from "@/components/cards/details/ContractPartiesDetails";
 import { ResendNotificationModal } from "@/components/modals/contractModals/ResendNotificationModal";
 import { CancelContractModal } from "@/components/modals/contractModals/CancelContractModal";
-import { PaymentService } from "@/services/domains/paymentService";
-import { RegisterPaymentModal } from "@/components/modals/paymentModals/RegisterPaymentModal";
+
 import { extractAxiosError } from "@/services/api";
 import { LottieAnimation } from "@/components/common/LottieAnimation";
-import signatureAnimation from "../../../../../public/lottie/signature-animation.json";
+import signatureAnimation from "../../../../../../public/lottie/signature-animation.json";
 import { JudicialReportCard } from "@/components/cards/JudicialReportCard";
+import { ContractPaymentList } from "@/components/lists/ContractPaymentList";
 
 export default function ContractManagementPage() {
   const [contract, setContract] = useState<ContractWithDocuments | null>(null);
@@ -46,11 +45,7 @@ export default function ContractManagementPage() {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [isSigningLoading, setIsSigningLoading] = useState(false);
   const [showResendModal, setShowResendModal] = useState(false);
-  const [showRegisterPaymentModal, setShowRegisterPaymentModal] =
-    useState(false);
-  const [selectedPaymentId, setSelectedPaymentId] = useState<string | null>(
-    null
-  );
+
   const params = useParams();
   const router = useRouter();
   const contractId = params.contractId as string;
@@ -103,30 +98,6 @@ export default function ContractManagementPage() {
       });
     } finally {
       setIsActionLoading(false);
-    }
-  };
-  const handleOpenRegisterModal = (paymentId: string) => {
-    setSelectedPaymentId(paymentId);
-    setShowRegisterPaymentModal(true);
-  };
-
-  const handleRegisterPayment = async () => {
-    if (!selectedPaymentId) return;
-
-    setIsActionLoading(true);
-    try {
-      await PaymentService.confirmCashPayment(selectedPaymentId, {});
-      toast.success("Pagamento registado com sucesso!");
-      setShowRegisterPaymentModal(false);
-      await fetchContract(); // Recarrega os dados do contrato para atualizar a lista
-    } catch (_error) {
-      const errorMessage = extractAxiosError(_error);
-      toast.error("Não foi possivel registrar pagamento", {
-        description: errorMessage,
-      });
-    } finally {
-      setIsActionLoading(false);
-      setSelectedPaymentId(null);
     }
   };
 
@@ -267,7 +238,7 @@ export default function ContractManagementPage() {
               </p>
               <CustomButton
                 onClick={() =>
-                  router.push(`/contrato/${contract.id}/documentos`)
+                  router.push(`/contratos/${contract.id}/documentos`)
                 }
                 className="mt-4 w-full"
               >
@@ -295,7 +266,7 @@ export default function ContractManagementPage() {
                 </p>
                 <CustomButton
                   onClick={() =>
-                    router.push(`/contrato/${contract.id}/documentos`)
+                    router.push(`/contratos/${contract.id}/documentos`)
                   }
                   color="bg-red-600"
                   textColor="text-white"
@@ -395,7 +366,7 @@ export default function ContractManagementPage() {
               </p>
               <CustomButton
                 onClick={() =>
-                  router.push(`/contrato/${contract.id}/documentos`)
+                  router.push(`/contratos/${contract.id}/documentos`)
                 }
                 color="bg-blue-600"
                 textColor="text-white"
@@ -416,7 +387,9 @@ export default function ContractManagementPage() {
               enquanto isso, você pode verificar quais foram enviados.
             </p>
             <CustomButton
-              onClick={() => router.push(`/contrato/${contract.id}/documentos`)}
+              onClick={() =>
+                router.push(`/contratos/${contract.id}/documentos`)
+              }
               color="bg-orange-600"
               textColor="text-white"
               className="w-full mt-4"
@@ -433,7 +406,7 @@ export default function ContractManagementPage() {
 
   return (
     <>
-      <div className="min-h-screen pt-24 md:pt-28 pb-10">
+      <div className="min-h-screen py-10 md:py-20">
         <div className="max-w-5xl mx-auto px-4">
           <header className="mb-6">
             <CustomButton
@@ -487,9 +460,9 @@ export default function ContractManagementPage() {
               <ContractDetails contract={contract} />
               {contract.paymentsOrders &&
                 contract.paymentsOrders.length > 0 && (
-                  <PaymentsList
+                  <ContractPaymentList
                     payments={contract.paymentsOrders}
-                    onRegisterPaymentClick={handleOpenRegisterModal}
+                    onRefresh={() => fetchContract()}
                   />
                 )}
               {contract.status === "ATIVO" &&
@@ -525,24 +498,7 @@ export default function ContractManagementPage() {
                     )}
                   </CustomButton>
                 )}
-                {/* {(role === Roles.LOCADOR || role === Roles.ADMIN) && (
-                  <CustomButton
-                    onClick={handleGenerateJudicialReport}
-                    disabled={isActionLoading}
-                    color="bg-gray-100"
-                    textColor="text-gray-900"
-                    className="w-full"
-                  >
-                    {isActionLoading ? (
-                      <Loader2 className="animate-spin mr-2" />
-                    ) : (
-                      <>
-                        <FileInput className="mr-2" size={20} />
-                        Gerar Relatório
-                      </>
-                    )}
-                  </CustomButton>
-                )} */}
+
                 {(contract.status === "PENDENTE_DOCUMENTACAO" ||
                   contract.status === "EM_ANALISE" ||
                   contract.status === "AGUARDANDO_ASSINATURAS" ||
@@ -551,7 +507,7 @@ export default function ContractManagementPage() {
                   contract.status === "FINALIZADO") && (
                   <CustomButton
                     onClick={() => {
-                      router.push(`/contrato/${contract.id}/documentos`);
+                      router.push(`/contratos/${contract.id}/documentos`);
                     }}
                     disabled={isActionLoading}
                     color="bg-indigo-100"
@@ -666,13 +622,6 @@ export default function ContractManagementPage() {
           contract={contract}
         />
       )}
-
-      <RegisterPaymentModal
-        isOpen={showRegisterPaymentModal}
-        onClose={() => setShowRegisterPaymentModal(false)}
-        onConfirm={handleRegisterPayment}
-        isLoading={isActionLoading}
-      />
     </>
   );
 }

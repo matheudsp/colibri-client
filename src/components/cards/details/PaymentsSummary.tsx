@@ -18,20 +18,20 @@ export function PaymentsSummary({ data }: PaymentsSummaryProps) {
         </strong>
       </h3>
       <dl className="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-2">
-        <div className="overflow-hidden rounded-lg border border-green-400 bg-green-200 px-4 py-5 sm:p-6">
-          <dt className="truncate text-sm font-medium text-green-700">
+        <div className="overflow-hidden rounded-lg border border-primary bg-primary-light px-4 py-5 sm:p-6">
+          <dt className="truncate text-sm font-medium text-shadow-primary-hover">
             Recebido
           </dt>
-          <dd className="mt-1 text-3xl font-semibold tracking-tight text-green-900">
+          <dd className="mt-1 text-3xl font-semibold tracking-tight text-shadow-primary-hover">
             {formatCurrency(data.received)}
           </dd>
         </div>
 
-        <div className="overflow-hidden rounded-lg border border-yellow-400 bg-yellow-200 px-4 py-5 sm:p-6">
-          <dt className="truncate text-sm font-medium text-yellow-700">
+        <div className="overflow-hidden rounded-lg border border-sky-400 bg-sky-200 px-4 py-5 sm:p-6">
+          <dt className="truncate text-sm font-medium text-sky-950">
             A receber
           </dt>
-          <dd className="mt-1 text-3xl font-semibold tracking-tight text-yellow-900">
+          <dd className="mt-1 text-3xl font-semibold tracking-tight text-sky-950">
             {formatCurrency(data.pending)}
           </dd>
         </div>

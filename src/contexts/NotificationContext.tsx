@@ -45,7 +45,6 @@ export const NotificationsProvider = ({
   const fetchNotifications = useCallback(async () => {
     try {
       const response = await notificationsService.getNotifications();
-      console.log(response, "NOTIFIACAOCSICAS");
       setNotifications(response.data.notifications || []);
       setUnreadCount(response.data.unreadCount || 0);
     } catch (error) {

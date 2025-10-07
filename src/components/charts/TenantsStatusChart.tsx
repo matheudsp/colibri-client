@@ -22,7 +22,7 @@ interface TenantsStatusChartProps {
 }
 
 const STATUS_INFO = {
-  goodPayer: { name: "Bons Pagadores", color: "#22c55e" }, // Verde
+  goodPayer: { name: "Bons Pagadores", color: "#97c52a" }, // Verde
   late: { name: "Atrasados", color: "#f59e0b" }, // Âmbar
   defaulted: { name: "Inadimplentes", color: "#ef4444" }, // Vermelho
 };

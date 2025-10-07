@@ -87,8 +87,8 @@ export function RentIncomeChart({ data }: RentIncomeChartProps) {
         >
           <defs>
             <linearGradient id="colorReceita" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="5%" stopColor="#0ea5e9" stopOpacity={0.7} />
-              <stop offset="95%" stopColor="#0ea5e9" stopOpacity={0} />
+              <stop offset="5%" stopColor="#97c52a" stopOpacity={0.7} />
+              <stop offset="95%" stopColor="#97c52a" stopOpacity={0} />
             </linearGradient>
           </defs>
           <CartesianGrid strokeDasharray="3 3" vertical={false} />
@@ -130,7 +130,7 @@ export function RentIncomeChart({ data }: RentIncomeChartProps) {
             type="monotone"
             dataKey="Receita"
             strokeWidth={2}
-            stroke="#0284c7"
+            stroke="#97c52a"
             fillOpacity={1}
             fill="url(#colorReceita)"
           />

@@ -1,4 +1,4 @@
-import { CheckIcon } from "lucide-react";
+import { FaCheckDouble } from "react-icons/fa";
 
 export const Stepper = ({
   steps,
@@ -43,7 +43,7 @@ export const Stepper = ({
                     : "bg-white text-gray-500 border-2 border-gray-200"
                 }`}
               >
-                {isCompleted ? <CheckIcon size={24} /> : stepNumber}
+                {isCompleted ? <FaCheckDouble size={24} /> : stepNumber}
               </div>
               <p
                 className={`mt-2 text-xs sm:text-sm transition-colors ${

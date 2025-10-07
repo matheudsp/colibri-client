@@ -115,7 +115,9 @@ export function MobileHeader() {
                 : `Área do ${role?.toLowerCase()}`} */}
               {`Painel do ${role?.toLowerCase()}`}
             </p>
-            <p className="text-xs text-gray-500">{pathname}</p>
+            <p className="text-xs text-gray-500 truncate text-nowrap max-w-44 xs:max-w-60 text-ellipsis ">
+              {pathname}
+            </p>
           </div>
         </div>
 

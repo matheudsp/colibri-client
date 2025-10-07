@@ -1,7 +1,7 @@
 import { Contract } from "@/interfaces/contract";
 import { formatDateForDisplay } from "@/utils/formatters/formatDate";
 import { formatDecimalValue } from "@/utils/formatters/formatDecimal";
-import { Building, Calendar, DollarSign, Shield, Clock } from "lucide-react";
+import { Calendar, DollarSign, Shield, Clock } from "lucide-react";
 import type { ReactNode } from "react";
 
 interface DetailItemProps {
@@ -26,15 +26,21 @@ export function ContractDetails({ contract }: { contract: Contract }) {
         Detalhes do Contrato
       </h2>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <DetailItem
+        {/* <DetailItem
           icon={<Building size={20} />}
           label="Imóvel"
           value={contract.property.title}
-        />
+        /> */}
         <DetailItem
           icon={<DollarSign size={20} />}
           label="Valor do Aluguel"
           value={`R$ ${formatDecimalValue(contract.rentAmount)}`}
+        />
+
+        <DetailItem
+          icon={<Clock size={20} />}
+          label="Duração"
+          value={`${contract.durationInMonths} meses`}
         />
         <DetailItem
           icon={<Calendar size={20} />}
@@ -45,11 +51,6 @@ export function ContractDetails({ contract }: { contract: Contract }) {
           icon={<Calendar size={20} />}
           label="Data de Término"
           value={formatDateForDisplay(contract.endDate)}
-        />
-        <DetailItem
-          icon={<Clock size={20} />}
-          label="Duração"
-          value={`${contract.durationInMonths} meses`}
         />
         <DetailItem
           icon={<Shield size={20} />}

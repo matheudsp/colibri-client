@@ -1,11 +1,11 @@
 import {
-  CheckCircle,
   FileClock,
   FileSearch,
   FileText,
   PenSquare,
   ShieldCheck,
 } from "lucide-react";
+import { BiCheckDouble } from "react-icons/bi";
 
 const statusToStep = {
   PENDENTE_DOCUMENTACAO: 2,
@@ -77,7 +77,7 @@ export function ContractFlowDetails({ status }: { status: string }) {
                     `}
                   >
                     {isCompleted ? (
-                      <CheckCircle size={24} />
+                      <BiCheckDouble size={24} />
                     ) : (
                       <step.icon
                         size={24}

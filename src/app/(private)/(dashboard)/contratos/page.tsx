@@ -63,8 +63,8 @@ export default function ContractsPage() {
 
   if (loading) {
     return (
-      <div className="min-h-svh flex flex-col items-center pt-8 md:pt-14 px-4 pb-24 ">
-        <div className="w-full max-w-7xl mx-auto">
+      <div className="min-h-svh flex flex-col  pt-8 md:pt-14 px-4 pb-24 ">
+        <div className="w-full max-w-7xl ">
           <PageHeader
             className="mb-8"
             title="Meus Contratos"

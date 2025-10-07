@@ -46,7 +46,7 @@ export function PropertiesOccupancyChart({
             <div className="flex h-6 w-full overflow-hidden rounded-full bg-zinc-200">
               {item.occupied > 0 && (
                 <motion.div
-                  className="flex items-center justify-center bg-sky-500 text-xs font-semibold text-white"
+                  className="flex items-center justify-center bg-primary text-xs font-semibold text-white"
                   style={{ width: `${occupiedPercentage}%` }}
                   initial={{ width: 0 }}
                   animate={{ width: `${occupiedPercentage}%` }}

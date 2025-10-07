@@ -22,220 +22,233 @@ export default function PoliticaDePrivacidadePage() {
         <h1 className="text-xl font-bold text-start">
           Política de Privacidade
         </h1>
-
         <p className="text-sm text-zinc-600">
-          Última atualização: 14/09/2025 às 22:46h
+          Última atualização: 06/10/2025 às 10:00h
         </p>
       </div>
 
       <p className="text-justify">
-        A Locaterra preza pela privacidade e segurança dos dados pessoais de
-        seus usuários. Esta política descreve como coletamos, usamos,
-        compartilhamos e protegemos as informações no sistema Locaterra. Estamos
-        em conformidade com a Lei Geral de Proteção de Dados Pessoais (LGPD, Lei
-        nº 13.709/2018), que protege os direitos fundamentais de liberdade e
-        privacidade dos indivíduos. Atuamos exclusivamente no Brasil e seguimos
-        as legislações locais de proteção de dados.
+        A Locaterra valoriza a privacidade e a proteção dos dados pessoais de
+        seus usuários. Esta Política de Privacidade descreve de forma clara e
+        transparente como coletamos, utilizamos, compartilhamos e protegemos as
+        informações no sistema Locaterra, em conformidade com a Lei Geral de
+        Proteção de Dados Pessoais (LGPD - Lei nº 13.709/2018). A Locaterra atua
+        exclusivamente no Brasil e segue as legislações locais aplicáveis à
+        proteção de dados e privacidade.
       </p>
 
-      <nav className="not-prose bg-zinc-100 p-4 rounded-xl border border-zinc-200 mb-10">
-        <h2 className="text-lg font-semibold mb-2 text-center">Índice</h2>
-        <ul className="space-y-2 list-decimal pl-5 ">
-          <li className="hover:text-secondary-hover underline">
-            <a href="#dados-pessoais-coletados ">Dados Pessoais Coletados</a>
-          </li>
-          <li className="hover:text-secondary-hover underline">
-            <a href="#finalidades-do-tratamento">Finalidades do Tratamento</a>
-          </li>
-          <li className="hover:text-secondary-hover underline">
-            <a href="#cookies-e-tecnologias">
-              Cookies e Tecnologias de Rastreamento
-            </a>
-          </li>
-          <li className="hover:text-secondary-hover underline">
-            <a href="#compartilhamento">
-              Compartilhamento de Dados com Terceiros
-            </a>
-          </li>
-          <li className="hover:text-secondary-hover underline">
-            <a href="#direitos-dos-usuarios">Direitos dos Usuários</a>
-          </li>
-          <li className="hover:text-secondary-hover underline">
-            <a href="#seguranca-e-retencao">Segurança e Retenção de Dados</a>
-          </li>
-          <li className="hover:text-secondary-hover underline">
-            <a href="#contato">Contato</a>
-          </li>
-          <li className="hover:text-secondary-hover underline">
-            <a href="#atualizacoes">Atualizações desta Política</a>
-          </li>
-        </ul>
-      </nav>
-
-      <section id="dados-pessoais-coletados">
+      <section>
         <h2 className="text-lg font-semibold text-start mb-4">
-          1. Dados Pessoais Coletados
+          1. Controlador de Dados
         </h2>
-        <ul className="list-decimal pl-16 space-y-2 mb-5">
-          <li>
-            <strong>Dados cadastrais:</strong> nome completo, e-mail, telefone,
-            CPF ou CNPJ, data de nascimento, tipo de empresa e outros dados de
-            identificação.
-          </li>
-          <li>
-            <strong>Endereço:</strong> CEP, rua, número, complemento, bairro,
-            cidade, estado.
-          </li>
-          <li>
-            <strong>Dados bancários:</strong> chave PIX (CPF, CNPJ, e-mail ou
-            telefone) e tipo de conta para repasse de valores.
-          </li>
-          <li>
-            <strong>Dados de contratos e transações:</strong> valores de
-            aluguel, taxas, tipo de garantia, vigência e demais informações
-            contratuais.
-          </li>
-          <li>
-            <strong>Documentos pessoais:</strong> cópias de identidade, CPF,
-            comprovante de renda e de endereço.
-          </li>
-          <li>
-            <strong>Dados de uso do sistema:</strong> registros de acesso e
-            ações realizadas (logs) para segurança, auditoria e melhoria da
-            plataforma.
-          </li>
-        </ul>
-        <p>
-          Não tratamos dados pessoais sensíveis (como saúde, religião,
-          orientação sexual, raça etc.). Os dados coletados são apenas os
-          necessários para prestar nossos serviços.
-        </p>
-      </section>
-
-      <section id="finalidades-do-tratamento">
-        <h2 className="text-lg font-semibold text-start mb-4">
-          2. Finalidades do Tratamento
-        </h2>
-        <ul className="list-decimal pl-16 space-y-2 mb-5">
-          <li>Criação e gestão de conta de usuário.</li>
-          <li>Processamento de contratos entre locador e locatário.</li>
-          <li>Processamento de pagamentos, boletos e repasses financeiros.</li>
-          <li>Envio de notificações e comunicações administrativas.</li>
-          <li>Cumprimento de obrigações legais e fiscais.</li>
-          <li>Segurança, prevenção a fraudes e melhorias da plataforma.</li>
-        </ul>
-        <p className="text-justify break-words">
-          Os dados são usados apenas para as finalidades acima, de forma
-          transparente e conforme a LGPD.
-        </p>
-      </section>
-
-      <section id="cookies-e-tecnologias">
-        <h2 className="text-lg font-semibold text-start mb-4">
-          3. Cookies e Tecnologias de Rastreamento
-        </h2>
-        <p className="text-justify break-words">
-          Utilizamos cookies e tokens de sessão para autenticação e segurança da
-          conta, armazenando no navegador dados essenciais para funcionamento da
-          plataforma. Esses cookies são estritamente necessários e não podem ser
-          desativados sem prejudicar o funcionamento do sistema. Não usamos
-          cookies de terceiros para publicidade ou rastreamento de navegação.
-        </p>
-      </section>
-
-      <section id="compartilhamento">
-        <h2 className="text-lg font-semibold text-start mb-4">
-          4. Compartilhamento de Dados com Terceiros
-        </h2>
-        <p className="text-justify break-words">
-          Compartilhamos dados pessoais apenas quando necessário para:
-        </p>
-        <ul className="list-decimal pl-16 space-y-2 my-5">
-          <li>
-            Prestadores de serviços financeiros (processamento de pagamentos e
-            transferências).
-          </li>
-          <li>
-            Serviços de assinatura digital (gestão de assinaturas eletrônicas de
-            contratos).
-          </li>
-          <li>
-            Órgãos legais e fiscais, quando exigido por lei ou decisão judicial.
-          </li>
-          <li>
-            Fornecedores de hospedagem e suporte técnico, sob contrato de
-            confidencialidade.
-          </li>
-        </ul>
-        <p>
-          Não vendemos dados pessoais e seguimos o princípio da minimização de
-          dados.
-        </p>
-      </section>
-
-      <section id="direitos-dos-usuarios">
-        <h2 className="text-lg font-semibold text-start mb-4">
-          5. Direitos dos Usuários
-        </h2>
-        <ul className="list-decimal pl-16 space-y-2 mb-5">
-          <li>Confirmação e acesso aos dados pessoais.</li>
-          <li>Correção de dados incompletos, inexatos ou desatualizados.</li>
-          <li>
-            Bloqueio ou exclusão de dados desnecessários ou tratados em
-            desconformidade.
-          </li>
-          <li>Portabilidade para outro fornecedor, quando aplicável.</li>
-          <li>Revogação do consentimento a qualquer momento.</li>
-        </ul>
-        <p className="text-justify break-words">
-          Se sentir dificuldades para exercer seus direitos, entre em contato
-          conosco pelo e-mail:{" "}
+        <p className="text-justify">
+          O controlador dos dados pessoais é a{" "}
+          <strong>Locaterra Tecnologia e Serviços Digitais</strong>, responsável
+          por definir as finalidades e os meios de tratamento dos dados. Para
+          qualquer solicitação relacionada à privacidade, o contato deve ser
+          pelo e-mail:{" "}
           <a
-            href="mailto:atendimentoaocliente.locaterra@gmail.com"
+            href="mailto:atendimentoaocliente@locaterra.com.br"
             className="text-primary-hover underline break-all"
           >
-            atendimentoaocliente.locaterra@gmail.com
-          </a>
-        </p>
-      </section>
-
-      <section id="seguranca-e-retencao">
-        <h2 className="text-lg font-semibold text-start mb-4">
-          6. Segurança e Retenção de Dados
-        </h2>
-        <p className="text-justify break-words">
-          Adotamos medidas técnicas e administrativas para proteger seus dados,
-          incluindo criptografia de senhas, SSL/TLS, controle de acesso,
-          registros de auditoria e políticas de segurança de rede. Mantemos os
-          dados apenas pelo tempo necessário para cumprir as finalidades
-          informadas e as exigências legais. Após esse prazo, os dados são
-          excluídos ou anonimizados de forma segura.
-        </p>
-      </section>
-
-      <section id="contato">
-        <h2 className="text-lg font-semibold text-start mb-4">7. Contato</h2>
-        <p className="text-justify break-words">
-          Em caso de dúvidas, sugestões ou solicitações sobre privacidade e
-          proteção de dados, entre em contato com nosso suporte através do
-          e-mail:{" "}
-          <a
-            href="mailto:atendimentoaocliente.locaterra@gmail.com"
-            className="break-all text-primary-hover underline"
-          >
-            atendimentoaocliente.locaterra@gmail.com
+            atendimentoaocliente@locaterra.com.br
           </a>
           .
         </p>
       </section>
 
+      <section id="dados-pessoais-coletados">
+        <h2 className="text-lg font-semibold text-start mb-4">
+          2. Dados Pessoais Coletados
+        </h2>
+        <p>
+          Coletamos apenas os dados estritamente necessários para prestação dos
+          serviços:
+        </p>
+        <ul className="list-decimal pl-16 space-y-2 mb-5">
+          <li>
+            <strong>Dados cadastrais:</strong> nome completo, e-mail, telefone,
+            CPF ou CNPJ, data de nascimento e tipo de perfil (locador, locatário
+            ou imobiliária).
+          </li>
+          <li>
+            <strong>Endereço:</strong> CEP, rua, número, complemento, bairro,
+            cidade e estado.
+          </li>
+          <li>
+            <strong>Dados bancários:</strong> chave PIX e informações de conta
+            para repasses financeiros.
+          </li>
+          <li>
+            <strong>Dados contratuais e transacionais:</strong> valores, taxas,
+            tipo de garantia, vigência e histórico de transações.
+          </li>
+          <li>
+            <strong>Documentos pessoais:</strong> cópias de identidade,
+            comprovante de renda e de endereço, quando necessários à
+            formalização contratual.
+          </li>
+          <li>
+            <strong>Dados técnicos e de uso:</strong> endereço IP, logs de
+            acesso, cookies de sessão, data e hora de atividades na plataforma.
+          </li>
+        </ul>
+        <p>
+          Não tratamos dados sensíveis, exceto se forem indispensáveis para o
+          cumprimento de obrigação legal ou exercício de direito contratual.
+        </p>
+      </section>
+
+      <section id="bases-legais">
+        <h2 className="text-lg font-semibold text-start mb-4">
+          3. Bases Legais para o Tratamento
+        </h2>
+        <ul className="list-decimal pl-16 space-y-2">
+          <li>
+            <strong>Execução de contrato:</strong> para cadastro, geração e
+            assinatura de contratos de locação.
+          </li>
+          <li>
+            <strong>Cumprimento de obrigação legal:</strong> guarda de
+            documentos fiscais, registros e comunicações obrigatórias.
+          </li>
+          <li>
+            <strong>Interesse legítimo:</strong> prevenção a fraudes,
+            auditorias, segurança da informação e melhoria da experiência do
+            usuário.
+          </li>
+          <li>
+            <strong>Consentimento:</strong> para comunicações opcionais, como
+            newsletters ou atualizações de produtos.
+          </li>
+        </ul>
+      </section>
+
+      <section id="finalidades-do-tratamento">
+        <h2 className="text-lg font-semibold text-start mb-4">
+          4. Finalidades do Tratamento
+        </h2>
+        <ul className="list-decimal pl-16 space-y-2 mb-5">
+          <li>Criação, autenticação e gestão de contas de usuário.</li>
+          <li>Geração, assinatura e gestão de contratos de locação.</li>
+          <li>Processamento de pagamentos, repasses e emissão de boletos.</li>
+          <li>
+            Envio de notificações operacionais e comunicações sobre o uso da
+            plataforma.
+          </li>
+          <li>Cumprimento de obrigações legais, fiscais e de segurança.</li>
+          <li>Prevenção de fraudes e auditorias técnicas.</li>
+        </ul>
+      </section>
+
+      <section id="cookies-e-tecnologias">
+        <h2 className="text-lg font-semibold text-start mb-4">
+          5. Cookies e Tecnologias de Rastreamento
+        </h2>
+        <p className="text-justify">
+          Utilizamos cookies e tokens de sessão apenas para autenticação,
+          segurança e funcionamento do sistema. Não utilizamos cookies de
+          terceiros para fins publicitários. O usuário pode configurar seu
+          navegador para bloqueá-los, mas isso pode comprometer algumas
+          funcionalidades.
+        </p>
+      </section>
+
+      <section id="compartilhamento">
+        <h2 className="text-lg font-semibold text-start mb-4">
+          6. Compartilhamento de Dados com Terceiros
+        </h2>
+        <p>
+          Seus dados podem ser compartilhados apenas com parceiros essenciais:
+        </p>
+        <ul className="list-decimal pl-16 space-y-2 mb-5">
+          <li>
+            <strong>Gateway de Pagamento:</strong> para processamento de
+            pagamentos, emissão de boletos e PIX.
+          </li>
+          <li>
+            <strong>Serviço de assinatura digital:</strong> para gestão e
+            assinatura eletrônica de contratos.
+          </li>
+          <li>
+            <strong>Armazenamento de mídias:</strong> para hospedagem segura e
+            armazenamento de dados.
+          </li>
+          <li>
+            <strong>Órgãos públicos:</strong> quando necessário para cumprimento
+            de obrigação legal.
+          </li>
+        </ul>
+        <p>
+          Todos os parceiros estão sujeitos a contratos de confidencialidade e
+          conformidade com a LGPD. Nenhum dado é vendido ou compartilhado para
+          fins comerciais.
+        </p>
+      </section>
+
+      <section id="direitos-dos-usuarios">
+        <h2 className="text-lg font-semibold text-start mb-4">
+          8. Direitos dos Usuários
+        </h2>
+        <p>De acordo com a LGPD, você tem direito a:</p>
+        <ul className="list-decimal pl-16 space-y-2 mb-5">
+          <li>
+            Confirmar a existência de tratamento e acessar seus dados pessoais.
+          </li>
+          <li>Corrigir dados incompletos, inexatos ou desatualizados.</li>
+          <li>
+            Solicitar anonimização, bloqueio ou exclusão de dados desnecessários
+            ou excessivos.
+          </li>
+          <li>
+            Solicitar portabilidade para outro fornecedor, quando aplicável.
+          </li>
+          <li>Revogar consentimento a qualquer momento.</li>
+          <li>
+            Solicitar informações sobre o compartilhamento de seus dados com
+            terceiros.
+          </li>
+          <li>
+            Opor-se ao tratamento de dados realizado com base em interesse
+            legítimo.
+          </li>
+        </ul>
+        <p>
+          As solicitações podem ser feitas pelo e-mail:{" "}
+          <a
+            href="mailto:atendimentoaocliente@locaterra.com.br"
+            className="text-primary-hover underline break-all"
+          >
+            atendimentoaocliente@locaterra.com.br
+          </a>
+          . Todos os pedidos serão analisados e respondidos em até 15 dias.
+        </p>
+      </section>
+
+      <section id="seguranca-e-retencao">
+        <h2 className="text-lg font-semibold text-start mb-4">
+          9. Segurança e Retenção de Dados
+        </h2>
+        <p>
+          Adotamos medidas técnicas e administrativas para proteger seus dados,
+          incluindo criptografia (SSL/TLS), controle de acesso, logs de
+          auditoria, backups seguros e políticas internas de segurança. Os dados
+          são armazenados apenas pelo tempo necessário para as finalidades
+          descritas ou conforme exigido por lei (ex: dados fiscais por até 5
+          anos). Após esse período, os dados são anonimizados ou excluídos de
+          forma segura.
+        </p>
+      </section>
+
       <section id="atualizacoes">
         <h2 className="text-lg font-semibold text-start mb-4">
-          8. Atualizações desta Política
+          10. Atualizações desta Política
         </h2>
-        <p className="text-justify break-words">
-          Esta política pode sofrer atualizações. Em caso de alterações,
-          publicaremos a nova versão nesta página.
+        <p>
+          Esta Política pode ser atualizada periodicamente para refletir
+          alterações legais ou melhorias na plataforma. Quando houver mudanças
+          relevantes, os usuários serão notificados e a nova versão será
+          publicada neste endereço.
         </p>
       </section>
     </main>
