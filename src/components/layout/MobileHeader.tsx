@@ -80,7 +80,7 @@ export function MobileHeader() {
   const handleLogout = async () => {
     try {
       await AuthService.logout();
-      toast.success("Você saiu com sucesso!");
+      toast.message("Você saiu do sistema com sucesso.");
       router.push("/entrar");
     } catch (error) {
       toast.error("Não foi possível fazer logout. Tente novamente.", {

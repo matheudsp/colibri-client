@@ -132,26 +132,27 @@ export default function LandlordRegisterPage() {
 
   const onSubmit = async (data: LandlordRegisterFormData) => {
     setLoading(true);
+    const registerindToastId = toast.loading("Criando sua conta...");
     try {
-      console.log("CADASTRANDO LANDLORD", {
-        email: data.email,
-        name: data.name,
-        // cpfCnpj: data.cpfCnpj.replace(/\D/g, ""),
-        cpfCnpj: data.cpfCnpj,
-        phone: data.phone,
-        // phone: data.phone.replace(/\D/g, ""),
-        password: data.password,
-        cep: data.cep,
-        street: data.street,
-        number: data.number,
-        province: data.province,
-        city: data.city,
-        state: data.state,
-        complement: data.complement,
-        companyType: data.companyType,
-        birthDate: data.birthDate,
-        incomeValue: unmaskNumeric(data.incomeValue),
-      });
+      // console.log("CADASTRANDO LANDLORD", {
+      //   email: data.email,
+      //   name: data.name,
+      //   // cpfCnpj: data.cpfCnpj.replace(/\D/g, ""),
+      //   cpfCnpj: data.cpfCnpj,
+      //   phone: data.phone,
+      //   // phone: data.phone.replace(/\D/g, ""),
+      //   password: data.password,
+      //   cep: data.cep,
+      //   street: data.street,
+      //   number: data.number,
+      //   province: data.province,
+      //   city: data.city,
+      //   state: data.state,
+      //   complement: data.complement,
+      //   companyType: data.companyType,
+      //   birthDate: data.birthDate,
+      //   incomeValue: unmaskNumeric(data.incomeValue),
+      // });
       await AuthService.registerLandlord({
         email: data.email,
         name: data.name,
@@ -169,14 +170,19 @@ export default function LandlordRegisterPage() {
         birthDate: data.birthDate,
         incomeValue: unmaskNumeric(data.incomeValue),
       });
-      toast.success("Cadastro de locador realizado com sucesso!");
+
       router.push("/entrar");
+      toast.success("Conta criada com sucesso!", {
+        description: "Você será redirecionado para a página de login.",
+      });
+      setTimeout(() => router.push("/entrar"), 2000);
     } catch (error) {
       const errorMessage = extractAxiosError(error);
       toast.error("Falha ao criar conta", {
         description: errorMessage,
       });
     } finally {
+      toast.dismiss(registerindToastId);
       setLoading(false);
     }
   };
@@ -266,39 +272,34 @@ export default function LandlordRegisterPage() {
           />
 
           {cpfCnpjValue.length > 11 ? (
-            <div className="md:col-span-2">
-              <CustomDropdownInput
-                label="Tipo de Empresa*"
-                placeholder="Tipo de Empresa*"
-                options={companyType}
-                selectedOptionValue={companyTypeValue}
-                onOptionSelected={(val) => {
-                  if (val)
-                    setValue("companyType", val, { shouldValidate: true });
-                }}
-                error={errors.companyType?.message}
-              />
-            </div>
+            <CustomDropdownInput
+              label="Tipo de Empresa*"
+              placeholder="Tipo de Empresa*"
+              options={companyType}
+              selectedOptionValue={companyTypeValue}
+              onOptionSelected={(val) => {
+                if (val) setValue("companyType", val, { shouldValidate: true });
+              }}
+              error={errors.companyType?.message}
+            />
           ) : (
             cpfCnpjValue.length > 0 && (
-              <div className="md:col-span-2">
-                <Controller
-                  name="birthDate"
-                  control={control}
-                  render={({ field }) => (
-                    <CustomInput
-                      label="Data de Nascimento*"
-                      id="birthDate"
-                      placeholder="DD/MM/YYYY"
-                      mask="date"
-                      icon={<CalendarIcon size={20} />}
-                      error={errors.birthDate?.message}
-                      autoComplete="bday"
-                      {...field}
-                    />
-                  )}
-                />
-              </div>
+              <Controller
+                name="birthDate"
+                control={control}
+                render={({ field }) => (
+                  <CustomInput
+                    label="Data de Nascimento*"
+                    id="birthDate"
+                    placeholder="DD/MM/YYYY"
+                    mask="date"
+                    icon={<CalendarIcon size={20} />}
+                    error={errors.birthDate?.message}
+                    autoComplete="bday"
+                    {...field}
+                  />
+                )}
+              />
             )
           )}
           <div className="md:col-span-2">

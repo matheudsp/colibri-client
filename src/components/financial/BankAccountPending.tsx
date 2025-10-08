@@ -79,7 +79,7 @@ export function BankAccountPending({ account }: BankAccountPendingProps) {
 
   return (
     <div className="overflow-hidden">
-      <div className="p-6  border-gray-200 flex flex-col justify-center text-center">
+      <div className="p-6  border-border flex flex-col justify-center text-center">
         <div className="w-12 h-12 mx-auto rounded-full flex items-center justify-center shadow-xs mb-3">
           <FileBadge2 className="text-yellow-600" size={24} />
         </div>
@@ -113,7 +113,7 @@ export function BankAccountPending({ account }: BankAccountPendingProps) {
       </div>
 
       {!isLoadingDocs && pendingDocs.length > 0 && (
-        <div className="border-t border-gray-200 py-6 px-4 sm:px-6">
+        <div className="border-t border-border py-6 px-4 sm:px-6">
           <h4 className="text-base font-semibold text-gray-800 text-center mb-4">
             Ações Necessárias
           </h4>

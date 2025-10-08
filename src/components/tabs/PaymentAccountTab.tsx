@@ -13,6 +13,7 @@ import { BankAccountOnboarding } from "@/components/financial/BankAccountOnboard
 import { BankAccountPending } from "@/components/financial/BankAccountPending";
 import { BankAccountApproved } from "@/components/financial/BankAccountApproved";
 import { BankAccountRejected } from "@/components/financial/BankAccountRejected";
+import { BankAccountAwaitingApproval } from "../financial/BankAccountAwaitingApproval";
 
 export function PaymentAccountTab() {
   const [account, setAccount] = useState<BankAccount | null>(null);
@@ -58,6 +59,8 @@ export function PaymentAccountTab() {
         return <BankAccountApproved account={account} />;
       case "REJECTED":
         return <BankAccountRejected account={account} />;
+      case "PENDING_ADMIN_APPROVAL":
+        return <BankAccountAwaitingApproval account={account} />;
       case "PENDING":
       default:
         return <BankAccountPending account={account} />;

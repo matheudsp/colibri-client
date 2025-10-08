@@ -77,10 +77,10 @@ export function BankAccountOnboarding({
       const { actionToken } = verificationResponse.data;
 
       await BankAccountService.create({ ...pendingData, actionToken });
-      toast.success("Conta de pagamentos criada com sucesso!", {
-        description:
-          "Pode ser necessário o envio de documentos adicionais. Verifique abaixo.",
-      });
+      // toast.success("Conta de pagamentos criada com sucesso!", {
+      //   description:
+      //     "Pode ser necessário o envio de documentos adicionais. Verifique abaixo.",
+      // });
       onSuccess();
     } catch (error) {
       toast.error("Falha ao criar conta", {
@@ -98,11 +98,11 @@ export function BankAccountOnboarding({
         <div className="text-center">
           <PixIcon width={50} height={50} className="mx-auto text-primary" />
           <h2 className="text-2xl font-bold text-gray-800 mt-4">
-            Cadastre sua Conta de Pagamentos
+            Crie sua Conta de Recebimentos
           </h2>
           <p className="text-gray-500 mt-1 max-w-md mx-auto">
-            Para receber os aluguéis, cadastre uma chave PIX. Isso criará sua
-            conta de pagamentos automaticamente.
+            Para receber os aluguéis, o primeiro passo é cadastrar sua chave
+            PIX. Isso iniciará a criação da sua conta no sistema de pagamentos.
           </p>
         </div>
         <form
@@ -147,7 +147,7 @@ export function BankAccountOnboarding({
               {loading ? (
                 <Loader2 className="animate-spin" />
               ) : (
-                "Cadastrar Chave PIX"
+                "Cadastrar e Verificar"
               )}
             </CustomButton>
           </div>

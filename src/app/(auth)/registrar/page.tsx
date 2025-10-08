@@ -19,7 +19,7 @@ const ProfileSelectionCard = ({
 }) => (
   <button
     onClick={onClick}
-    className="group w-full bg-white p-6 rounded-xl shadow-lg border border-gray-200 text-left transition-all duration-300 hover:border-primary hover:shadow-2xl hover:-translate-y-1"
+    className="group w-full bg-white p-6 rounded-xl shadow-lg border border-gray-200 text-left transition-all duration-300 hover:border-primary hover:shadow-2xl hover:-translate-y-1 cursor-pointer"
   >
     <div className="flex items-center justify-between">
       <div className="flex items-center gap-4">
@@ -67,7 +67,7 @@ export default function RegisterPage() {
         <ProfileSelectionCard
           onClick={() => router.push("/registrar/locador")}
           icon={<GrUserAdmin size={28} />}
-          title="Sou Locador"
+          title="Sou Proprietário"
           description="Quero anunciar meus imóveis na plataforma."
         />
       </div>

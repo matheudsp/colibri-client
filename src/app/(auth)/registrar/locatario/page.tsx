@@ -42,6 +42,7 @@ export default function TenantRegisterPage() {
 
   const onSubmit = async (data: TenantRegisterFormData) => {
     setLoading(true);
+    const registerindToastId = toast.loading("Criando sua conta...");
     try {
       await AuthService.registerTenant({
         name: data.name,
@@ -51,7 +52,7 @@ export default function TenantRegisterPage() {
         birthDate: data.birthDate,
         password: data.password,
       });
-      toast.success("Cadastro realizado com sucesso!", {
+      toast.success("Conta criada com sucesso!", {
         description: "Você será redirecionado para a página de login.",
       });
       setTimeout(() => router.push("/entrar"), 2000);
@@ -61,6 +62,7 @@ export default function TenantRegisterPage() {
         description: errorMessage,
       });
     } finally {
+      toast.dismiss(registerindToastId);
       setLoading(false);
     }
   };

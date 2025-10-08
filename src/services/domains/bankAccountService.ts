@@ -15,8 +15,15 @@ export interface BankAccount {
     createdAt: string;
     updatedAt: string;
   };
+  user: {
+    email?: string;
+  };
   subAccount?: {
-    statusGeneral: "PENDING" | "APPROVED" | "REJECTED";
+    statusGeneral:
+      | "PENDING"
+      | "APPROVED"
+      | "REJECTED"
+      | "PENDING_ADMIN_APPROVAL";
     statusDocumentation: "PENDING" | "APPROVED" | "REJECTED";
     statusCommercialInfo: "PENDING" | "APPROVED" | "REJECTED";
     statusBankAccountInfo: "PENDING" | "APPROVED" | "REJECTED";
