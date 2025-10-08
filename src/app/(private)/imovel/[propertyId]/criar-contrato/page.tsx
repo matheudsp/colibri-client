@@ -2,12 +2,10 @@
 
 import { useEffect, useRef, useState, useCallback } from "react";
 import * as htmlToImage from "html-to-image";
+import { HiOutlineSave } from "react-icons/hi";
+import { FaShareFromSquare } from "react-icons/fa6";
 import {
-  Save,
-  Share2,
   Copy,
-  User,
-  KeyRound,
   Globe,
   CalendarIcon,
   FilePen,
@@ -51,8 +49,8 @@ import { unmaskNumeric } from "@/utils/masks/maskNumeric";
 import type { ApiResponse } from "@/types/api";
 import { cpfCnpjMask } from "@/utils/masks/cpfCnpjMask";
 import { extractAxiosError } from "@/services/api";
-import { LottieAnimation } from "@/components/common/LottieAnimation";
-import successAnimation from "../../../../../../public/lottie/success-animation.json";
+
+import Image from "next/image";
 
 export default function CreateContractPage() {
   const searchParams = useSearchParams();
@@ -69,9 +67,11 @@ export default function CreateContractPage() {
   const [foundTenants, setFoundTenants] = useState<userProps[]>([]);
   const [selectedTenant, setSelectedTenant] = useState<userProps | null>(null);
   const [newTenantCredentials, setNewTenantCredentials] = useState<{
+    name?: string;
     email: string;
     password?: string;
   } | null>(null);
+  const [newContractId, setNewContractId] = useState<string>();
   const [isEasyContractFlow, setIsEasyContractFlow] = useState(false);
   const credentialsCardRef = useRef<HTMLDivElement>(null);
   const steps = [
@@ -93,6 +93,8 @@ export default function CreateContractPage() {
     resetField,
     watch,
     trigger,
+    setError,
+    setFocus,
     formState: { errors },
   } = useForm<CreateContractFormValues>({
     resolver: zodResolver(createContractSchema),
@@ -219,21 +221,118 @@ export default function CreateContractPage() {
 
       if (data.tenantAction === "create") {
         setNewTenantCredentials({
+          name: data.tenantName,
           email: response.data.tenant.email,
           password: data.tenantPassword,
         });
       }
-
+      setNewContractId(response.data.id);
       setCurrentStep(3);
     } catch (_error) {
-      const errorMessage = extractAxiosError(_error);
-      toast.error("Erro ao criar contrato", {
-        description: errorMessage,
-      });
+      // Tratamento melhorado de erro para mapear para campos do formulário e redirecionar steps
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const axiosErr = _error as any;
+      const dataErr = axiosErr?.response?.data;
+
+      // Helper: setar erro num campo e navegar para o step correto
+      const setFieldErrorAndGotoStep = (
+        fieldName: keyof CreateContractFormValues,
+        message: string,
+        step: number
+      ) => {
+        setError(fieldName, { type: "server", message });
+        // se o campo for de tenant, garanto que aba "create" esteja ativa pra exibir o input
+        if (fieldName.toString().startsWith("tenant")) {
+          setTenantAction("create");
+          setValue("tenantAction", "create");
+        }
+        setCurrentStep(step);
+        // tenta focar no campo
+        try {
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          setFocus(fieldName as any);
+        } catch {
+          // ignore
+        }
+      };
+
+      if (dataErr) {
+        // Caso a API retorne erros estruturados em array: [{ field, message }]
+        if (Array.isArray(dataErr.errors) && dataErr.errors.length > 0) {
+          // percorre e seta erros
+          let tenantRelated = false;
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          dataErr.errors.forEach((errItem: any) => {
+            const field = errItem.field;
+            const msg = errItem.message || errItem;
+            if (field) {
+              // tenta mapear field para o nome no form
+              if (field === "tenantEmail" || /email/i.test(field)) {
+                setError("tenantEmail", { type: "server", message: msg });
+                tenantRelated = true;
+              } else if (field === "tenantCpfCnpj" || /cpf/i.test(field)) {
+                setError("tenantCpfCnpj", { type: "server", message: msg });
+                tenantRelated = true;
+              } else {
+                // fallback: seta genericamente no form com key igual ao field se existir
+                try {
+                  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                  setError(field as any, { type: "server", message: msg });
+                } catch {
+                  // noop
+                }
+              }
+            } else {
+              toast.error(String(msg));
+            }
+          });
+          if (tenantRelated) {
+            setTenantAction("create");
+            setValue("tenantAction", "create");
+            setCurrentStep(1);
+          } else {
+            setCurrentStep(2);
+          }
+        } else if (typeof dataErr.message === "string") {
+          const msgLower = dataErr.message.toLowerCase();
+
+          // heurísticas para mapear mensagens para campos
+          if (msgLower.includes("e-mail") || msgLower.includes("email")) {
+            setFieldErrorAndGotoStep("tenantEmail", dataErr.message, 1);
+          } else if (msgLower.includes("cpf") || msgLower.includes("cnpj")) {
+            setFieldErrorAndGotoStep("tenantCpfCnpj", dataErr.message, 1);
+          } else if (
+            msgLower.includes("inquilino") ||
+            msgLower.includes("locatário") ||
+            msgLower.includes("locatario")
+          ) {
+            // se mencionar inquilino de forma geral, manda para step 1
+            setCurrentStep(1);
+            toast.error(dataErr.message);
+          } else {
+            // Mensagem não mapeada: provavelmente erro do contrato (step 2)
+            toast.error("Erro ao criar contrato", {
+              description: dataErr.message,
+            });
+            setCurrentStep(2);
+          }
+        } else {
+          // Sem message: fallback
+          toast.error("Erro ao criar contrato", {
+            description: extractAxiosError(_error),
+          });
+        }
+      } else {
+        // Não é erro axios com body conhecido
+        toast.error("Erro ao criar contrato", {
+          description: extractAxiosError(_error),
+        });
+      }
     } finally {
       setLoading(false);
     }
   };
+
   const handleSaveCredentials = () => {
     if (credentialsCardRef.current === null) {
       toast.error("Não foi possível encontrar o card de credenciais.");
@@ -326,8 +425,8 @@ export default function CreateContractPage() {
   }, [searchParams, setValue, handleSelectTenant, selectedTenant]);
 
   return (
-    <div className=" w-full flex flex-col items-center justify-center">
-      <div className="min-h-svh py-24 px-4 md:px-8 grid place-items-center    w-full max-w-2xl">
+    <div className="min-h-svh w-full flex flex-col items-center justify-start">
+      <div className="   py-4 md:py-24 grid place-items-center   px-4 md:px-0 w-full max-w-2xl">
         <div>
           <h1 className="text-xl md:text-3xl  font-bold text-gray-800  text-center">
             Criar Novo Contrato de Locação
@@ -702,6 +801,7 @@ export default function CreateContractPage() {
                         placeholder="08/08/2002"
                         label="Data de Início*"
                         icon={<Calendar />}
+
                         mask="date"
                         error={errors.startDate?.message}
                         {...field}
@@ -746,117 +846,229 @@ export default function CreateContractPage() {
           )}
 
           {currentStep === 3 && (
-            <>
+            <div className="w-full max-w-3xl mx-auto animate-fade-in ">
               {tenantAction === "create" && newTenantCredentials ? (
-                <div className="text-center space-y-6 p-4 animate-fade-in">
-                  <LottieAnimation
-                    animationData={successAnimation}
-                    className="w-32 h-32 mx-auto"
-                  />
-                  <h2 className="text-2xl font-bold text-gray-800">
-                    Contrato Criado e Inquilino Cadastrado!
-                  </h2>
-                  <p className="text-gray-600">
-                    Guarde as informações de acesso abaixo e compartilhe com o
-                    inquilino.
-                  </p>
+                <>
+                  <div className="flex flex-col items-center gap-2 mb-6">
+                    <p className="text-sm text-justify text-gray-500">
+                      O seu contrato foi criado e está aguardando a próxima
+                      etapa: <strong>Envio de documentos pelo Inquilino</strong>
+                      . Ele receberá um e-mail com as informações de acesso, mas
+                      você pode enviar também abaixo.
+                    </p>
+                  </div>
 
                   <div
                     ref={credentialsCardRef}
-                    className="bg-gray-50 border border-border rounded-lg p-6 text-left space-y-4"
+                    className="bg-background border border-border rounded-2xl overflow-hidden z-20 shadow-sm"
+                    aria-live="polite"
                   >
-                    <h3 className="font-bold text-lg text-gray-700 text-center mb-4">
-                      Dados de Acesso do Inquilino
-                    </h3>
-                    <div className="flex items-center gap-4">
-                      <User className="w-5 h-5 text-gray-500" />
-                      <div>
-                        <p className="text-xs text-gray-500">Login (E-mail)</p>
-                        <p className="font-mono text-gray-800">
-                          {newTenantCredentials.email}
-                        </p>
+                    <div className="px-6 py-4 bg-gradient-to-r from-background-alt to-background/90 border-b border-border ">
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-3">
+                          <Image
+                            width={44}
+                            height={44}
+                            src={"/logo/icon/icon.svg"}
+                            alt="Locaterra"
+                            className="rounded-md"
+                          />
+                          <div>
+                            <p className="text-xs text-gray-500">
+                              Portal do Inquilino
+                            </p>
+                            <p className="text-sm font-medium text-gray-800">
+                              Complete a documentação online
+                            </p>
+                          </div>
+                        </div>
                       </div>
                     </div>
-                    <div className="flex items-center gap-4">
-                      <KeyRound className="w-5 h-5 text-gray-500" />
-                      <div>
-                        <p className="text-xs text-gray-500">Senha</p>
-                        <p className="font-mono text-gray-800">
-                          {newTenantCredentials.password}
-                        </p>
+
+                    <div className="px-6 py-6 grid grid-cols-1 gap-4 ">
+                      <div className="col-span-1 border-b border-border pb-2 px-4">
+                        <span className="text-xs text-gray-700  ">
+                          Use as seguintes informações para fazer login no
+                          Sistema Locaterra e dar continuidade ao processo.
+                        </span>
                       </div>
-                    </div>
-                    <div className="flex items-center gap-4 border-t border-border pt-4 mt-4">
-                      <Globe className="w-5 h-5 text-gray-500" />
-                      <div>
-                        <p className="text-xs text-gray-500">Acessar em</p>
-                        <a
-                          href="https://www.locaterra.com.br"
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="font-mono text-primary hover:underline"
-                        >
-                          www.locaterra.com.br
-                        </a>
+                      <div className="col-span-1 ">
+                        <span className="text-xs text-gray-500">Nome</span>
+                        <div className="">
+                          <span className="text-sm font-medium text-gray-800 break-words">
+                            {newTenantCredentials?.name ?? "-"}
+                          </span>
+                        </div>
+                      </div>
+                      <div className="col-span-1">
+                        <span className="text-xs text-gray-500">E-mail</span>
+                        <div className=" flex items-center justify-between gap-3">
+                          <span className="font-medium text-sm max-w-xs truncate text-gray-800 break-words">
+                            {newTenantCredentials.email}
+                          </span>
+
+                          <CustomButton
+                            type="button"
+                            aria-label="Copiar e-mail"
+                            ghost
+                            onClick={async () => {
+                              try {
+                                await navigator.clipboard.writeText(
+                                  newTenantCredentials.email
+                                );
+                                toast.info(
+                                  "E-mail copiado para a área de transferência"
+                                );
+                              } catch {
+                                toast.error("Não foi possível copiar o e-mail");
+                              }
+                            }}
+                            className="p-2 w-8 h-8 rounded-md hover:bg-background-alt border transition"
+                            icon={<Copy className="w-4 h-4 text-gray-600" />}
+                          />
+                        </div>
+                      </div>
+                      <div className="col-span-1">
+                        <span className="text-xs text-gray-500">
+                          Senha temporária
+                        </span>
+                        <div className=" flex items-center justify-between gap-3">
+                          <span className="font-medium text-sm max-w-xs truncate text-gray-800 break-words">
+                            {newTenantCredentials.password}
+                          </span>
+
+                          <div className="flex items-center gap-2">
+                            <CustomButton
+                              type="button"
+                              ghost
+                              aria-label="Copiar senha"
+                              onClick={async () => {
+                                try {
+                                  await navigator.clipboard.writeText(
+                                    newTenantCredentials.password!
+                                  );
+                                  toast.info(
+                                    "Senha copiada para a área de transferência"
+                                  );
+                                } catch {
+                                  toast.error(
+                                    "Não foi possível copiar a senha"
+                                  );
+                                }
+                              }}
+                              className="p-2 w-8 h-8 rounded-md hover:bg-background-alt border transition"
+                              icon={<Copy className="w-4 h-4 text-gray-600" />}
+                            />
+                          </div>
+                        </div>
+                      </div>
+                      <div className="col-span-full mt-2 pt-3 border-t border-border">
+                        <div className="flex flex-col items-center gap-3">
+                          <div className="flex-col justify-center text-center items-center gap-3">
+                            <p className="text-xs text-gray-500">Acesse em</p>
+                            <a
+                              href="https://www.locaterra.com.br"
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="inline-flex items-center gap-2 font-mono font-medium text-gray-900 hover:underline px-2 py-1 rounded-md border border-border"
+                            >
+                              <Globe className="w-4 h-4" />
+                              www.locaterra.com.br
+                            </a>
+                          </div>
+                        </div>
                       </div>
                     </div>
                   </div>
+                  <div className="flex-col  items-center justify-center border-x border-b border-border rounded-b-lg px-8 pt-8 pb-4 -mt-4 -z-20">
+                    <h1 className="text-center">Ações</h1>
+                    <div className="flex md:flex-row flex-col items-center justify-center gap-2">
+                      <CustomButton
+                        type="button"
+                        onClick={handleSaveCredentials}
+                        ghost
+                        className="inline-flex items-center w-full px-3 py-2 rounded-lg border border-border text-sm transition"
+                        icon={<HiOutlineSave className="w-4 h-4" />}
+                      >
+                        Salvar (PNG)
+                      </CustomButton>
 
-                  <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4">
-                    <CustomButton onClick={handleSaveCredentials} type="button">
-                      <Save className="w-4 h-4 mr-2" />
-                      Salvar
-                    </CustomButton>
-                    <CustomButton
-                      onClick={handleShareCredentials}
-                      type="button"
-                      color="bg-secondary"
-                    >
-                      {canShare ? (
-                        <Share2 className="w-4 h-4 mr-2" />
-                      ) : (
-                        <Copy className="w-4 h-4 mr-2" />
-                      )}
-                      {canShare ? "Compartilhar" : "Copiar"}
-                    </CustomButton>
+                      <CustomButton
+                        type="button"
+                        onClick={handleShareCredentials}
+                        className="inline-flex items-center w-full px-3 py-2 rounded-lg bg-secondary text-white text-sm hover:opacity-80 transition"
+                        icon={
+                          canShare ? (
+                            <FaShareFromSquare className="w-4 h-4" />
+                          ) : (
+                            <Copy className="w-4 h-4" />
+                          )
+                        }
+                      >
+                        {canShare ? "Compartilhar" : "Copiar tudo"}
+                      </CustomButton>
+                    </div>
                   </div>
-
-                  <CustomButton
-                    onClick={() => router.push(`/imoveis`)}
-                    fontSize="text-lg"
-                    className="mt-4 border border-border mx-auto"
-                    ghost
-                  >
-                    Voltar ao menu
-                  </CustomButton>
-                </div>
+                </>
               ) : (
-                <div className="text-center space-y-4 p-8">
-                  <LottieAnimation
-                    animationData={successAnimation}
-                    className="w-32 h-32 mx-auto"
-                  />
-                  <h2 className="text-2xl font-bold text-gray-800">
-                    Contrato Criado com Sucesso!
-                  </h2>
-                  <p className="text-gray-600">
-                    O inquilino receberá as instruções por e-mail para dar
-                    continuidade ao processo de locação.
-                  </p>
-                  <CustomButton
-                    onClick={() => router.push(`/imoveis`)}
-                    fontSize="text-lg"
-                    className="mt-4 border border-border mx-auto"
-                    ghost
-                  >
-                    Voltar ao menu
-                  </CustomButton>
+                <div className="border border-border rounded-lg shadow-md p-6">
+                  <div className="flex items-start gap-4">
+                    <div className="flex-shrink-0">
+                      <div className="rounded-full bg-primary-hover p-3">
+                        <svg
+                          className="w-6 h-6 text-white"
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor"
+                          aria-hidden="true"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth="2"
+                            d="M5 13l4 4L19 7"
+                          />
+                        </svg>
+                      </div>
+                    </div>
+
+                    <div>
+                      <h2 className="text-2xl font-extrabold text-gray-900">
+                        Contrato criado com sucesso!
+                      </h2>
+                      <p className="text-sm text-gray-600 mt-2">
+                        O inquilino receberá as instruções por e-mail para dar
+                        continuidade ao processo de locação.
+                      </p>
+                    </div>
+                  </div>
                 </div>
               )}
-            </>
+            </div>
           )}
 
-          <div className="flex flex-col md:flex-row-reverse pt-4 gap-4">
+          <div className="flex flex-col md:flex-row-reverse gap-4">
+            {currentStep === 3 && (
+              <>
+                <CustomButton
+                  onClick={() => router.push(`/contratos/${newContractId}`)}
+                  ghost
+                  icon={<FileText className="w-4 h-4" />}
+                  className="w-full"
+                >
+                  Acessar contrato
+                </CustomButton>
+                <CustomButton
+                  onClick={() => router.push(`/imoveis`)}
+                  ghost
+                  icon={<ChevronLeft className="w-4 h-4" />}
+                  className="w-full"
+                >
+                  Retornar ao início
+                </CustomButton>
+              </>
+            )}
             {currentStep === 2 && (
               <CustomButton
                 type="submit"

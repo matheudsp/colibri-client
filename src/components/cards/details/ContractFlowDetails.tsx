@@ -5,7 +5,8 @@ import {
   PenSquare,
   ShieldCheck,
 } from "lucide-react";
-import { BiCheckDouble } from "react-icons/bi";
+
+import { FaCheck } from "react-icons/fa";
 
 const statusToStep = {
   PENDENTE_DOCUMENTACAO: 2,
@@ -77,7 +78,7 @@ export function ContractFlowDetails({ status }: { status: string }) {
                     `}
                   >
                     {isCompleted ? (
-                      <BiCheckDouble size={24} />
+                      <FaCheck size={12} />
                     ) : (
                       <step.icon
                         size={24}

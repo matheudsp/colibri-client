@@ -5,7 +5,7 @@ import { Loader2 } from "lucide-react";
 
 interface CustomButtonProps {
   type?: "button" | "submit" | "reset";
-  children: React.ReactNode;
+  children?: React.ReactNode;
   onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;
   fontSize?: string;
   color?: string;

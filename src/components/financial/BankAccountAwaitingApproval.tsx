@@ -50,8 +50,10 @@ export function BankAccountAwaitingApproval({
             rel="noopener noreferrer"
             className="no-underline"
           >
-            <CustomButton className="w-full bg-secondary hover:bg-secondary-hover transition-colors">
-              <MessageCircle className="mr-2" size={18} />
+            <CustomButton
+              icon={<MessageCircle size={18} />}
+              className="w-full bg-secondary hover:bg-secondary-hover transition-colors"
+            >
               Contatar Gerente de Contas
             </CustomButton>
           </a>
@@ -60,7 +62,7 @@ export function BankAccountAwaitingApproval({
         <div className="text-xs text-gray-500 flex items-center">
           <HelpCircle size={14} className="mr-1.5" />
           <span>
-            Ao contatar, tenha em solicitaremos apenas seu e-mail e documento de
+            Ao contatar, solicitaremos apenas seu e-mail e documento de
             identificação.
           </span>
         </div>

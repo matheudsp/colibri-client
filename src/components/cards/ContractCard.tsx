@@ -133,14 +133,14 @@ export function ContractCard({ contract }: { contract: Contract }) {
         </header>
 
         <div className="mt-4 grid grid-cols-2 md:grid-cols-4 gap-4 pt-4 border-t border-border">
-          {role === Roles.LOCATARIO && (
+          {role === Roles.LOCADOR && (
             <DetailItem
               icon={User}
               label="Inquilino"
               value={contract.tenant.name}
             />
           )}
-          {role === Roles.LOCADOR && (
+          {role === Roles.LOCATARIO && (
             <DetailItem
               icon={MdOutlineRealEstateAgent}
               label="Locador"
