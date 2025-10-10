@@ -1,4 +1,4 @@
-import { CreatePropertyFormValues } from "../../validations";
+// import { CreatePropertyFormValues } from "../../validations";
 import { api, extractAxiosError } from "../api";
 import API_ROUTES from "../api/routes";
 import { PropertyProps } from "../../interfaces/property";

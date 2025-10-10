@@ -31,7 +31,6 @@ export function PropertyPhotoManager({
   propertyTitle,
 }: PropertyPhotoManagerProps) {
   const [photos, setPhotos] = useState<Photo[]>([]);
-  const [isActionLoading, setIsActionLoading] = useState(false);
   const [isAddPhotoModalOpen, setIsAddPhotoModalOpen] = useState(false);
   const [photoToDelete, setPhotoToDelete] = useState<Photo | null>(null);
 
@@ -140,9 +139,9 @@ export function PropertyPhotoManager({
             onClick={() => setIsAddPhotoModalOpen(true)}
             className="flex flex-col items-center justify-center aspect-square border-2 border-dashed rounded-lg border-border text-gray-400 hover:bg-gray-100 hover:text-gray-600 transition-colors"
             title="Adicionar nova foto"
-            disabled={isSubmitting || isActionLoading}
+            disabled={isSubmitting}
           >
-            {isSubmitting || isActionLoading ? (
+            {isSubmitting ? (
               <Loader2 className="animate-spin" />
             ) : (
               <PlusIcon className="w-8 h-8 sm:w-10 sm:h-10" />
@@ -156,7 +155,7 @@ export function PropertyPhotoManager({
         isOpen={isAddPhotoModalOpen}
         onClose={() => setIsAddPhotoModalOpen(false)}
         onPhotosAdded={handlePhotosAdded}
-        isLoading={isSubmitting || isActionLoading}
+        isLoading={isSubmitting}
       />
 
       {photoToDelete && (
@@ -164,7 +163,7 @@ export function PropertyPhotoManager({
           isOpen={!!photoToDelete}
           onClose={() => setPhotoToDelete(null)}
           onConfirm={handleConfirmDelete}
-          isLoading={isSubmitting || isActionLoading}
+          isLoading={isSubmitting}
         />
       )}
     </>

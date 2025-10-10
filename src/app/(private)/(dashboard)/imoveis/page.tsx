@@ -25,7 +25,6 @@ import { OtpVerificationModal } from "@/components/modals/verificationModals/Otp
 import { VerificationContexts } from "../../../../constants/verification-contexts";
 import { EmptyCard } from "@/components/common/EmptyCard";
 import PageHeader from "@/components/common/PageHeader";
-import { PropertyProps } from "@/interfaces/property";
 
 export default function DashboardPropertiesPage() {
   const { searchValue } = useSearch();

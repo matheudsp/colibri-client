@@ -28,27 +28,27 @@ export function WildcardPaymentButton({
   };
   return (
     <div className="w-full  items-center justify-center">
-      {isPaid && payment.bankSlip?.transactionReceiptUrl ? (
+      {isPaid && payment.charge?.transactionReceiptUrl ? (
         <CustomButton
           onClick={() =>
-            window.open(payment.bankSlip.transactionReceiptUrl, "_blank")
+            window.open(payment.charge.transactionReceiptUrl, "_blank")
           }
           color="bg-blue-100"
           textColor="text-blue-800"
           className="w-full"
           icon={<Eye size={16} />}
-          disabled={!payment.bankSlip?.transactionReceiptUrl}
+          disabled={!payment.charge?.transactionReceiptUrl}
         >
           Visualizar Comprovante
         </CustomButton>
-      ) : payment.bankSlip ? (
+      ) : payment.charge ? (
         <CustomButton
-          onClick={() => window.open(payment.bankSlip.bankSlipUrl, "_blank")}
+          onClick={() => window.open(payment.charge.bankSlipUrl, "_blank")}
           color="bg-gray-200"
           textColor="text-black"
           className="w-full"
           icon={<Eye size={16} />}
-          disabled={!payment.bankSlip?.bankSlipUrl}
+          disabled={!payment.charge?.bankSlipUrl}
         >
           Visualizar Boleto
         </CustomButton>

@@ -34,8 +34,8 @@ export function PaymentActionsDropdown({
 }: Props) {
   const canViewReceipt =
     ["PAGO", "RECEBIDO", "EM_REPASSE", "CONFIRMADO"].includes(payment.status) &&
-    !!payment.bankSlip?.transactionReceiptUrl;
-  const canViewBankSlip = !!payment.bankSlip?.bankSlipUrl;
+    !!payment.charge?.transactionReceiptUrl;
+  const canViewBankSlip = !!payment.charge?.bankSlipUrl;
   const canGenerateSlip = ["PENDENTE", "ATRASADO", "FALHOU"].includes(
     payment.status
   );
@@ -55,12 +55,12 @@ export function PaymentActionsDropdown({
 
   const handleViewReceipt = () => {
     if (!canViewReceipt) return;
-    openUrl(payment.bankSlip!.transactionReceiptUrl!);
+    openUrl(payment.charge!.transactionReceiptUrl!);
   };
 
   const handleViewBankSlip = () => {
     if (!canViewBankSlip) return;
-    openUrl(payment.bankSlip!.bankSlipUrl!);
+    openUrl(payment.charge!.bankSlipUrl!);
   };
 
   const handleRegister = () => {
@@ -97,7 +97,7 @@ export function PaymentActionsDropdown({
       ) : (
         <DownloadCloud size={16} />
       ),
-      disabled: !canGenerateSlip || loading || !!payment.bankSlip?.bankSlipUrl,
+      disabled: !canGenerateSlip || loading || !!payment.charge?.bankSlipUrl,
     },
     {
       label: "Dar baixa",

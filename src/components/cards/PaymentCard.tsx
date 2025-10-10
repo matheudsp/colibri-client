@@ -55,10 +55,10 @@ export const PaymentCard = ({
         </div>
       </div>
       <div className="bg-gray-50 p-4 flex justify-center">
-        {isPaid && payment.bankSlip?.transactionReceiptUrl ? (
+        {isPaid && payment.charge?.transactionReceiptUrl ? (
           <CustomButton
             onClick={() =>
-              window.open(payment.bankSlip.transactionReceiptUrl, "_blank")
+              window.open(payment.charge.transactionReceiptUrl, "_blank")
             }
             color="bg-blue-100"
             textColor="text-blue-800"
@@ -66,9 +66,9 @@ export const PaymentCard = ({
           >
             <Eye size={16} className="mr-1" /> Visualizar Comprovante
           </CustomButton>
-        ) : payment.bankSlip ? (
+        ) : payment.charge ? (
           <CustomButton
-            onClick={() => window.open(payment.bankSlip.bankSlipUrl, "_blank")}
+            onClick={() => window.open(payment.charge.bankSlipUrl, "_blank")}
             color="bg-gray-200"
             textColor="text-black"
             className="w-full"

@@ -1,5 +1,5 @@
 import type { PaymentStatus } from "@/constants";
-import type { BankSlip } from "./charge";
+import type { Charge } from "./charge";
 
 export interface PaymentResponse {
   id: string;
@@ -9,7 +9,7 @@ export interface PaymentResponse {
   paidAt: string | null;
   status: PaymentStatus;
   contractId: string;
-  bankSlip: BankSlip;
+  charge: Charge;
   contract: {
     property: {
       id: string;

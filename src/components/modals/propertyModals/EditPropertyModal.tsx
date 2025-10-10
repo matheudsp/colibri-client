@@ -14,7 +14,6 @@ import {
   Bed,
   Bath,
   Car,
-  Loader2,
   LandPlot,
 } from "lucide-react";
 
@@ -37,7 +36,6 @@ import { PropertyProps } from "@/interfaces/property";
 import { formatCurrency } from "@/utils/masks/maskCurrency";
 import { unmaskNumeric } from "@/utils/masks/maskNumeric";
 import { PropertyPhotoManager } from "@/components/photos/PropertyPhotoManager";
-import { Photo } from "@/interfaces/photo";
 
 interface EditPropertyModalProps {
   isOpen: boolean;
@@ -113,13 +111,7 @@ export function EditPropertyModal({
         value: unmaskNumeric(data.value!),
       };
 
-      const response = await PropertyService.update(property.id, payload);
-
-      // Combina os dados atualizados do formulário com as fotos atuais
-      const finalUpdatedProperty: PropertyProps = {
-        ...response.data,
-        photos: property.photos, // Mantém as fotos que já estão no estado
-      };
+      await PropertyService.update(property.id, payload);
 
       onUpdate();
       onClose();
