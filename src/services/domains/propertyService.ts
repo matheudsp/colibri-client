@@ -185,7 +185,7 @@ export const PropertyService = {
 
   async update(
     id: string,
-    data: Partial<CreatePropertyFormValues>
+    data: Partial<PropertyCreateData>
   ): Promise<ApiResponse<PropertyProps>> {
     try {
       const response = await api.patch(

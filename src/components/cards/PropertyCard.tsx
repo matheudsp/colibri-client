@@ -17,6 +17,7 @@ import {
   ChevronRight,
   ImageIcon,
   MoveHorizontal,
+  Pencil,
 } from "lucide-react";
 import { toast } from "sonner";
 import { PropertyService } from "@/services/domains/propertyService";
@@ -28,20 +29,24 @@ import { CustomButton } from "@/components/forms/CustomButton";
 import { extractAxiosError } from "@/services/api";
 import { CustomSwitch } from "../forms/CustomSwitch";
 import { getPropertyTypeLabel } from "@/utils/helpers/getPropertyType";
+import { EditPropertyModal } from "../modals/propertyModals/EditPropertyModal";
 
 function DashboardActions({
   property,
   onDelete,
   onAvailabilityChange,
+  onUpdate,
 }: {
   property: PropertyProps;
   onDelete?: (id: string) => void;
   onAvailabilityChange?: (id: string, newStatus: boolean) => void;
+  onUpdate?: () => void;
 }) {
   const router = useRouter();
   const { role, loading: roleLoading } = useCurrentUser();
   const [isAvailable, setIsAvailable] = useState(property.isAvailable);
   const [isUpdating, setIsUpdating] = useState(false);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 
   useEffect(() => {
     setIsAvailable(property.isAvailable);
@@ -51,6 +56,11 @@ function DashboardActions({
     e.stopPropagation();
     e.preventDefault();
     if (onDelete) onDelete(property.id);
+  };
+  const handleOpenEditModal = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    e.preventDefault();
+    setIsEditModalOpen(true);
   };
 
   const handleCreateContract = (e: React.MouseEvent) => {
@@ -119,6 +129,15 @@ function DashboardActions({
         Criar Contrato
       </CustomButton>
       <CustomButton
+        onClick={handleOpenEditModal}
+        icon={<Pencil size={16} />}
+        color="bg-blue-100"
+        textColor="text-blue-800"
+        className="w-full text-sm"
+      >
+        Editar
+      </CustomButton>
+      <CustomButton
         onClick={handleDelete}
         icon={<Trash2 size={16} />}
         color="bg-red-100"
@@ -127,6 +146,16 @@ function DashboardActions({
       >
         Excluir
       </CustomButton>
+      <EditPropertyModal
+        isOpen={isEditModalOpen}
+        onClose={() => setIsEditModalOpen(false)}
+        property={property}
+        onUpdate={() => {
+          if (onUpdate) {
+            onUpdate();
+          }
+        }}
+      />
     </div>
   );
 }
@@ -136,11 +165,13 @@ export function PropertyCardComponent({
   variant = "dashboard",
   onDelete,
   onAvailabilityChange,
+  onUpdate,
 }: {
   property: PropertyProps;
   variant?: "dashboard" | "public";
   onDelete?: (id: string) => void;
   onAvailabilityChange?: (id: string, newStatus: boolean) => void;
+  onUpdate?: () => void;
 }) {
   const [currentImage, setCurrentImage] = useState(0);
   const [touchStart, setTouchStart] = useState<number | null>(null);
@@ -257,14 +288,14 @@ export function PropertyCardComponent({
           <>
             <button
               onClick={handlePrevImage}
-              className="absolute left-2 top-1/2 -translate-y-1/2 bg-black/40 text-white p-1 rounded-full shadow-md transition-opacity opacity-70 hover:opacity-100 focus:outline-hidden focus:ring-2 focus:ring-white z-20"
+              className="absolute left-2 top-1/2 -translate-y-1/2 bg-black/40 text-white p-1 rounded-full shadow-md transition-opacity opacity-70 hover:opacity-100 focus:outline-hidden focus:ring-2 focus:ring-white z-20 cursor-pointer"
               aria-label="Imagem anterior"
             >
               <ChevronLeft size={20} />
             </button>
             <button
               onClick={handleNextImage}
-              className="absolute right-2 top-1/2 -translate-y-1/2 bg-black/40 text-white p-1 rounded-full shadow-md transition-opacity opacity-70 hover:opacity-100 focus:outline-hidden focus:ring-2 focus:ring-white z-20"
+              className="absolute right-2 top-1/2 -translate-y-1/2 bg-black/40 text-white p-1 rounded-full shadow-md transition-opacity opacity-70 hover:opacity-100 focus:outline-hidden focus:ring-2 focus:ring-white z-20 cursor-pointer"
               aria-label="Próxima imagem"
             >
               <ChevronRight size={20} />
@@ -330,6 +361,7 @@ export function PropertyCardComponent({
             property={property}
             onDelete={onDelete}
             onAvailabilityChange={onAvailabilityChange}
+            onUpdate={onUpdate}
           />
         )}
       </div>

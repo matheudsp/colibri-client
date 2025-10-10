@@ -1,5 +1,5 @@
 import type { PaymentStatus } from "@/constants";
-import type { BankSlip } from "./bank-slip";
+import type { BankSlip } from "./charge";
 
 export interface PaymentResponse {
   id: string;

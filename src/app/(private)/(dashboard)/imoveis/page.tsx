@@ -25,6 +25,7 @@ import { OtpVerificationModal } from "@/components/modals/verificationModals/Otp
 import { VerificationContexts } from "../../../../constants/verification-contexts";
 import { EmptyCard } from "@/components/common/EmptyCard";
 import PageHeader from "@/components/common/PageHeader";
+import { PropertyProps } from "@/interfaces/property";
 
 export default function DashboardPropertiesPage() {
   const { searchValue } = useSearch();
@@ -52,7 +53,6 @@ export default function DashboardPropertiesPage() {
           page: currentPage,
           limit: ITEMS_PER_PAGE,
         });
-        // console.log(response);
       } else {
         const searchParams = {
           city: searchValue,
@@ -69,9 +69,6 @@ export default function DashboardPropertiesPage() {
         response = await PropertyService.search(cleanedParams);
       }
 
-      // const data = response.data || [];
-
-      // setProperties(Array.isArray(data) ? data : []);
       setProperties(
         Array.isArray(response.data.properties) ? response.data.properties : []
       );
@@ -97,11 +94,11 @@ export default function DashboardPropertiesPage() {
     setPropertyToDelete(id);
     setIsOtpModalOpen(true);
   };
+
   const confirmDeleteWithOtp = async (otp: string) => {
     if (!propertyToDelete) return;
 
-    setLoading(true);
-    try {
+    const promise = async () => {
       const verificationResponse = await VerificationService.confirm(
         VerificationContexts.DELETE_PROPERTY,
         otp
@@ -111,21 +108,24 @@ export default function DashboardPropertiesPage() {
           propertyToDelete,
           verificationResponse.data.actionToken
         );
-
-        toast.success("Imóvel excluído com sucesso!");
+        // Atualiza a UI otimisticamente e depois busca os dados
         setProperties((prev) => prev.filter((p) => p.id !== propertyToDelete));
-        setIsOtpModalOpen(false);
+        fetchProperties();
+      } else {
+        throw new Error("Token de ação inválido.");
       }
-    } catch (error) {
-      toast.error("Falha na exclusão do imóvel", {
-        description: extractAxiosError(error),
-      });
-      console.error("Falha na exclusão do imóvel:", error);
-    } finally {
-      setPropertyToDelete(null);
-      setLoading(false);
-    }
+    };
+
+    toast.promise(promise(), {
+      loading: "Excluindo imóvel...",
+      success: "Imóvel excluído com sucesso!",
+      error: (err) => `Falha na exclusão: ${extractAxiosError(err)}`,
+    });
+
+    setIsOtpModalOpen(false);
+    setPropertyToDelete(null);
   };
+
   const pageContent = {
     title: "Meus Imóveis",
     subtitle: "Gerencie e visualize todos os seus imóveis.",
@@ -144,6 +144,18 @@ export default function DashboardPropertiesPage() {
       role === Roles.LOCATARIO
         ? "Tente uma nova busca ou alugue um imóvel."
         : "Clique no botão '+' para adicionar seu primeiro imóvel.",
+  };
+
+  const handleAvailabilityUpdate = (propertyId: string, newStatus: boolean) => {
+    setProperties((prevProperties) =>
+      prevProperties.map((p) =>
+        p.id === propertyId ? { ...p, isAvailable: newStatus } : p
+      )
+    );
+  };
+
+  const handlePropertyUpdate = () => {
+    fetchProperties();
   };
 
   if (roleLoading || loading) {
@@ -166,14 +178,7 @@ export default function DashboardPropertiesPage() {
       </div>
     );
   }
-  const handleAvailabilityUpdate = (propertyId: string, newStatus: boolean) => {
-    console.log("Updating property availability:", propertyId, newStatus);
-    setProperties((prevProperties) =>
-      prevProperties.map((p) =>
-        p.id === propertyId ? { ...p, isAvailable: newStatus } : p
-      )
-    );
-  };
+
   return (
     <div className="min-h-svh flex flex-col items-center pt-8 md:pt-14 px-4 pb-24 ">
       <div className="w-full max-w-7xl mx-auto">
@@ -201,6 +206,7 @@ export default function DashboardPropertiesPage() {
                     variant="dashboard"
                     onDelete={handleDeleteProperty}
                     onAvailabilityChange={handleAvailabilityUpdate}
+                    onUpdate={handlePropertyUpdate}
                   />
                 ))}
               </div>

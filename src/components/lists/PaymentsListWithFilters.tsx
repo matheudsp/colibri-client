@@ -9,7 +9,7 @@ import {
   PaymentService,
   PaymentFilters,
 } from "@/services/domains/paymentService";
-import { BankSlipService } from "@/services/domains/bankSlipService";
+import { ChargeService } from "@/services/domains/chargeService";
 import { extractAxiosError } from "@/services/api";
 import { formatDateForDisplay } from "@/utils/formatters/formatDate";
 import { formatDecimalValue } from "@/utils/formatters/formatDecimal";
@@ -242,7 +242,7 @@ export function PaymentListWithFilters({
   const handleGenerateSlip = async (paymentOrderId: string) => {
     setIsActionLoading(true);
     try {
-      await BankSlipService.generate(paymentOrderId);
+      await ChargeService.generate(paymentOrderId);
       toast.success("Boleto gerado com sucesso!", {
         description: "A lista foi atualizada.",
       });

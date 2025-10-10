@@ -1,4 +1,4 @@
-export interface BankSlipResponse {
+export interface ChargeResponse {
   id: string;
   contractId: string;
   amountDue: string;
@@ -6,17 +6,19 @@ export interface BankSlipResponse {
   dueDate: string;
   paidAt: string | null;
   status: string;
-  bankSlip: BankSlip;
+  charge: Charge;
 }
 
-export interface BankSlip {
+export interface Charge {
   id: string;
   paymentOrderId: string;
   transactionReceiptUrl?: string;
   asaasChargeId: string;
-  bankSlipUrl: string;
+  bankSlipUrl?: string;
+  nossoNumero?: string;
+  pixQrCode?: string;
+  pixPayload?: string;
   invoiceUrl: string;
-  nossoNumero: string;
   createdAt: string;
   updatedAt: string;
 }

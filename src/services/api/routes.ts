@@ -78,9 +78,9 @@ const API_ROUTES = {
     UPDATE: ({ propertyId }: Params) => `/properties/${propertyId}`,
     DELETE: ({ propertyId }: Params) => `/properties/${propertyId}/delete`,
   },
-  BANKSLIP: {
-    BASE: "/bank-slips",
-    GENERATE: "/bank-slips/generate",
+  CHARGE: {
+    BASE: "/charges",
+    GENERATE: "/charges/generate",
   },
   DOCUMENTS: {
     BASE: "/documents",
