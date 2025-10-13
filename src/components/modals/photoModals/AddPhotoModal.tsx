@@ -71,7 +71,7 @@ export function AddPhotoModal({
 
       onPhotosAdded(validFiles);
 
-      toast.success("Fotos adicionadas com sucesso!");
+      // toast.success("Fotos adicionadas com sucesso!");
     } catch (error) {
       console.error("Erro detalhado:", error);
       toast.error(
@@ -116,7 +116,7 @@ export function AddPhotoModal({
                   <button
                     onClick={openCamera}
                     disabled={isLoading || uploading}
-                    className="flex items-center justify-center gap-2 w-full py-3 px-4 rounded-lg bg-gray-100 hover:bg-gray-200 disabled:opacity-50"
+                    className="flex items-center justify-center gap-2 w-full py-3 px-4 rounded-lg bg-gray-100 hover:bg-gray-200 disabled:opacity-50 cursor-pointer"
                   >
                     <CameraIcon className="w-5 h-5" />
                     <span>{uploading ? "Enviando..." : "Tirar foto"}</span>
@@ -124,7 +124,7 @@ export function AddPhotoModal({
                   <button
                     onClick={openGallery}
                     disabled={isLoading || uploading}
-                    className="flex items-center justify-center gap-2 w-full py-3 px-4 rounded-lg bg-gray-100 hover:bg-gray-200 disabled:opacity-50"
+                    className="flex items-center justify-center gap-2 w-full py-3 px-4 rounded-lg bg-gray-100 hover:bg-gray-200 disabled:opacity-50 cursor-pointer"
                   >
                     <ImageIcon className="w-5 h-5" />
                     <span>
@@ -136,7 +136,7 @@ export function AddPhotoModal({
                   <button
                     onClick={onClose}
                     disabled={uploading}
-                    className="w-full py-2 rounded-lg font-medium text-center text-gray-700 hover:bg-gray-100"
+                    className="w-full py-2 rounded-lg font-medium text-center text-gray-700 hover:bg-gray-100 cursor-pointer"
                   >
                     Cancelar
                   </button>

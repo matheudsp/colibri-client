@@ -65,7 +65,7 @@ export function PropertyPhotoManager({
             setPhotos(newPhotoList);
             onPhotoListUpdate?.(newPhotoList);
             setIsAddPhotoModalOpen(false);
-            return `${newFiles.length} foto(s) adicionada(s)!`;
+            return "Foto(s) enviada(s) com sucesso.";
           },
           error: (error) => `Falha no upload: ${extractAxiosError(error)}`,
         });
@@ -98,7 +98,7 @@ export function PropertyPhotoManager({
           setPhotos(newPhotoList);
           onPhotoListUpdate?.(newPhotoList);
           setPhotoToDelete(null);
-          return "Foto excluída com sucesso!";
+          return "Foto excluída com sucesso.";
         },
         error: (err) => `Falha ao excluir: ${extractAxiosError(err)}`,
       });

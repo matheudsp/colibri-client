@@ -1,13 +1,14 @@
 "use client";
 
-import { useEffect, useState, useCallback } from "react";
+import { useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { Building2, Search, HomeIcon } from "lucide-react";
+import { useQuery } from "@tanstack/react-query";
 
 import { PropertyCard } from "@/components/cards/PropertyCard";
 import FabButton from "@/components/layout/FabButton";
 import {
-  PropertyResponse,
+  // PropertyResponse,
   PropertyService,
 } from "@/services/domains/propertyService";
 import { PropertyCardSkeleton } from "@/components/skeletons/PropertyCardSkeleton";
@@ -28,27 +29,25 @@ import PageHeader from "@/components/common/PageHeader";
 
 export default function DashboardPropertiesPage() {
   const { searchValue } = useSearch();
-  const [properties, setProperties] = useState<PropertyResponse[]>([]);
-  const [loading, setLoading] = useState(true);
   const [propertyToDelete, setPropertyToDelete] = useState<string | null>(null);
-  const [pagination, setPagination] = useState({
-    total: 0,
-    page: 1,
-    totalPages: 1,
-  });
   const searchParams = useSearchParams();
   const currentPage = Number(searchParams.get("page")) || 1;
   const [isOtpModalOpen, setIsOtpModalOpen] = useState(false);
   const { user, loading: roleLoading } = useUserStore();
   const role = user?.role;
-  const fetchProperties = useCallback(async () => {
-    if (roleLoading) return;
 
-    setLoading(true);
-    try {
-      let response: ApiResponse<PropertiesApiResponse>;
+  const propertiesQueryKey = ["properties", currentPage, searchValue];
+
+  const {
+    data: response,
+    isLoading: loading,
+    refetch,
+  } = useQuery({
+    queryKey: propertiesQueryKey,
+    queryFn: async (): Promise<ApiResponse<PropertiesApiResponse>> => {
+      let responseData: ApiResponse<PropertiesApiResponse>;
       if (searchValue.trim() === "") {
-        response = await PropertyService.listAll({
+        responseData = await PropertyService.listAll({
           page: currentPage,
           limit: ITEMS_PER_PAGE,
         });
@@ -59,35 +58,24 @@ export default function DashboardPropertiesPage() {
             searchValue.length === 2 ? searchValue.toUpperCase() : undefined,
           title: searchValue,
         };
-
         const cleanedParams = Object.fromEntries(
           Object.entries(searchParams).filter(
             ([, value]) => value !== undefined
           )
         );
-        response = await PropertyService.search(cleanedParams);
+        responseData = await PropertyService.search(cleanedParams);
       }
+      return responseData;
+    },
+    enabled: !roleLoading,
+  });
 
-      setProperties(
-        Array.isArray(response.data.properties) ? response.data.properties : []
-      );
-      setPagination({
-        total: response.meta?.resource?.total || 0,
-        page: response.meta?.resource?.page || 1,
-        totalPages: response.meta?.resource?.totalPages || 1,
-      });
-    } catch (err) {
-      console.error("Erro ao carregar propriedades:", err);
-      toast.error("Não foi possível carregar as propriedades.");
-      setProperties([]);
-    } finally {
-      setLoading(false);
-    }
-  }, [currentPage, roleLoading, searchValue]);
-
-  useEffect(() => {
-    fetchProperties();
-  }, [fetchProperties]);
+  const properties = response?.data.properties || [];
+  const pagination = {
+    total: response?.meta?.resource?.total || 0,
+    page: response?.meta?.resource?.page || 1,
+    totalPages: response?.meta?.resource?.totalPages || 1,
+  };
 
   const handleDeleteProperty = (id: string) => {
     setPropertyToDelete(id);
@@ -107,9 +95,7 @@ export default function DashboardPropertiesPage() {
           propertyToDelete,
           verificationResponse.data.actionToken
         );
-        // Atualiza a UI otimisticamente e depois busca os dados
-        setProperties((prev) => prev.filter((p) => p.id !== propertyToDelete));
-        fetchProperties();
+        await refetch();
       } else {
         throw new Error("Token de ação inválido.");
       }
@@ -145,16 +131,12 @@ export default function DashboardPropertiesPage() {
         : "Clique no botão '+' para adicionar seu primeiro imóvel.",
   };
 
-  const handleAvailabilityUpdate = (propertyId: string, newStatus: boolean) => {
-    setProperties((prevProperties) =>
-      prevProperties.map((p) =>
-        p.id === propertyId ? { ...p, isAvailable: newStatus } : p
-      )
-    );
+  const handleAvailabilityUpdate = () => {
+    refetch();
   };
 
   const handlePropertyUpdate = () => {
-    fetchProperties();
+    refetch();
   };
 
   if (roleLoading || loading) {

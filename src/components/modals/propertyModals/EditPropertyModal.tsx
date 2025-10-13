@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
@@ -36,6 +36,7 @@ import { PropertyProps } from "@/interfaces/property";
 import { formatCurrency } from "@/utils/masks/maskCurrency";
 import { unmaskNumeric } from "@/utils/masks/maskNumeric";
 import { PropertyPhotoManager } from "@/components/photos/PropertyPhotoManager";
+import { Photo } from "@/interfaces/photo";
 
 interface EditPropertyModalProps {
   isOpen: boolean;
@@ -55,6 +56,8 @@ export function EditPropertyModal({
     { id: string; value: string; label: string }[]
   >([]);
   const [isCitiesLoading, setIsCitiesLoading] = useState(false);
+  const [localPhotos, setLocalPhotos] = useState<Photo[]>([]);
+  const [hasPhotoChanges, setHasPhotoChanges] = useState(false);
 
   const {
     control,
@@ -62,7 +65,7 @@ export function EditPropertyModal({
     setValue,
     watch,
     reset,
-    formState: { errors },
+    formState: { errors, isDirty },
   } = useForm<UpdatePropertyFormValues>({
     resolver: zodResolver(updatePropertySchema),
   });
@@ -71,11 +74,13 @@ export function EditPropertyModal({
 
   useEffect(() => {
     if (property) {
+      setLocalPhotos(property.photos || []);
       reset({
         ...property,
         value: formatCurrency(property.value),
         complement: property.complement || "",
       });
+      setHasPhotoChanges(false); // Reseta o controle de mudanças ao abrir
     }
   }, [property, reset]);
 
@@ -100,10 +105,27 @@ export function EditPropertyModal({
     loadCities();
   }, [stateValue, setValue]);
 
-  const handlePhotoListUpdate = () => {
-    onUpdate();
+  const handlePhotoListUpdate = (updatedPhotos: Photo[]) => {
+    setLocalPhotos(updatedPhotos);
+    setHasPhotoChanges(true);
   };
+
+  const propertyForPhotoManager = useMemo(() => {
+    return { ...property, photos: localPhotos };
+  }, [property, localPhotos]);
+
+  const handleClose = () => {
+    if (hasPhotoChanges) {
+      onUpdate();
+    }
+    onClose();
+  };
+
   const onSubmit = async (data: UpdatePropertyFormValues) => {
+    if (!isDirty && !hasPhotoChanges) {
+      toast.info("Nenhuma alteração para salvar.");
+      return;
+    }
     setIsSubmitting(true);
     try {
       const payload = {
@@ -127,7 +149,7 @@ export function EditPropertyModal({
   return (
     <Modal
       isOpen={isOpen}
-      onClose={onClose}
+      onClose={handleClose}
       title="Editar Imóvel"
       scrollable
       maxWidth="max-w-2xl"
@@ -138,7 +160,7 @@ export function EditPropertyModal({
       >
         <div className="overflow-y-auto p-6 space-y-6 md:space-y-8">
           <PropertyPhotoManager
-            property={property}
+            property={propertyForPhotoManager}
             onPhotoListUpdate={handlePhotoListUpdate}
             isSubmitting={isSubmitting}
             propertyTitle={watch("title") || ""}
@@ -396,7 +418,7 @@ export function EditPropertyModal({
             type="button"
             color="bg-gray-200"
             textColor="text-gray-800"
-            onClick={onClose}
+            onClick={handleClose}
           >
             Cancelar
           </CustomButton>

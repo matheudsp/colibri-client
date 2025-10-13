@@ -253,7 +253,7 @@ export function PropertyCardComponent({
           )}
         {property.photos && property.photos.length > 0 ? (
           <Image
-            src={property.photos[currentImage].url}
+            src={property.photos[currentImage].url!}
             alt={`Foto de ${property.title}`}
             fill
             className="object-cover rounded-md transition-transform duration-300 transform group-hover:scale-105 filter group-hover:brightness-75"

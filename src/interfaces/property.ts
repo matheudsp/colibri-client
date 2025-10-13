@@ -1,3 +1,5 @@
+import type { Photo } from "./photo";
+
 export interface PropertyProps {
   id: string;
   title: string;
@@ -31,13 +33,6 @@ export interface PropertyProps {
   showPropertyInformation?: boolean;
 
   onDelete?: (id: string) => void;
-  photos: Array<{
-    id: string;
-    propertyId: string;
-    name?: string;
-    filePath: string;
-    isCover: boolean;
-    url: string;
-  }>;
+  photos: Photo[];
   variant?: "dashboard" | "public";
 }

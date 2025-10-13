@@ -4,6 +4,7 @@ import API_ROUTES from "../api/routes";
 import { PropertyProps } from "../../interfaces/property";
 import { ApiResponse, type PropertiesApiResponse } from "../../types/api";
 import type { PropertySearchFormValues } from "@/validations/properties/propertySearchValidation";
+import type { Photo } from "@/interfaces/photo";
 
 export interface PropertyResponse {
   id: string;
@@ -31,14 +32,7 @@ export interface PropertyResponse {
     email: string;
     phone?: string;
   };
-  photos: Array<{
-    id: string;
-    propertyId: string;
-    name?: string;
-    filePath: string;
-    isCover: boolean;
-    url: string;
-  }>;
+  photos: Photo[];
   createdAt: string;
   updatedAt: string;
   acceptOnlineProposals?: boolean;

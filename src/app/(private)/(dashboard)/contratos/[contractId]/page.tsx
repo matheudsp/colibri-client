@@ -11,6 +11,7 @@ import {
   BellRing,
   MailCheck,
   Shredder,
+  ExternalLink,
 } from "lucide-react";
 import { toast } from "sonner";
 import { IoDocumentsOutline } from "react-icons/io5";
@@ -36,6 +37,7 @@ import { LottieAnimation } from "@/components/common/LottieAnimation";
 import signatureAnimation from "../../../../../../public/lottie/signature-animation.json";
 import { JudicialReportCard } from "@/components/cards/JudicialReportCard";
 import { ContractPaymentList } from "@/components/lists/ContractPaymentList";
+import Link from "next/link";
 
 export default function ContractManagementPage() {
   const [contract, setContract] = useState<ContractWithDocuments | null>(null);
@@ -422,7 +424,7 @@ export default function ContractManagementPage() {
                 <div className="relative w-16 h-16 rounded-lg bg-zinc-100 shrink-0 overflow-hidden border border-border">
                   {coverPhoto ? (
                     <Image
-                      src={coverPhoto.url}
+                      src={coverPhoto.url!}
                       alt={`Foto de ${contract.property.title}`}
                       fill
                       sizes="64px"
@@ -439,7 +441,14 @@ export default function ContractManagementPage() {
                     Gerenciar Contrato
                   </h1>
                   <p className="text-gray-500 mt-1">
-                    Imóvel: {contract.property.title}
+                    <Link
+                      href={`/imovel/${contract.property.id}`}
+                      className="hover:underline transition-colors hover:text-primary flex items-center "
+                      target="_self"
+                    >
+                      Imóvel: {contract.property.title}
+                      <ExternalLink className="inline ml-2 " size={16} />
+                    </Link>
                   </p>
                 </div>
               </div>

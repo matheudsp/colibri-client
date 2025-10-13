@@ -98,7 +98,7 @@ export function ContractCard({ contract }: { contract: Contract }) {
         <header className="flex flex-col sm:flex-row items-start justify-between gap-4">
           <div className="flex items-center gap-4 min-w-0 w-full">
             <div className="relative w-16 h-16 rounded-lg bg-zinc-100 shrink-0 overflow-hidden border border-border">
-              {coverPhoto ? (
+              {coverPhoto?.url ? (
                 <Image
                   src={coverPhoto.url}
                   alt={`Foto de ${contract.property.title}`}
