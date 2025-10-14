@@ -79,7 +79,7 @@ export function CancelContractModal({
                     {isLoading ? (
                       <Loader2 className="animate-spin" />
                     ) : (
-                      "Sim, cancelar"
+                      "Cancelar"
                     )}
                   </CustomButton>
                 </div>

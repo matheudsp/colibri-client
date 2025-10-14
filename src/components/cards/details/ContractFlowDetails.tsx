@@ -2,22 +2,22 @@ import {
   FileClock,
   FileSearch,
   FileText,
+  HandCoins,
   PenSquare,
   ShieldCheck,
 } from "lucide-react";
-
 import { FaCheck } from "react-icons/fa";
-
-const statusToStep = {
+import { ContractWithDocuments } from "@/interfaces/contract";
+const statusToStep: { [key: string]: number } = {
   PENDENTE_DOCUMENTACAO: 2,
   EM_ANALISE: 3,
   AGUARDANDO_ASSINATURAS: 4,
-  ATIVO: 5,
-  FINALIZADO: 6,
+  AGUARDANDO_GARANTIA: 5,
+  ATIVO: 6,
+  FINALIZADO: 7,
   CANCELADO: -1,
 };
-
-const steps = [
+const baseSteps = [
   {
     name: "Criação",
     icon: FileText,
@@ -45,8 +45,27 @@ const steps = [
   },
 ];
 
-export function ContractFlowDetails({ status }: { status: string }) {
+const caucaoStep = {
+  name: "Garantia",
+  icon: HandCoins,
+  description: "Aguardando o pagamento do depósito caução.",
+};
+
+export function ContractFlowDetails({
+  contract,
+}: {
+  contract: ContractWithDocuments;
+}) {
+  const { status, guaranteeType } = contract;
   const currentStep = statusToStep[status as keyof typeof statusToStep] || 0;
+
+  const steps = [...baseSteps];
+  if (guaranteeType === "DEPOSITO_CAUCAO") {
+    steps.splice(4, 0, caucaoStep);
+  } else {
+    statusToStep["ATIVO"] = 5;
+    statusToStep["FINALIZADO"] = 6;
+  }
 
   return (
     <div className="bg-background p-4 sm:p-6 rounded-xl shadow-xs border border-border">
@@ -69,7 +88,11 @@ export function ContractFlowDetails({ status }: { status: string }) {
                     className={`
                       w-12 h-12 rounded-full flex items-center justify-center
                       ${isCompleted ? "bg-green-500 text-white" : ""}
-                      ${isCurrent ? "bg-primary text-white" : ""}
+                      ${
+                        isCurrent
+                          ? "bg-primary text-white animate-pulse-shadow"
+                          : ""
+                      }
                       ${
                         !isCompleted && !isCurrent
                           ? "bg-gray-200 text-gray-500"

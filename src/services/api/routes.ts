@@ -124,6 +124,8 @@ const API_ROUTES = {
     BY_CONTRACT: ({ id }: Params) => `/payments-orders/contracts/${id}`,
     CONFIRM_CASH_PAYMENT: ({ id }: Params) =>
       `/payments-orders/${id}/confirm-cash`,
+    CONFIRM_SECURITY_CASH_PAYMENT: ({ id }: Params) =>
+      `/payments-orders/${id}/confirm-deposit-cash`,
   },
 
   BANK_ACCOUNTS: {

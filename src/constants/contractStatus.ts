@@ -15,6 +15,11 @@ export const contractStatus = [
     class: "bg-yellow-100 text-yellow-800",
   },
   {
+    value: "AGUARDANDO_GARANTIA",
+    label: "Aguardando pagamento da garantia",
+    class: "bg-indigo-100 text-indigo-800",
+  },
+  {
     value: "FINALIZADO",
     label: "Finalizado",
     class: "bg-purple-100 text-purple-800",

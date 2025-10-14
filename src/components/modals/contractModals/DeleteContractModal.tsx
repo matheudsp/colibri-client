@@ -80,7 +80,7 @@ export function DeleteContractModal({
                     {isLoading ? (
                       <Loader2 className="animate-spin" />
                     ) : (
-                      "Sim, remover"
+                      "Remover"
                     )}
                   </CustomButton>
                 </div>

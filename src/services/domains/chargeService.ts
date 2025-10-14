@@ -6,10 +6,14 @@ export const ChargeService = {
   /**
    * Solicita a geração de um novo boleto para uma ordem de pagamento.
    */
-  async generate(paymentOrderId: string): Promise<ChargeResponse> {
+  async generate(
+    paymentOrderId: string,
+    billingType?: "BOLETO" | "PIX"
+  ): Promise<ChargeResponse> {
     try {
       const response = await api.post(API_ROUTES.CHARGE.GENERATE, {
         paymentOrderId,
+        billingType,
       });
       return response.data;
     } catch (error) {

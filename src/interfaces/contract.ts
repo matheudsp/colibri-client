@@ -8,6 +8,7 @@ export interface Contract {
     | "PENDENTE_DOCUMENTACAO"
     | "EM_ANALISE"
     | "AGUARDANDO_ASSINATURAS"
+    | "AGUARDANDO_GARANTIA"
     | "ATIVO"
     | "FINALIZADO"
     | "CANCELADO";

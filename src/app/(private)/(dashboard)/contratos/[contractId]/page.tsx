@@ -12,6 +12,7 @@ import {
   MailCheck,
   Shredder,
   ExternalLink,
+  HandCoins,
 } from "lucide-react";
 import { toast } from "sonner";
 import { IoDocumentsOutline } from "react-icons/io5";
@@ -23,7 +24,7 @@ import { CustomButton } from "@/components/forms/CustomButton";
 import { DeleteContractModal } from "@/components/modals/contractModals/DeleteContractModal";
 import { contractStatus } from "@/constants/contractStatus";
 import { useCurrentUser } from "@/hooks/useCurrentUser";
-import { Roles } from "@/constants";
+import { PaymentStatus, Roles } from "@/constants";
 import { ForceActivateContractModal } from "@/components/modals/contractModals/ForceActivateContractModal";
 import { FaRegEye } from "react-icons/fa";
 import { ContractFlowDetails } from "@/components/cards/details/ContractFlowDetails";
@@ -38,6 +39,8 @@ import signatureAnimation from "../../../../../../public/lottie/signature-animat
 import { JudicialReportCard } from "@/components/cards/JudicialReportCard";
 import { ContractPaymentList } from "@/components/lists/ContractPaymentList";
 import Link from "next/link";
+import { PaymentService } from "@/services/domains/paymentService";
+import { RegisterCaucaoModal } from "@/components/modals/contractModals/RegisterCaucaoModal";
 
 export default function ContractManagementPage() {
   const [contract, setContract] = useState<ContractWithDocuments | null>(null);
@@ -47,6 +50,7 @@ export default function ContractManagementPage() {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [isSigningLoading, setIsSigningLoading] = useState(false);
   const [showResendModal, setShowResendModal] = useState(false);
+  const [showRegisterCaucaoModal, setShowRegisterCaucaoModal] = useState(false);
 
   const params = useParams();
   const router = useRouter();
@@ -213,7 +217,31 @@ export default function ContractManagementPage() {
       setShowDeleteModal(false);
     }
   };
+  const handleRegisterCaucao = async () => {
+    if (!contract) return;
+    const caucaoPayment = contract.paymentsOrders?.find(
+      (p) => p.status === "PENDENTE"
+    );
+    if (!caucaoPayment) {
+      toast.error("Fatura da caução não encontrada.");
+      return;
+    }
 
+    setIsActionLoading(true);
+    try {
+      await PaymentService.confirmSecurityCashPayment(caucaoPayment.id, {});
+      toast.success("Recebimento da caução registrado com sucesso!");
+      setShowRegisterCaucaoModal(false);
+      await fetchContract();
+    } catch (_error) {
+      const errorMessage = extractAxiosError(_error);
+      toast.error("Não foi possível registrar o recebimento", {
+        description: errorMessage,
+      });
+    } finally {
+      setIsActionLoading(false);
+    }
+  };
   if (loading) {
     return (
       <div className="flex justify-center items-center h-screen">
@@ -355,7 +383,71 @@ export default function ContractManagementPage() {
             </p>
           </div>
         );
+      case "AGUARDANDO_GARANTIA":
+        // Lógica para o Locador
+        if (role === "LOCADOR" || role === Roles.ADMIN) {
+          return (
+            <div className="bg-indigo-50 border-indigo-200 border p-4 rounded-xl text-center">
+              <HandCoins className="mx-auto text-indigo-500" size={32} />
+              <h3 className="font-bold text-lg mt-2">
+                Aguardando Pagamento da Caução
+              </h3>
+              <p className="text-sm text-gray-600 mt-1">
+                O contrato foi assinado. Agora, aguarde o inquilino realizar o
+                pagamento da caução. Se o pagamento for feito em dinheiro,
+                registre-o aqui.
+              </p>
+              <CustomButton
+                onClick={() => setShowRegisterCaucaoModal(true)}
+                disabled={isActionLoading}
+                color="bg-indigo-500"
+                className="mt-4 w-full"
+              >
+                Registrar Recebimento (Dinheiro)
+              </CustomButton>
+            </div>
+          );
+        }
 
+        if (role === "LOCATARIO") {
+          const caucaoPayment = contract.paymentsOrders?.find(
+            (p) =>
+              p.status === PaymentStatus.PENDENTE ||
+              p.status === PaymentStatus.ATRASADO ||
+              PaymentStatus.FALHOU
+          );
+
+          return (
+            <div className="bg-indigo-50 border-indigo-200 border p-4 rounded-xl text-center">
+              <HandCoins className="mx-auto text-indigo-500" size={32} />
+              <h3 className="font-bold text-lg mt-2">
+                Pagamento da Caução Pendente
+              </h3>
+              <p className="text-sm text-gray-600 mt-1">
+                O contrato foi assinado! Para ativá-lo, realize o pagamento da
+                caução clicando no botão abaixo.
+              </p>
+              <CustomButton
+                onClick={() => {
+                  if (caucaoPayment) {
+                    router.push(`/faturas/${caucaoPayment.id}`);
+                  } else {
+                    toast.error(
+                      "Não foi possível encontrar a fatura da caução."
+                    );
+                  }
+                }}
+                disabled={!caucaoPayment}
+                color="bg-indigo-500"
+                textColor="text-white"
+                className="w-full mt-4"
+              >
+                Realizar Pagamento
+              </CustomButton>
+            </div>
+          );
+        }
+        return null;
       case "PENDENTE_DOCUMENTACAO":
         if (role === "LOCATARIO" && sub === contract.tenantId) {
           return (
@@ -464,8 +556,8 @@ export default function ContractManagementPage() {
 
           <main className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             <div className="lg:col-span-2 space-y-6 ">
-              <ContractFlowDetails status={contract.status} />
-
+              <ContractFlowDetails contract={contract} />
+              <ActionCard />
               <ContractDetails contract={contract} />
               {contract.paymentsOrders &&
                 contract.paymentsOrders.length > 0 && (
@@ -486,7 +578,6 @@ export default function ContractManagementPage() {
             <aside className="lg:col-span-1 space-y-6">
               <ContractPartiesDetails contract={contract} />
 
-              <ActionCard />
               <div className="bg-background p-4 rounded-xl  border border-border space-y-3">
                 <h3 className="font-bold text-lg">Outras Ações</h3>
                 {(contract.status === "AGUARDANDO_ASSINATURAS" ||
@@ -631,6 +722,12 @@ export default function ContractManagementPage() {
           contract={contract}
         />
       )}
+      <RegisterCaucaoModal
+        isOpen={showRegisterCaucaoModal}
+        onClose={() => setShowRegisterCaucaoModal(false)}
+        onConfirm={handleRegisterCaucao}
+        isLoading={isActionLoading}
+      />
     </>
   );
 }

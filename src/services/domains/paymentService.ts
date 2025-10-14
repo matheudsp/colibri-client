@@ -21,6 +21,18 @@ export interface ListPaymentParams {
   limit?: number;
 }
 export const PaymentService = {
+  async findById(
+    paymentOrderId: string
+  ): Promise<ApiResponse<PaymentResponse>> {
+    try {
+      const response = await api.get(
+        API_ROUTES.PAYMENTS.BY_ID({ id: paymentOrderId })
+      );
+      return response.data;
+    } catch (error) {
+      throw new Error(extractAxiosError(error));
+    }
+  },
   /**
    * Busca todos os pagamentos relacionados ao utilizador logado, com filtros opcionais.
    */
@@ -68,6 +80,25 @@ export const PaymentService = {
       throw new Error(extractAxiosError(error));
     }
   },
+
+  /**
+   * Registra o recebimento do Depósito Caução em dinheiro
+   */
+  async confirmSecurityCashPayment(
+    paymentOrderId: string,
+    data: RegisterPaymentData
+  ): Promise<ApiResponse<PaymentResponse>> {
+    try {
+      const response = await api.post(
+        API_ROUTES.PAYMENTS.CONFIRM_CASH_PAYMENT({ id: paymentOrderId }),
+        data
+      );
+      return response.data;
+    } catch (error) {
+      throw new Error(extractAxiosError(error));
+    }
+  },
+
   /**
    * Busca todos os pagamentos do utilizador logado.
    */

@@ -3,6 +3,7 @@ import { formatDateForDisplay } from "@/utils/formatters/formatDate";
 import { formatDecimalValue } from "@/utils/formatters/formatDecimal";
 import { Calendar, DollarSign, Shield, Clock } from "lucide-react";
 import type { ReactNode } from "react";
+import { guaranteeTypes } from "@/constants/guaranteeTypes";
 
 interface DetailItemProps {
   icon: ReactNode;
@@ -10,7 +11,7 @@ interface DetailItemProps {
   value: string;
 }
 const DetailItem = ({ icon, label, value }: DetailItemProps) => (
-  <div className="flex items-start gap-3">
+  <div className="flex items-start gap-3 ">
     <div className="text-primary mt-1">{icon}</div>
     <div>
       <p className="text-sm text-gray-500">{label}</p>
@@ -20,17 +21,16 @@ const DetailItem = ({ icon, label, value }: DetailItemProps) => (
 );
 
 export function ContractDetails({ contract }: { contract: Contract }) {
+  const guaranteeTypeLabel =
+    guaranteeTypes.find((gt) => gt.value === contract.guaranteeType)?.label ||
+    contract.guaranteeType.replace("_", " ");
+
   return (
     <div className="bg-background p-5 rounded-xl shadow-xs border border-border ">
       <h2 className="font-bold text-xl mb-4 border-b border-border pb-2">
         Detalhes do Contrato
       </h2>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        {/* <DetailItem
-          icon={<Building size={20} />}
-          label="Imóvel"
-          value={contract.property.title}
-        /> */}
         <DetailItem
           icon={<DollarSign size={20} />}
           label="Valor do Aluguel"
@@ -55,7 +55,7 @@ export function ContractDetails({ contract }: { contract: Contract }) {
         <DetailItem
           icon={<Shield size={20} />}
           label="Tipo de Garantia"
-          value={contract.guaranteeType.replace("_", " ")}
+          value={guaranteeTypeLabel}
         />
         {contract.condoFee && parseFloat(contract.condoFee) > 0 && (
           <DetailItem
