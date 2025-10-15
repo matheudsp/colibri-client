@@ -58,7 +58,7 @@ export const PaymentCard = ({
         {isPaid && payment.charge?.transactionReceiptUrl ? (
           <CustomButton
             onClick={() =>
-              window.open(payment.charge.transactionReceiptUrl, "_blank")
+              window.open(payment.charge!.transactionReceiptUrl, "_blank")
             }
             color="bg-blue-100"
             textColor="text-blue-800"
@@ -68,7 +68,7 @@ export const PaymentCard = ({
           </CustomButton>
         ) : payment.charge ? (
           <CustomButton
-            onClick={() => window.open(payment.charge.bankSlipUrl, "_blank")}
+            onClick={() => window.open(payment.charge!.bankSlipUrl, "_blank")}
             color="bg-gray-200"
             textColor="text-black"
             className="w-full"

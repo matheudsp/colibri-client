@@ -81,6 +81,9 @@ const API_ROUTES = {
   CHARGE: {
     BASE: "/charges",
     GENERATE: "/charges/generate",
+    GET_PIX_QR_CODE: ({ id }: Params) => `/charges/${id}/pix`,
+    GET_BOLETO_IDENTIFICATION_FIELD: ({ id }: Params) =>
+      `/charges/${id}/identificationField`,
   },
   DOCUMENTS: {
     BASE: "/documents",

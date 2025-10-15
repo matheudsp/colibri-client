@@ -787,7 +787,9 @@ export default function CreateContractPage() {
                       )}
                     />
                     <p className="text-xs text-gray-500 mt-1 pl-1">
-                      Valor que fica retido como garantia.
+                      O depósito caução é uma garantia financeira paga pelo
+                      inquilino ao locador no início de um contrato de aluguel,
+                      geralmente equivalente a até três meses de aluguel.
                     </p>
                   </div>
                 )}

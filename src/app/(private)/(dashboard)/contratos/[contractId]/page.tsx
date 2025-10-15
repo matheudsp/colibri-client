@@ -9,7 +9,6 @@ import {
   ShieldCheck,
   FileWarning,
   BellRing,
-  MailCheck,
   Shredder,
   ExternalLink,
   HandCoins,
@@ -330,8 +329,11 @@ export default function ContractManagementPage() {
         if (role === Roles.LOCADOR || role === Roles.ADMIN) {
           if (signatureProcessStarted) {
             return (
-              <div className="bg-green-50 border-green-200 border p-4 rounded-xl  text-center">
-                <MailCheck className="mx-auto text-green-500" size={32} />
+              <div className="bg-indigo-50 border-indigo-200 border p-4 rounded-xl text-center">
+                <LottieAnimation
+                  animationData={signatureAnimation}
+                  className="w-20 h-20 mx-auto"
+                />
                 <h3 className="font-bold text-lg mt-2">
                   Assinaturas Solicitadas
                 </h3>
@@ -403,7 +405,7 @@ export default function ContractManagementPage() {
                 color="bg-indigo-500"
                 className="mt-4 w-full"
               >
-                Registrar Recebimento (Dinheiro)
+                Registrar recebimento
               </CustomButton>
             </div>
           );
@@ -442,7 +444,7 @@ export default function ContractManagementPage() {
                 textColor="text-white"
                 className="w-full mt-4"
               >
-                Realizar Pagamento
+                Realizar pagamento
               </CustomButton>
             </div>
           );

@@ -2,7 +2,7 @@
 
 import { AlertTriangle } from "lucide-react";
 import { BankAccount } from "@/services/domains/bankAccountService";
-import { CustomButton } from "../forms/CustomButton";
+import { CustomButton } from "../../forms/CustomButton";
 
 interface BankAccountRejectedProps {
   account: BankAccount;

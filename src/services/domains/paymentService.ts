@@ -90,7 +90,9 @@ export const PaymentService = {
   ): Promise<ApiResponse<PaymentResponse>> {
     try {
       const response = await api.post(
-        API_ROUTES.PAYMENTS.CONFIRM_CASH_PAYMENT({ id: paymentOrderId }),
+        API_ROUTES.PAYMENTS.CONFIRM_SECURITY_CASH_PAYMENT({
+          id: paymentOrderId,
+        }),
         data
       );
       return response.data;

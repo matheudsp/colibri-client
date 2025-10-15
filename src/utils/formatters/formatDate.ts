@@ -1,3 +1,4 @@
+import { differenceInDays, format, isToday, isFuture, isPast } from "date-fns";
 export const formatDate = (
   date: Date | string,
   locale = "pt-BR",
@@ -45,11 +46,46 @@ export const formatDateForInput = (dateString: string | undefined) => {
     .slice(0, 10);
 };
 
-export const formatDateForDisplay = (dateString: string | undefined) => {
+export const formatDateForDisplay = (
+  dateString: string | undefined,
+  options: { showRelative?: boolean } = {}
+) => {
   if (!dateString) return "";
   const date = new Date(dateString);
-  const day = String(date.getUTCDate()).padStart(2, "0");
-  const month = String(date.getUTCMonth() + 1).padStart(2, "0");
-  const year = date.getUTCFullYear();
-  return `${day}/${month}/${year}`;
+  // Garante que a data seja tratada como UTC para evitar problemas de fuso horário
+  const utcDate = new Date(
+    date.getUTCFullYear(),
+    date.getUTCMonth(),
+    date.getUTCDate()
+  );
+
+  const formattedDate = format(utcDate, "dd/MM/yyyy");
+
+  if (options.showRelative) {
+    const today = new Date();
+    // Zera a hora do dia atual para uma comparação precisa de "dias"
+    const todayStart = new Date(
+      today.getFullYear(),
+      today.getMonth(),
+      today.getDate()
+    );
+    const daysDiff = differenceInDays(utcDate, todayStart);
+
+    if (isToday(utcDate)) {
+      return `${formattedDate} (Vence hoje)`;
+    }
+    if (isFuture(utcDate)) {
+      const plural = daysDiff === 1 ? "" : "s";
+      const text =
+        daysDiff === 1 ? "Vence amanhã" : `Vence em ${daysDiff} dia${plural}`;
+      return `${formattedDate} (${text})`;
+    }
+    if (isPast(utcDate)) {
+      const daysPast = Math.abs(daysDiff);
+      const plural = daysPast === 1 ? "" : "s";
+      return `${formattedDate} (Vencido há ${daysPast} dia${plural})`;
+    }
+  }
+
+  return formattedDate;
 };

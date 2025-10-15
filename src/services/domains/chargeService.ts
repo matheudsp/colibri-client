@@ -1,6 +1,17 @@
 import type { ChargeResponse } from "@/interfaces/charge";
 import { api, extractAxiosError } from "../api";
 import API_ROUTES from "../api/routes";
+import { ApiResponse } from "@/types/api";
+
+export interface PixQrCodeResponse {
+  encodedImage: string;
+  payload: string;
+  expirationDate: string;
+}
+
+export interface IdentificationFieldResponse {
+  identificationField: string;
+}
 
 export const ChargeService = {
   /**
@@ -15,6 +26,40 @@ export const ChargeService = {
         paymentOrderId,
         billingType,
       });
+      return response.data;
+    } catch (error) {
+      throw new Error(extractAxiosError(error));
+    }
+  },
+
+  /**
+   * Obtém os dados do QR Code PIX de uma cobrança existente.
+   */
+  async getPixQrCode(
+    paymentOrderId: string
+  ): Promise<ApiResponse<PixQrCodeResponse>> {
+    try {
+      const response = await api.get(
+        API_ROUTES.CHARGE.GET_PIX_QR_CODE({ id: paymentOrderId })
+      );
+      return response.data;
+    } catch (error) {
+      throw new Error(extractAxiosError(error));
+    }
+  },
+
+  /**
+   * Obtém a linha digitável de um boleto de uma cobrança existente.
+   */
+  async getBoletoIdentificationField(
+    paymentOrderId: string
+  ): Promise<ApiResponse<IdentificationFieldResponse>> {
+    try {
+      const response = await api.get(
+        API_ROUTES.CHARGE.GET_BOLETO_IDENTIFICATION_FIELD({
+          id: paymentOrderId,
+        })
+      );
       return response.data;
     } catch (error) {
       throw new Error(extractAxiosError(error));

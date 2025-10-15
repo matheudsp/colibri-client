@@ -9,11 +9,11 @@ import {
   BankAccountService,
 } from "@/services/domains/bankAccountService";
 import { extractAxiosError } from "@/services/api";
-import { BankAccountOnboarding } from "@/components/financial/BankAccountOnboarding";
-import { BankAccountPending } from "@/components/financial/BankAccountPending";
-import { BankAccountApproved } from "@/components/financial/BankAccountApproved";
-import { BankAccountRejected } from "@/components/financial/BankAccountRejected";
-import { BankAccountAwaitingApproval } from "../financial/BankAccountAwaitingApproval";
+import { BankAccountOnboarding } from "@/components/tabs/PaymentAccountTabs/BankAccountOnboarding";
+import { BankAccountPending } from "@/components/tabs/PaymentAccountTabs/BankAccountPending";
+import { BankAccountApproved } from "@/components/tabs/PaymentAccountTabs/BankAccountApproved";
+import { BankAccountRejected } from "@/components/tabs/PaymentAccountTabs/BankAccountRejected";
+import { BankAccountAwaitingApproval } from "./PaymentAccountTabs/BankAccountAwaitingApproval";
 
 export function PaymentAccountTab() {
   const [account, setAccount] = useState<BankAccount | null>(null);

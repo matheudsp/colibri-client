@@ -11,7 +11,7 @@ import {
   PixKeyFormValues,
 } from "@/validations/bankAccounts/pixKeyValidation";
 import { VerificationService } from "@/services/domains/verificationService";
-import { VerificationContexts } from "../../constants/verification-contexts";
+import { VerificationContexts } from "../../../constants/verification-contexts";
 import { BankAccountService } from "@/services/domains/bankAccountService";
 import { extractAxiosError } from "@/services/api";
 import { CustomDropdownInput } from "@/components/forms/CustomDropdownInput";
@@ -19,7 +19,7 @@ import { CustomInput } from "@/components/forms/CustomInput";
 import { CustomButton } from "@/components/forms/CustomButton";
 import { OtpVerificationModal } from "@/components/modals/verificationModals/OtpVerificationModal";
 import { pixKeyTypes } from "@/constants/pixKeyTypes";
-import { PixIcon } from "../icons/PixIcon";
+import { PixIcon } from "../../icons/PixIcon";
 
 interface BankAccountOnboardingProps {
   onSuccess: () => void;

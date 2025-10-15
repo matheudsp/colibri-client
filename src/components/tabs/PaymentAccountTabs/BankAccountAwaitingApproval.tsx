@@ -2,7 +2,7 @@
 
 import { MessageCircle, HelpCircle } from "lucide-react";
 import { BankAccount } from "@/services/domains/bankAccountService";
-import { CustomButton } from "../forms/CustomButton";
+import { CustomButton } from "../../forms/CustomButton";
 
 const ACCOUNT_MANAGER_WHATSAPP =
   process.env.NEXT_PUBLIC_ACCOUNT_MANAGER_WHATSAPP;

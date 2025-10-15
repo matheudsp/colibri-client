@@ -9,8 +9,12 @@ export interface PaymentResponse {
   paidAt: string | null;
   status: PaymentStatus;
   contractId: string;
-  charge: Charge;
+  charge: Charge | null;
+  isSecurityDeposit?: boolean;
   contract: {
+    rentAmount?: string;
+    iptuFee?: string;
+    condoFee?: string;
     property: {
       id: string;
       title: string;
