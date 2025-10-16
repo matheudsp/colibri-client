@@ -1,4 +1,56 @@
 "use client";
+
+import { Check } from "lucide-react";
+import { ReactNode } from "react";
+
+interface CustomCheckboxProps {
+  id: string;
+  label: ReactNode;
+  checked: boolean;
+  onChange: (checked: boolean) => void;
+  error?: string;
+  disabled?: boolean;
+}
+
+export function CustomCheckbox({
+  id,
+  label,
+  checked,
+  onChange,
+  error,
+  disabled,
+}: CustomCheckboxProps) {
+  return (
+    <div>
+      <label htmlFor={id} className="flex items-start space-x-3 cursor-pointer">
+        <div className="relative flex items-center">
+          <input
+            id={id}
+            type="checkbox"
+            checked={checked}
+            onChange={(e) => onChange(e.target.checked)}
+            disabled={disabled}
+            className="absolute opacity-0 w-5 h-5 cursor-pointer"
+          />
+          <div
+            className={`flex-shrink-0 w-5 h-5 rounded border-2 flex items-center justify-center transition-colors ${
+              checked ? "bg-primary border-primary" : "bg-white border-gray-300"
+            } ${disabled ? "opacity-50" : ""}`}
+          >
+            {checked && <Check className="w-3 h-3 text-white" />}
+          </div>
+        </div>
+        <span className="text-sm text-gray-600 select-none">{label}</span>
+      </label>
+      {error && <p className="mt-2 text-sm text-error">{error}</p>}
+    </div>
+  );
+}
+
+// Mantenha seu CustomCheckboxGroup se ele for usado em outros lugares
+// Se não, você pode substituir o conteúdo do arquivo.
+// Adicionei a exportação dele aqui para garantir que não quebre nada.
+
 interface CheckboxOption {
   value: string;
   label: string;
@@ -25,6 +77,7 @@ export function CustomCheckboxGroup({
   error,
   name,
 }: CheckboxGroupProps) {
+  // ... seu código do CustomCheckboxGroup existente
   const getGridClasses = () => {
     if (gridCols === "full") {
       return "grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4";

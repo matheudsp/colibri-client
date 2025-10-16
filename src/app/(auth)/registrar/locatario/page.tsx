@@ -26,6 +26,8 @@ import { AuthService } from "@/services/domains/authService";
 import { CustomButton } from "@/components/forms/CustomButton";
 import { CustomInput } from "@/components/forms/CustomInput";
 import { extractAxiosError } from "@/services/api";
+import Link from "next/link";
+import { CustomCheckbox } from "@/components/forms/CustomCheckbox";
 
 export default function TenantRegisterPage() {
   const router = useRouter();
@@ -177,6 +179,41 @@ export default function TenantRegisterPage() {
             />
           )}
         />
+        <div className="pt-2">
+          <Controller
+            name="termsAccepted"
+            control={control}
+            render={({ field }) => (
+              <CustomCheckbox
+                id="terms"
+                checked={field.value || false}
+                onChange={field.onChange}
+                error={errors.termsAccepted?.message}
+                label={
+                  <span className="text-sm text-gray-600">
+                    Eu li e concordo com os{" "}
+                    <Link
+                      href="/termos-de-uso"
+                      className="underline font-medium text-primary hover:text-primary-hover"
+                      target="_blank"
+                    >
+                      Termos de Uso
+                    </Link>{" "}
+                    e a{" "}
+                    <Link
+                      href="/politica-de-privacidade"
+                      className="underline font-medium text-primary hover:text-primary-hover"
+                      target="_blank"
+                    >
+                      Política de Privacidade
+                    </Link>
+                    .
+                  </span>
+                }
+              />
+            )}
+          />
+        </div>
 
         <div className="flex flex-col-reverse sm:flex-row gap-4 pt-4">
           <CustomButton
@@ -195,7 +232,7 @@ export default function TenantRegisterPage() {
             {loading ? <Loader2 className="animate-spin" /> : "Criar Conta"}
           </CustomButton>
         </div>
-        <p className="text-center text-xs text-gray-500 pt-4">
+        {/* <p className="text-center text-xs text-gray-500 pt-4">
           Ao se cadastrar, você concorda com nossos{" "}
           <a href="#" className="underline hover:text-primary">
             Termos de Uso
@@ -205,7 +242,7 @@ export default function TenantRegisterPage() {
             Política de Privacidade
           </a>
           .
-        </p>
+        </p> */}
       </form>
     </FormWrapper>
   );

@@ -56,7 +56,7 @@ export function PaymentAccountTab() {
 
     switch (account.subAccount?.statusGeneral) {
       case "APPROVED":
-        return <BankAccountApproved account={account} />;
+        return <BankAccountApproved account={account} onUpdate={fetchData} />;
       case "REJECTED":
         return <BankAccountRejected account={account} />;
       case "PENDING_ADMIN_APPROVAL":

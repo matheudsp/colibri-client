@@ -36,6 +36,8 @@ import { unmaskNumeric } from "@/utils/masks/maskNumeric";
 import { BrlCurrencyIcon } from "@/components/icons/BRLCurrencyIcon";
 import { FormWrapper } from "@/components/forms/FormWrapper";
 import { extractAxiosError } from "@/services/api";
+import { CustomCheckbox } from "@/components/forms/CustomCheckbox";
+import Link from "next/link";
 
 const FormSection = ({
   title,
@@ -469,7 +471,41 @@ export default function LandlordRegisterPage() {
             />
           </div>
         </FormSection>
-
+        <div className="pt-2">
+          <Controller
+            name="termsAccepted"
+            control={control}
+            render={({ field }) => (
+              <CustomCheckbox
+                id="terms"
+                checked={field.value || false}
+                onChange={field.onChange}
+                error={errors.termsAccepted?.message}
+                label={
+                  <span className="text-sm text-gray-600">
+                    Eu li e concordo com os{" "}
+                    <Link
+                      href="/termos-de-uso"
+                      className="underline font-medium text-primary hover:text-primary-hover"
+                      target="_blank"
+                    >
+                      Termos de Uso
+                    </Link>{" "}
+                    e a{" "}
+                    <Link
+                      href="/politica-de-privacidade"
+                      className="underline font-medium text-primary hover:text-primary-hover"
+                      target="_blank"
+                    >
+                      Política de Privacidade
+                    </Link>
+                    .
+                  </span>
+                }
+              />
+            )}
+          />
+        </div>
         <div className="flex flex-col-reverse sm:flex-row gap-4 pt-4">
           <CustomButton
             type="button"
@@ -487,7 +523,7 @@ export default function LandlordRegisterPage() {
             {loading ? <Loader2 className="animate-spin" /> : "Criar Conta"}
           </CustomButton>
         </div>
-        <p className="text-center text-xs text-gray-500 pt-2">
+        {/* <p className="text-center text-xs text-gray-500 pt-2">
           Ao clicar em &quot;Criar Conta&quot;, você concorda com nossos{" "}
           <a href="#" className="underline hover:text-primary">
             Termos de Uso
@@ -497,7 +533,7 @@ export default function LandlordRegisterPage() {
             Política de Privacidade
           </a>
           .
-        </p>
+        </p> */}
       </form>
     </FormWrapper>
   );

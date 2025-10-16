@@ -37,6 +37,9 @@ export const tenantRegisterSchema = z
     confirmPassword: z.string({
       required_error: "Confirmação de senha é obrigatória",
     }),
+    termsAccepted: z.boolean().refine((val) => val === true, {
+      message: "Você deve aceitar os termos para continuar.",
+    }),
   })
   .refine((data) => data.password === data.confirmPassword, {
     message: "As senhas não coincidem",
@@ -85,6 +88,9 @@ export const landlordRegisterSchema = z
         message: "Tipo de empresa inválido",
       })
       .optional(),
+    termsAccepted: z.boolean().refine((val) => val === true, {
+      message: "Você deve aceitar os termos para continuar.",
+    }),
   })
   .refine(
     (data) => {
