@@ -17,10 +17,12 @@ export interface CreateContractData {
   tenantName?: string;
   tenantPassword?: string;
 }
+export interface UpdateContractHtmlData {
+  contractHtml: string;
+}
 
 export interface ResendNotificationData {
   signerId: string;
-  // method: "email" | "whatsapp";
 }
 
 export const ContractService = {
@@ -32,7 +34,31 @@ export const ContractService = {
       throw error;
     }
   },
+  async updateContractHtml(
+    id: string,
+    data: UpdateContractHtmlData
+  ): Promise<ApiResponse<{ message: string }>> {
+    try {
+      const response = await api.patch(
+        API_ROUTES.CONTRACTS.UPDATE_HTML({ id }),
+        data
+      );
+      return response.data;
+    } catch (error) {
+      throw new Error(extractAxiosError(error));
+    }
+  },
 
+  async tenantAcceptsContract(
+    id: string
+  ): Promise<ApiResponse<{ message: string }>> {
+    try {
+      const response = await api.patch(API_ROUTES.CONTRACTS.ACCEPT({ id }));
+      return response.data;
+    } catch (error) {
+      throw new Error(extractAxiosError(error));
+    }
+  },
   async listAll(params?: {
     page?: number;
     limit?: number;

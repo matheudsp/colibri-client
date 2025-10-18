@@ -1,10 +1,18 @@
 import type { PaymentResponse } from "./payment";
-import type { Pdf } from "./pdf";
 import { PropertyProps as Property } from "./property";
+
+export interface SignatureRequest {
+  id: string;
+  clicksignSignerId: string;
+  status: string;
+  signerId: string;
+}
 
 export interface Contract {
   id: string;
   status:
+    | "EM_ELABORACAO"
+    | "AGUARDANDO_ACEITE_INQUILINO"
     | "PENDENTE_DOCUMENTACAO"
     | "EM_ANALISE"
     | "AGUARDANDO_ASSINATURAS"
@@ -25,6 +33,8 @@ export interface Contract {
   propertyId: string;
   landlordId: string;
   tenantId: string;
+  contractHtml: string | null;
+  clicksignEnvelopeId: string | null;
   property: Property;
   landlord: {
     id: string;
@@ -48,5 +58,5 @@ export interface ContractWithDocuments extends Contract {
     status: string;
     type: string;
   }[];
-  GeneratedPdf: Pdf[];
+  signatureRequests: SignatureRequest[];
 }

@@ -12,6 +12,8 @@ import {
   Shredder,
   ExternalLink,
   HandCoins,
+  FileEdit,
+  Check,
 } from "lucide-react";
 import { toast } from "sonner";
 import { IoDocumentsOutline } from "react-icons/io5";
@@ -40,14 +42,17 @@ import { ContractPaymentList } from "@/components/lists/ContractPaymentList";
 import Link from "next/link";
 import { PaymentService } from "@/services/domains/paymentService";
 import { RegisterCaucaoModal } from "@/components/modals/contractModals/RegisterCaucaoModal";
+import { CustomCheckbox } from "@/components/forms/CustomCheckbox";
 
 export default function ContractManagementPage() {
   const [contract, setContract] = useState<ContractWithDocuments | null>(null);
   const [loading, setLoading] = useState(true);
+  const [isAccepting, setIsAccepting] = useState(false);
+  const [hasAgreed, setHasAgreed] = useState(false);
   const [showCancelModal, setShowCancelModal] = useState(false);
   const [isActionLoading, setIsActionLoading] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
-  const [isSigningLoading, setIsSigningLoading] = useState(false);
+
   const [showResendModal, setShowResendModal] = useState(false);
   const [showRegisterCaucaoModal, setShowRegisterCaucaoModal] = useState(false);
 
@@ -56,6 +61,24 @@ export default function ContractManagementPage() {
   const contractId = params.contractId as string;
   const { role, sub } = useCurrentUser();
   const [showActivateModal, setShowActivateModal] = useState(false);
+  const handleTenantAcceptsContract = async () => {
+    if (!contract) return;
+    setIsAccepting(true);
+    try {
+      await ContractService.tenantAcceptsContract(contract.id);
+      toast.success("Contrato aceito com sucesso!", {
+        description: "Agora você pode prosseguir com o envio dos documentos.",
+      });
+      await fetchContract();
+    } catch (_error) {
+      const errorMessage = extractAxiosError(_error);
+      toast.error("Não foi possível aceitar o contrato", {
+        description: errorMessage,
+      });
+    } finally {
+      setIsAccepting(false);
+    }
+  };
 
   const fetchContract = useCallback(async () => {
     if (!contractId) return;
@@ -136,7 +159,7 @@ export default function ContractManagementPage() {
   };
   const handleRequestSignature = async () => {
     if (!contract) return;
-    setIsSigningLoading(true);
+    setIsActionLoading(true);
     try {
       await ContractService.requestSignature(contract.id);
       toast.success("Solicitação de assinatura enviada!", {
@@ -151,7 +174,7 @@ export default function ContractManagementPage() {
         description: errorMessage,
       });
     } finally {
-      setIsSigningLoading(false);
+      setIsActionLoading(false);
     }
   };
 
@@ -255,6 +278,139 @@ export default function ContractManagementPage() {
 
   const ActionCard = () => {
     switch (contract.status) {
+      case "EM_ELABORACAO":
+        if (role === Roles.LOCADOR) {
+          return (
+            <div className="bg-gray-50 border-gray-200 border p-4 rounded-xl text-center">
+              <FileEdit className="mx-auto text-gray-500" size={32} />
+              <h3 className="font-bold text-lg mt-2">Elaboração do Contrato</h3>
+              <p className="text-sm text-gray-600 mt-1">
+                O contrato foi criado. O próximo passo é editar o conteúdo e
+                enviá-lo para o inquilino revisar e aceitar.
+              </p>
+              <CustomButton
+                onClick={() =>
+                  router.push(`/contratos/${contract.id}/editar-contrato`)
+                }
+                className="mt-4 w-full"
+              >
+                Ir para o Editor de Contrato
+              </CustomButton>
+            </div>
+          );
+        }
+        return (
+          <div className="bg-gray-50 border-gray-200 border p-4 rounded-xl text-center">
+            <Loader2 className="mx-auto text-gray-500 animate-spin" size={32} />
+            <h3 className="font-bold text-lg mt-2">Contrato em Elaboração</h3>
+            <p className="text-sm text-gray-600 mt-1">
+              O locador está preparando os termos do contrato. Você será
+              notificado quando estiver pronto para sua revisão.
+            </p>
+          </div>
+        );
+
+      case "AGUARDANDO_ACEITE_INQUILINO":
+        if (role === Roles.LOCATARIO) {
+          return (
+            <div className="bg-cyan-50 border-cyan-200 border p-4 rounded-xl">
+              <div className="text-center">
+                <FileText className="mx-auto text-cyan-600" size={32} />
+                <h3 className="font-bold text-lg mt-2">
+                  Revise e Aceite o Contrato
+                </h3>
+                <p className="text-sm text-gray-600 mt-1 mb-4">
+                  Leia atentamente os termos do contrato abaixo. Se estiver de
+                  acordo, marque a caixa e clique em &quot;Aceitar&quot; para
+                  prosseguir.
+                </p>
+              </div>
+              <div
+                className="prose prose-sm max-w-none p-4 border rounded-lg bg-white h-64 overflow-y-auto"
+                dangerouslySetInnerHTML={{
+                  __html: contract.contractHtml || "",
+                }}
+              />
+              <div className="flex items-center space-x-2 mt-4">
+                <CustomCheckbox
+                  id="terms"
+                  checked={hasAgreed}
+                  onChange={(checked) => setHasAgreed(Boolean(checked))}
+                  label={"Eu aceito os termos"}
+                />
+                <label
+                  htmlFor="terms"
+                  className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                >
+                  Li e concordo com todos os termos do contrato.
+                </label>
+              </div>
+              <CustomButton
+                onClick={handleTenantAcceptsContract}
+                disabled={!hasAgreed || isAccepting}
+                className="mt-4 w-full"
+              >
+                {isAccepting ? (
+                  <Loader2 className="animate-spin" />
+                ) : (
+                  <>
+                    <Check className="mr-2" /> Aceitar Contrato
+                  </>
+                )}
+              </CustomButton>
+            </div>
+          );
+        }
+        return (
+          <div className="bg-cyan-50 border-cyan-200 border p-4 rounded-xl text-center">
+            <Loader2 className="mx-auto text-cyan-500 animate-spin" size={32} />
+            <h3 className="font-bold text-lg mt-2">Aguardando Inquilino</h3>
+            <p className="text-sm text-gray-600 mt-1">
+              O contrato foi enviado para o inquilino. Aguardando a revisão e o
+              aceite dos termos para prosseguir.
+            </p>
+          </div>
+        );
+
+      case "PENDENTE_DOCUMENTACAO":
+        if (role === Roles.LOCATARIO) {
+          return (
+            <div className="bg-orange-50 border-orange-200 border p-4 rounded-xl text-center">
+              <IoDocumentsOutline
+                className="mx-auto text-orange-500"
+                size={32}
+              />
+              <h3 className="font-bold text-lg mt-2">Envie Seus Documentos</h3>
+              <p className="text-sm text-gray-600 mt-1">
+                Obrigado por aceitar os termos! Agora, envie seus documentos
+                para a análise do locador.
+              </p>
+              <CustomButton
+                onClick={() =>
+                  router.push(`/contratos/${contract.id}/documentos`)
+                }
+                className="mt-4 w-full"
+              >
+                Enviar Documentos
+              </CustomButton>
+            </div>
+          );
+        }
+        return (
+          <div className="bg-orange-50 border-orange-200 border p-4 rounded-xl text-center">
+            <Loader2
+              className="mx-auto text-orange-500 animate-spin"
+              size={32}
+            />
+            <h3 className="font-bold text-lg mt-2">
+              Aguardando Documentos do Inquilino
+            </h3>
+            <p className="text-sm text-gray-600 mt-1">
+              O inquilino aceitou os termos e agora está na etapa de envio de
+              documentos para sua análise.
+            </p>
+          </div>
+        );
       case "EM_ANALISE":
         if (role === "LOCADOR") {
           return (
@@ -322,9 +478,9 @@ export default function ContractManagementPage() {
         }
         return null;
       case "AGUARDANDO_ASSINATURAS":
-        const signatureProcessStarted = contract.GeneratedPdf?.some(
-          (pdf) => pdf.signatureRequests.length > 0
-        );
+        // LÓGICA CORRIGIDA: Agora verificamos diretamente o array 'signatureRequests'
+        const signatureProcessStarted =
+          contract.signatureRequests && contract.signatureRequests.length > 0;
 
         if (role === Roles.LOCADOR || role === Roles.ADMIN) {
           if (signatureProcessStarted) {
@@ -356,12 +512,12 @@ export default function ContractManagementPage() {
                 </p>
                 <CustomButton
                   onClick={handleRequestSignature}
-                  disabled={isSigningLoading}
+                  disabled={isActionLoading}
                   color="bg-indigo-600"
                   textColor="text-white"
                   className="w-full mt-4"
                 >
-                  {isSigningLoading ? (
+                  {isActionLoading ? (
                     <Loader2 className="animate-spin" />
                   ) : (
                     "Iniciar Assinatura Digital"
@@ -559,7 +715,9 @@ export default function ContractManagementPage() {
           <main className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             <div className="lg:col-span-2 space-y-6 ">
               <ContractFlowDetails contract={contract} />
+
               <ActionCard />
+
               <ContractDetails contract={contract} />
               {contract.paymentsOrders &&
                 contract.paymentsOrders.length > 0 && (
@@ -582,24 +740,22 @@ export default function ContractManagementPage() {
 
               <div className="bg-background p-4 rounded-xl  border border-border space-y-3">
                 <h3 className="font-bold text-lg">Outras Ações</h3>
-                {(contract.status === "AGUARDANDO_ASSINATURAS" ||
-                  contract.status === "ATIVO") && (
-                  <CustomButton
-                    onClick={handleViewContract}
-                    disabled={isActionLoading}
-                    color="bg-green-100"
-                    textColor="text-green-900"
-                    className="w-full"
-                  >
-                    {isActionLoading ? (
-                      <Loader2 className="animate-spin mr-2" />
-                    ) : (
-                      <>
-                        <FaRegEye className="mr-2" /> Visualizar Contrato
-                      </>
-                    )}
-                  </CustomButton>
-                )}
+
+                <CustomButton
+                  onClick={handleViewContract}
+                  disabled={isActionLoading}
+                  color="bg-green-100"
+                  textColor="text-green-900"
+                  className="w-full"
+                >
+                  {isActionLoading ? (
+                    <Loader2 className="animate-spin mr-2" />
+                  ) : (
+                    <>
+                      <FaRegEye className="mr-2" /> Visualizar Contrato
+                    </>
+                  )}
+                </CustomButton>
 
                 {(contract.status === "PENDENTE_DOCUMENTACAO" ||
                   contract.status === "EM_ANALISE" ||

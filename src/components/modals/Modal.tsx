@@ -10,7 +10,7 @@ interface ModalProps {
   title: string;
   children: ReactNode;
   scrollable?: boolean; // Prop para ativar o layout de rolagem
-  maxWidth?: "max-w-md" | "max-w-lg" | "max-w-xl" | "max-w-2xl"; // Prop para largura
+  maxWidth?: "max-w-md" | "max-w-lg" | "max-w-xl" | "max-w-2xl" | "max-w-7xl";
 }
 
 const backdropVariants = {

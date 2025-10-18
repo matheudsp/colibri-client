@@ -57,15 +57,14 @@ const API_ROUTES = {
   },
 
   PDFS: {
-    BASE: "/pdfs",
-    GENERATE: "/pdfs/generate",
-
-    SIGN: ({ id }: Params) => `/pdfs/${id}/sign`,
-    BY_CONTRACT: ({ contractId }: Params) => `/pdfs/contract/${contractId}`,
-    BY_ID: ({ id }: Params) => `/pdfs/${id}`,
-    SIGNED_URL: ({ id }: Params) => `/pdfs/${id}/signed-url`,
-    DOWNLOAD: ({ id }: Params) => `/pdfs/${id}/download`,
-    DELETE: ({ id }: Params) => `/pdfs/${id}`,
+    GENERATE: "/pdfs/accessory-pdfs/generate",
+    GET_CONTRACT_TEMPLATE: "/pdfs/templates/contract-data",
+    BY_CONTRACT: ({ contractId }: Params) =>
+      `/pdfs/accessory-pdfs/contract/${contractId}`,
+    BY_ID: ({ id }: Params) => `/pdfs/accessory-pdfs/${id}`,
+    SIGNED_URL: ({ id }: Params) => `/pdfs/accessory-pdfs/${id}/signed-url`,
+    DOWNLOAD: ({ id }: Params) => `/pdfs/accessory-pdfs/${id}/download`,
+    DELETE: ({ id }: Params) => `/pdfs/accessory-pdfs/${id}`,
   },
   PROPERTIES: {
     BASE: "/properties",
@@ -110,6 +109,8 @@ const API_ROUTES = {
   CONTRACTS: {
     BASE: "/contracts",
     CREATE: "/contracts",
+    UPDATE_HTML: ({ id }: Params) => `/contracts/${id}/contract-html`,
+    ACCEPT: ({ id }: Params) => `/contracts/${id}/accept`,
     REQUEST_SIGNATURE: ({ id }: Params) => `/contracts/${id}/request-signature`,
     VIEW_PDF_URL: ({ id }: Params) => `/contracts/${id}/pdf-url`,
     BY_ID: ({ id }: Params) => `/contracts/${id}`,

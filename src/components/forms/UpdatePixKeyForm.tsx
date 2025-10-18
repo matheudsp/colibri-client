@@ -4,7 +4,7 @@ import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
-import { Loader2, KeyRound } from "lucide-react";
+import { KeyRound } from "lucide-react";
 
 import {
   pixKeySchema,

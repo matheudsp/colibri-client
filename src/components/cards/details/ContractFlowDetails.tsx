@@ -1,55 +1,60 @@
 import {
   FileClock,
   FileSearch,
-  FileText,
   HandCoins,
   PenSquare,
   ShieldCheck,
+  FileEdit,
+  UserCheck,
 } from "lucide-react";
 import { FaCheck } from "react-icons/fa";
 import { ContractWithDocuments } from "@/interfaces/contract";
-const statusToStep: { [key: string]: number } = {
-  PENDENTE_DOCUMENTACAO: 2,
-  EM_ANALISE: 3,
-  AGUARDANDO_ASSINATURAS: 4,
-  AGUARDANDO_GARANTIA: 5,
-  ATIVO: 6,
-  FINALIZADO: 7,
-  CANCELADO: -1,
-};
-const baseSteps = [
+
+const STEPS_CONFIG = [
   {
-    name: "Criação",
-    icon: FileText,
-    description: "O contrato foi iniciado pelo locador.",
+    name: "Elaboração",
+    icon: FileEdit,
+    description: "O locador prepara os termos do contrato.",
+    statuses: ["EM_ELABORACAO"],
+  },
+  {
+    name: "Aceite",
+    icon: UserCheck,
+    description: "Aguardando o inquilino revisar e aceitar os termos.",
+    statuses: ["AGUARDANDO_ACEITE_INQUILINO"],
   },
   {
     name: "Documentos",
     icon: FileClock,
     description: "Aguardando o envio de documentos pelo locatário.",
+    statuses: ["PENDENTE_DOCUMENTACAO"],
   },
   {
     name: "Análise",
     icon: FileSearch,
     description: "Documentos em análise pelo locador.",
+    statuses: ["EM_ANALISE"],
   },
   {
     name: "Assinatura",
     icon: PenSquare,
     description: "Aguardando as assinaturas digitais.",
+    statuses: ["AGUARDANDO_ASSINATURAS"],
+  },
+  {
+    name: "Garantia",
+    icon: HandCoins,
+    description: "Aguardando o pagamento do depósito caução.",
+    statuses: ["AGUARDANDO_GARANTIA"],
+    isConditional: true,
   },
   {
     name: "Ativo",
     icon: ShieldCheck,
     description: "O contrato está ativo e os pagamentos serão gerados.",
+    statuses: ["ATIVO", "FINALIZADO"],
   },
 ];
-
-const caucaoStep = {
-  name: "Garantia",
-  icon: HandCoins,
-  description: "Aguardando o pagamento do depósito caução.",
-};
 
 export function ContractFlowDetails({
   contract,
@@ -57,25 +62,33 @@ export function ContractFlowDetails({
   contract: ContractWithDocuments;
 }) {
   const { status, guaranteeType } = contract;
-  const currentStep = statusToStep[status as keyof typeof statusToStep] || 0;
 
-  const steps = [...baseSteps];
-  if (guaranteeType === "DEPOSITO_CAUCAO") {
-    steps.splice(4, 0, caucaoStep);
-  } else {
-    statusToStep["ATIVO"] = 5;
-    statusToStep["FINALIZADO"] = 6;
+  // Filtra as etapas a serem exibidas com base na necessidade da garantia
+  const steps = STEPS_CONFIG.filter(
+    (step) =>
+      !step.isConditional ||
+      (step.isConditional && guaranteeType === "DEPOSITO_CAUCAO")
+  );
+
+  // Encontra o índice da etapa atual com base no status do contrato
+  let currentStepIndex = steps.findIndex((step) =>
+    step.statuses.includes(status)
+  );
+
+  // Casos especiais para o final do fluxo
+  if (status === "FINALIZADO") {
+    currentStepIndex = steps.length; // Marca todas as etapas como concluídas
+  } else if (status === "CANCELADO") {
+    currentStepIndex = -1; // Nenhuma etapa é marcada como atual ou concluída
   }
 
   return (
     <div className="bg-background p-4 sm:p-6 rounded-xl shadow-xs border border-border">
       <h3 className="font-bold text-lg mb-6 text-center">Etapas do Contrato</h3>
-
       <div className="flex flex-col md:flex-row justify-center items-stretch md:items-start space-y-4 md:space-y-0 md:space-x-2">
         {steps.map((step, index) => {
-          const stepNumber = index + 1;
-          const isCompleted = currentStep > stepNumber;
-          const isCurrent = currentStep === stepNumber;
+          const isCompleted = currentStepIndex > index;
+          const isCurrent = currentStepIndex === index;
 
           return (
             <div

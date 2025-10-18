@@ -29,6 +29,7 @@ export interface PropertyResponse {
   landlordId: string;
   landlord: {
     name: string;
+    cpfCnpj?: string;
     email: string;
     phone?: string;
   };

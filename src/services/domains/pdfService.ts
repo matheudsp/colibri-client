@@ -2,8 +2,29 @@ import { api, extractAxiosError } from "../api";
 import API_ROUTES from "../api/routes";
 import { ApiResponse } from "@/types/api";
 import type { Pdf } from "@/interfaces/pdf";
+export interface ContractTemplateResponse {
+  templateHtml: string;
+  templateData: Record<string, any>;
+}
 
 export const PdfService = {
+  /**
+   * Busca o template de contrato e os dados dinâmicos com base no ID do contrato.
+   * @param contractId O ID do contrato.
+   */
+  async getContractTemplate(
+    contractId: string
+  ): Promise<ApiResponse<ContractTemplateResponse>> {
+    try {
+      const response = await api.get(API_ROUTES.PDFS.GET_CONTRACT_TEMPLATE, {
+        params: { contractId },
+      });
+      return response.data;
+    } catch (error) {
+      throw new Error(extractAxiosError(error));
+    }
+  },
+
   /**
    * Solicita a geração de um PDF para um contrato específico.
    * @param contractId - O ID do contrato.
