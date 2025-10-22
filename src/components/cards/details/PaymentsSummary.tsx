@@ -10,28 +10,29 @@ interface PaymentsSummaryProps {
 
 export function PaymentsSummary({ data }: PaymentsSummaryProps) {
   return (
-    <div className="rounded-lg border border-border p-6 ">
-      <h3 className="text-lg font-medium leading-6 text-gray-900">
-        Resumo de Pagamentos{" "}
-        <strong className="text-base font-extralight text-zinc-700/90">
+    <div className="rounded-lg border border-border p-6 bg-card">
+      <h3 className="text-lg font-medium leading-6 text-foreground">
+        Resumo de Pagamentos
+        <strong className="text-base font-extralight text-muted-foreground">
           ({data.period})
         </strong>
       </h3>
       <dl className="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-2">
         <div className="overflow-hidden rounded-lg border border-primary bg-primary-light px-4 py-5 sm:p-6">
-          <dt className="truncate text-sm font-medium text-shadow-primary-hover">
+          <dt className="truncate text-sm font-medium text-foreground">
             Recebido
           </dt>
-          <dd className="mt-1 text-3xl font-semibold tracking-tight text-shadow-primary-hover">
+
+          <dd className="mt-1 text-3xl font-semibold tracking-tight text-foreground">
             {formatCurrency(data.received)}
           </dd>
         </div>
 
-        <div className="overflow-hidden rounded-lg border border-sky-400 bg-sky-200 px-4 py-5 sm:p-6">
-          <dt className="truncate text-sm font-medium text-sky-950">
+        <div className="overflow-hidden rounded-lg border border-accent bg-accent/10 px-4 py-5 sm:p-6">
+          <dt className="truncate text-sm font-medium text-accent">
             A receber
           </dt>
-          <dd className="mt-1 text-3xl font-semibold tracking-tight text-sky-950">
+          <dd className="mt-1 text-3xl font-semibold tracking-tight text-accent">
             {formatCurrency(data.pending)}
           </dd>
         </div>

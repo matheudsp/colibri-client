@@ -92,7 +92,7 @@ export function ContractCard({ contract }: { contract: Contract }) {
       onClick={handleCardClick}
       onKeyDown={(e) => e.key === "Enter" && handleCardClick()}
       aria-label={`Ver detalhes do contrato do imóvel ${contract.property.title}`}
-      className="bg-background rounded-2xl border border-border cursor-pointer transition-all duration-300   group focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
+      className="bg-card rounded-2xl border border-border cursor-pointer transition-all duration-300   group focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
     >
       <div className="p-4">
         <header className="flex flex-col sm:flex-row items-start justify-between gap-4">

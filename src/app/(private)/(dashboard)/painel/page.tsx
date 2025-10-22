@@ -109,11 +109,11 @@ export default function Painel() {
           ) : (
             <>
               {rentIncome && (
-                <div className="rounded-lg border border-border p-6 ">
+                <div className="rounded-lg border bg-card border-border p-6 ">
                   <div className="flex gap-2 items-center">
                     <h3 className="text-lg font-medium  leading-6 gap-1">
                       Receita de Aluguel{" "}
-                      <strong className="text-base font-extralight text-zinc-700/90">
+                      <strong className="text-base font-extralight text-muted-foreground">
                         ({rentIncome.year})
                       </strong>
                     </h3>
@@ -131,10 +131,10 @@ export default function Painel() {
               )}
 
               {tenantsStatus && (
-                <div className="rounded-lg border border-border p-6">
+                <div className="rounded-lg border bg-card border-border p-6">
                   <h3 className="text-lg font-medium leading-6 ">
-                    Resumo dos seus locatários{" "}
-                    <em className="text-xs font-light text-gray-600/80">
+                    Resumo dos seus locatários
+                    <em className="text-xs font-light text-muted-foreground">
                       (Total: {tenantsStatus.totalTenants})
                     </em>
                   </h3>
@@ -149,7 +149,7 @@ export default function Painel() {
           <ChartSkeleton />
         ) : (
           propertiesOccupancy && (
-            <div className="rounded-lg border border-border p-6">
+            <div className="rounded-lg border bg-card border-border p-6">
               <h3 className="text-lg font-medium leading-6 ">
                 Ocupação de Imóveis
               </h3>

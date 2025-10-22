@@ -40,10 +40,10 @@ export const PaymentService = {
     filters?: PaymentFilters
   ): Promise<ApiResponse<PaymentResponse[]>> {
     try {
-      // Passa os filtros como query params para a API
       const response = await api.get(API_ROUTES.PAYMENTS.USER_PAYMENTS, {
         params: filters,
       });
+
       return response.data;
     } catch (error) {
       throw new Error(extractAxiosError(error));

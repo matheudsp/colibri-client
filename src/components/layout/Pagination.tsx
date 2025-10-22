@@ -40,67 +40,69 @@ export function Pagination({
   );
 
   return (
-    <div className="flex flex-col  items-center justify-center gap-4 mt-6">
+    <div className="flex flex-col items-center justify-center gap-4 mt-6">
       {typeof total === "number" && (
-        <div className="text-sm text-gray-700">
-          <span className="font-semibold">{total}</span> itens encontrados.
+        <div className="text-sm text-foreground">
+          <span className="font-semibold">{total}</span> itens encontrados.{" "}
         </div>
       )}
       <div className="flex items-center justify-center gap-2">
         <button
           title="Página anterior"
-          className={`flex items-center justify-center p-2 h-9 w-9 rounded-md border border-border ${
+          className={`flex items-center justify-center p-2 h-9 w-9 rounded-md border border-border text-foreground ${
             currentPage === 1
               ? "opacity-50 cursor-not-allowed"
-              : "hover:bg-gray-100"
+              : "hover:bg-muted"
           }`}
           disabled={currentPage === 1}
           onClick={() => handlePageChange(currentPage - 1)}
         >
           <ChevronLeft className="h-4 w-4" />
         </button>
-
         {startPage > 1 && (
           <>
             <button
               title={`Ir para página 1`}
-              className={`flex items-center justify-center p-2 h-9 w-9 rounded-md border border-border ${
+              className={`flex items-center justify-center p-2 h-9 w-9 rounded-md border border-border text-foreground ${
                 currentPage === 1
-                  ? "bg-primary text-white"
-                  : "hover:bg-gray-100"
+                  ? "bg-primary text-primary-foreground"
+                  : "hover:bg-muted"
               }`}
               onClick={() => handlePageChange(1)}
             >
               1
             </button>
-            {startPage > 2 && <span className="px-2">...</span>}
+            {startPage > 2 && (
+              <span className="px-2 text-muted-foreground">...</span>
+            )}
           </>
         )}
-
         {pages.map((page) => (
           <button
             key={page}
             title={`Ir para página ${page}`}
-            className={`flex items-center justify-center p-2 h-9 w-9 rounded-md border border-border ${
+            className={`flex items-center justify-center p-2 h-9 w-9 rounded-md border border-border text-foreground ${
               currentPage === page
-                ? "bg-primary text-white"
-                : "hover:bg-gray-100"
+                ? "bg-primary text-primary-foreground"
+                : "hover:bg-muted"
             }`}
             onClick={() => handlePageChange(page)}
           >
             {page}
           </button>
         ))}
-
         {endPage < totalPages && (
           <>
-            {endPage < totalPages - 1 && <span className="px-2">...</span>}
+            {endPage < totalPages - 1 && (
+              <span className="px-2 text-muted-foreground">...</span>
+            )}
+
             <button
               title={`Ir para página ${totalPages} (última página)`}
-              className={`flex items-center justify-center p-2 h-9 w-9 rounded-md border  border-border ${
+              className={`flex items-center justify-center p-2 h-9 w-9 rounded-md border border-border text-foreground ${
                 currentPage === totalPages
-                  ? "bg-primary text-white"
-                  : "hover:bg-gray-100"
+                  ? "bg-primary text-primary-foreground"
+                  : "hover:bg-muted"
               }`}
               onClick={() => handlePageChange(totalPages)}
             >
@@ -108,13 +110,12 @@ export function Pagination({
             </button>
           </>
         )}
-
         <button
           title="Próxima página"
-          className={`flex items-center justify-center p-2 h-9 w-9 rounded-md border border-border ${
+          className={`flex items-center justify-center p-2 h-9 w-9 rounded-md border border-border text-foreground ${
             currentPage === totalPages
               ? "opacity-50 cursor-not-allowed"
-              : "hover:bg-gray-100"
+              : "hover:bg-muted"
           }`}
           disabled={currentPage === totalPages}
           onClick={() => handlePageChange(currentPage + 1)}

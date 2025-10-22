@@ -42,7 +42,7 @@ export const NotificationList = ({
 
   return (
     <div
-      className={`w-full bg-background  overflow-hidden md:rounded-lg md:border md:border-border md:shadow-lg`}
+      className={`w-full bg-card  overflow-hidden md:rounded-lg md:border md:border-border md:shadow-lg`}
     >
       <div
         className={`flex items-center  p-3 border-b border-border gap-14 ${

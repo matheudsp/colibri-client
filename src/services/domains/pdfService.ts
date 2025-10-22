@@ -2,9 +2,11 @@ import { api, extractAxiosError } from "../api";
 import API_ROUTES from "../api/routes";
 import { ApiResponse } from "@/types/api";
 import type { Pdf } from "@/interfaces/pdf";
+import type { NestedVariableData } from "@/types/editor";
+
 export interface ContractTemplateResponse {
   templateHtml: string;
-  templateData: Record<string, any>;
+  templateData: NestedVariableData;
 }
 
 export const PdfService = {

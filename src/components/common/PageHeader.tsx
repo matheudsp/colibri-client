@@ -4,7 +4,6 @@ import React from "react";
 import Link from "next/link";
 import clsx from "clsx";
 import { motion } from "framer-motion";
-import { LayoutDashboard } from "lucide-react";
 
 export type IconComponent = React.ComponentType<React.SVGProps<SVGSVGElement>>;
 
@@ -28,7 +27,7 @@ interface PageHeaderProps {
 export default function PageHeader({
   title = "",
   subtitle = "",
-  icon: Icon = LayoutDashboard,
+  icon: Icon,
   className,
   actions,
   preTitle,
@@ -77,19 +76,21 @@ export default function PageHeader({
           </Link>
         ) : null}
 
-        <motion.div
-          initial={{ scale: 0.95, opacity: 0.9 }}
-          animate={{ scale: 1, opacity: 1 }}
-          transition={{ type: "spring", stiffness: 220, damping: 18 }}
-          className={clsx(
-            "flex items-center justify-center rounded-xl",
-            "w-14 h-14",
-            "outline-2 outline-primary-light outline-offset-2",
-            "bg-primary/10 text-primary"
-          )}
-        >
-          <Icon className={clsx("w-6 h-6")} />
-        </motion.div>
+        {Icon && (
+          <motion.div
+            initial={{ scale: 0.95, opacity: 0.9 }}
+            animate={{ scale: 1, opacity: 1 }}
+            transition={{ type: "spring", stiffness: 220, damping: 18 }}
+            className={clsx(
+              "flex items-center justify-center rounded-xl",
+              "w-14 h-14",
+              "outline-2 outline-primary-hover/60 outline-offset-2",
+              "bg-primary/50 text-primary-hover"
+            )}
+          >
+            <Icon className={clsx("w-6 h-6")} />
+          </motion.div>
+        )}
       </div>
 
       {/* Title and subtitle */}
@@ -102,14 +103,14 @@ export default function PageHeader({
           <div>
             <h1
               className={clsx(
-                "font-bold text-black leading-tight",
+                "font-bold text-foreground leading-tight",
                 "text-3xl sm:text-4xl"
               )}
             >
               {title}
             </h1>
             {subtitle ? (
-              <p className="text-sm text-gray-500 mt-1 max-w-prose">
+              <p className="text-sm text-muted-foreground mt-1 max-w-prose">
                 {subtitle}
               </p>
             ) : null}

@@ -5,13 +5,18 @@ export const contractStatus = [
     class: "bg-gray-100 text-gray-800",
   },
   {
+    value: "SOLICITANDO_ALTERACAO",
+    label: "Alteração Contratual Solicitada",
+    class: "bg-purple-100 text-purple-800",
+  },
+  {
     value: "AGUARDANDO_ACEITE_INQUILINO",
     label: "Aguardando Aceite do Inquilino",
     class: "bg-cyan-100 text-cyan-800",
   },
   {
     value: "PENDENTE_DOCUMENTACAO",
-    label: "Aguardando Documentos",
+    label: "Aguardando Envio de Documentos",
     class: "bg-orange-100 text-orange-800",
   },
   {

@@ -17,7 +17,7 @@ export default function DashboardLayout({
 
   return (
     <SearchProvider value={{ searchValue, handleSearchChange }}>
-      <div className="min-h-svh w-full flex items-center justify-center flex-col md:flex-row overflow-x-hidden">
+      <div className="min-h-svh bg-background w-full flex items-center justify-center flex-col md:flex-row overflow-x-hidden">
         {children}
       </div>
     </SearchProvider>

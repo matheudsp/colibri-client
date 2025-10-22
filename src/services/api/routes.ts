@@ -110,7 +110,10 @@ const API_ROUTES = {
     BASE: "/contracts",
     CREATE: "/contracts",
     UPDATE_HTML: ({ id }: Params) => `/contracts/${id}/contract-html`,
+    REVIEW: ({ id }: Params) => `/contracts/${id}/review`,
     ACCEPT: ({ id }: Params) => `/contracts/${id}/accept`,
+    REQUEST_ALTERATION: ({ id }: Params) =>
+      `/contracts/${id}/request-alteration`,
     REQUEST_SIGNATURE: ({ id }: Params) => `/contracts/${id}/request-signature`,
     VIEW_PDF_URL: ({ id }: Params) => `/contracts/${id}/pdf-url`,
     BY_ID: ({ id }: Params) => `/contracts/${id}`,

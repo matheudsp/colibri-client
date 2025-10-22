@@ -48,17 +48,45 @@ export const ContractService = {
       throw new Error(extractAxiosError(error));
     }
   },
-
-  async tenantAcceptsContract(
+  /**
+   * Busca o HTML renderizado do contrato para revisão e aceite do inquilino.
+   */
+  async getContractForReview(
     id: string
-  ): Promise<ApiResponse<{ message: string }>> {
+  ): Promise<ApiResponse<{ renderedHtml: string }>> {
     try {
-      const response = await api.patch(API_ROUTES.CONTRACTS.ACCEPT({ id }));
+      const response = await api.get(API_ROUTES.CONTRACTS.REVIEW({ id }));
       return response.data;
     } catch (error) {
       throw new Error(extractAxiosError(error));
     }
   },
+
+  async tenantAcceptsContract(
+    id: string
+  ): Promise<ApiResponse<{ message: string }>> {
+    try {
+      const response = await api.patch(API_ROUTES.CONTRACTS.ACCEPT({ id }), {});
+      return response.data;
+    } catch (error) {
+      throw new Error(extractAxiosError(error));
+    }
+  },
+  async requestAlteration(
+    id: string,
+    data: { reason: string }
+  ): Promise<ApiResponse<Contract>> {
+    try {
+      const response = await api.patch(
+        API_ROUTES.CONTRACTS.REQUEST_ALTERATION({ id }),
+        data
+      );
+      return response.data;
+    } catch (error) {
+      throw new Error(extractAxiosError(error));
+    }
+  },
+
   async listAll(params?: {
     page?: number;
     limit?: number;

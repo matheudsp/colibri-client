@@ -1,47 +1,24 @@
-@import 'tailwindcss';
-@source "safelist.txt";
-@config '../../tailwind.config.ts';
+@import "tailwindcss";
+@import "tailwindcss-animated";
 
+@custom-variant dark (&:is(.dark *));
+@source "safelist.txt";
+@config "../../tailwind.config.ts";
+
+/* ===========================
+   Base reset & comportamento
+   =========================== */
 @layer base {
   *,
   ::after,
   ::before,
   ::backdrop,
   ::file-selector-button {
-    border-color: var(--color-gray-200, currentcolor);
+    border-color: var(--border, currentcolor);
   }
-}
 
-@layer utilities {
-  :root {
-    /* Base */
-    --background: #ffffff; /* fundo principal suave */
-    --background-alt: #ecede9; /* cartões, inputs, áreas elevadas */
-    --foreground: #2d2b2e; /* texto principal */
-    --foreground-muted: #666468; /* texto secundário */
-
-    /* Paleta principal */
-    --primary: #97c52a; /* verde principal (grama) */
-    --primary-hover: #7da623; /* verde escurecido para hover */
-    --primary-light: #c4e173; /* destaque e bordas verdes suaves */
-
-    /* Paleta secundária */
-    --secondary: #6b5c86; /* roxo sóbrio */
-    --secondary-hover: #5a4a73; /* hover do roxo */
-    --secondary-light: #9c8eb5; /* roxo suave para detalhes */
-
-    /* Acentos e feedback */
-    --accent: #7f2ac7; /* cor de destaque opcional */
-    --success: #4caf50;
-    --warning: #ffc107;
-    --error: #c62828;
-
-    /* Elementos */
-    --border: #d6d8d2;
-    --input-bg: #ffffff;
-    --input-border: #d6d8d2;
-    --card-bg: #ffffff;
-    --shadow: rgba(0, 0, 0, 0.05);
+  * {
+    @apply transition-colors duration-200;
   }
 
   body {
@@ -51,39 +28,173 @@
     background: var(--background);
     color: var(--foreground);
     overflow-x: hidden;
+    @apply bg-background text-foreground;
+  }
+  .ProseMirror {
+    height: 100%;
+  }
+  
+  .ProseMirror p {
+    @apply leading-relaxed; /* ou 'leading-loose' para um espaçamento ainda maior */
+  }
+
+  .ProseMirror ol > li {
+    @apply mb-6; /* Ajuste (mb-4, mb-6, etc.) conforme sua preferência */
   }
 }
 
-@layer base {
-  * {
-    @apply transition-colors duration-200;
-  }
-}
-
+/* ===========================
+   Scrollbar estilizado
+   =========================== */
 * {
   scrollbar-width: thin;
-  scrollbar-color: var(--secondary) transparent; /* Cor da barra e do fundo transparente */
+  scrollbar-color: var(--secondary) transparent;
 }
 
-/* Para Chrome, Edge, Safari e outros baseados em WebKit */
 *::-webkit-scrollbar {
-  width: 6px;  /* Largura da scrollbar vertical */
-  height: 6px; /* Altura da scrollbar horizontal (para as abas no mobile) */
+  width: 6px;
+  height: 6px;
 }
 
 *::-webkit-scrollbar-track {
-  background: transparent; /* O fundo da scrollbar fica invisível */
+  background: transparent;
 }
 
 *::-webkit-scrollbar-thumb {
-  background-color: #C1C1C1; /* Cor padrão da barra, um cinza bem sutil */
+  background-color: #c1c1c1;
   border-radius: 10px;
   transition: background-color 0.2s ease-in-out;
 }
 
-/* Efeito ao passar o mouse: a barra fica mais escura e visível */
 *:hover::-webkit-scrollbar-thumb {
-    background-color: var(--secondary); /* Usa a cor secundária do seu tema */
+  background-color: var(--secondary);
 }
 
+/* ===========================
+   Variáveis de tema (shadcn compatível)
+   =========================== */
+
+:root {
+  /* === Tema claro === */
+
+  /* Base */
+  --background: #eceff1;       
+  --foreground: #212529;       
+  --muted: #d4dce4e0;          
+  --muted-foreground: #6d7983;
+
+  /* Paleta principal */
+  --primary: #97c52a;
+  --primary-foreground: #ffffff;
+  --primary-hover: #7da623;
+  --primary-light: #c4e173;
+
+  /* Paleta secundária */
+  --secondary: #6b5c86;
+  --secondary-foreground: #ffffff;
+  --secondary-hover: #5a4a73;
+  --secondary-light: #9c8eb5;
+
+  /* Acentos e feedback */
+  --accent: #7f2ac7;
+  --accent-foreground: #ffffff;
+  --success: #4caf50;
+  --warning: #ffc107;
+  --error: #c62828;
+
+  /* Elementos */
+  --border: #d6d8d2;
+  --input: #ffffff;
+  --card: #ffffff;
+  --card-foreground: var(--foreground);
+  --ring: var(--primary);
+  --radius: 0.625rem;
+
+  /* Sidebar (compatível com tokens do shadcn >= 2.0) */
+  --sidebar: var(--card);
+  --sidebar-foreground: var(--foreground);
+  --sidebar-primary: var(--primary);
+  --sidebar-primary-foreground: var(--primary-foreground);
+  --sidebar-accent: var(--accent);
+  --sidebar-accent-foreground: var(--accent-foreground);
+  --sidebar-border: var(--border);
+  --sidebar-ring: var(--ring);
+}
+
+/* ===========================
+   Tema escuro
+   =========================== */
+.dark {
+  --background: #1d1c1e;
+  --foreground: #f3f3f3;
+  --muted: #2e2e31;
+  --muted-foreground: #d1d1d1;
+
+  --primary: #a9e23b;
+
+  --primary-foreground: #1a1a1a;
+  
+  --secondary: #9c8eb5;
+  --secondary-foreground: #1a1a1a;
+
+  --accent: #9f4fe0;
+  --accent-foreground: #ffffff;
+
+  --border: #3a3a3a;
+  --input: #2a2a2a;
+  --card: #2a2a2a;
+  --card-foreground: #ffffff;
+  --ring: var(--primary);
+
+  --sidebar: var(--card);
+  --sidebar-foreground: var(--foreground);
+  --sidebar-primary: var(--primary);
+  --sidebar-primary-foreground: var(--primary-foreground);
+  --sidebar-accent: var(--accent);
+  --sidebar-accent-foreground: var(--accent-foreground);
+  --sidebar-border: var(--border);
+  --sidebar-ring: var(--ring);
+}
+
+/* ===========================
+   Tokens utilitários (theme inline)
+   =========================== */
+@theme inline {
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--card);
+  --color-popover-foreground: var(--foreground);
+  --color-primary: var(--primary);
+  --color-primary-light: var(--primary-light);
+  --color-primary-hover: var(--primary-hover);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-light: var(--secondary-light);
+  --color-secondary-hover: var(--secondary-hover);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--error);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+}
 

@@ -79,15 +79,16 @@ export default function PropertyDetailsPage() {
 
   return (
     <>
-      <div className=" min-h-screen">
+      <div className=" min-h-screen w-full ">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-10">
           <nav className="mt-24 pb-6">
             <CustomButton
               onClick={() => router.back()}
               ghost
-              className="text-gray-600 hover:text-gray-900 px-2"
+              className=""
+              icon={<ArrowLeft size={18} />}
             >
-              <ArrowLeft className="mr-2" /> Voltar
+              Voltar
             </CustomButton>
           </nav>
 
@@ -105,7 +106,7 @@ export default function PropertyDetailsPage() {
                 />
               </div>
 
-              <div className=" border border-border rounded-xl p-6 space-y-6">
+              <div className="bg-card border border-border rounded-xl p-6 space-y-6">
                 <div className="flex flex-col md:flex-row justify-between items-center md:items-start gap-4">
                   <h1 className="text-2xl md:text-3xl font-bold text-gray-900">
                     {property.title}

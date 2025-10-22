@@ -1,4 +1,5 @@
 import type { PaymentResponse } from "./payment";
+import type { Pdf } from "./pdf";
 import { PropertyProps as Property } from "./property";
 
 export interface SignatureRequest {
@@ -13,6 +14,7 @@ export interface Contract {
   status:
     | "EM_ELABORACAO"
     | "AGUARDANDO_ACEITE_INQUILINO"
+    | "SOLICITANDO_ALTERACAO"
     | "PENDENTE_DOCUMENTACAO"
     | "EM_ANALISE"
     | "AGUARDANDO_ASSINATURAS"
@@ -21,6 +23,7 @@ export interface Contract {
     | "FINALIZADO"
     | "CANCELADO";
   rentAmount: string;
+  alterationRequestReason?: string | null;
   condoFee: string;
   iptuFee: string;
   startDate: string;
@@ -50,6 +53,7 @@ export interface Contract {
     password?: string;
   };
   paymentsOrders?: PaymentResponse[];
+  GeneratedPdf?: Pdf[];
 }
 
 export interface ContractWithDocuments extends Contract {
@@ -59,4 +63,5 @@ export interface ContractWithDocuments extends Contract {
     type: string;
   }[];
   signatureRequests: SignatureRequest[];
+  GeneratedPdf?: Pdf[];
 }

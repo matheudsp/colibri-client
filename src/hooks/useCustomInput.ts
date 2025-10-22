@@ -148,7 +148,7 @@ export function useCustomInput(props: UseCustomInputProps) {
         {
           "border-primary ring-2 ring-primary/20": isFocused && !error,
           "border-error ring-2 ring-error/20": !!error,
-          "border-border bg-background": !isFocused && !error && !disabled,
+          "border-border bg-card": !isFocused && !error && !disabled,
           "hover:border-border": !disabled && !error && !isFocused,
           "bg-gray-100 border-border cursor-not-allowed ": disabled,
         }

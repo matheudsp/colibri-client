@@ -290,7 +290,7 @@ export default function DocumentPage() {
           <ArrowLeft className="mr-2" /> Voltar ao Contrato
         </CustomButton>
 
-        <header className=" p-6 rounded-t-xl border-x border-t border-border">
+        <header className="bg-card p-6 rounded-t-xl border-x border-t border-border">
           <div className="flex items-center gap-4">
             <div className="bg-primary/10 p-3 rounded-lg text-primary">
               <FileText className="w-8 h-8" />
@@ -308,7 +308,7 @@ export default function DocumentPage() {
           </div>
         </header>
 
-        <main className=" p-6 rounded-b-xl border border-border">
+        <main className="bg-card p-6 rounded-b-xl border border-border">
           {isTenant ? (
             <ul className="space-y-3">
               {requiredDocs.map((docType) => (

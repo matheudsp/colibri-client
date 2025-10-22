@@ -59,7 +59,6 @@ export function CustomDropdownInput({
   const buttonRef = useRef<HTMLButtonElement>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
-  // A CORREÇÃO ESTÁ AQUI: Passando a ref como HTMLElement
   useOnClickOutside(dropdownRef as React.RefObject<HTMLElement>, (e) => {
     if (buttonRef.current && !buttonRef.current.contains(e.target as Node)) {
       setIsOpen(false);
@@ -98,12 +97,12 @@ export function CustomDropdownInput({
         left: `${position.left}px`,
         width: `${position.width}px`,
       }}
-      className="z-50 bg-background shadow-lg rounded-md py-1 border border-border border-opacity-10 focus:outline-hidden max-h-60 overflow-y-auto"
+      className="z-50 bg-card shadow-lg rounded-md py-1 border border-border border-opacity-10 focus:outline-hidden max-h-60 overflow-y-auto"
     >
       {options.map((option) => (
         <div
           key={option.id}
-          className="p-4 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer flex justify-between items-center"
+          className="p-4 text-sm text-foreground hover:bg-muted cursor-pointer flex justify-between items-center"
           onClick={() => handleOptionSelect(option)}
         >
           <span>{option.label}</span>

@@ -21,6 +21,7 @@ import { Roles } from "@/constants";
 import { useCurrentUser } from "@/hooks/useCurrentUser";
 import { GrGroup } from "react-icons/gr";
 import { NotificationBell } from "../notifications/NotificationBell";
+
 const navItems = [
   {
     label: "Painel",
@@ -61,24 +62,19 @@ export default function SidebarNav() {
   const router = useRouter();
   const { user, loading } = useUserStore();
   const { role } = useCurrentUser();
-
   const [collapsed, setCollapsed] = useState(false);
 
   useEffect(() => {
     try {
       const raw = localStorage.getItem(LOCALSTORAGE_KEY);
       setCollapsed(raw === "true");
-    } catch {
-      // ignore (e.g. SSR or privacy mode)
-    }
+    } catch {}
   }, []);
 
   useEffect(() => {
     try {
       localStorage.setItem(LOCALSTORAGE_KEY, String(collapsed));
-    } catch {
-      // ignore
-    }
+    } catch {}
   }, [collapsed]);
 
   const handleLogout = async () => {
@@ -103,7 +99,8 @@ export default function SidebarNav() {
     <aside
       aria-label="Barra lateral"
       className={clsx(
-        "hidden md:flex sticky top-0 left-0 z-20 h-screen  flex-col justify-between bg-background border-r border-border py-6 px-2 transition-all duration-300",
+        "hidden md:flex sticky top-0 left-0 z-20 h-screen flex-col justify-between",
+        "bg-sidebar border-r border-sidebar-border py-6 px-2 transition-all duration-300",
         collapsed ? "w-24" : "w-60"
       )}
     >
@@ -138,13 +135,13 @@ export default function SidebarNav() {
               collapsed ? "Expandir barra lateral" : "Colapsar barra lateral"
             }
             onClick={() => setCollapsed((s) => !s)}
-            className="p-4 border border-gray-50/20 rounded-md hover:bg-black/10 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary"
+            className="p-4 border border-sidebar-border rounded-md hover:bg-muted/40 focus:outline-none focus:ring-2 focus:ring-sidebar-ring "
             title={collapsed ? "Expandir" : "Colapsar"}
           >
             {collapsed ? (
-              <ChevronRight className="w-5 h-5 text-black/80" />
+              <ChevronRight className="w-5 h-5 text-sidebar-foreground/80 " />
             ) : (
-              <ChevronLeft className="w-5 h-5 text-black/80" />
+              <ChevronLeft className="w-5 h-5 text-sidebar-foreground/80" />
             )}
           </button>
         </div>
@@ -165,13 +162,12 @@ export default function SidebarNav() {
                 title={item.label}
                 className={clsx(
                   "flex items-center transition-all duration-200 ease-in-out rounded-xl w-full",
-
                   collapsed
-                    ? "justify-center px-0 py-2 "
-                    : "justify-start px-4 py-2 ",
+                    ? "justify-center px-0 py-2"
+                    : "justify-start px-4 py-2",
                   isActive
-                    ? "bg-primary-light text-black "
-                    : "text-slate-800/90 hover:bg-gray-400/40 hover:scale-105",
+                    ? "bg-sidebar-primary text-sidebar-primary-foreground scale-105"
+                    : "text-sidebar-foreground/90 hover:bg-muted hover:scale-105 hover:text-sidebar-foreground",
                   collapsed &&
                     isActive &&
                     "outline-2 outline-offset-2 outline-border"
@@ -187,11 +183,7 @@ export default function SidebarNav() {
                 </div>
 
                 {!collapsed && (
-                  <span
-                    className={`ml-2 text-sm  tracking-wide truncate font-normal ${
-                      isActive && ""
-                    }`}
-                  >
+                  <span className="ml-2 text-sm tracking-wide truncate font-normal">
                     {item.label}
                   </span>
                 )}
@@ -201,29 +193,33 @@ export default function SidebarNav() {
         </nav>
       </div>
 
-      {/* Bottom: account + logout */}
+      {/* Bottom: conta + logout */}
       <div
         className={clsx(
-          "flex flex-col gap-4 px-1",
+          "flex flex-col gap-3 px-1",
           collapsed ? "items-center" : "items-stretch"
         )}
       >
         <NotificationBell collapsed={collapsed} />
+
         <Link
           href={"/conta"}
           className={clsx(
-            "flex items-center transition-all duration-200 ease-in-out rounded-lg w-full p-2",
-            collapsed ? "justify-center " : "justify-start",
+            "flex items-center transition-all duration-200 ease-in-out rounded-xl w-full",
+            collapsed ? "justify-center px-0 py-2" : "justify-start px-4 py-2",
             myAccountIsActive
-              ? "bg-primary-light scale-105 text-black"
-              : "text-slate-800/90 hover:bg-gray-400/40  hover:scale-105"
+              ? "bg-sidebar-primary text-sidebar-primary-foreground scale-105"
+              : "text-sidebar-foreground/90 hover:bg-muted hover:scale-105 hover:text-sidebar-foreground",
+            collapsed &&
+              myAccountIsActive &&
+              "outline-2 outline-offset-2 outline-border"
           )}
         >
           <div
             className={clsx(
               "flex items-center justify-center rounded-full",
-              "w-6 h-6 text-white",
-              myAccountIsActive ? "bg-secondary " : "bg-primary "
+              "w-5 h-5 text-white",
+              myAccountIsActive ? "bg-secondary" : "bg-primary"
             )}
           >
             <span
@@ -237,7 +233,7 @@ export default function SidebarNav() {
           </div>
 
           {!collapsed && (
-            <span className="ml-2 text-sm font-normal  tracking-wide truncate">
+            <span className="ml-2 text-sm font-semibold tracking-wide truncate">
               Minha Conta
             </span>
           )}
@@ -247,11 +243,12 @@ export default function SidebarNav() {
           onClick={handleLogout}
           title="Sair do sistema"
           className={clsx(
-            "flex items-center cursor-pointer transition-all duration-200 ease-in-out rounded-lg w-full text-black/90 hover:bg-red-500/80 hover:text-white hover:scale-105",
-            collapsed ? "justify-center px-0 py-2" : "justify-start px-3 py-2"
+            "flex items-center cursor-pointer  transition-all duration-200 ease-in-out rounded-xl w-full",
+            "text-sidebar-foreground/90 hover:bg-red-500/80 hover:text-white hover:scale-105",
+            collapsed ? "justify-center px-0 py-2" : "justify-start px-4 py-2"
           )}
         >
-          <LogOut className="w-5 h-5" />
+          <LogOut className="w-5 h-5" strokeWidth={1.5} />
           {!collapsed && (
             <span className="ml-2 text-sm font-semibold tracking-wide truncate">
               Sair do sistema

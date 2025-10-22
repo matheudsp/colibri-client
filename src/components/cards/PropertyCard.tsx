@@ -113,8 +113,8 @@ function DashboardActions({
       <CustomButton
         onClick={handleNavigate}
         icon={<Eye size={16} />}
-        color="bg-gray-200"
-        textColor="text-gray-800"
+        color="bg-muted"
+        textColor="text-foreground"
         className="w-full text-sm "
       >
         Ver Detalhes
@@ -123,7 +123,7 @@ function DashboardActions({
         onClick={handleCreateContract}
         icon={<FilePlus2 size={16} />}
         color="bg-primary"
-        textColor="text-white"
+        textColor="text-primary-foreground"
         className="w-full text-sm"
       >
         Criar Contrato
@@ -234,7 +234,7 @@ export function PropertyCardComponent({
   };
 
   const cardContent = (
-    <div className="overflow-hidden transition-all duration-300 flex flex-col h-full group">
+    <div className="overflow-hidden transition-all duration-300 flex flex-col  h-full group">
       <div
         className="relative w-full aspect-[3/2] overflow-hidden rounded-md"
         onTouchStart={onTouchStart}
@@ -314,18 +314,18 @@ export function PropertyCardComponent({
         <p className="text-sm text-primary font-semibold">
           {getPropertyTypeLabel(property.propertyType)}
         </p>
-        <h3 className="text-lg font-bold text-gray-800 truncate mt-1">
+        <h3 className="text-lg font-bold text-foreground truncate mt-1">
           {property.title}
         </h3>
-        <p className="text-sm text-gray-500 truncate">
+        <p className="text-sm text-muted-foreground truncate">
           {property.street}, {property.number} - {property.district}
         </p>
-        <p className="text-sm text-gray-500 truncate">
+        <p className="text-sm text-muted-foreground truncate">
           {property.city} - {property.state}
         </p>
         <div className="grow">
           {variant === "public" && (
-            <div className="grid grid-cols-2 sm:grid-cols-2 font-medium gap-x-4 gap-y-2 text-sm text-gray-600 my-1 border-t border-b border-border py-3">
+            <div className="grid grid-cols-2 sm:grid-cols-2 font-medium gap-x-4 gap-y-2 text-sm text-muted-foreground my-1 border-t border-b border-border py-3">
               <span className="flex items-center gap-2 ">
                 <Maximize
                   className="text-white bg-primary p-1 rotate-45 rounded-lg"
@@ -350,8 +350,8 @@ export function PropertyCardComponent({
             </div>
           )}
           <div className="mt-1 flex justify-between items-center">
-            <span className="text-gray-500 text-sm">Aluguel</span>
-            <span className="font-bold text-gray-800 text-base">
+            <span className="text-muted-foreground text-sm">Aluguel</span>
+            <span className="font-bold text-foreground text-base">
               {formatCurrency(property.value)}
             </span>
           </div>

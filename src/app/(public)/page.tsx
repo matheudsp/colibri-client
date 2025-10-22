@@ -41,7 +41,7 @@ export default function Home() {
             />
 
             <div
-              className="absolute inset-0 bg-gradient-to-b from-secondary-hover to-secondary/85"
+              className="absolute inset-0 bg-gradient-to-b from-secondary via-secondary/85 to-secondary/75"
               aria-hidden="true"
             />
           </div>

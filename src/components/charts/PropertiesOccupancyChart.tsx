@@ -16,7 +16,7 @@ export function PropertiesOccupancyChart({
 }: PropertiesOccupancyChartProps) {
   if (!data || data.length === 0) {
     return (
-      <div className="flex h-[300px] items-center justify-center text-gray-500">
+      <div className="flex h-[300px] items-center justify-center text-muted-foreground">
         Não há dados de ocupação para exibir.
       </div>
     );

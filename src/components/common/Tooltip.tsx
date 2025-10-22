@@ -15,7 +15,7 @@ interface TooltipProps {
 export function Tooltip({
   children,
   content,
-  // position = "top",
+  position = "top", // 1. Prop descomentada
   className,
 }: TooltipProps) {
   const [isOpen, setIsOpen] = useState(false);
@@ -25,6 +25,7 @@ export function Tooltip({
 
   const [style, setStyle] = useState<React.CSSProperties>({});
   const [arrowStyle, setArrowStyle] = useState<React.CSSProperties>({});
+  const [arrowClass, setArrowClass] = useState("bottom-[-4px]"); // 2. Estado para a seta
 
   useEffect(() => {
     setIsMounted(true);
@@ -39,14 +40,25 @@ export function Tooltip({
 
       const newStyle: React.CSSProperties = { position: "fixed" };
 
+      // 3. Lógica de posicionamento (top vs bottom)
+      let top: number;
+      if (position === "bottom") {
+        top = triggerRect.bottom + margin;
+        setArrowClass("top-[-4px]"); // Seta aponta para cima
+      } else {
+        // Default é "top"
+        top = triggerRect.top - tooltipRect.height - margin;
+        setArrowClass("bottom-[-4px]"); // Seta aponta para baixo
+      }
+
+      // Lógica de centralização horizontal (igual a antes)
       let left =
         triggerRect.left + triggerRect.width / 2 - tooltipRect.width / 2;
-      const top = triggerRect.top - tooltipRect.height - margin;
 
+      // Colisão horizontal (igual a antes)
       if (left < margin) {
         left = margin;
       }
-
       if (left + tooltipRect.width > viewportWidth - margin) {
         left = viewportWidth - tooltipRect.width - margin;
       }
@@ -55,13 +67,15 @@ export function Tooltip({
       newStyle.left = left;
       setStyle(newStyle);
 
+      // Lógica da posição da seta (igual a antes)
       const arrowLeft = triggerRect.left + triggerRect.width / 2 - left;
       setArrowStyle({ left: `${arrowLeft}px` });
     }
-  }, [isOpen]);
+  }, [isOpen, position]); // 4. Adicionar 'position' ao array de dependências
 
   const tooltipVariants = {
-    hidden: { opacity: 0, scale: 0.95, y: 5 },
+    // 5. Animação baseada na posição
+    hidden: { opacity: 0, scale: 0.95, y: position === "top" ? 5 : -5 },
     visible: { opacity: 1, scale: 1, y: 0 },
   };
 
@@ -77,14 +91,18 @@ export function Tooltip({
           exit="hidden"
           transition={{ duration: 0.2, ease: "easeInOut" }}
           className={clsx(
-            "z-50 w-max max-w-xs rounded-md bg-background px-3 py-2 text-sm font-normal text-slate-900/90 border-border border",
+            "z-50 w-max max-w-xs rounded-md bg-card/90 backdrop-blur-md px-3 py-2 text-sm font-normal text-foreground border-border border",
             className
           )}
         >
           {content}
+          {/* 6. Usar a classe dinâmica da seta */}
           <div
             style={arrowStyle}
-            className="absolute bottom-[-4px] -translate-x-1/2 h-0 w-0  border border-border"
+            className={clsx(
+              "absolute -translate-x-1/2 h-0 w-0 border border-border",
+              arrowClass
+            )}
           />
         </motion.div>
       )}

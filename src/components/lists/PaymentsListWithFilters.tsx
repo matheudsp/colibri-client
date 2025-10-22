@@ -86,6 +86,7 @@ export function PaymentListWithFilters({
 
   const fetchPayments = async (currentFilters: PaymentFilters) => {
     setLoading(true);
+
     try {
       const response = await PaymentService.findUserPayments(currentFilters);
       const paymentsList = Array.isArray(response?.data) ? response.data : [];
@@ -286,7 +287,7 @@ export function PaymentListWithFilters({
   };
 
   const renderFilters = () => (
-    <div className="bg-background p-4 rounded-xl shadow-xs border border-border mb-6">
+    <div className="bg-card p-4 rounded-xl shadow-xs border border-border mb-6">
       <div className="flex items-center justify-between gap-2 mb-4">
         <div className="flex items-center gap-2">
           <Filter size={18} className="text-gray-600" />
@@ -441,7 +442,7 @@ export function PaymentListWithFilters({
         {sorted.map((payment) => (
           <div
             key={payment.id}
-            className="bg-background border border-border rounded-lg p-4 shadow-sm"
+            className="bg-gradient-to-t from-card/40 to-card border border-border rounded-lg p-4 shadow-sm"
           >
             <div className="flex justify-between items-start">
               <div>
@@ -492,9 +493,9 @@ export function PaymentListWithFilters({
       </div>
 
       {/* Desktop table */}
-      <div className="hidden md:block overflow-x-auto border border-border rounded-lg">
-        <table className="min-w-full">
-          <thead className="border-b border-border bg-background">
+      <div className="hidden md:block overflow-x-auto border border-border rounded-lg ">
+        <table className="min-w-full ">
+          <thead className="border-b border-border bg-gradient-to-t from-card/40 to-card">
             <tr>
               <th
                 scope="col"
@@ -577,7 +578,7 @@ export function PaymentListWithFilters({
             </tr>
           </thead>
 
-          <tbody className="bg-background divide-y divide-border">
+          <tbody className="bg-card divide-y divide-border">
             {sorted.map((payment) => {
               return (
                 <tr key={payment.id}>

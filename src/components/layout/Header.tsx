@@ -12,6 +12,7 @@ import { useState, ReactNode, ChangeEvent } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useCurrentUser } from "@/hooks/useCurrentUser";
 import { UserMenu } from "../common/UserMenu";
+
 type HeaderType = "default" | "back" | "backMenu" | "search" | "logoOnly";
 
 interface HeaderProps {
@@ -25,10 +26,7 @@ interface HeaderProps {
   onSearchChange?: (value: string) => void;
 }
 
-const navItems = [
-  { label: "Ajuda", href: "/ajuda" },
-  // { label: "Mais", href: "#" },
-];
+const navItems = [{ label: "Ajuda", href: "/ajuda" }];
 
 const menuVariants = {
   hidden: { x: "100%", opacity: 0 },
@@ -52,26 +50,25 @@ export function Header({
 
   const isScrolledOrSearch = isScrolled || type === "search";
   const showSearchBar = false;
-  // const showSearchBar = type === "search" || (type === "default" && isScrolled);
 
   if (type === "default" || type === "search") {
     return (
       <header
         className={`${
           occultInPrivate ? "hidden" : "flex"
-        } fixed z-50 top-0 w-full items-center justify-center ${
+        } fixed z-50 top-0 w-full items-center justify-center transition-colors duration-300 ${
           isScrolledOrSearch
             ? "bg-background/90 backdrop-blur-xs border-b border-border"
-            : "bg-secondary-hover"
+            : "bg-secondary"
         }`}
       >
         <div
-          className={` ${
+          className={`${
             occultInPrivate ? "hidden" : "flex"
-          } w-full max-w-7xl px-4 2xl:px-0 h-16  items-center justify-between gap-6 transition-all duration-300 ease-in-out `}
+          } w-full max-w-7xl px-4 2xl:px-0 h-16 items-center justify-between gap-6 transition-all duration-300 ease-in-out`}
         >
           {/* Logo */}
-          <div className="shrink-0">
+          <div className="shrink-0 animate-fade-right animate-once animate-ease-in-out">
             <Link href="/">
               <Image
                 height={32}
@@ -105,12 +102,12 @@ export function Header({
                       placeholder="Digite sua busca"
                       value={searchValue}
                       onChange={handleChange}
-                      className="w-full h-12 pl-5 pr-14 rounded-full border-2 border-border "
+                      className="w-full h-12 pl-5 pr-14 rounded-full border-2 border-border bg-background text-foreground placeholder:text-foreground-muted"
                     />
                     <button
                       type="button"
                       aria-label="Buscar"
-                      className="absolute top-1/2 right-2 -translate-y-1/2 w-9 h-9 bg-primary rounded-full flex items-center justify-center text-white"
+                      className="absolute top-1/2 right-2 -translate-y-1/2 w-9 h-9 bg-primary rounded-full flex items-center justify-center text-primary-foreground"
                     >
                       <SearchIcon size={20} />
                     </button>
@@ -121,61 +118,62 @@ export function Header({
           </div>
 
           {/* Navegação (Desktop) */}
-          <nav className="hidden  lg:flex items-center gap-6 shrink-0">
+          <nav className="hidden lg:flex items-center gap-6 shrink-0 animate-fade-left animate-once animate-ease-in-out">
             {isAuthenticated ? (
-              <div className="flex items-center gap-x-4">
+              <div className="flex items-center gap-x-4 animate-fade animate-once animate-ease-in-out">
                 <Link
                   href="/painel"
-                  className={`rounded-md px-4 py-1.5 text-sm font-semibold shadow-sm transition-all duration-300 ${
+                  className={`rounded-md px-4 py-1.5 text-sm font-semibold shadow-sm  ${
                     isScrolled
-                      ? "bg-primary border-primary-hover border text-white hover:bg-primary/85"
-                      : "bg-background/10 text-white hover:bg-background/20 backdrop-blur-sm border border-white/20"
+                      ? "bg-primary text-primary-foreground hover:bg-primary/85 border border-primary-hover border-b-4  "
+                      : "bg-background/10 text-background hover:bg-background/20 backdrop-blur-sm border border-background/30"
                   }`}
                 >
                   Painel
                 </Link>
-
                 <UserMenu orientation="horizontal" isScrolled={isScrolled} />
               </div>
             ) : (
               <div className="flex items-center justify-evenly gap-x-4">
                 <Link
                   href="/entrar"
-                  className={`font-light text-base  transition-all duration-300 ease-in-out  py-1.5 ${
+                  className={`font-light text-base py-1.5 transition-all duration-300 ease-in-out ${
                     isScrolled
-                      ? "text-black hover:text-primary "
-                      : "text-white hover:text-gray-50/75 "
+                      ? "text-foreground hover:text-primary"
+                      : "text-background hover:text-background/80"
                   }`}
                 >
                   Já tenho acesso
                 </Link>
                 <em
-                  className={`font-light  text-sm   transition-colors text-center duration-300 ${
+                  className={`font-light text-sm transition-colors text-center duration-300 ${
                     isScrolled
-                      ? "text-black hover:text-primary"
-                      : "text-white hover:text-gray-200"
+                      ? "text-foreground hover:text-primary"
+                      : "text-background hover:text-background/80"
                   }`}
                 >
                   ou
                 </em>
                 <Link
                   href="/registrar"
-                  className={`transform rounded-lg px-4  py-1 text-center font-medium text-white shadow-md transition-all duration-300 ease-in-out hover:-translate-y-0.5 active:translate-y-0 ${
+                  className={`transform  rounded-lg px-4 py-1 text-center font-medium text-background shadow-md transition-all duration-300 animate-ease-in hover:-translate-y-0.5 active:translate-y-0 ${
                     isScrolled
-                      ? "bg-secondary/75 border-b-4 border border-secondary-hover border-b-secondary-hover "
-                      : "bg-background/20 hover:bg-background/30 border border-white/30"
+                      ? "bg-secondary text-secondary-foreground hover:bg-secondary-hover border-1 border-secondary-hover border-b-4"
+                      : "bg-background/20 hover:bg-background/30 border border-background/30"
                   }`}
                 >
                   Criar conta grátis
                 </Link>
               </div>
             )}
+
             <div
               className={`h-6 w-px transition-colors duration-300 ${
-                isScrolled ? "bg-gray-200" : "bg-background/30"
+                isScrolled ? "bg-border" : "bg-background/40"
               }`}
               aria-hidden="true"
             />
+
             <nav className="flex gap-x-6">
               {navItems.map((item) => (
                 <Link
@@ -183,8 +181,8 @@ export function Header({
                   href={item.href}
                   className={`font-semibold transition-colors duration-300 ${
                     isScrolled
-                      ? "text-gray-700 hover:text-primary"
-                      : "text-white hover:text-gray-200"
+                      ? "text-foreground hover:text-primary"
+                      : "text-background hover:text-background/90"
                   }`}
                 >
                   {item.label}
@@ -198,7 +196,7 @@ export function Header({
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
               className={`p-2 rounded-md z-50 ${
-                isScrolledOrSearch ? "text-gray-700" : "text-white"
+                isScrolledOrSearch ? "text-foreground" : "text-background"
               }`}
             >
               {isMenuOpen ? <XIcon size={24} /> : <MenuIcon size={24} />}
@@ -214,36 +212,17 @@ export function Header({
               animate="visible"
               exit="hidden"
               transition={{ type: "tween", duration: 0.3 }}
-              className="fixed  inset-0 top-[64px]  z-40 lg:hidden"
+              className="fixed inset-0 top-[64px] z-40 lg:hidden"
             >
               <div className="p-4 bg-background/95 h-svh">
-                {/* {showSearchBar && (
-                  <div className="relative mb-4">
-                    <input
-                      type="text"
-                      placeholder="Digite sua busca"
-                      value={searchValue}
-                      onChange={handleChange}
-                      className="w-full h-12 pl-5 pr-14 rounded-full border-2 border-gray-200"
-                    />
-                    <button
-                      type="button"
-                      aria-label="Buscar"
-                      className="absolute top-1/2 right-2 -translate-y-1/2 w-9 h-9 bg-primary rounded-full flex items-center justify-center text-white"
-                    >
-                      <SearchIcon size={20} />
-                    </button>
-                  </div>
-                )} */}
                 <nav className="flex flex-col space-y-4 items-end">
                   {isAuthenticated ? (
                     <div className="w-full flex flex-col space-y-4">
                       <UserMenu orientation="horizontal" fullWidth />
-
                       <Link
                         href="/painel"
                         onClick={() => setIsMenuOpen(false)}
-                        className="rounded-md  p-2 bg-primary/85 border-b-4 border border-primary-hover border-b-primary-hover text-center text-lg font-semibold text-white hover:bg-primary-hover"
+                        className="rounded-md p-2 bg-primary border-b-4 border border-primary-hover text-primary-foreground text-center text-lg font-semibold hover:bg-primary/85"
                       >
                         Painel
                       </Link>
@@ -255,21 +234,23 @@ export function Header({
                           <Link
                             href="/entrar"
                             onClick={() => setIsMenuOpen(false)}
-                            className="font-light text-base text-black hover:text-primary"
+                            className="font-light text-base text-foreground hover:text-primary"
                           >
                             Já tenho acesso
                           </Link>
                         </div>
-                        <em className="text-base font-light text-black">ou</em>
+                        <em className="text-base font-light text-foreground">
+                          ou
+                        </em>
                         <Link
                           href="/registrar"
                           onClick={() => setIsMenuOpen(false)}
-                          className="w-full transform rounded-lg bg-secondary/75 border-b-4 border border-secondary-hover border-b-secondary-hover p-3 text-center font-medium text-white shadow-md transition-transform duration-150 ease-in-out hover:-translate-y-0.5 active:translate-y-0"
+                          className="w-full transform rounded-lg bg-secondary text-secondary-foreground p-2 border-b-4 border border-secondary-hover text-center font-medium shadow-md transition-transform duration-150 ease-in-out hover:-translate-y-0.5 active:translate-y-0"
                         >
                           Criar conta grátis
                         </Link>
                       </div>
-                      <div className="my-2 border-t border-gray-200" />
+                      <div className="my-2 border-t border-border" />
                     </>
                   )}
 
@@ -278,7 +259,7 @@ export function Header({
                       key={item.label}
                       href={item.href}
                       onClick={() => setIsMenuOpen(false)}
-                      className="rounded-md p-3 text-lg font-semibold text-secondary hover:bg-gray-100"
+                      className="rounded-md p-3 text-lg font-semibold text-secondary hover:bg-muted"
                     >
                       {item.label}
                     </Link>
@@ -297,7 +278,7 @@ export function Header({
       <header
         className={`${
           occultInPrivate && "hidden"
-        } md:fixed z-40 top-0 w-full bg-background/90 backdrop-blur-xs px-4 py-2  flex items-center justify-center border-b border-border`}
+        } md:fixed z-40 top-0 w-full bg-background/90 backdrop-blur-xs px-4 py-2 flex items-center justify-center border-b border-border`}
       >
         <Image
           height={50}
@@ -310,23 +291,22 @@ export function Header({
       </header>
     );
   }
+
   return (
     <header
-      className={` ${
+      className={`${
         occultInPrivate && "hidden"
       } md:fixed z-50 top-0 w-full flex items-center justify-center bg-background/90 backdrop-blur-xs border-b border-border`}
     >
-      <div
-        className={` w-full max-w-7xl px-4 2xl:px-0 h-16 flex items-center justify-between gap-6 transition-all duration-300 ease-in-out `}
-      >
+      <div className="w-full max-w-7xl px-4 2xl:px-0 h-16 flex items-center justify-between gap-6 transition-all duration-300 ease-in-out">
         {onBack && (
           <button
             title="Botão de voltar"
             aria-label="Botão de voltar"
             onClick={onBack}
-            className="hover:bg-slate-600/10 p-2 rounded-full transition-all"
+            className="hover:bg-muted p-2 rounded-full transition-all"
           >
-            <ArrowLeftIcon className="w-7 h-7" />
+            <ArrowLeftIcon className="w-7 h-7 text-foreground" />
           </button>
         )}
         <div className="flex-1 flex justify-center">
@@ -339,7 +319,7 @@ export function Header({
             priority
           />
         </div>
-        {type === "back" && <span className="w-11 h-11"></span>}
+        {type === "back" && <span className="w-11 h-11" />}
         {type === "backMenu" && dropdownMenu}
       </div>
     </header>

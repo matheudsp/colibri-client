@@ -69,7 +69,7 @@ export function JudicialReportCard({
   };
 
   return (
-    <div className="bg-background p-4 rounded-xl border border-border">
+    <div className="bg-card p-4 rounded-xl border border-border">
       <div className="flex flex-col sm:flex-row justify-between sm:items-start gap-3 mb-4">
         <div className="flex-1">
           <h3 className="font-bold text-lg">Relatórios</h3>

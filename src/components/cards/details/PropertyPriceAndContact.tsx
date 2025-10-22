@@ -72,7 +72,7 @@ export const PropertyPriceAndContact = ({
   const renderActionButtons = () => {
     if (isOwner) {
       return (
-        <div className="text-center text-sm text-foreground-muted py-3 bg-background-alt border border-border rounded-lg">
+        <div className="text-center text-sm text-foreground py-3 bg-muted border border-border rounded-lg">
           Você é o proprietário deste imóvel.
         </div>
       );
@@ -127,7 +127,7 @@ export const PropertyPriceAndContact = ({
   };
 
   return (
-    <div className="border border-border rounded-xl p-5 space-y-5 bg-background shadow-sm">
+    <div className="border border-border rounded-xl p-5 space-y-5 bg-card shadow-sm">
       {/* Seção de Preço */}
       <div>
         <p className="text-gray-500 text-sm">Valor do Aluguel (mensal)</p>

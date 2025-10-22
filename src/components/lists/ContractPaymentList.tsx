@@ -103,12 +103,12 @@ export function ContractPaymentList({
   }
 
   return (
-    <div className="w-full max-h-[400px] overflow-y-auto border border-border rounded-lg bg-background  shadow-sm">
+    <div className="w-full max-h-[400px] overflow-y-auto border border-border rounded-lg shadow-sm">
       <div className="md:hidden divide-y divide-border">
         {payments.map((payment) => (
           <div
             key={payment.id}
-            className="  p-4  space-y-4 transition-shadow duration-200"
+            className="bg-gradient-to-t from-card/40 to-card  p-4  space-y-4 transition-shadow duration-200"
           >
             <div className="flex justify-between items-start">
               <div>
@@ -158,7 +158,7 @@ export function ContractPaymentList({
       {/* Desktop table */}
       <div className="hidden md:block overflow-x-auto ">
         <table className="min-w-full">
-          <thead className="border-b border-border bg-background">
+          <thead className="border-b border-border bg-gradient-to-t from-card/40 to-card">
             <tr>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                 Vencimento
@@ -175,7 +175,7 @@ export function ContractPaymentList({
               </th>
             </tr>
           </thead>
-          <tbody className="bg-background divide-y divide-border">
+          <tbody className="bg-card divide-y divide-border">
             {payments.map((payment) => (
               <tr key={payment.id}>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">

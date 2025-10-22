@@ -63,7 +63,7 @@ export function Modal({
           {!scrollable && (
             <motion.div
               onClick={(e) => e.stopPropagation()}
-              className={`bg-background rounded-xl shadow-2xl w-full ${maxWidth} m-4 p-6 relative`}
+              className={`bg-card rounded-xl shadow-2xl w-full ${maxWidth} m-4 p-6 relative`}
               variants={modalVariants}
               initial="hidden"
               animate="visible"

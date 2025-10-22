@@ -26,7 +26,7 @@ export function ContractDetails({ contract }: { contract: Contract }) {
     contract.guaranteeType.replace("_", " ");
 
   return (
-    <div className="bg-background p-5 rounded-xl shadow-xs border border-border ">
+    <div className="bg-card p-5 rounded-xl shadow-xs border border-border ">
       <h2 className="font-bold text-xl mb-4 border-b border-border pb-2">
         Detalhes do Contrato
       </h2>

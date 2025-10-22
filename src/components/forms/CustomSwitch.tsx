@@ -30,10 +30,10 @@ export function CustomSwitch({
   return (
     <div className="flex items-center justify-between">
       <div className="flex items-center gap-1.5">
-        <span className="font-semibold text-gray-700 text-sm">{label}</span>
+        <span className="font-semibold text-foreground text-sm">{label}</span>
         {tip && (
           <Tooltip content={tip} position="top">
-            <HelpCircle className="h-4 w-4 text-gray-400 cursor-help" />
+            <HelpCircle className="h-4 w-4 text-muted-foreground cursor-help" />
           </Tooltip>
         )}
       </div>
@@ -51,7 +51,7 @@ export function CustomSwitch({
             "relative inline-flex h-6 w-11 shrink-0 items-center rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-hidden focus:ring-2 focus:ring-primary focus:ring-offset-2 cursor-pointer",
             {
               "bg-primary": checked,
-              "bg-gray-300": !checked,
+              "bg-muted-foreground": !checked,
               "cursor-not-allowed opacity-75": disabled,
             }
           )}
