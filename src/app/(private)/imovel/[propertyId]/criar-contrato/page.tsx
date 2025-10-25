@@ -47,8 +47,8 @@ import { guaranteeTypes } from "@/constants";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { toISODate } from "@/utils/formatters/formatDate";
 import { unmaskNumeric } from "@/utils/masks/maskNumeric";
-import type { ApiResponse } from "@/types/api";
-import { cpfCnpjMask } from "@/utils/masks/cpfCnpjMask";
+import { ApiResponse } from "@/types/api";
+
 import { extractAxiosError } from "@/services/api";
 
 import Image from "next/image";

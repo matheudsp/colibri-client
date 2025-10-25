@@ -3,11 +3,9 @@ import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 
-import { Separator } from "@/components/ui/separator";
-
 import { ContainerScroll } from "@/components/ui/container-scroll-animation";
 
-import { Carousel, Card } from "@/components/ui/apple-cards-carousel"; // Adjust path if needed
+import { Carousel, Card } from "@/components/ui/apple-cards-carousel";
 import { SecuritySeal } from "@/components/common/SecuritySeal";
 
 function HeroScrollSection() {
