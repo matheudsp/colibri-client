@@ -61,7 +61,7 @@ export default function CreateCondominiumPage() {
       const address = await fetchAddressByCep(cep);
       if (address) {
         setValue("street", address.street, { shouldValidate: true });
-        setValue("district", address.district, { shouldValidate: true });
+        setValue("province", address.district, { shouldValidate: true });
         setCityFromCep(address.city);
         setValue("state", address.rawUf, { shouldValidate: true });
         setFocus("number");
@@ -206,15 +206,15 @@ export default function CreateCondominiumPage() {
             />
           </div>
           <Controller
-            name="district"
+            name="province"
             control={control}
             render={({ field }) => (
               <CustomFormInput
                 placeholder="ex: Centro"
                 label="Bairro*"
-                id="district"
+                id="province"
                 icon={<MapIcon />}
-                error={errors.district?.message}
+                error={errors.province?.message}
                 {...field}
               />
             )}

@@ -60,7 +60,7 @@ export default function CreateContractPage() {
   const params = useParams();
   const propertyId = params.propertyId as string;
   const [canShare, setCanShare] = useState(false);
-  const [currentStep, setCurrentStep] = useState(3);
+  const [currentStep, setCurrentStep] = useState(1);
   const [tenantAction, setTenantAction] = useState<"search" | "create">(
     "search"
   );
@@ -551,8 +551,8 @@ export default function CreateContractPage() {
                               <p className="font-bold text-secondary">
                                 {user.name}
                               </p>
-                              <p className="text-sm text-gray-600  break-all">
-                                {user.cpfCnpj}
+                              <p className="text-sm text-gray-600 uppercase  break-all">
+                                CPF/CNPJ: {user.cpfCnpj}
                               </p>
                               <p className="text-sm text-gray-500 break-all">
                                 {user.email}
@@ -591,8 +591,8 @@ export default function CreateContractPage() {
                           <p className="font-bold text-lg text-foreground break-all">
                             {selectedTenant.name}
                           </p>
-                          <p className="text-sm text-muted-foreground break-all">
-                            {selectedTenant.cpfCnpj}
+                          <p className="text-sm text-muted-foreground break-all uppercase">
+                            CPF/CNPJ: {selectedTenant.cpfCnpj}
                           </p>
                           <p className="text-sm text-muted-foreground  break-all truncate ">
                             {selectedTenant.email}

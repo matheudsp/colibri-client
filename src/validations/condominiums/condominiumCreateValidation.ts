@@ -13,7 +13,7 @@ export const createCondominiumSchema = z.object({
 
   street: z.string().min(1, "A rua é obrigatória."),
   number: z.string().min(1, "O número é obrigatório."),
-  district: z.string().min(1, "O bairro é obrigatório."),
+  province: z.string().min(1, "O bairro é obrigatório."),
   city: z.string().min(1, "A cidade é obrigatória."),
   state: z.string().min(1, "O estado é obrigatório"),
 });

@@ -9,7 +9,7 @@ export interface Condominium {
   cep: string;
   street: string;
   number: string;
-  district: string;
+  province: string;
   city: string;
   state: string;
 }

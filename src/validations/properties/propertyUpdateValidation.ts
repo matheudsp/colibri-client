@@ -35,7 +35,7 @@ export const updatePropertySchema = z.object({
 
   complement: z.string().optional(),
 
-  district: z.string().min(1, "O bairro é obrigatório").optional(),
+  province: z.string().min(1, "O bairro é obrigatório").optional(),
 
   city: z.string().min(1, "A cidade é obrigatória").optional(),
 

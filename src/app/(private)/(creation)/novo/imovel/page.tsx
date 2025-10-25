@@ -80,7 +80,7 @@ export default function CreatePropertyPage() {
       const address = await fetchAddressByCep(cep);
       if (address) {
         setValue("street", address.street, { shouldValidate: true });
-        setValue("district", address.district, { shouldValidate: true });
+        setValue("province", address.district, { shouldValidate: true });
         setCityFromCep(address.city);
         setValue("state", address.state, { shouldValidate: true });
       } else {
@@ -318,15 +318,15 @@ export default function CreatePropertyPage() {
                   )}
                 />
                 <Controller
-                  name="district"
+                  name="province"
                   control={control}
                   render={({ field }) => (
                     <CustomFormInput
-                      id="district"
+                      id="province"
                       placeholder="ex: Centro"
                       icon={<MapIcon className="h-5 w-5" />}
                       label="Bairro*"
-                      error={errors.district?.message}
+                      error={errors.province?.message}
                       {...field}
                     />
                   )}
