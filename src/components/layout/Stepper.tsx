@@ -15,7 +15,7 @@ export const Stepper = ({
     <div className={`w-full max-w-md mx-auto ${className}`}>
       <div className="relative flex justify-between items-start">
         <div className="absolute left-5 right-5 top-5 h-1">
-          <div className="w-full h-full bg-gray-200 rounded-full" />
+          <div className="w-full h-full bg-muted rounded-full" />
           <div
             className="absolute top-0 h-full bg-primary-hover rounded-full transition-all duration-500 ease-in-out bg-striped-gradient bg-striped-size animate-progress-stripes"
             style={{ width: `${progressPercentage}%` }}
@@ -36,17 +36,19 @@ export const Stepper = ({
               <div
                 className={`w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300 ${
                   isCurrent
-                    ? "bg-secondary text-white animate-pulse-shadow"
+                    ? "bg-secondary text-secondary-foreground animate-pulse-shadow"
                     : isActive
-                    ? "bg-primary-hover text-white"
-                    : "bg-white text-gray-500 border-2 border-gray-200"
+                    ? "bg-primary-hover text-primary-foreground"
+                    : "bg-card text-muted-foreground border-2 border-muted"
                 }`}
               >
                 {isCompleted ? <FaCheck size={12} /> : stepNumber}
               </div>
               <p
                 className={`mt-2 text-xs sm:text-sm transition-colors ${
-                  isCurrent ? "font-bold text-secondary" : "text-gray-500"
+                  isCurrent
+                    ? "font-bold text-secondary"
+                    : "text-muted-foreground"
                 }`}
               >
                 {step}

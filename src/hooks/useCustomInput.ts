@@ -144,11 +144,11 @@ export function useCustomInput(props: UseCustomInputProps) {
   const containerClasses = useMemo(
     () =>
       clsx(
-        "flex items-center w-full px-3 py-2 rounded-lg border-2 transition-all duration-300",
+        "flex items-center w-full px-3 py-2 rounded-lg border-2 transition-all duration-300 bg-card",
         {
           "border-primary ring-2 ring-primary/20": isFocused && !error,
           "border-error ring-2 ring-error/20": !!error,
-          "border-border bg-card": !isFocused && !error && !disabled,
+          "border-border ": !isFocused && !error && !disabled,
           "hover:border-border": !disabled && !error && !isFocused,
           "bg-gray-100 border-border cursor-not-allowed ": disabled,
         }

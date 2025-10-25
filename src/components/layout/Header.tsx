@@ -26,7 +26,10 @@ interface HeaderProps {
   onSearchChange?: (value: string) => void;
 }
 
-const navItems = [{ label: "Ajuda", href: "/ajuda" }];
+const navItems = [
+  { label: "Ajuda", href: "/ajuda" },
+  { label: "Sobre", href: "/sobre" },
+];
 
 const menuVariants = {
   hidden: { x: "100%", opacity: 0 },
@@ -58,7 +61,7 @@ export function Header({
           occultInPrivate ? "hidden" : "flex"
         } fixed z-50 top-0 w-full items-center justify-center transition-colors duration-300 ${
           isScrolledOrSearch
-            ? "bg-background/90 backdrop-blur-xs border-b border-border"
+            ? "bg-card/90 backdrop-blur-xs border-b border-border"
             : "bg-secondary"
         }`}
       >
@@ -278,7 +281,7 @@ export function Header({
       <header
         className={`${
           occultInPrivate && "hidden"
-        } md:fixed z-40 top-0 w-full bg-background/90 backdrop-blur-xs px-4 py-2 flex items-center justify-center border-b border-border`}
+        } md:fixed z-40 top-0 w-full bg-card/90 backdrop-blur-xs px-4 py-2 flex items-center justify-center border-b border-border`}
       >
         <Image
           height={50}
@@ -296,7 +299,7 @@ export function Header({
     <header
       className={`${
         occultInPrivate && "hidden"
-      } md:fixed z-50 top-0 w-full flex items-center justify-center bg-background/90 backdrop-blur-xs border-b border-border`}
+      } md:fixed z-50 top-0 w-full flex items-center justify-center bg-card/90 backdrop-blur-xs border-b border-border`}
     >
       <div className="w-full max-w-7xl px-4 2xl:px-0 h-16 flex items-center justify-between gap-6 transition-all duration-300 ease-in-out">
         {onBack && (

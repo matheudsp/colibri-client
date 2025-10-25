@@ -93,7 +93,7 @@ export function MobileHeader() {
   return (
     <>
       {/* Header (mobile only) */}
-      <header className="fixed top-0 left-0 w-full bg-background backdrop-blur-sm h-16 border-b border-border px-3 py-2 flex items-center justify-between z-50 md:hidden">
+      <header className="fixed top-0 left-0 w-full bg-card backdrop-blur-sm h-16 border-b border-border px-3 py-2 flex items-center justify-between z-50 md:hidden">
         <div className="flex items-center gap-3">
           <div className="shrink-0">
             <Link href="/">
@@ -159,7 +159,7 @@ export function MobileHeader() {
               animate={{ y: "0%" }}
               exit={{ y: "-110%" }}
               transition={{ type: "tween", ease: "easeInOut", duration: 0.28 }}
-              className="fixed top-0 left-0 w-full bg-background p-4 z-50 md:hidden border-b border-border"
+              className="fixed top-0 left-0 w-full bg-card p-4 z-50 md:hidden border-b border-border"
             >
               <div className="flex items-center justify-between mb-4">
                 <div className="flex items-center gap-3">

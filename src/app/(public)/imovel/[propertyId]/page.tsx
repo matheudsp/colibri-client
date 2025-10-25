@@ -24,6 +24,8 @@ import { LoginModal } from "@/components/modals/authModals/LoginModal";
 import { InterestIndicator } from "@/components/layout/InterestIndicator";
 import { PropertyPriceAndContact } from "@/components/cards/details/PropertyPriceAndContact";
 
+import { AutopromoteSection } from "./autopromote-section";
+
 export default function PropertyDetailsPage() {
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const params = useParams();
@@ -172,8 +174,9 @@ export default function PropertyDetailsPage() {
                   </h2>
                   <div className="text-gray-600 space-y-1">
                     <p>
-                      <strong>Endereço:</strong> {property.street},{" "}
-                      {property.number}{" "}
+                      {/* <strong>Endereço:</strong> {property.street},{" "}
+                      {property.number}{" "} */}
+                      <strong>Endereço:</strong> {property.street}
                       {property.complement && `, ${property.complement}`}
                     </p>
                     <p>
@@ -211,6 +214,9 @@ export default function PropertyDetailsPage() {
               </div>
             </aside>
           </div>
+
+          <AutopromoteSection />
+
           <p className="text-xs text-gray-400 mt-6 text-center">
             Código de Referência do Imóvel: {property.id}
           </p>

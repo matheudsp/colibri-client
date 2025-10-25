@@ -38,8 +38,8 @@ const createTenantSchema = z.object({
 
 const searchTenantSchema = z.object({
   tenantAction: z.literal("search"),
-  tenantCpfCnpj: z.string().min(11, "O CPF/CNPJ é obrigatório para a busca."),
-  tenantEmail: z.string().optional(),
+  tenantCpfCnpj: z.string().optional(),
+  tenantEmail: z.string().email(),
   tenantName: z.string().optional(),
   tenantPhone: z.string().optional(),
   tenantPassword: z.string().optional(),

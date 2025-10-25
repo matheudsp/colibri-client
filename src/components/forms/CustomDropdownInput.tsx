@@ -119,7 +119,9 @@ export function CustomDropdownInput({
       {label && (
         <label
           htmlFor={id}
-          className="block text-sm font-light text-gray-700 mb-1"
+          className={`block text-sm font-medium mb-1 ${
+            error ? "text-error" : "text-secondary"
+          }`}
         >
           {label}
         </label>
@@ -131,14 +133,14 @@ export function CustomDropdownInput({
           id={id}
           type="button"
           onClick={toggleDropdown}
-          className={`w-full px-3 py-2 text-left border-2 rounded-lg shadow-xs bg-white focus:outline-hidden flex justify-between items-center transition-colors duration-200 hover:border-primary ${
-            isOpen ? "border-primary" : "border-gray-300"
-          }`}
+          className={`w-full px-3 py-2 text-left border-2 rounded-lg shadow-xs bg-card focus:outline-hidden flex justify-between items-center transition-colors duration-200 hover:border-primary ${
+            isOpen ? "border-primary" : "border-border"
+          } ${error && "border-error"}`}
           disabled={disabled}
         >
           <span
             className={` flex items-center gap-2 ${
-              selectedOption ? "text-gray-700" : "text-gray-400"
+              selectedOption ? "text-foreground" : "text-muted-foreground/80"
             }`}
           >
             {icon && <span className="text-gray-500">{icon}</span>}

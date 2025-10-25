@@ -11,6 +11,7 @@ import {
   FilePen,
   ChevronLeft,
   ChevronRight,
+  UserSearch,
 } from "lucide-react";
 
 import { Controller, useForm } from "react-hook-form";
@@ -51,6 +52,7 @@ import { cpfCnpjMask } from "@/utils/masks/cpfCnpjMask";
 import { extractAxiosError } from "@/services/api";
 
 import Image from "next/image";
+import { BrlCurrencyIcon } from "@/components/icons/BRLCurrencyIcon";
 
 export default function CreateContractPage() {
   const searchParams = useSearchParams();
@@ -58,7 +60,7 @@ export default function CreateContractPage() {
   const params = useParams();
   const propertyId = params.propertyId as string;
   const [canShare, setCanShare] = useState(false);
-  const [currentStep, setCurrentStep] = useState(1);
+  const [currentStep, setCurrentStep] = useState(3);
   const [tenantAction, setTenantAction] = useState<"search" | "create">(
     "search"
   );
@@ -118,12 +120,12 @@ export default function CreateContractPage() {
     resetField("tenantPhone");
   };
 
-  const cpfCnpjValue = watch("tenantCpfCnpj");
+  const tenantEmailValue = watch("tenantEmail");
   const guaranteeTypeValue = watch("guaranteeType");
 
   const handleSearchTenant = async () => {
-    if (!cpfCnpjValue || cpfCnpjValue.length < 11) {
-      toast.error("Por favor, insira um CPF/CNPJ válido para buscar.");
+    if (!tenantEmailValue || tenantEmailValue.length < 11) {
+      toast.error("Por favor, insira um e-mail válido para buscar.");
       return;
     }
 
@@ -132,7 +134,7 @@ export default function CreateContractPage() {
 
     try {
       const response: ApiResponse<userProps[]> = await UserService.search({
-        cpfCnpj: cpfCnpjValue,
+        email: tenantEmailValue,
         role: "LOCATARIO",
       });
       const userList = response.data || [];
@@ -141,7 +143,7 @@ export default function CreateContractPage() {
         toast.success(`${userList.length} inquilino(s) encontrado(s).`);
       } else {
         toast.info(
-          "Nenhum inquilino encontrado. Verifique o CPF/CNPJ ou cadastre um novo."
+          "Nenhum inquilino encontrado. Verifique o E-MAIL ou cadastre um novo."
         );
         setFoundTenants([]);
       }
@@ -157,7 +159,7 @@ export default function CreateContractPage() {
   const handleSelectTenant = useCallback(
     (tenant: userProps) => {
       setSelectedTenant(tenant);
-      setValue("tenantCpfCnpj", tenant.cpfCnpj!, { shouldValidate: true });
+      setValue("tenantEmail", tenant.email!, { shouldValidate: true });
       setFoundTenants([]);
     },
     [setValue]
@@ -172,7 +174,7 @@ export default function CreateContractPage() {
             "tenantPhone",
             "tenantPassword",
           ]
-        : ["tenantCpfCnpj"];
+        : ["tenantEmail"];
 
     const isValid = await trigger(fieldsToValidate);
 
@@ -210,7 +212,7 @@ export default function CreateContractPage() {
         startDate: toISODate(data.startDate),
       };
       if (tenantAction === "search" && selectedTenant) {
-        delete payload.tenantEmail;
+        delete payload.tenantCpfCnpj;
         delete payload.tenantPhone;
         delete payload.tenantName;
         delete payload.tenantPassword;
@@ -376,15 +378,15 @@ export default function CreateContractPage() {
     }
   };
   useEffect(() => {
-    const tenantCpfCnpj = searchParams.get("tenantCpfCnpj");
+    const tenantEmail = searchParams.get("tenantEmail");
 
     const startEasyFlow = async () => {
-      if (tenantCpfCnpj && !selectedTenant) {
+      if (tenantEmail && !selectedTenant) {
         // Executa apenas se tiver CPF e nenhum inquilino foi selecionado ainda
         setIsEasyContractFlow(true);
         setTenantAction("search");
         setValue("tenantAction", "search");
-        setValue("tenantCpfCnpj", tenantCpfCnpj);
+        setValue("tenantEmail", tenantEmail);
 
         // toast.info("Iniciando Contrato Fácil", {
         //   description: "Buscando dados do inquilino pré-selecionado.",
@@ -393,7 +395,7 @@ export default function CreateContractPage() {
         setSearchingTenant(true);
         try {
           const response: ApiResponse<userProps[]> = await UserService.search({
-            cpfCnpj: tenantCpfCnpj,
+            email: tenantEmail,
             role: "LOCATARIO",
           });
           const userList = response.data || [];
@@ -428,10 +430,10 @@ export default function CreateContractPage() {
     <div className="min-h-svh w-full flex flex-col items-center justify-start">
       <div className="   py-4 md:py-24 grid place-items-center   px-4 md:px-0 w-full max-w-2xl">
         <div>
-          <h1 className="text-xl md:text-3xl  font-bold text-gray-800  text-center">
+          <h1 className="text-xl md:text-3xl  font-bold text-foreground  text-center">
             Criar Novo Contrato de Locação
           </h1>
-          <p className="text-xs md:text-sm text-gray-500 text-center">
+          <p className="text-xs md:text-sm text-muted-foreground text-center">
             Siga as etapas para gerar um novo contrato.
           </p>
         </div>
@@ -445,26 +447,26 @@ export default function CreateContractPage() {
         <form onSubmit={handleSubmit(onSubmit)} className="w-full  space-y-6">
           {currentStep === 1 && (
             <fieldset className="border border-border p-4 rounded-lg space-y-4">
-              <legend className="px-2 font-bold text-lg text-gray-700">
+              <legend className="px-2 font-bold text-lg text-foreground">
                 1. Dados do Inquilino
               </legend>
 
-              <p className="text-sm text-gray-600">
+              <p className="text-sm text-muted-foreground">
                 {
-                  'Para evitar duplicidade, primeiro busque pelo CPF/CNPJ do inquilino. Se ele não for encontrado, utilize a aba "Cadastrar Novo".'
+                  'Para evitar duplicidade, primeiro busque pelo e-mail do inquilino. Se ele não for encontrado, utilize a aba "Cadastrar Novo".'
                 }
               </p>
 
-              <div className="flex flex-col sm:flex-row w-full bg-gray-200 border border-border rounded-lg p-1 gap-1 sm:gap-0">
+              <div className="flex flex-col sm:flex-row w-full bg-card border border-border rounded-lg p-1 gap-1 sm:gap-0">
                 <button
                   type="button"
                   onClick={() => handleActionChange("search")}
                   disabled={isEasyContractFlow}
-                  className={`w-full sm:w-1/2 py-2 rounded-md transition-all duration-200 text-sm font-bold ]
+                  className={`cursor-pointer w-full sm:w-1/2 py-2 rounded-md transition-all duration-200 text-sm font-bold ]
                     ${
                       tenantAction === "search"
-                        ? "bg-primary text-white shadow-sm"
-                        : "bg-transparent text-gray-600"
+                        ? "bg-primary text-primary-foreground shadow-sm"
+                        : "bg-transparent text-foreground"
                     }
                    ${
                      isEasyContractFlow ? "cursor-not-allowed opacity-50" : ""
@@ -476,11 +478,11 @@ export default function CreateContractPage() {
                   type="button"
                   onClick={() => handleActionChange("create")}
                   disabled={isEasyContractFlow}
-                  className={`w-full sm:w-1/2 py-2 rounded-md transition-all duration-200 text-sm font-bold 
+                  className={`cursor-pointer  w-full sm:w-1/2 py-2 rounded-md transition-all duration-200 text-sm font-bold 
                     ${
                       tenantAction === "create"
-                        ? "bg-primary text-white shadow-sm"
-                        : "bg-transparent text-gray-600"
+                        ? "bg-primary text-primary-foreground shadow-sm"
+                        : "bg-transparent text-foreground"
                     } ${
                     isEasyContractFlow ? "cursor-not-allowed opacity-50" : ""
                   }`}
@@ -491,26 +493,25 @@ export default function CreateContractPage() {
 
               {tenantAction === "search" && (
                 <div className="pt-2 space-y-6">
-                  <p className="text-sm text-center text-gray-600">
-                    Digite o CPF/CNPJ do inquilino para encontrá-lo na
-                    plataforma.
+                  <p className="text-sm text-center text-muted-foreground">
+                    Digite o e-mail do inquilino para encontrá-lo na plataforma.
                   </p>
 
                   <div className="flex flex-col sm:flex-row items-stretch gap-2">
                     <div className="grow">
                       <Controller
-                        name="tenantCpfCnpj"
+                        name="tenantEmail"
                         control={control}
                         render={({ field }) => (
                           <CustomFormInput
-                            id="search-cpf"
-                            icon={<FileText />}
-                            mask="cpfCnpj"
-                            label="CPF/CNPJ do inquilino"
-                            placeholder="ex: 064.245.353-53"
+                            id="search-email"
+                            icon={<UserSearch />}
+                            type="email"
+                            label="E-mail do Inquilino"
+                            placeholder="ex: johndoe@mail.com"
                             disabled={searchingTenant}
                             className="h-full "
-                            error={errors.tenantCpfCnpj?.message}
+                            error={errors.tenantEmail?.message}
                             {...field}
                           />
                         )}
@@ -533,17 +534,17 @@ export default function CreateContractPage() {
                   </div>
 
                   {foundTenants.length > 0 && (
-                    <div className="w-full space-y-3 border-t border-border pt-4 animate-fade-in">
-                      <h3 className="font-semibold text-gray-700">
-                        Usuários existentes:
+                    <div className="w-full space-y-3 border-t border-border pt-4 animate-flip-down animate-once animate-duration-300 animate-ease-in-out">
+                      <h3 className="font-semibold text-foreground">
+                        Usuários encontrados:
                       </h3>
                       {foundTenants.map((user) => (
                         <div
                           key={user.id}
-                          className="w-full p-4 bg-gray-50 rounded-lg border border-border flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3"
+                          className="w-full p-4 bg-card rounded-lg border border-border flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3"
                         >
                           <div className="flex items-center gap-3">
-                            <div className="shrink-0 bg-secondary text-white rounded-full h-10 w-10 flex items-center justify-center font-bold">
+                            <div className="shrink-0 bg-secondary text-secondary-foreground rounded-full h-10 w-10 flex items-center justify-center font-bold">
                               {user.name.charAt(0).toUpperCase()}
                             </div>
                             <div>
@@ -551,7 +552,7 @@ export default function CreateContractPage() {
                                 {user.name}
                               </p>
                               <p className="text-sm text-gray-600  break-all">
-                                {cpfCnpjMask(user.cpfCnpj!)}
+                                {user.cpfCnpj}
                               </p>
                               <p className="text-sm text-gray-500 break-all">
                                 {user.email}
@@ -561,7 +562,7 @@ export default function CreateContractPage() {
 
                           <CustomButton
                             onClick={() => handleSelectTenant(user)}
-                            color="bg-green-600"
+                            color="bg-primary"
                             textColor="text-white"
                             className="w-full sm:w-auto mt-2 sm:mt-0"
                           >
@@ -575,25 +576,25 @@ export default function CreateContractPage() {
 
                   {selectedTenant && (
                     <div
-                      className="w-full p-4 bg-primary/10 border-2 border-primary/20 rounded-lg animate-fade-in"
+                      className="w-full  py-1 md:py-4 px-2 md:px-8 bg-secondary/10 border-2 border-secondary/20 rounded-lg animate-flip-down animate-once animate-duration-300 animate-ease-out"
                       role="group"
                       aria-label="Inquilino Selecionado"
                     >
-                      <p className="text-sm font-semibold text-primary mb-2">
-                        Inquilino Selecionado:
+                      <p className="text-sm font-semibold text-primary-hover mb-2">
+                        Inquilino selecionado:
                       </p>
                       <div className="flex items-center gap-4">
                         <div className="shrink-0">
-                          <UserIcon className="w-8 h-8 text-primary" />
+                          <UserIcon className="w-8 h-8 text-primary-hover" />
                         </div>
                         <div className="grow">
-                          <p className="font-bold text-lg text-gray-800 break-all">
+                          <p className="font-bold text-lg text-foreground break-all">
                             {selectedTenant.name}
                           </p>
-                          <p className="text-sm text-gray-600 break-all">
-                            {cpfCnpjMask(selectedTenant.cpfCnpj!)}
+                          <p className="text-sm text-muted-foreground break-all">
+                            {selectedTenant.cpfCnpj}
                           </p>
-                          <p className="text-sm text-gray-600 break-all">
+                          <p className="text-sm text-muted-foreground  break-all truncate ">
                             {selectedTenant.email}
                           </p>
                         </div>
@@ -706,7 +707,7 @@ export default function CreateContractPage() {
                       <CustomFormInput
                         id="rentAmount"
                         placeholder="ex: 1.650,00"
-                        icon={<DollarSign />}
+                        icon={<BrlCurrencyIcon />}
                         label="Valor do Aluguel*"
                         error={errors.rentAmount?.message}
                         mask="numeric"
@@ -722,7 +723,7 @@ export default function CreateContractPage() {
                     render={({ field }) => (
                       <CustomFormInput
                         id="condoFee"
-                        icon={<DollarSign />}
+                        icon={<BrlCurrencyIcon />}
                         placeholder="ex: 125,00"
                         label="Taxa de Condomínio"
                         error={errors.condoFee?.message}
@@ -852,7 +853,7 @@ export default function CreateContractPage() {
               {tenantAction === "create" && newTenantCredentials ? (
                 <>
                   <div className="flex flex-col items-center gap-2 mb-6">
-                    <p className="text-sm text-justify text-gray-500">
+                    <p className="text-sm text-justify text-muted-foreground">
                       O seu contrato foi criado e está aguardando a próxima
                       etapa: <strong>Envio de documentos pelo Inquilino</strong>
                       . Ele receberá um e-mail com as informações de acesso, mas
@@ -876,10 +877,10 @@ export default function CreateContractPage() {
                             className="rounded-md"
                           />
                           <div>
-                            <p className="text-xs text-gray-500">
+                            <p className="text-xs text-muted-foreground">
                               Portal do Inquilino
                             </p>
-                            <p className="text-sm font-medium text-gray-800">
+                            <p className="text-sm font-medium text-foreground">
                               Complete a documentação online
                             </p>
                           </div>
@@ -889,23 +890,27 @@ export default function CreateContractPage() {
 
                     <div className="px-6 py-6 grid grid-cols-1 gap-4 ">
                       <div className="col-span-1 border-b border-border pb-2 px-4">
-                        <span className="text-xs text-gray-700  ">
+                        <span className="text-xs text-foreground  ">
                           Use as seguintes informações para fazer login no
                           Sistema Locaterra e dar continuidade ao processo.
                         </span>
                       </div>
                       <div className="col-span-1 ">
-                        <span className="text-xs text-gray-500">Nome</span>
+                        <span className="text-xs text-muted-foreground">
+                          Nome
+                        </span>
                         <div className="">
-                          <span className="text-sm font-medium text-gray-800 break-words">
+                          <span className="text-sm font-medium text-foreground break-words">
                             {newTenantCredentials?.name ?? "-"}
                           </span>
                         </div>
                       </div>
                       <div className="col-span-1">
-                        <span className="text-xs text-gray-500">E-mail</span>
+                        <span className="text-xs text-muted-foreground">
+                          E-mail
+                        </span>
                         <div className=" flex items-center justify-between gap-3">
-                          <span className="font-medium text-sm max-w-xs truncate text-gray-800 break-words">
+                          <span className="font-medium text-sm max-w-xs truncate text-foreground break-words">
                             {newTenantCredentials.email}
                           </span>
 
@@ -926,16 +931,18 @@ export default function CreateContractPage() {
                               }
                             }}
                             className="p-2 w-8 h-8 rounded-md hover:bg-background-alt border transition"
-                            icon={<Copy className="w-4 h-4 text-gray-600" />}
+                            icon={
+                              <Copy className="w-4 h-4 text-muted-foreground" />
+                            }
                           />
                         </div>
                       </div>
                       <div className="col-span-1">
-                        <span className="text-xs text-gray-500">
+                        <span className="text-xs text-muted-foreground">
                           Senha temporária
                         </span>
                         <div className=" flex items-center justify-between gap-3">
-                          <span className="font-medium text-sm max-w-xs truncate text-gray-800 break-words">
+                          <span className="font-medium text-sm max-w-xs truncate text-foreground break-words">
                             {newTenantCredentials.password}
                           </span>
 
@@ -959,7 +966,9 @@ export default function CreateContractPage() {
                                 }
                               }}
                               className="p-2 w-8 h-8 rounded-md hover:bg-background-alt border transition"
-                              icon={<Copy className="w-4 h-4 text-gray-600" />}
+                              icon={
+                                <Copy className="w-4 h-4 text-muted-foreground" />
+                              }
                             />
                           </div>
                         </div>
@@ -967,12 +976,14 @@ export default function CreateContractPage() {
                       <div className="col-span-full mt-2 pt-3 border-t border-border">
                         <div className="flex flex-col items-center gap-3">
                           <div className="flex-col justify-center text-center items-center gap-3">
-                            <p className="text-xs text-gray-500">Acesse em</p>
+                            <p className="text-xs text-muted-foreground">
+                              Acesse em
+                            </p>
                             <a
                               href="https://www.locaterra.com.br"
                               target="_blank"
                               rel="noopener noreferrer"
-                              className="inline-flex items-center gap-2 font-mono font-medium text-gray-900 hover:underline px-2 py-1 rounded-md border border-border"
+                              className="inline-flex items-center gap-2 font-mono font-medium text-foreground hover:underline px-2 py-1 rounded-md border border-border"
                             >
                               <Globe className="w-4 h-4" />
                               www.locaterra.com.br
@@ -998,7 +1009,7 @@ export default function CreateContractPage() {
                       <CustomButton
                         type="button"
                         onClick={handleShareCredentials}
-                        className="inline-flex items-center w-full px-3 py-2 rounded-lg bg-secondary text-white text-sm hover:opacity-80 transition"
+                        className="inline-flex items-center w-full px-3 py-2 rounded-lg bg-secondary text-secondary-foreground text-sm hover:opacity-80 transition"
                         icon={
                           canShare ? (
                             <FaShareFromSquare className="w-4 h-4" />
@@ -1013,12 +1024,12 @@ export default function CreateContractPage() {
                   </div>
                 </>
               ) : (
-                <div className="border border-border rounded-lg shadow-md p-6">
+                <div className="border border-border rounded-lg p-6">
                   <div className="flex items-start gap-4">
                     <div className="flex-shrink-0">
-                      <div className="rounded-full bg-primary-hover p-3">
+                      <div className="rounded-full bg-primary p-3">
                         <svg
-                          className="w-6 h-6 text-white"
+                          className="w-6 h-6 text-primary-foreground"
                           xmlns="http://www.w3.org/2000/svg"
                           fill="none"
                           viewBox="0 0 24 24"
@@ -1036,10 +1047,10 @@ export default function CreateContractPage() {
                     </div>
 
                     <div>
-                      <h2 className="text-2xl font-extrabold text-gray-900">
+                      <h2 className="text-2xl font-extrabold text-foreground">
                         Contrato criado com sucesso!
                       </h2>
-                      <p className="text-sm text-gray-600 mt-2">
+                      <p className="text-sm text-muted-foreground mt-2">
                         O inquilino receberá as instruções por e-mail para dar
                         continuidade ao processo de locação.
                       </p>

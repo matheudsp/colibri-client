@@ -51,9 +51,9 @@ export function InterestCard({ interest, userRole }: InterestCardProps) {
   });
 
   const handleStartContract = () => {
-    const tenantCpfCnpj = interest.tenant.cpfCnpj;
+    const tenantEmail = interest.tenant.email;
 
-    if (!tenantCpfCnpj) {
+    if (!tenantEmail) {
       toast.error("Não foi possível iniciar o contrato.", {
         description: "Dados do interessado não encontrados.",
       });
@@ -62,7 +62,7 @@ export function InterestCard({ interest, userRole }: InterestCardProps) {
 
     const url = `/imovel/${
       interest.property.id
-    }/criar-contrato?tenantCpfCnpj=${encodeURIComponent(tenantCpfCnpj)}`;
+    }/criar-contrato?tenantEmail=${encodeURIComponent(tenantEmail)}`;
     router.push(url);
   };
 

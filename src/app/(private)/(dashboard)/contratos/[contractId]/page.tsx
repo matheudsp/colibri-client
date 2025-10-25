@@ -65,6 +65,7 @@ export default function ContractManagementPage() {
     setLoading(true);
     try {
       const response = await ContractService.findOne(contractId);
+      console.log("AQUI ESTA SEU RESPONSE", response);
       setContract(response.data);
     } catch (_error) {
       const errorMessage = extractAxiosError(_error);
@@ -492,54 +493,54 @@ export default function ContractManagementPage() {
         }
         return null;
       case "AGUARDANDO_ASSINATURAS":
-        // LÓGICA CORRIGIDA: Agora verificamos diretamente o array 'signatureRequests'
-        const signatureProcessStarted =
-          contract.signatureRequests && contract.signatureRequests.length > 0;
-
         if (role === Roles.LOCADOR || role === Roles.ADMIN) {
-          if (signatureProcessStarted) {
-            return (
-              <div className="bg-indigo-50 border-indigo-200 border p-4 rounded-xl text-center">
+          // A lógica para verificar se o processo começou permanece
+          const signatureProcessStarted =
+            contract.signatureRequests && contract.signatureRequests.length > 0;
+
+          return (
+            <div className="bg-indigo-50 border-indigo-200 border p-4 rounded-xl text-center">
+              {isActionLoading ? (
+                <Loader2 className="inline animate-spin w-4 h-4 mr-1" />
+              ) : (
                 <LottieAnimation
                   animationData={signatureAnimation}
                   className="w-20 h-20 mx-auto"
                 />
-                <h3 className="font-bold text-lg mt-2">
-                  Assinaturas Solicitadas
-                </h3>
-                <p className="text-sm text-gray-600 mt-1">
-                  O contrato foi enviado para ambos. Eles devem verificar os
-                  seus e-mails e WhatsApp para assinar. Você pode reenviar as
-                  notificações se necessário.
-                </p>
-              </div>
-            );
-          } else {
-            return (
-              <div className="bg-red-50 border-red-200 border p-4 rounded-xl text-center">
-                <FileWarning className="mx-auto text-red-500" size={32} />
-                <h3 className="font-bold text-lg mt-2">Ação Necessária</h3>
-                <p className="text-sm text-gray-600 mt-1">
-                  A documentação foi aprovada. Clique abaixo para gerar o
-                  contrato e enviá-lo para a assinatura digital de ambas as
-                  partes.
-                </p>
+              )}
+              <h3 className="font-bold text-lg mt-2">
+                {signatureProcessStarted
+                  ? "Assinaturas Solicitadas"
+                  : "Preparando para Assinatura"}
+              </h3>
+              <p className="text-sm text-gray-600 mt-1">
+                O processo de assinatura foi iniciado automaticamente. Locador e
+                locatário receberão notificações para assinar o contrato.{" "}
+                {!signatureProcessStarted && (
+                  <button
+                    onClick={handleRequestSignature}
+                    disabled={isActionLoading}
+                    className="text-primary hover:text-primary-hover underline font-semibold focus:outline-none"
+                  >
+                    Clique aqui se não tiver iniciado.
+                  </button>
+                )}
+              </p>
+
+              {/* {signatureProcessStarted && (
                 <CustomButton
-                  onClick={handleRequestSignature}
+                  onClick={() => setShowResendModal(true)}
                   disabled={isActionLoading}
-                  color="bg-indigo-600"
-                  textColor="text-white"
-                  className="w-full mt-4"
+                  color="bg-sky-100"
+                  textColor="text-sky-900"
+                  className="w-full sm:w-auto mt-4"
                 >
-                  {isActionLoading ? (
-                    <Loader2 className="animate-spin" />
-                  ) : (
-                    "Iniciar Assinatura Digital"
-                  )}
+                  <BellRing className="mr-2" size={16} />
+                  Reenviar Lembrete
                 </CustomButton>
-              </div>
-            );
-          }
+              )} */}
+            </div>
+          );
         }
 
         return (

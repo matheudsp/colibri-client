@@ -75,8 +75,6 @@ export function PropertyPhotoManager({
         const newPhotos: Photo[] = newFiles.map((file) => ({
           file,
           tempUrl: URL.createObjectURL(file),
-          id: `temp-${file.name}-${Date.now()}`,
-          filePath: "",
         }));
         setPhotos((prev) => [...prev, ...newPhotos]);
         setIsAddPhotoModalOpen(false);

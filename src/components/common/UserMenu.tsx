@@ -137,15 +137,17 @@ export function UserMenu({
           leaveFrom="transform opacity-100 scale-100"
           leaveTo="transform opacity-0 scale-95"
         >
-          <Menu.Items className="absolute right-0 z-50 mt-2 w-72 origin-top-right divide-y divide-border rounded-lg bg-background shadow-lg  ring-opacity-5 focus:outline-none border border-border">
+          <Menu.Items className="absolute right-0 z-50 mt-2 w-72 origin-top-right divide-y divide-border rounded-lg bg-card shadow-lg  ring-opacity-5 focus:outline-none border border-border">
             <div className="px-4 py-3">
               <div className="flex items-center gap-3">
                 <Avatar name={user.name} isScrolled={isScrolled} />
                 <div className="flex-1 min-w-0">
-                  <p className="text-sm font-semibold text-gray-900 truncate">
+                  <p className="text-sm font-semibold text-foreground truncate">
                     {user.name}
                   </p>
-                  <p className="text-xs text-gray-500 truncate">{user.email}</p>
+                  <p className="text-xs text-muted-foreground truncate">
+                    {user.email}
+                  </p>
                 </div>
               </div>
 
@@ -153,7 +155,7 @@ export function UserMenu({
               <div className="mt-3 grid grid-cols-2 gap-2">
                 <Link
                   href="/conta"
-                  className="inline-flex items-center justify-center rounded-md border border-border px-2 py-1 text-sm font-medium text-gray-700 hover:bg-background/60"
+                  className="inline-flex items-center justify-center rounded-md border border-border px-2 py-1 text-sm font-medium text-gray-700 hover:bg-muted"
                 >
                   <UserCircleIcon
                     className="mr-2 h-4 w-4 text-gray-400"
@@ -163,7 +165,7 @@ export function UserMenu({
                 </Link>
                 <button
                   onClick={() => setShowLogoutConfirm(true)}
-                  className="inline-flex items-center justify-center rounded-md bg-red-50 px-2 py-1 text-sm font-medium text-red-700 hover:bg-red-100"
+                  className="inline-flex items-center justify-center cursor-pointer rounded-md bg-red-100 px-2 py-1 text-sm font-medium text-red-700 hover:bg-red-200"
                 >
                   <ArrowRightOnRectangleIcon
                     className="mr-2 h-4 w-4 text-red-500"
@@ -180,13 +182,14 @@ export function UserMenu({
                   <Link
                     href="/conta/seguranca"
                     className={cx(
-                      "flex items-center gap-3 w-full rounded-md px-3 py-2 text-sm",
-                      active
-                        ? "bg-background/70 text-gray-900"
-                        : "text-gray-700"
+                      "flex items-center gap-3 w-full rounded-md px-3 py-2 text-sm  text-foreground",
+                      active && "bg-muted"
                     )}
                   >
-                    <Shield className="h-5 w-5 text-gray-400" aria-hidden />
+                    <Shield
+                      className="h-5 w-5 text-muted-foreground"
+                      aria-hidden
+                    />
                     Segurança
                   </Link>
                 )}
@@ -197,14 +200,12 @@ export function UserMenu({
                   <Link
                     href="/conta/configuracoes"
                     className={cx(
-                      "flex items-center gap-3 w-full rounded-md px-3 py-2 text-sm",
-                      active
-                        ? "bg-background/70 text-gray-900"
-                        : "text-gray-700"
+                      "flex items-center gap-3 w-full rounded-md px-3 py-2 text-sm  text-foreground",
+                      active && "bg-muted"
                     )}
                   >
                     <Settings
-                      className="h-5 w-5 text-gray-400 rotate-90"
+                      className="h-5 w-5 text-muted-foreground"
                       aria-hidden
                     />
                     Configurações
@@ -252,7 +253,7 @@ export function UserMenu({
                 leaveFrom="opacity-100 scale-100"
                 leaveTo="opacity-0 scale-95"
               >
-                <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-background p-6 text-left align-middle shadow-xl ring-1 ring-border">
+                <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-card p-6 text-left align-middle shadow-xl ring-1 ring-border">
                   <div className="flex items-start gap-4">
                     <div className="flex h-10 w-10 items-center justify-center rounded-full bg-red-50">
                       <ExclamationTriangleIcon className="h-6 w-6 text-red-600" />
@@ -262,7 +263,7 @@ export function UserMenu({
                         as="h3"
                         className="text-lg font-semibold text-gray-900"
                       >
-                        Encerrar sessão?
+                        Encerrar sessão
                       </Dialog.Title>
                       <div className="mt-1 text-sm text-gray-500">
                         Tem certeza que deseja sair agora? Você precisará fazer
@@ -274,14 +275,14 @@ export function UserMenu({
                   <div className="mt-6 flex justify-end gap-3">
                     <button
                       type="button"
-                      className="inline-flex justify-center rounded-md border border-border px-4 py-2 text-sm font-medium text-gray-700 hover:bg-background/60"
+                      className=" cursor-pointer  inline-flex justify-center rounded-md border border-border px-4 py-2 text-sm font-medium text-gray-700 hover:bg-background/60"
                       onClick={() => setShowLogoutConfirm(false)}
                     >
                       Cancelar
                     </button>
                     <button
                       type="button"
-                      className="inline-flex items-center gap-2 justify-center rounded-md bg-red-600 px-4 py-2 text-sm font-semibold text-white hover:bg-red-700"
+                      className=" cursor-pointer inline-flex items-center gap-2 justify-center rounded-md bg-red-600 px-4 py-2 text-sm font-semibold text-white hover:bg-red-700"
                       onClick={handleConfirmLogout}
                       disabled={loadingLogout}
                     >

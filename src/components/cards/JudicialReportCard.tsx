@@ -97,7 +97,7 @@ export function JudicialReportCard({
           {judicialReports.map((report, i) => (
             <li
               key={report.id}
-              className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 p-3 bg-background rounded-md border border-border"
+              className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 p-3 rounded-md border border-border bg-gradient-to-t from-muted/40 to-card"
             >
               <div className="text-sm">
                 <p className="font-semibold">Relatório {i + 1}</p>

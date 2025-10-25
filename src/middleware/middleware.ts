@@ -10,6 +10,7 @@ export const publicRoutes = [
   /^\/imoveis\/[^/]+$/,
   /^\/imovel\/[^/]+$/, // Corresponde a /imovel/{qualquer-id}
   "/ajuda",
+  "/sobre",
 ];
 
 export function middleware(req: NextRequest) {

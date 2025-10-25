@@ -192,15 +192,13 @@ export default function EditContractPage() {
         },
       },
     },
-    [
-      processedContent,
-      parseVariables,
-      isAuthorized,
-      isLoadingContract,
-      contract?.status,
-    ]
+    [processedContent, isAuthorized, isLoadingContract, contract?.status]
   );
-
+  useEffect(() => {
+    if (editor) {
+      editor.setEditable(!parseVariables && isAuthorized === true);
+    }
+  }, [editor, parseVariables, isAuthorized]);
   const handleSaveContract = async () => {
     if (!contractId || !editor || isAuthorized !== true) return;
 
