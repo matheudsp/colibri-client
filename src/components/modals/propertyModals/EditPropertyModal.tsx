@@ -293,15 +293,15 @@ export function EditPropertyModal({
                 )}
               />
               <Controller
-                name="district"
+                name="province"
                 control={control}
                 render={({ field }) => (
                   <CustomFormInput
-                    id="district"
+                    id="province"
                     placeholder="ex: Centro"
                     icon={<MapIcon className="h-5 w-5" />}
                     label="Bairro*"
-                    error={errors.district?.message}
+                    error={errors.province?.message}
                     {...field}
                   />
                 )}
