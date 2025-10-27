@@ -15,6 +15,7 @@ import {
   Home,
   Hash,
   MapIcon,
+  InfoIcon,
 } from "lucide-react";
 
 import { useCurrentUser } from "@/hooks/useCurrentUser";
@@ -405,6 +406,18 @@ export function AccountTab() {
           </div>
         </FormSection>
 
+        <div className="border p-3 border-border rounded-lg bg-muted/30 flex md:flex-row flex-col items-center md:justify-between justify-center gap-4">
+          <InfoIcon
+            size={16}
+            strokeWidth={1.5}
+            className="text-muted-foreground md:h-10 md:w-10  h-5 w-5"
+          />
+          <p className="text-muted-foreground text-sm">
+            As mudanças na sua conta serão analisadas pela nossa equipe. Assim
+            que a análise for concluída, você receberá um e-mail com o
+            resultado.
+          </p>
+        </div>
         <div className="flex justify-end pt-4">
           <CustomButton
             type="submit"
