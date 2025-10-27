@@ -15,7 +15,6 @@ import {
   Home,
   Hash,
   MapIcon,
-  Building2,
 } from "lucide-react";
 
 import { useCurrentUser } from "@/hooks/useCurrentUser";
@@ -33,12 +32,13 @@ import {
 import { extractAxiosError } from "@/services/api";
 import { formatDateForDisplay } from "@/utils/formatters/formatDate";
 import { BrlCurrencyIcon } from "@/components/icons/BRLCurrencyIcon";
-import { getCompanyTypeLabel } from "@/constants/companyType";
+import { companyType } from "@/constants/companyType";
 import { FormSection } from "@/components/forms/FormSection";
 import { OtpVerificationModal } from "@/components/modals/verificationModals/OtpVerificationModal";
 import { VerificationService } from "@/services/domains/verificationService";
 import { VerificationContexts } from "../../constants/verification-contexts";
 import { unmaskNumeric } from "@/utils/masks/maskNumeric";
+import { CustomDropdownInput } from "../forms/CustomDropdownInput";
 export function AccountTab() {
   const { sub } = useCurrentUser();
   const [loading, setLoading] = useState(false);
@@ -198,7 +198,7 @@ export function AccountTab() {
                   mask="cpfCnpj"
                   error={errors.cpfCnpj?.message}
                   {...field}
-                  disabled
+                  // disabled
                 />
               )}
             />
@@ -208,12 +208,16 @@ export function AccountTab() {
                 name="companyType"
                 control={control}
                 render={({ field }) => (
-                  <CustomInput
-                    id="companyType"
+                  <CustomDropdownInput
                     label="Tipo de Empresa"
-                    icon={<Building2 size={18} />}
-                    value={getCompanyTypeLabel(field.value)}
-                    disabled
+                    placeholder="Tipo de Empresa"
+                    options={companyType}
+                    selectedOptionValue={field.value}
+                    onOptionSelected={(val) => {
+                      if (val)
+                        setValue("companyType", val, { shouldValidate: true });
+                    }}
+                    error={errors.companyType?.message}
                   />
                 )}
               />
@@ -229,7 +233,6 @@ export function AccountTab() {
                     mask="date"
                     error={errors.birthDate?.message}
                     {...field}
-                    disabled
                   />
                 )}
               />

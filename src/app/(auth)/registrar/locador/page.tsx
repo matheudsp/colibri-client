@@ -285,7 +285,7 @@ export default function LandlordRegisterPage() {
               error={errors.companyType?.message}
             />
           ) : (
-            cpfCnpjValue.length > 0 && (
+            cpfCnpjValue.length >= 0 && (
               <Controller
                 name="birthDate"
                 control={control}
