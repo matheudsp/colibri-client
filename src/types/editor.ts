@@ -19,7 +19,7 @@ export interface NestedVariableData {
     street: string;
     number: string;
     complement: string;
-    district: string;
+    province: string;
     city: string;
     state: string;
     cep: string;

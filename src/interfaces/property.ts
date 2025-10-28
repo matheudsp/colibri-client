@@ -8,7 +8,7 @@ export interface PropertyProps {
   value: number;
   cep: string;
   street: string;
-  district: string;
+  province: string;
   city: string;
   state: string;
   number: string;

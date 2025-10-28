@@ -180,7 +180,7 @@ export default function PropertyDetailsPage() {
                       {property.complement && `, ${property.complement}`}
                     </p>
                     <p>
-                      <strong>Bairro:</strong> {property.district}
+                      <strong>Bairro:</strong> {property.province}
                     </p>
                     <p>
                       <strong>Cidade/Estado:</strong> {property.city} /{" "}

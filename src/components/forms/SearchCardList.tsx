@@ -53,7 +53,7 @@ export function SearchCardList({ onSelectProperty }: SearchCardListProps) {
             agencyNumber: !isNaN(Number(query)) ? Number(query) : undefined,
             state: query,
             city: query,
-            district: query,
+            province: query,
             page: currentPage,
             limit: ITEMS_PER_PAGE,
           };
@@ -132,7 +132,7 @@ export function SearchCardList({ onSelectProperty }: SearchCardListProps) {
                     <LandmarkIcon className="hidden sm:block w-6 h-6 text-primary" />
                     <span className="ml-2 text-gray-600">
                       {property.title}
-                      {property.city} - {property.district}
+                      {property.city} - {property.province}
                     </span>
                   </div>
                 </li>

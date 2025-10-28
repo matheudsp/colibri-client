@@ -319,7 +319,7 @@ export function PropertyCardComponent({
         </h3>
         <p className="text-sm text-muted-foreground truncate">
           {/* {property.street}, {property.number} - {property.district} */}
-          {property.street} - {property.district}
+          {property.street} - {property.province}
         </p>
         <p className="text-sm text-muted-foreground truncate">
           {property.city} - {property.state}
