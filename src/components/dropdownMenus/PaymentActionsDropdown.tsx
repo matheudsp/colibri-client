@@ -12,6 +12,7 @@ import {
   Loader,
   Loader2,
 } from "lucide-react";
+import { CustomButton } from "../forms/CustomButton";
 
 type Props = {
   payment: PaymentResponse;
@@ -116,9 +117,10 @@ export function PaymentActionsDropdown({
       <DropdownMenu
         bg="bg-card"
         trigger={
-          <button
+          <CustomButton
+            ghost
             type="button"
-            className="p-2 w-9 h-9 flex items-center justify-center rounded-md hover:bg-gray-100 border-border  border transition cursor-pointer"
+            className="p-2 w-9 h-9 flex items-center justify-center transition cursor-pointer"
             aria-label="Abrir menu de ações do pagamento"
             title="Abrir menu de ações do pagamento"
           >
@@ -127,7 +129,7 @@ export function PaymentActionsDropdown({
             ) : (
               <MoreVertical size={16} />
             )}
-          </button>
+          </CustomButton>
         }
         items={items}
         side="right"

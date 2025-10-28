@@ -301,7 +301,7 @@ export default function DocumentPage() {
               </h1>
               <p className="text-zinc-500">
                 {isTenant
-                  ? "Envie os arquivos necessários para a análise do locador."
+                  ? "Envie os arquivos necessários para a análise do locador. Apenas envie FOTOS(PNG, JPG, WEBP)"
                   : "Analise e aprove ou reprove os documentos do inquilino."}
               </p>
             </div>

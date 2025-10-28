@@ -10,11 +10,13 @@ import { extractAxiosError } from "@/services/api";
 import { formatDateForDisplay } from "@/utils/formatters/formatDate";
 import { formatDecimalValue } from "@/utils/formatters/formatDecimal";
 import { statusMap } from "@/constants/paymentStatusMap";
-import { Loader2, FileText } from "lucide-react";
+import { Loader2, FileText, SquareArrowOutUpRight } from "lucide-react";
 import { EmptyCard } from "@/components/common/EmptyCard";
 import { RegisterPaymentModal } from "@/components/modals/paymentModals/RegisterPaymentModal";
 import { PaymentActionsDropdown } from "../dropdownMenus/PaymentActionsDropdown";
 import { WildcardPaymentButton } from "../common/WildcardPaymentButton";
+import { CustomButton } from "../forms/CustomButton";
+import Link from "next/link";
 
 interface Props {
   payments: PaymentResponse[];
@@ -162,6 +164,7 @@ export function ContractPaymentList({
             <tr>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                 Vencimento
+                <p className="text-xs font-medium text-gray-500"></p>
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                 Valor
@@ -195,7 +198,16 @@ export function ContractPaymentList({
                   </span>
                 </td>
 
-                <td className="px-6 py-4 items-center flex justify-center whitespace-nowrap text-right text-sm font-medium">
+                <td className="px-6 py-4 items-center flex justify-center whitespace-nowrap text-right text-sm font-medium gap-2">
+                  <Link target="_blank" href={`/faturas/${payment.id}`}>
+                    <CustomButton
+                      aria-label="Abrir página da fatura"
+                      title="Abrir página da fatura"
+                      ghost
+                      className="h-9 w-9 p-2"
+                      icon={<SquareArrowOutUpRight className="" size={16} />}
+                    />
+                  </Link>
                   <PaymentActionsDropdown
                     payment={payment}
                     loading={isActionLoading}
