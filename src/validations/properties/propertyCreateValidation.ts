@@ -1,6 +1,8 @@
-import { propertyType } from "@/constants";
+import { PropertyTransactionType, propertyType } from "@/constants";
 import { z } from "zod";
-
+const transactionTypeValues = PropertyTransactionType.map(
+  (item) => item.value
+) as [string, ...string[]];
 export const createPropertySchema = z.object({
   title: z
     .string()
@@ -8,13 +10,16 @@ export const createPropertySchema = z.object({
     .max(100, "O título deve ter no máximo 100 caracteres"),
   propertyType: z
     .string({
-      required_error: "O tipo de empresa é obrigatório",
+      required_error: "O tipo de imóvel é obrigatório",
       invalid_type_error: "Deve ser uma string",
     })
     .min(1, "Tipo do imóvel é obrigatório")
     .refine((val) => propertyType.some((type) => type.value === val), {
       message: "Tipo do imóvel inválido",
     }),
+  transactionType: z.enum(transactionTypeValues, {
+    errorMap: () => ({ message: "Selecione Locação ou Venda" }),
+  }),
   description: z
     .string()
     .min(1, "A descrição é obrigatória")

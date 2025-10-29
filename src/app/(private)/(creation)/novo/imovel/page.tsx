@@ -36,7 +36,7 @@ import { Stepper } from "@/components/layout/Stepper";
 import { unmaskNumeric } from "@/utils/masks/maskNumeric";
 import { BrlCurrencyIcon } from "@/components/icons/BRLCurrencyIcon";
 import { extractAxiosError } from "@/services/api";
-import { propertyType } from "@/constants";
+import { PropertyTransactionType, propertyType } from "@/constants";
 import { CustomFormTextarea } from "@/components/forms/CustomFormTextarea";
 import { PropertyPhotoManager } from "@/components/photos/PropertyPhotoManager";
 
@@ -62,12 +62,13 @@ export default function CreatePropertyPage() {
     formState: { errors },
   } = useForm<CreatePropertyFormValues>({
     resolver: zodResolver(createPropertySchema),
-    defaultValues: { isAvailable: true },
+    defaultValues: { isAvailable: true, transactionType: "LOCACAO" },
   });
 
   const stateValue = watch("state");
   const propertyTitleValue = watch("title");
   const formSteps = ["Cadastrar Imóvel", "Envio de Fotos"];
+  const transactionTypeValue = watch("transactionType");
   const propertyTypeValue = watch("propertyType");
 
   const handleNextStep = () => setStep((prev) => prev + 1);
@@ -184,10 +185,46 @@ export default function CreatePropertyPage() {
             className="w-full space-y-6 md:space-y-8"
           >
             <div>
-              <h2 className="text-lg sm:text-xl font-semibold mb-4 text-gray-700 border-b border-border pb-2">
+              <h2 className="text-lg sm:text-xl font-semibold mb-4 text-foreground border-b border-border pb-2">
                 Informações Principais
               </h2>
               <div className="grid grid-cols-1 gap-y-4">
+                <div>
+                  <label className="block text-sm font-medium mb-1 text-secondary">
+                    Tipo de Transação*
+                  </label>
+                  <div className="flex flex-col sm:flex-row w-full bg-muted border border-border rounded-lg p-1 gap-1 sm:gap-0">
+                    {PropertyTransactionType.map((option) => (
+                      <button
+                        type="button"
+                        key={option.id}
+                        onClick={() =>
+                          setValue(
+                            "transactionType",
+                            option.value as "VENDA" | "LOCACAO",
+                            {
+                              shouldValidate: true,
+                            }
+                          )
+                        }
+                        className={`w-full sm:w-1/2 py-2 rounded-md transition-all duration-200 text-sm font-bold cursor-pointer
+                          ${
+                            transactionTypeValue === option.value
+                              ? "bg-primary text-primary-foreground shadow-sm animate-fade-right animate-once animate-duration-100 animate-ease-in-out"
+                              : "bg-transparent text-muted-foreground hover:text-primary-hover "
+                          }
+                        `}
+                      >
+                        {option.label}
+                      </button>
+                    ))}
+                  </div>
+                  {errors.transactionType && (
+                    <span className="text-error text-sm mt-1 block">
+                      {errors.transactionType.message}
+                    </span>
+                  )}
+                </div>
                 <CustomDropdownInput
                   label="Categoria do Imóvel*"
                   placeholder="Selecione a categoria"
@@ -237,9 +274,17 @@ export default function CreatePropertyPage() {
                   render={({ field }) => (
                     <CustomFormInput
                       id="value"
-                      placeholder="ex: 2.650,00"
+                      placeholder={
+                        transactionTypeValue === "VENDA"
+                          ? "ex: 250.000,00"
+                          : "ex: 1.650,00"
+                      }
                       icon={<BrlCurrencyIcon className="h-6 w-6" />}
-                      label="Valor do Aluguel*"
+                      label={
+                        transactionTypeValue === "VENDA"
+                          ? "Valor de Venda*"
+                          : "Valor do Aluguel*"
+                      }
                       error={errors.value?.message}
                       mask="numeric"
                       {...field}
@@ -250,7 +295,7 @@ export default function CreatePropertyPage() {
             </div>
 
             <div>
-              <h2 className="text-lg sm:text-xl font-semibold mb-4 text-gray-700 border-b border-border pb-2">
+              <h2 className="text-lg sm:text-xl font-semibold mb-4 text-foreground border-b border-border pb-2">
                 Endereço
               </h2>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-4">
@@ -365,7 +410,7 @@ export default function CreatePropertyPage() {
             </div>
 
             <div>
-              <h2 className="text-lg sm:text-xl font-semibold mb-4 text-gray-700 border-b border-border pb-2">
+              <h2 className="text-lg sm:text-xl font-semibold mb-4 text-foreground border-b border-border pb-2">
                 Características do Imóvel
               </h2>
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-x-4 gap-y-4">

@@ -65,7 +65,7 @@ export default function ContractManagementPage() {
     setLoading(true);
     try {
       const response = await ContractService.findOne(contractId);
-      console.log("AQUI ESTA SEU RESPONSE", response);
+      // console.log("AQUI ESTA SEU RESPONSE", response);
       setContract(response.data);
     } catch (_error) {
       const errorMessage = extractAxiosError(_error);

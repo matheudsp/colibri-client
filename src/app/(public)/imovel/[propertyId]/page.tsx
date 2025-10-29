@@ -114,16 +114,23 @@ export default function PropertyDetailsPage() {
                     {property.title}
                   </h1>
                   <div className="flex items-center gap-2 flex-wrap">
+                    {/* === ÁREA ATUALIZADA === */}
                     {property.isAvailable ? (
                       <div className="shrink-0 flex items-center text-green-600 bg-green-100 font-bold text-xs px-2.5 py-1 rounded-full">
-                        <CheckCircle2 size={14} className="mr-1.5" /> Disponível
-                        para Alugar
+                        <CheckCircle2 size={14} className="mr-1.5" />
+                        {property.transactionType === "VENDA"
+                          ? "Disponível para Venda"
+                          : "Disponível para Alugar"}
                       </div>
                     ) : (
                       <div className="shrink-0 flex items-center text-red-600 bg-red-100 font-bold text-xs px-2.5 py-1 rounded-full">
-                        <XCircle size={14} className="mr-1.5" /> Já Alugado
+                        <XCircle size={14} className="mr-1.5" />
+                        {property.transactionType === "VENDA"
+                          ? "Já Vendido"
+                          : "Já Alugado"}
                       </div>
                     )}
+                    {/* === FIM DA ÁREA ATUALIZADA === */}
                     <InterestIndicator count={property.interestCount || 0} />
                   </div>
                 </div>

@@ -9,6 +9,9 @@ import { PaymentResponse } from "@/interfaces/payment";
 import { PaymentStatus } from "@/constants/payment";
 import { toast } from "react-toastify";
 import { Pagination } from "@/components/layout/Pagination";
+import { EmptyCard } from "../common/EmptyCard";
+import { LottieAnimation } from "../common/LottieAnimation";
+import notFoundAnimation from "../../../public/lottie/not-found-animation.json";
 
 export type PaymentEvent = {
   id: string;
@@ -109,14 +112,14 @@ function transformPaymentResponseToEvent(
 
   return {
     id: payment.id,
-    userName: payment.contract.tenant?.name ?? "Inquilino não informado",
+    userName: payment.contract.tenant?.name?.split(" ")[0] ?? "N/A",
     action,
     contractLabel: `Contrato #${payment.contractId.substring(0, 8)}`,
     propertyLabel: payment.contract.property?.title,
     amount,
     dateISO: payment.paidAt || payment.dueDate,
     status: statusMap[payment.status] || payment.status,
-    note: `Fatura referente ao contrato ${payment.contractId.substring(0, 8)}`,
+    // note: `Fatura referente ao contrato ${payment.contractId.substring(0, 8)}`,
   };
 }
 
@@ -141,12 +144,12 @@ export function PaymentsActivityTab() {
     const fetchPayments = async () => {
       setLoading(true);
       try {
-        const today = new Date().toISOString();
+        // const today = new Date().toISOString();
         // const futureDate = new Date();
         // futureDate.setMonth(futureDate.getMonth() + 6);
         // const endDate = futureDate.toISOString();
         const response = await PaymentService.findUserPayments({
-          endDate: today,
+          // endDate: today,
           limit: limitFromUrl,
           page: pageFromUrl,
         });
@@ -231,21 +234,21 @@ export function PaymentsActivityTab() {
     <section aria-live="polite" className="space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
         <div>
-          <h2 className="text-2xl font-semibold text-gray-900">
+          <h2 className="text-2xl font-semibold text-foreground">
             Atividades de Pagamento
           </h2>
-          <p className="mt-1 text-sm text-gray-500">
+          <p className="mt-1 text-sm text-muted-foreground">
             Histórico das ações realizadas pelos locatários. Use os filtros para
             refinar.
           </p>
         </div>
 
-        <div className="flex items-center gap-3 ml-auto flex-wrap">
+        <div className="flex items-center justify-end gap-3 ml-auto flex-wrap">
           <div className="text-sm text-gray-600">Itens por página</div>
           <select
             value={String(limitFromUrl)}
             onChange={(e) => handleChangeLimit(Number(e.target.value))}
-            className="border border-border rounded px-3 py-2 bg-white text-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+            className="border border-border rounded px-3 py-2 bg-background text-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-primary"
           >
             <option value={5}>5</option>
             <option value={10}>10</option>
@@ -255,14 +258,14 @@ export function PaymentsActivityTab() {
       </div>
 
       {/* filters */}
-      <div className="flex gap-2 flex-wrap items-center overflow-x-auto sm:overflow-visible py-1">
+      <div className="flex gap-1 flex-wrap items-center justify-center md:justify-start overflow-x-auto sm:overflow-visible py-1">
         <button
           onClick={() => setFilter("ALL")}
           className={clsx(
-            "px-4 py-2 rounded-full text-sm font-medium flex-shrink-0",
+            "px-4 py-2 rounded-full text-sm font-medium flex-shrink-0 cursor-pointer",
             filter === "ALL"
               ? "bg-primary text-white"
-              : "bg-gray-100 text-gray-700"
+              : "bg-primary-hover text-primary-foreground"
           )}
           aria-pressed={filter === "ALL"}
         >
@@ -271,7 +274,7 @@ export function PaymentsActivityTab() {
         <button
           onClick={() => setFilter("PAID")}
           className={clsx(
-            "px-4 py-2 rounded-full text-sm font-medium flex items-center gap-2 flex-shrink-0",
+            "px-4 py-2 rounded-full text-sm font-medium flex items-center gap-2 flex-shrink-0 cursor-pointer",
             filter === "PAID"
               ? "bg-emerald-600 text-white"
               : "bg-emerald-100 text-emerald-800"
@@ -284,7 +287,7 @@ export function PaymentsActivityTab() {
         <button
           onClick={() => setFilter("LATE")}
           className={clsx(
-            "px-4 py-2 rounded-full text-sm font-medium flex items-center gap-2 flex-shrink-0",
+            "px-4 py-2 rounded-full text-sm font-medium flex items-center gap-2 flex-shrink-0 cursor-pointer",
             filter === "LATE"
               ? "bg-rose-600 text-white"
               : "bg-rose-100 text-rose-800"
@@ -297,10 +300,10 @@ export function PaymentsActivityTab() {
         <button
           onClick={() => setFilter("CANCELED")}
           className={clsx(
-            "px-4 py-2 rounded-full text-sm font-medium flex items-center gap-2 flex-shrink-0",
+            "px-4 py-2 rounded-full text-sm font-medium flex items-center gap-2 flex-shrink-0 cursor-pointer",
             filter === "CANCELED"
-              ? "bg-gray-600 text-white"
-              : "bg-gray-100 text-gray-800"
+              ? "bg-foreground text-white"
+              : "bg-muted text-muted-foreground"
           )}
           aria-pressed={filter === "CANCELED"}
         >
@@ -308,10 +311,10 @@ export function PaymentsActivityTab() {
           <span className="hidden sm:inline">Cancelados</span>
         </button>
 
-        <div className="ml-auto text-sm text-gray-500 flex-shrink-0">
+        {/* <div className="ml-auto text-sm text-gray-500 flex-shrink-0">
           Total na página:{" "}
           <span className="font-medium">{filtered.length}</span>
-        </div>
+        </div> */}
       </div>
 
       {/* content */}
@@ -329,12 +332,17 @@ export function PaymentsActivityTab() {
             ))}
           </div>
         ) : filtered.length === 0 ? (
-          <div className="p-6 bg-background rounded-lg border border-border text-center text-gray-500">
-            <div className="mb-2">Nenhuma ação encontrada.</div>
-            <div className="text-sm">
-              Tente ajustar os filtros ou aumentar o período de busca.
-            </div>
-          </div>
+          <EmptyCard
+            icon={
+              <LottieAnimation
+                animationData={notFoundAnimation}
+                className="w-24 h-24"
+              />
+            }
+            title="Nenhuma ação encontrada."
+            subtitle="Tente ajustar os filtros ou aumentar o período de busca."
+            className=""
+          />
         ) : (
           <div className="grid gap-4">
             {grouped.map(([dateLabel, items]) => (
@@ -369,7 +377,7 @@ export function PaymentsActivityTab() {
                         />
 
                         <div className="flex-1 p-3 sm:p-4 flex items-center gap-3">
-                          <div className="flex-shrink-0 w-12 h-12 rounded-full bg-gray-400 flex items-center justify-center text-white font-semibold">
+                          <div className="flex-shrink-0 w-12 h-12 rounded-full bg-accent flex items-center justify-center text-accent-foreground font-semibold">
                             <span className="text-sm">
                               {ev.userName
                                 .split(" ")
@@ -384,10 +392,10 @@ export function PaymentsActivityTab() {
                             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
                               <div className="min-w-0">
                                 <div className="flex items-center gap-2 flex-wrap text-sm">
-                                  <span className="font-semibold text-gray-900 truncate">
+                                  <span className="font-semibold text-foreground truncate">
                                     {ev.userName}
                                   </span>
-                                  <span className="text-gray-600">
+                                  <span className="text-muted-foreground">
                                     {ev.action}
                                   </span>
                                   <span className="font-medium text-gray-800">
@@ -403,7 +411,7 @@ export function PaymentsActivityTab() {
                                   )}
                                 </div>
 
-                                <div className="mt-1 flex items-center gap-3 text-sm text-gray-600">
+                                <div className="mt-1 flex  items-center gap-3 text-sm text-foreground">
                                   <span
                                     className={clsx(
                                       "inline-flex items-center gap-2 px-2 py-1 rounded",
@@ -414,7 +422,7 @@ export function PaymentsActivityTab() {
                                     <span className="text-xs">{cfg.label}</span>
                                   </span>
 
-                                  <div className="text-sm">
+                                  <div className="text-lg font-bold">
                                     {formatCurrency(ev.amount)}
                                   </div>
                                 </div>
@@ -431,9 +439,9 @@ export function PaymentsActivityTab() {
                             </div>
 
                             {/* details on desktop */}
-                            <div className="mt-3 hidden sm:block text-sm text-gray-700">
+                            {/* <div className="mt-3 hidden sm:block text-sm text-gray-700">
                               <div>{ev.note}</div>
-                            </div>
+                            </div> */}
                           </div>
                         </div>
                       </div>
@@ -446,8 +454,8 @@ export function PaymentsActivityTab() {
         )}
       </main>
 
-      <div className="mt-4 flex flex-col sm:flex-row items-center justify-between gap-3">
-        <div className="text-sm text-gray-600">
+      <div className=" flex flex-col sm:flex-row items-center justify-center gap-3">
+        {/* <div className="text-sm text-gray-600">
           {totalItems !== null ? (
             <>
               Mostrando{" "}
@@ -466,7 +474,7 @@ export function PaymentsActivityTab() {
               <span className="font-medium">{pageFromUrl}</span>
             </>
           )}
-        </div>
+        </div> */}
 
         <Pagination
           currentPage={pageFromUrl}

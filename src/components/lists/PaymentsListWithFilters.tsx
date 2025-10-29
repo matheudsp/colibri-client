@@ -23,6 +23,7 @@ import {
   Calendar as CalendarIcon,
   User,
   Building2,
+  SquareArrowOutUpRight,
 } from "lucide-react";
 import { CustomButton } from "@/components/forms/CustomButton";
 import { CustomInput } from "@/components/forms/CustomInput";
@@ -31,6 +32,7 @@ import { CustomDropdownInput } from "@/components/forms/CustomDropdownInput";
 import { EmptyCard } from "@/components/common/EmptyCard";
 import { RegisterPaymentModal } from "@/components/modals/paymentModals/RegisterPaymentModal";
 import { PaymentActionsDropdown } from "../dropdownMenus/PaymentActionsDropdown";
+import Link from "next/link";
 
 type SortKey = "dueDate" | "amountDue" | "property" | "status" | "tenant";
 
@@ -453,6 +455,7 @@ export function PaymentListWithFilters({
                   {payment.contract.tenant?.name}
                 </p>
               </div>
+
               <PaymentActionsDropdown
                 payment={payment}
                 loading={isActionLoading}
@@ -478,7 +481,7 @@ export function PaymentListWithFilters({
                 </p>
               </div>
             </div>
-            <div className="mt-4">
+            <div className="mt-4 flex justify-between items-center">
               <span
                 className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium gap-1.5 border ${
                   statusMap[payment.status]?.color
@@ -487,6 +490,17 @@ export function PaymentListWithFilters({
                 {statusMap[payment.status]?.icon}
                 {statusMap[payment.status]?.label || payment.status}
               </span>
+              <Link target="_blank" href={`/faturas/${payment.id}`}>
+                <CustomButton
+                  aria-label="Abrir página da fatura"
+                  title="Abrir página da fatura"
+                  ghost
+                  className="text-sm h-9 "
+                  icon={<SquareArrowOutUpRight className="" size={16} />}
+                >
+                  Ver fatura
+                </CustomButton>
+              </Link>
             </div>
           </div>
         ))}
@@ -605,7 +619,16 @@ export function PaymentListWithFilters({
                     {payment.contract.tenant?.name || "N/A"}
                   </td>
 
-                  <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                  <td className="px-6 py-4 items-center flex justify-center whitespace-nowrap text-right text-sm font-medium gap-2">
+                    <Link target="_blank" href={`/faturas/${payment.id}`}>
+                      <CustomButton
+                        aria-label="Abrir página da fatura"
+                        title="Abrir página da fatura"
+                        ghost
+                        className="h-9 w-9 p-2"
+                        icon={<SquareArrowOutUpRight className="" size={16} />}
+                      />
+                    </Link>
                     <PaymentActionsDropdown
                       payment={payment}
                       loading={isActionLoading}

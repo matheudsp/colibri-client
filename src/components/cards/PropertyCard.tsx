@@ -98,7 +98,21 @@ function DashboardActions({
 
   const showAdminButtons = role === Roles.ADMIN || role === Roles.LOCADOR;
 
-  if (!showAdminButtons) return null;
+  if (!showAdminButtons) {
+    return (
+      <div className="mt-2 pt-2 border-t border-border space-y-3">
+        <CustomButton
+          onClick={handleNavigate}
+          icon={<Eye size={16} />}
+          color="bg-muted"
+          textColor="text-foreground"
+          className="w-full text-sm"
+        >
+          Ver Detalhes
+        </CustomButton>
+      </div>
+    );
+  }
 
   return (
     <div className="mt-2 pt-2 border-t border-border space-y-3">
@@ -250,7 +264,16 @@ export function PropertyCardComponent({
                 {property.interestCount > 1 ? "interessados" : "interessado"}
               </span>
             </div>
-          )}
+          )}{" "}
+        {typeof property.viewCount === "number" && property.viewCount > 0 && (
+          <div className="absolute top-2 right-2 z-10 flex items-center gap-1.5 bg-black/50 text-white text-xs font-semibold px-2 py-1 rounded-full backdrop-blur-sm">
+            <Eye size={14} />
+            <span>
+              {property.viewCount}{" "}
+              {property.viewCount > 1 ? "visualizações" : "visualização"}
+            </span>
+          </div>
+        )}
         {property.photos && property.photos.length > 0 ? (
           <Image
             src={property.photos[currentImage].url!}
@@ -350,9 +373,11 @@ export function PropertyCardComponent({
               </span>
             </div>
           )}
-          <div className="mt-1 flex justify-between items-center">
-            <span className="text-muted-foreground text-sm">Aluguel</span>
-            <span className="font-bold text-foreground text-base">
+          <div className="mt-1 flex justify-between items-baseline">
+            <span className="text-muted-foreground text-sm">
+              {property.transactionType === "LOCACAO" ? "Aluguel" : "Venda"}
+            </span>
+            <span className="font-bold text-primary text-lg">
               {formatCurrency(property.value)}
             </span>
           </div>

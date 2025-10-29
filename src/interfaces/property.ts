@@ -26,6 +26,7 @@ export interface PropertyProps {
     email: string;
     phone?: string;
   };
+  viewCount?: number;
   createdAt: string;
   updatedAt: string;
   acceptOnlineProposals?: boolean;

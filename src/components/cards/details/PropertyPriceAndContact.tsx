@@ -128,14 +128,17 @@ export const PropertyPriceAndContact = ({
 
   return (
     <div className="border  border-border rounded-xl p-5 space-y-5 bg-card shadow-sm">
-      {/* Seção de Preço */}
       <div>
-        <p className="text-muted-foreground font-medium italic text-sm">
-          Valor
+        <p className="text-sm text-gray-500">
+          {property.transactionType === "LOCACAO"
+            ? "Valor do Aluguel"
+            : "Valor de Venda"}
         </p>
         <p className="text-3xl font-bold text-primary">
           {formatCurrency(property.value)}
-          <span className="text-xs">/mês</span>
+          {property.transactionType === "LOCACAO" && (
+            <span className="text-lg font-medium text-gray-500">/mês</span>
+          )}
         </p>
       </div>
 

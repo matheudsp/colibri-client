@@ -1,6 +1,12 @@
-import { DownloadCloud, Eye, Loader } from "lucide-react";
+import {
+  DownloadCloud,
+  Eye,
+  Loader,
+  SquareArrowOutUpRight,
+} from "lucide-react";
 import { CustomButton } from "../forms/CustomButton";
 import { PaymentResponse } from "@/interfaces/payment";
+import Link from "next/link";
 interface Props {
   payment: PaymentResponse;
   loading?: boolean;
@@ -42,16 +48,28 @@ export function WildcardPaymentButton({
           Visualizar Comprovante
         </CustomButton>
       ) : payment.charge ? (
-        <CustomButton
-          onClick={() => window.open(payment.charge!.bankSlipUrl, "_blank")}
-          color="bg-gray-200"
-          textColor="text-black"
-          className="w-full"
-          icon={<Eye size={16} />}
-          disabled={!payment.charge?.bankSlipUrl}
-        >
-          Visualizar Boleto
-        </CustomButton>
+        // <CustomButton
+        //   onClick={() => window.open(payment.charge!.bankSlipUrl, "_blank")}
+        //   color="bg-gray-200"
+        //   textColor="text-black"
+        //   className="w-full"
+        //   icon={<Eye size={16} />}
+        //   disabled={!payment.charge?.bankSlipUrl}
+        // >
+        //   Visualizar Boleto
+        // </CustomButton>
+        <Link target="_blank" href={`/faturas/${payment.id}`}>
+          <CustomButton
+            aria-label="Abrir página da fatura"
+            title="Abrir página da fatura"
+            ghost
+            className="w-full"
+            icon={<SquareArrowOutUpRight className="" size={16} />}
+            disabled={!payment.charge?.bankSlipUrl}
+          >
+            Visualizar Fatura
+          </CustomButton>
+        </Link>
       ) : isPayable ? (
         <CustomButton
           onClick={() => handleGenerate()}
