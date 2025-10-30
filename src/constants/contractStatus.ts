@@ -2,7 +2,7 @@ export const contractStatus = [
   {
     value: "EM_ELABORACAO",
     label: "Em Elaboração",
-    class: "bg-gray-100 text-gray-800",
+    class: "bg-gray-200 text-gray-800",
   },
   {
     value: "SOLICITANDO_ALTERACAO",

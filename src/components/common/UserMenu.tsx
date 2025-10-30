@@ -180,7 +180,7 @@ export function UserMenu({
               <Menu.Item>
                 {({ active }) => (
                   <Link
-                    href="/conta/seguranca"
+                    href="/conta?aba=seguranca"
                     className={cx(
                       "flex items-center gap-3 w-full rounded-md px-3 py-2 text-sm  text-foreground",
                       active && "bg-muted"
@@ -198,7 +198,7 @@ export function UserMenu({
               <Menu.Item>
                 {({ active }) => (
                   <Link
-                    href="/conta/configuracoes"
+                    href="/conta?aba=preferencias"
                     className={cx(
                       "flex items-center gap-3 w-full rounded-md px-3 py-2 text-sm  text-foreground",
                       active && "bg-muted"
@@ -208,7 +208,7 @@ export function UserMenu({
                       className="h-5 w-5 text-muted-foreground"
                       aria-hidden
                     />
-                    Configurações
+                    Preferências
                   </Link>
                 )}
               </Menu.Item>
