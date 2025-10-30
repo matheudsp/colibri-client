@@ -41,8 +41,14 @@
   .ProseMirror ol > li {
     @apply mb-6; /* Ajuste (mb-4, mb-6, etc.) conforme sua preferência */
   } 
-
- 
+  
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
 }
 
 /* ===========================

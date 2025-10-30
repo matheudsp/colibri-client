@@ -334,9 +334,14 @@ export function PropertyCardComponent({
       </div>
 
       <div className="p-2 flex flex-col grow">
-        <p className="text-sm text-primary font-semibold">
-          {getPropertyTypeLabel(property.propertyType)}
-        </p>
+        <div className="flex items-center gap-2 mb-1">
+          <span className="bg-secondary text-secondary-foreground px-2.5 py-0.5 rounded-full text-xs font-medium">
+            {getPropertyTypeLabel(property.propertyType)}
+          </span>
+          <span className="bg-secondary text-secondary-foreground px-2.5 py-0.5 rounded-full text-xs font-medium">
+            {property.transactionType === "LOCACAO" ? "Para alugar" : "À venda"}
+          </span>
+        </div>
         <h3 className="text-lg font-bold text-foreground truncate mt-1">
           {property.title}
         </h3>

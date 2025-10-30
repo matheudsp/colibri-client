@@ -10,18 +10,48 @@ import { useQuery } from "@tanstack/react-query";
 import Image from "next/image";
 
 export default function Home() {
-  const { data: popularData, isLoading: isPopularLoading } = useQuery({
-    queryKey: ["properties", "most-interested", { limit: 8 }],
-    queryFn: () => PropertyService.listMostInterested({ page: 1, limit: 8 }),
-  });
+  // const { data: popularData, isLoading: isPopularLoading } = useQuery({
+  //   queryKey: ["properties", "most-interested", { limit: 8 }],
+  //   queryFn: () => PropertyService.listMostInterested({ page: 1, limit: 8 }),
+  // });
 
   const { data: recentData, isLoading: isRecentLoading } = useQuery({
     queryKey: ["properties", "available", { limit: 8 }],
     queryFn: () => PropertyService.listAvailable({ page: 1, limit: 8 }),
   });
 
-  const popularProperties = popularData?.properties || [];
-  const recentProperties = recentData?.properties || [];
+  const { data: toSellData, isLoading: toSellPropertiesLoading } = useQuery({
+    queryKey: [
+      "properties",
+      "publicSearch",
+      { transactionType: "VENDA", limit: 8 },
+    ],
+    queryFn: () =>
+      PropertyService.publicSearch({
+        transactionType: "VENDA",
+        page: 1,
+        limit: 8,
+      }),
+  });
+
+  const { data: toRentData, isLoading: toRentPropertiesLoading } = useQuery({
+    queryKey: [
+      "properties",
+      "publicSearch",
+      { transactionType: "LOCACAO", limit: 8 },
+    ],
+    queryFn: () =>
+      PropertyService.publicSearch({
+        transactionType: "LOCACAO",
+        page: 1,
+        limit: 8,
+      }),
+  });
+
+  // const popularProperties = popularData?.properties || [];
+  const recentProperties = recentData?.data.properties || [];
+  const sellProperties = toSellData?.data.properties || [];
+  const rentProperties = toRentData?.data.properties || [];
 
   return (
     <div className="bg-background flex-col justify-center items-center ">
@@ -65,8 +95,7 @@ export default function Home() {
           </div>
         </div>
       </section>
-
-      {popularProperties.length > 0 && (
+      {/* {popularProperties.length > 0 && (
         <section className="max-w-7xl mx-auto">
           <PropertiesList
             title="Imóveis mais populares"
@@ -75,15 +104,34 @@ export default function Home() {
             viewAllLink="/imoveis"
           />
         </section>
-      )}
-      <section className="max-w-7xl mx-auto">
-        <PropertiesList
-          title="Imóveis recentes para alugar"
-          properties={recentProperties}
-          isLoading={isRecentLoading}
-          viewAllLink="/imoveis/para-alugar"
-        />
-      </section>
+      )} */}
+
+      <div className="py-10 md:py-20 space-y-10 md:space-y-20">
+        <section className="max-w-[90em] mx-auto ">
+          <PropertiesList
+            title="Imóveis adicionados recentemente"
+            properties={recentProperties}
+            isLoading={isRecentLoading}
+            viewAllLink="/imoveis/para-alugar"
+          />
+        </section>
+        <section className="max-w-[90em] mx-auto ">
+          <PropertiesList
+            title="Imóveis à venda"
+            properties={sellProperties}
+            isLoading={toSellPropertiesLoading}
+            viewAllLink="/imoveis/a-venda"
+          />
+        </section>
+        <section className="max-w-[90em] mx-auto ">
+          <PropertiesList
+            title="Imóveis para alugar"
+            properties={rentProperties}
+            isLoading={toRentPropertiesLoading}
+            viewAllLink="/imoveis/para-alugar"
+          />
+        </section>
+      </div>
       <section className="py-12 sm:py-18">
         <BenefitsSection />
       </section>

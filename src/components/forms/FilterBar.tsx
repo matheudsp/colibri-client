@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, Fragment } from "react";
+import { useState, useMemo } from "react";
 import { UseFormReturn } from "react-hook-form";
 
 import {
@@ -10,22 +10,54 @@ import {
   ArrowUpWideNarrow,
 } from "lucide-react";
 import clsx from "clsx";
-import { Menu, Transition } from "@headlessui/react";
 
 import { PropertySearchFormValues } from "@/validations/properties/propertySearchValidation";
 import { AdvancedFiltersModal } from "../modals/propertyModals/AdvancedFiltersModal";
+import { CustomButton } from "./CustomButton";
+import { PiEraserFill } from "react-icons/pi";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "../ui/dropdown-menu";
 
 interface FilterBarProps {
   form: UseFormReturn<PropertySearchFormValues>;
   onSearch: (data: PropertySearchFormValues) => void;
   loading: boolean;
 }
-
+const DEFAULT_SORT_VALUE = "createdAt:desc";
 export function FilterBar({ form, onSearch, loading }: FilterBarProps) {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const { watch, setValue, handleSubmit } = form;
+  const { watch, setValue, handleSubmit, reset, getValues } = form;
   const transactionType = watch("transactionType");
   const sort = watch("sort");
+
+  const watchedValues = watch();
+  const hasActiveFilters = useMemo(() => {
+    const currentValues = getValues();
+
+    if (currentValues.q && currentValues.q !== "") {
+      return true;
+    }
+
+    if (currentValues.sort && currentValues.sort !== DEFAULT_SORT_VALUE) {
+      return true;
+    }
+
+    if (
+      currentValues.city ||
+      currentValues.state ||
+      currentValues.propertyType
+      // || currentValues.minPrice
+      // || currentValues.numRooms
+    ) {
+      return true;
+    }
+    return false;
+  }, [watchedValues, getValues]);
+
   const handleTransactionChange = (type: "VENDA" | "LOCACAO") => {
     setValue("transactionType", type, { shouldDirty: true });
     handleSubmit(onSearch)();
@@ -35,7 +67,17 @@ export function FilterBar({ form, onSearch, loading }: FilterBarProps) {
     setValue("sort", value, { shouldDirty: true });
     handleSubmit(onSearch)();
   };
-
+  const handleClearFilters = () => {
+    reset({
+      transactionType: transactionType,
+      sort: DEFAULT_SORT_VALUE,
+      q: "",
+      city: undefined,
+      state: undefined,
+      propertyType: undefined,
+    });
+    handleSubmit(onSearch)();
+  };
   const applyFiltersAndCloseModal = () => {
     setIsModalOpen(false);
     handleSubmit(onSearch)();
@@ -53,19 +95,20 @@ export function FilterBar({ form, onSearch, loading }: FilterBarProps) {
 
   return (
     <>
-      <div className="w-full bg-background p-3 rounded-xl shadow-md border border-border flex flex-wrap items-center gap-2">
+      <div className="w-full bg-card p-3 rounded-xl shadow-md border border-border flex flex-wrap items-center gap-2">
         {/* Toggle Venda / Locação */}
-        <div className="flex bg-gray-200 rounded-2xl p-1">
+        <div className="flex bg-muted rounded-2xl p-1">
           <button
             type="button"
             onClick={() => handleTransactionChange("VENDA")}
             disabled={loading}
             className={clsx(
-              "px-4 py-1.5 text-sm font-semibold rounded-xl transition-colors",
+              "px-4 py-1.5 text-sm font-semibold rounded-xl transition-colors cursor-pointer",
               {
-                "bg-secondary text-white shadow-sm":
+                "bg-secondary text-secondary-foreground shadow-sm":
                   transactionType === "VENDA" || !transactionType,
-                "text-gray-600 hover:bg-gray-200": transactionType !== "VENDA",
+                "text-muted-foreground hover:bg-card":
+                  transactionType !== "VENDA",
               }
             )}
           >
@@ -76,11 +119,11 @@ export function FilterBar({ form, onSearch, loading }: FilterBarProps) {
             onClick={() => handleTransactionChange("LOCACAO")}
             disabled={loading}
             className={clsx(
-              "px-4 py-1.5 text-sm font-semibold rounded-xl transition-colors",
+              "px-4 py-1.5 text-sm font-semibold rounded-xl transition-colors cursor-pointer",
               {
-                "bg-secondary text-white shadow-sm":
+                "bg-secondary  text-secondary-foreground shadow-sm":
                   transactionType === "LOCACAO" || !transactionType,
-                "text-gray-600 hover:bg-gray-200":
+                "text-muted-foreground hover:bg-card":
                   transactionType !== "LOCACAO",
               }
             )}
@@ -90,72 +133,67 @@ export function FilterBar({ form, onSearch, loading }: FilterBarProps) {
         </div>
 
         <div className="grow"></div>
-
-        <button
+        {hasActiveFilters && (
+          <CustomButton
+            type="button"
+            onClick={handleClearFilters}
+            disabled={loading}
+            ghost
+            rounded="rounded-full"
+            className="flex items-center gap-2 px-4 py-1.5 text-sm font-semibold text-foreground hover:bg-muted rounded-full border border-border disabled:opacity-50 cursor-pointer"
+          >
+            <PiEraserFill size={16} /> Limpar filtros
+          </CustomButton>
+        )}
+        <CustomButton
           type="button"
+          ghost
           onClick={() => setIsModalOpen(true)}
           disabled={loading}
-          className="flex items-center gap-2 px-4 py-1.5 text-sm font-semibold text-gray-600 hover:bg-input-border rounded-full border border-border disabled:opacity-50"
+          rounded="rounded-full"
+          className="flex items-center gap-2 px-4 py-1.5 text-sm font-semibold text-foreground hover:bg-muted rounded-full border border-border disabled:opacity-50 cursor-pointer"
         >
           <Filter size={16} /> Filtros
-        </button>
+        </CustomButton>
 
-        <Menu as="div" className="relative inline-block text-left">
-          <div>
-            <Menu.Button
-              className="inline-flex justify-center items-center gap-2 rounded-full border border-border  hover:bg-input-border px-4 py-1.5 text-sm font-semibold text-gray-600 shadow-xs disabled:opacity-50"
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <CustomButton
+              ghost
+              rounded="rounded-full"
+              className="inline-flex justify-center items-center gap-2 rounded-full border border-border hover:bg-muted px-4 py-2 text-sm font-semibold text-foreground cursor-pointer"
               disabled={loading}
             >
               {currentOption?.label || "Ordenar por"}
               <ChevronDown
-                className="h-4 w-4 text-gray-400"
+                className="h-4 w-4 text-foreground"
                 aria-hidden="true"
               />
-            </Menu.Button>
-          </div>
-          <Transition
-            as={Fragment}
-            enter="transition ease-out duration-100"
-            enterFrom="transform opacity-0 scale-95"
-            enterTo="transform opacity-100 scale-100"
-            leave="transition ease-in duration-75"
-            leaveFrom="transform opacity-100 scale-100"
-            leaveTo="transform opacity-0 scale-95"
-          >
-            <Menu.Items className="absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-background shadow-lg ring-1 ring-border ring-opacity-5 focus:outline-hidden">
-              <div className="py-1">
-                {options.map((option) => (
-                  <Menu.Item key={option.value}>
-                    {({ active }) => (
-                      <button
-                        onClick={() => handleSortChange(option.value)}
-                        className={clsx(
-                          "group flex w-full items-center px-4 py-2 text-sm ",
-                          active
-                            ? "bg-input-border text-gray-900"
-                            : "text-gray-700"
-                        )}
-                      >
-                        <span>{option.label}</span>
-                        {option.value.endsWith("asc") ? (
-                          <ArrowUpWideNarrow
-                            size={14}
-                            className="ml-2 text-gray-500"
-                          />
-                        ) : (
-                          <ArrowDownWideNarrow
-                            size={14}
-                            className="ml-2 text-gray-500"
-                          />
-                        )}
-                      </button>
-                    )}
-                  </Menu.Item>
-                ))}
-              </div>
-            </Menu.Items>
-          </Transition>
-        </Menu>
+            </CustomButton>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent className="w-56">
+            {options.map((option) => (
+              <DropdownMenuItem
+                key={option.value}
+                onClick={() => handleSortChange(option.value)}
+                className="cursor-pointer "
+              >
+                <span>{option.label}</span>
+                {option.value.endsWith("asc") ? (
+                  <ArrowUpWideNarrow
+                    size={14}
+                    className="ml-auto text-muted-foreground "
+                  />
+                ) : (
+                  <ArrowDownWideNarrow
+                    size={14}
+                    className="ml-auto text-muted-foreground"
+                  />
+                )}
+              </DropdownMenuItem>
+            ))}
+          </DropdownMenuContent>
+        </DropdownMenu>
       </div>
       <AdvancedFiltersModal
         isOpen={isModalOpen}

@@ -12,6 +12,7 @@ import { useState, ReactNode, ChangeEvent } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useCurrentUser } from "@/hooks/useCurrentUser";
 import { UserMenu } from "../common/UserMenu";
+import { Roles } from "@/constants";
 
 type HeaderType = "default" | "back" | "backMenu" | "search" | "logoOnly";
 
@@ -46,7 +47,7 @@ export function Header({
   onSearchChange,
 }: HeaderProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const { isAuthenticated } = useCurrentUser();
+  const { isAuthenticated, role } = useCurrentUser();
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     onSearchChange?.(e.target.value);
   };
@@ -125,7 +126,7 @@ export function Header({
             {isAuthenticated ? (
               <div className="flex items-center gap-x-4 animate-fade animate-once animate-ease-in-out">
                 <Link
-                  href="/painel"
+                  href={role === Roles.LOCADOR ? "/painel" : "/imoveis"}
                   className={`rounded-md px-4 py-1.5 text-sm font-semibold shadow-sm  ${
                     isScrolled
                       ? "bg-primary text-primary-foreground hover:bg-primary/85 border border-primary-hover border-b-4  "
@@ -223,7 +224,7 @@ export function Header({
                     <div className="w-full flex flex-col space-y-4">
                       <UserMenu orientation="horizontal" fullWidth />
                       <Link
-                        href="/painel"
+                        href={role === Roles.LOCADOR ? "/painel" : "/imoveis"}
                         onClick={() => setIsMenuOpen(false)}
                         className="rounded-md p-2 bg-primary border-b-4 border border-primary-hover text-primary-foreground text-center text-lg font-semibold hover:bg-primary/85"
                       >

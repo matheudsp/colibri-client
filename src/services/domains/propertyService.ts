@@ -69,7 +69,7 @@ interface SearchPropertiesParams {
   state?: string;
   city?: string;
   q?: string;
-  propertyType?: string;
+  propertyType?: "LOCACAO" | "VENDA";
   transactionType?: string;
   page?: number;
   limit?: number;
@@ -104,7 +104,7 @@ export const PropertyService = {
   },
   async listAvailable(
     params?: ListPropertiesParams
-  ): Promise<PropertiesApiResponse> {
+  ): Promise<ApiResponse<PropertiesApiResponse>> {
     try {
       const response = await api.get<ApiResponse<PropertiesApiResponse>>(
         API_ROUTES.PROPERTIES.LIST_AVAILABLE_PUBLIC,
@@ -113,7 +113,7 @@ export const PropertyService = {
         }
       );
 
-      return response.data.data;
+      return response.data;
     } catch (error) {
       throw new Error(extractAxiosError(error));
     }
@@ -121,7 +121,7 @@ export const PropertyService = {
 
   async listMostInterested(
     params?: ListPropertiesParams
-  ): Promise<PropertiesApiResponse> {
+  ): Promise<ApiResponse<PropertiesApiResponse>> {
     try {
       const response = await api.get<ApiResponse<PropertiesApiResponse>>(
         API_ROUTES.PROPERTIES.LIST_MOST_INTERESTED,
@@ -130,7 +130,7 @@ export const PropertyService = {
         }
       );
 
-      return response.data.data;
+      return response.data;
     } catch (error) {
       console.error("Failed to fetch most interested properties:", error);
       throw new Error(extractAxiosError(error));
