@@ -101,6 +101,7 @@ function SectionRenderer({
 }
 
 export default function TermosDeUsoPage() {
+  /* eslint-disable  @typescript-eslint/no-explicit-any */
   const sections: TermSection[] = Array.isArray(termsJson)
     ? termsJson
     : (termsJson as any).sections ?? [];

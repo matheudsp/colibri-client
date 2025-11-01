@@ -34,7 +34,6 @@ export function FilterBar({ form, onSearch, loading }: FilterBarProps) {
   const transactionType = watch("transactionType");
   const sort = watch("sort");
 
-  const watchedValues = watch();
   const hasActiveFilters = useMemo(() => {
     const currentValues = getValues();
 
@@ -56,7 +55,7 @@ export function FilterBar({ form, onSearch, loading }: FilterBarProps) {
       return true;
     }
     return false;
-  }, [watchedValues, getValues]);
+  }, [getValues]);
 
   const handleTransactionChange = (type: "VENDA" | "LOCACAO") => {
     setValue("transactionType", type, { shouldDirty: true });

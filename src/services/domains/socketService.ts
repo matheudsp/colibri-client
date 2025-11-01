@@ -20,11 +20,11 @@ class SocketService {
     this.socket.on("connect", () => {
       // console.log("✅ WebSocket Conectado com sucesso:", this.socket?.id);
     });
-
+    /* eslint-disable  @typescript-eslint/no-unused-vars */
     this.socket.on("disconnect", (reason) => {
       // console.log(`❌ WebSocket Desconectado: ${reason}`);
     });
-
+    /* eslint-disable  @typescript-eslint/no-unused-vars */
     this.socket.on("connect_error", (err) => {
       // console.error("❌ Falha na conexão com o WebSocket:", err.message);
       // toast.error("Erro de comunicação em tempo real.", {

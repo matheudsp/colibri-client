@@ -47,7 +47,7 @@
     "title": "5. Estrutura Financeira e Pagamentos",
     "content": [
       "Gateway de Pagamento e Split: Os pagamentos de aluguel e demais encargos são processados por meio de um gateway de pagamento terceirizado e regulamentado. A Locaterra utiliza um sistema de split de pagamento, no qual o valor pago pelo Locatário é automaticamente dividido no momento da transação. A parcela correspondente ao aluguel é direcionada diretamente à conta do Locador, e a taxa de serviço da Locaterra é direcionada à conta da Plataforma.",
-      "Isenção de Responsabilidade Financeira: Em razão do modelo de split de pagamento, a Locaterra não retém nem gerencia fundos de terceiros, atuando apenas como facilitadora tecnológica da transação. A Locaterra não se responsabiliza por quaisquer obrigações tributárias decorrentes das transações realizadas entre Locador e Locatário.",
+      "Isenção de Responsabilidade Financeira: Em razão do modelo de split de pagamento, a Locaterra não retém nem gerencia fundos de terceiros, atuando apenas como facilitadora tecnológica da transação. A Locaterra não se responsabiliza pelas obrigações tributárias (ex: Imposto de Renda sobre o aluguel) decorrentes da relação locatícia direta entre o Locador e o Locatário, cabendo a cada parte o cumprimento de suas próprias responsabilidades fiscais.",
       "Taxas de Serviço: Pelos serviços de intermediação, a Locaterra cobrará do Locador uma taxa de serviço (\"Comissão\"), cujo percentual ou valor será claramente informado no momento da criação do contrato. A Comissão será automaticamente deduzida do valor a ser repassado ao Locador via split de pagamento.",
       "Inadimplência e Multas: Em caso de atraso no pagamento pelo Locatário, poderão incidir multas e juros de mora, conforme estipulado no contrato de locação entre as partes e nos limites da legislação aplicável. A Locaterra poderá fornecer ferramentas para a cobrança automatizada, mas a responsabilidade por medidas legais, como a ação de despejo, é exclusiva do Locador."
     ]
@@ -77,7 +77,7 @@
     "content": [
       "A Locaterra se compromete a envidar seus melhores esforços para manter a segurança, disponibilidade e integridade da Plataforma.",
       "Nos termos do art. 19 da Lei nº 12.965/2014 (Marco Civil da Internet), a Locaterra não será responsabilizada civilmente por conteúdos gerados por Usuários, exceto se, após ordem judicial específica, deixar de remover o conteúdo ilícito.",
-      "A Locaterra não se responsabiliza por danos decorrentes da relação direta entre Locador e Locatário, salvo quanto às falhas técnicas, operacionais ou de segurança da Plataforma, ou por atos ou omissões que configurem negligência, imprudência ou imperícia na prestação do serviço.",
+      "A Locaterra, na qualidade de intermediadora, não é parte da relação contratual de locação. A Plataforma não se responsabiliza por danos decorrentes da relação direta entre Locador e Locatário (tais como a condição do imóvel, inadimplência, ou comportamento das partes), exceto nos casos em que tais danos sejam comprovadamente e diretamente causados por uma falha, defeito ou vício na prestação dos serviços tecnológicos oferecidos pela Locaterra, conforme Art. 14 do Código de Defesa do Consumidor.",
       "Qualquer limitação de responsabilidade deverá respeitar as garantias mínimas previstas no Código de Defesa do Consumidor."
     ]
   },
