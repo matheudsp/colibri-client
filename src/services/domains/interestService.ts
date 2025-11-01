@@ -96,7 +96,7 @@ export const InterestService = {
     data: UpdateInterestStatusData
   ): Promise<ApiResponse<Interest>> {
     try {
-      console.log(data);
+      // console.log(data);
       const response = await api.patch(
         API_ROUTES.INTERESTS.UPDATE_STATUS({ id }),
         data

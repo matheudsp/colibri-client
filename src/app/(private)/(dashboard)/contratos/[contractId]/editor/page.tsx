@@ -268,11 +268,14 @@ export default function EditContractPage() {
 
           <header className="bg-card border-x border-t border-border px-5 py-4">
             <div className="flex flex-col sm:flex-row items-start justify-between gap-4">
-              <div className="flex flex-col gap-3 w-full">
+              <div className="flex flex-1 flex-col gap-3 min-w-0">
                 <div className="flex items-center gap-2">
                   <Edit2Icon size={18} className="text-muted-foreground" />
-                  <h1 className="text-lg font-medium truncate">
-                    Contrato do Imóvel: {contract?.property.title}
+                  <h1
+                    className="text-lg font-medium line-clamp-3 min-w-0"
+                    title={contract?.property.title}
+                  >
+                    {contract?.property.title}
                   </h1>
                 </div>
 

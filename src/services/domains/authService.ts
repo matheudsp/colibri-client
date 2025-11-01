@@ -149,7 +149,7 @@ export const AuthService = {
   },
 
   async registerLandlord(registerData: LandlordRegisterData) {
-    console.log("Registering landlord with data:", registerData);
+    // console.log("Registering landlord with data:", registerData);
     try {
       const response = await api.post(
         API_ROUTES.AUTH.REGISTER_LANDLORD,

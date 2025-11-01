@@ -1,0 +1,110 @@
+[
+  {
+    "id": "aceitacao",
+    "title": "1. Aceitação dos Termos",
+    "content": [
+      "Bem-vindo à Locaterra! Estes Termos de Uso e Condições Gerais (\"Termos\") regem o seu acesso e uso da plataforma, site, serviços e aplicações oferecidos pela pessoa jurídica de direito privado inscrita no CNPJ 63.122.894/0001-02.",
+      "Ao se cadastrar, acessar ou utilizar a Plataforma, você declara ter lido, entendido e concordado com estes Termos em sua totalidade, bem como com a nossa Política de Privacidade, que é parte integrante deste documento. Caso não concorde com qualquer disposição aqui presente, você não deverá utilizar os Serviços.",
+      "Estes Termos constituem um contrato legalmente vinculante entre você (\"Usuário\") e a Locaterra. A utilização dos Serviços implica a sua aceitação plena e sem reservas a todas as condições aqui estipuladas.",
+      "A Locaterra reserva-se o direito de alterar estes Termos a qualquer momento. As alterações entrarão em vigor imediatamente após a publicação da versão atualizada na Plataforma. Notificaremos os Usuários sobre alterações materiais através de e-mail ou de um aviso destacado na Plataforma. A continuidade do uso dos Serviços após a notificação constituirá aceitação das novas condições."
+    ]
+  },
+  {
+    "id": "definicoes",
+    "title": "2. Definições",
+    "content": [
+      "Para os fins destes Termos, as seguintes palavras e expressões terão os significados abaixo definidos:",
+      "• Plataforma: Refere-se ao software, site e aplicações de propriedade da Locaterra, que oferece um espaço digital para a intermediação de locações imobiliárias.",
+      "• Usuário: Toda pessoa física ou jurídica que acessa ou utiliza a Plataforma, podendo ser classificada como Locador, Locatário ou Administrador.",
+      "• Locador: Usuário proprietário ou possuidor legal de um imóvel que o cadastra na Plataforma com o objetivo de alugá-lo a terceiros.",
+      "• Locatário (Inquilino): Usuário que busca e utiliza a Plataforma para alugar um imóvel listado por um Locador.",
+      "• Administrador: Perfil de usuário com permissões para supervisionar as operações gerais da Plataforma.",
+      "• Conteúdo de Usuário: Todas as informações, textos, fotos, vídeos e outros materiais publicados, enviados ou compartilhados pelos Usuários na Plataforma."
+    ]
+  },
+  {
+    "id": "objeto",
+    "title": "3. Objeto e Papel da Locaterra",
+    "content": [
+      "A Locaterra é uma provedora de aplicação de internet, nos termos da Lei nº 12.965/2014 (Marco Civil da Internet), que oferece infraestrutura tecnológica para conectar Locadores e Locatários, facilitando a negociação, celebração e gestão de contratos de locação de imóveis.",
+      "A Locaterra atua como intermediadora tecnológica entre as partes, disponibilizando um ambiente digital seguro para a comunicação, assinatura de documentos e processamento de pagamentos.",
+      "A Locaterra não é uma imobiliária nem atua como corretora de imóveis, e não interfere nas condições contratuais negociadas entre Locador e Locatário.",
+      "Contudo, por integrar a cadeia de prestação de serviços, a Locaterra compromete-se a responder solidariamente pelos vícios ou falhas de funcionamento da plataforma e dos serviços sob sua responsabilidade, conforme o art. 7º, parágrafo único, e art. 25, §1º, do Código de Defesa do Consumidor."
+    ]
+  },
+  {
+    "id": "cadastro",
+    "title": "4. Cadastro, Elegibilidade e Verificação",
+    "content": [
+      "Para utilizar a Plataforma, o Usuário deve ter no mínimo 18 (dezoito) anos e possuir plena capacidade civil.",
+      "O Usuário compromete-se a fornecer informações verdadeiras, completas e atualizadas, respondendo pela autenticidade dos dados informados.",
+      "A Locaterra poderá adotar medidas razoáveis de verificação de identidade para prevenir fraudes e garantir a segurança das transações, observando os princípios da finalidade, necessidade e transparência, conforme a Lei nº 13.709/2018 (LGPD).",
+      "Os dados coletados serão utilizados exclusivamente para fins de autenticação e segurança, sendo vedado seu uso para finalidades não compatíveis com a operação da Plataforma."
+    ]
+  },
+  {
+    "id": "pagamentos",
+    "title": "5. Estrutura Financeira e Pagamentos",
+    "content": [
+      "Gateway de Pagamento e Split: Os pagamentos de aluguel e demais encargos são processados por meio de um gateway de pagamento terceirizado e regulamentado. A Locaterra utiliza um sistema de split de pagamento, no qual o valor pago pelo Locatário é automaticamente dividido no momento da transação. A parcela correspondente ao aluguel é direcionada diretamente à conta do Locador, e a taxa de serviço da Locaterra é direcionada à conta da Plataforma.",
+      "Isenção de Responsabilidade Financeira: Em razão do modelo de split de pagamento, a Locaterra não retém nem gerencia fundos de terceiros, atuando apenas como facilitadora tecnológica da transação. A Locaterra não se responsabiliza por quaisquer obrigações tributárias decorrentes das transações realizadas entre Locador e Locatário.",
+      "Taxas de Serviço: Pelos serviços de intermediação, a Locaterra cobrará do Locador uma taxa de serviço (\"Comissão\"), cujo percentual ou valor será claramente informado no momento da criação do contrato. A Comissão será automaticamente deduzida do valor a ser repassado ao Locador via split de pagamento.",
+      "Inadimplência e Multas: Em caso de atraso no pagamento pelo Locatário, poderão incidir multas e juros de mora, conforme estipulado no contrato de locação entre as partes e nos limites da legislação aplicável. A Locaterra poderá fornecer ferramentas para a cobrança automatizada, mas a responsabilidade por medidas legais, como a ação de despejo, é exclusiva do Locador."
+    ]
+  },
+  {
+    "id": "lgpd",
+    "title": "6. Proteção de Dados Pessoais (LGPD)",
+    "content": [
+      "A Locaterra, na qualidade de Controladora dos dados pessoais coletados em sua Plataforma, compromete-se a tratar tais informações em estrita conformidade com a Lei nº 13.709/2018 (Lei Geral de Proteção de Dados Pessoais - LGPD) e outras regulamentações aplicáveis.",
+      "Todas as informações sobre como coletamos, usamos, armazenamos e protegemos seus dados pessoais estão detalhadas em nossa Política de Privacidade, que é um documento anexo e indissociável destes Termos. O aceite destes Termos implica também no aceite da Política de Privacidade.",
+      "A Plataforma garante canais de atendimento para que os Usuários possam exercer seus direitos como titulares de dados, conforme previsto na LGPD."
+    ]
+  },
+  {
+    "id": "responsabilidades",
+    "title": "7. Responsabilidades e Conduta dos Usuários",
+    "content": [
+      "Os Usuários se comprometem a não utilizar a Plataforma para fins ilícitos, fraudulentos ou que violem os direitos de terceiros, devendo respeitar a legislação brasileira.",
+      "• O Locador é o único e exclusivo responsável pela veracidade, legalidade, qualidade e exatidão das informações e imagens dos imóveis anunciados, bem como por possuir todos os direitos e autorizações necessárias para alugá-los.",
+      "• O Locatário é responsável por zelar pelo imóvel e cumprir todas as obrigações estipuladas no contrato de locação firmado com o Locador.",
+      "• É vedado aos Usuários utilizar a Plataforma para contornar o sistema de pagamentos, negociar diretamente fora da plataforma para evitar o pagamento da Comissão, ou publicar conteúdo que seja difamatório, discriminatório, ofensivo ou que viole a propriedade intelectual de terceiros."
+    ]
+  },
+  {
+    "id": "limitacao",
+    "title": "8. Limitação de Responsabilidade",
+    "content": [
+      "A Locaterra se compromete a envidar seus melhores esforços para manter a segurança, disponibilidade e integridade da Plataforma.",
+      "Nos termos do art. 19 da Lei nº 12.965/2014 (Marco Civil da Internet), a Locaterra não será responsabilizada civilmente por conteúdos gerados por Usuários, exceto se, após ordem judicial específica, deixar de remover o conteúdo ilícito.",
+      "A Locaterra não se responsabiliza por danos decorrentes da relação direta entre Locador e Locatário, salvo quanto às falhas técnicas, operacionais ou de segurança da Plataforma, ou por atos ou omissões que configurem negligência, imprudência ou imperícia na prestação do serviço.",
+      "Qualquer limitação de responsabilidade deverá respeitar as garantias mínimas previstas no Código de Defesa do Consumidor."
+    ]
+  },
+  {
+    "id": "propriedade",
+    "title": "9. Propriedade Intelectual",
+    "content": [
+      "Todo o conteúdo da Plataforma, incluindo, mas não se limitando a, marcas, logotipos, software, layout, textos e gráficos, é de propriedade exclusiva da Locaterra e protegido pelas leis de propriedade intelectual.",
+      "Ao publicar Conteúdo de Usuário na Plataforma, você concede à Locaterra uma licença não exclusiva, mundial, isenta de royalties e transferível para usar, reproduzir, distribuir e exibir tal conteúdo, com o único propósito de operar e promover os serviços da Plataforma."
+    ]
+  },
+  {
+    "id": "disputas",
+    "title": "10. Resolução de Disputas, Foro e Legislação Aplicável",
+    "content": [
+      "As partes comprometem-se a buscar solução amigável para qualquer controvérsia decorrente destes Termos.",
+      "A mediação ou arbitragem poderá ser utilizada de forma facultativa, mediante concordância expressa e destacada do Usuário consumidor, conforme o art. 4º, §2º, da Lei nº 9.307/1996.",
+      "Na hipótese de disputa judicial, fica eleito o foro da Comarca da sede da Locaterra, ressalvado o direito do Usuário consumidor de ajuizar a ação em seu domicílio, nos termos do art. 101, I, do Código de Defesa do Consumidor.",
+      "Este contrato é regido pelas leis da República Federativa do Brasil."
+    ]
+  },
+  {
+    "id": "disposicoes",
+    "title": "11. Disposições Gerais",
+    "content": [
+      "Modificações: A Locaterra poderá alterar estes Termos a qualquer momento. As alterações serão comunicadas aos Usuários com antecedência. A continuidade do uso da Plataforma após a comunicação implicará no aceite das novas condições.",
+      "Independência das Cláusulas: Se qualquer disposição destes Termos for considerada nula ou inexequível, as demais disposições permanecerão em pleno vigor e efeito."
+    ]
+  }
+]
